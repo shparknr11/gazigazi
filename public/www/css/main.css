@@ -1,0 +1,12 @@
+.main {
+}
+.main-inner {
+  width: calc(100% - 150px);
+  max-width: 1170px;
+  height: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}

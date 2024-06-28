@@ -1,0 +1,13 @@
+.footer {
+  height: 100px;
+  background-color: aquamarine;
+}
+
+.footer-inner {
+  width: calc(100% - 150px);
+  max-width: 1170px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}
