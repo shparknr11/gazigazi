@@ -1,0 +1,78 @@
+.mypage-home {
+  box-sizing: border-box;
+  margin: 0;
+  min-width: 0;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mypage-info-edit {
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  color: rgb(36, 36, 36);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mypage-shild {
+  box-sizing: border-box;
+  margin: 0px 8px 0px 0px;
+  min-width: 0px;
+  max-width: 100%;
+  height: auto;
+}
+
+.mypage-info {
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  width: 100%;
+}
+
+.mypage-info-edit2 {
+  box-sizing: border-box;
+  margin: 20px 0px;
+  min-width: 0px;
+  background-color: rgb(247, 247, 247);
+  border-radius: 6px;
+  color: rgb(102, 102, 102);
+  font-size: 14px;
+  line-height: 24px;
+  padding: 8px;
+  width: 100%;
+}
+
+.infos {
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  width: 100%;
+  color: rgb(122, 126, 130);
+  font-weight: bold;
+  display: flex;
+}
+
+.mypage-detail {
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  width: 100%;
+}
+
+.infos-input {
+  box-sizing: border-box;
+  margin: 0px 0px;
+  min-width: 0px;
+  display: block;
+  padding: 8px;
+  appearance: none;
+  font-size: inherit;
+  line-height: inherit;
+  border: 1px solid rgb(218, 220, 224);
+  color: inherit;
+  background-color: transparent;
+  border-radius: 10px;
+  height: 28px;
+  width: 50%;
+}
