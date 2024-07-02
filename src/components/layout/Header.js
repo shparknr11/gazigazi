@@ -1,39 +1,55 @@
+import { Link } from "react-router-dom";
+import { AiTwotoneHeart } from "react-icons/ai";
+import { BsPerson } from "react-icons/bs";
+import styled from "@emotion/styled";
+
+const HeaderIconStyle = styled.div`
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+`;
+
 const Header = () => {
   return (
     <header className="header">
       <div className="header-inner">
         <div className="header-logo">
-          <a>
-            <img src="#" alt="가지가지" className="header-logo-img" />
-          </a>
+          <Link to="/">
+            <img alt="가지가지" className="header-logo-img" />
+          </Link>
         </div>
         <nav className="header-menu">
           <ul className="header-menu-list">
             <li>
-              <a href="#">홈</a>
+              <Link to="/">홈</Link>
             </li>
             <li>
-              <a href="#">소개</a>
+              <Link to="/">소개</Link>
             </li>
             <li>
-              <a href="#">커뮤니티 후기</a>
+              <Link to="/review">커뮤니티 후기</Link>
             </li>
             <li>
-              <a href="#">내 모임</a>
+              <Link to="/mymeeting">내 모임</Link>
             </li>
           </ul>
         </nav>
         <nav>
           <ul className="header-icon-list">
             <li>
-              <a href="#">
-                <div>♥</div>
-              </a>
+              <Link to="/">
+                <HeaderIconStyle>
+                  <AiTwotoneHeart />
+                </HeaderIconStyle>
+              </Link>
             </li>
             <li>
-              <a href="#">
-                <div>⌂</div>
-              </a>
+              <Link to="/">
+                <HeaderIconStyle>
+                  <BsPerson />
+                </HeaderIconStyle>
+              </Link>
             </li>
           </ul>
         </nav>

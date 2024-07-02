@@ -14,16 +14,14 @@ const MainStyle = styled.div`
   padding-top: 70px;
 `;
 const MainInnerStyle = styled.div`
-  width: calc(100% - 150px);
-  max-width: 1170px;
+  width: 100%;
+  max-width: 1920px;
   height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  margin-top: 50px;
-  padding: 0 10px;
 `;
 
 const App = () => {
@@ -69,17 +67,17 @@ const App = () => {
               element={<h1>찜목록페이지</h1>}
             ></Route>
 
-            <Route path="/notice" element={<h1>커뮤니티 페이지</h1>}></Route>
+            <Route path="/review" element={<h1>커뮤니티 페이지</h1>}></Route>
             <Route
-              path="/notice/:boardId"
+              path="/review/:boardId"
               element={<h1>커뮤상세페이지</h1>}
             ></Route>
             <Route
-              path="/notice/write"
+              path="/review/write"
               element={<h1>커뮤등록페이지</h1>}
             ></Route>
             <Route
-              path="/notice/modify/:boardId"
+              path="/review/modify/:boardId"
               element={<h1>커뮤수정페이지</h1>}
             ></Route>
 
