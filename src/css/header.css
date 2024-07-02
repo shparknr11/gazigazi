@@ -6,13 +6,13 @@
   height: 70px;
   display: block;
   border-bottom: 1px solid aliceblue;
-  /* z-index: 999999; */
+  z-index: 9;
   background-color: white;
 }
 
 .header-inner {
   width: calc(100% - 150px);
-  max-width: 1170px;
+  max-width: 1300px;
   height: 100%;
   display: flex;
   align-items: center;

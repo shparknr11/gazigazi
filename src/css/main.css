@@ -1,20 +1,16 @@
 .main {
 }
-.main-inner {
-  width: calc(100% - 150px);
-  max-width: 1170px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  margin-top: 50px;
-  padding: 0 10px;
-}
+
 .main-top {
   width: 100%;
   margin: 0 auto;
+}
+.mt-banner-div {
+  width: 100%;
+  height: 450px;
+  margin-bottom: 50px;
+  background: url("../images/banner1.png") no-repeat center;
+  background-size: cover;
 }
 .mt-searchbox-div {
   display: flex;
@@ -24,17 +20,23 @@
   margin-bottom: 40px;
 }
 .mt-searchbox {
-  width: 600px;
+  width: 800px;
   height: 50px;
   background-color: aliceblue;
   border-radius: 25px;
 }
 .mt-category-div {
-  width: 100%;
-  height: 200px;
-  margin-bottom: 50px;
-  background-color: aliceblue;
+  width: 100px;
+  height: 100px;
 }
+.mt-category-img {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate1.png") no-repeat center;
+  background-size: cover;
+}
+
 .main-mid {
   width: 100%;
 }
@@ -44,13 +46,15 @@
   font-weight: 700;
 }
 .mm-meeting-picks {
+  position: relative;
+  padding: 0 170px;
+  margin-bottom: 40px;
 }
 .mm-meeting-list {
   display: flex;
   gap: 20px;
   width: 100%;
   height: 285px;
-  margin-bottom: 40px;
 }
 .list-box {
   display: block;
@@ -81,6 +85,17 @@
   font-size: 12px;
   padding: 5px;
 }
+.mm-meeting-around {
+  position: relative;
+  padding: 0 170px;
+  margin-bottom: 40px;
+}
+
+.mm-meeting-deadline {
+  position: relative;
+  padding: 0 170px;
+  margin-bottom: 40px;
+}
 .main-bottom {
   display: flex;
   justify-content: space-between;
@@ -92,16 +107,37 @@
   font-weight: 700;
 }
 .mb-event-div {
+  padding-left: 170px;
 }
 .mb-rank-div {
+  padding-right: 170px;
 }
 .mb-event-list {
-  width: 500px;
+  width: 700px;
   height: 300px;
   background-color: aliceblue;
 }
 .mb-rank-list {
-  width: 600px;
+  width: 700px;
   height: 300px;
   background-color: aliceblue;
+}
+
+.more-bt {
+  position: absolute;
+  bottom: 133px;
+  right: 240px;
+  padding: 3px 5px;
+  border: solid 1px;
+  border-radius: 5px;
+  font-size: 10px;
+  rotate: 90deg;
+}
+.more-bt-icon svg {
+  position: absolute;
+  bottom: 130px;
+  right: 250px;
+  width: 33px;
+  height: 33px;
+  font-size: 10px;
 }
