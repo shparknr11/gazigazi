@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <style>
+      .item {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header class="header"></header>
+      <main class="main">
+        <div class="main-inner">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              width: 100%;
+              text-align: center;
+            "
+          >
+            <!-- 일단 누르면 이벤트 나오게 해놓음. -->
+            <div
+              style="
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <div id="1" class="item">1</div>
+              <div id="2" class="item">2</div>
+              <div id="3" class="item">3</div>
+            </div>
+            <div style="width: 100%; height: 600px">
+              <div style="width: 100%; height: 100%" class="func-main"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="footer-inner">
+          <div class="footer-menu">
+            <ul class="footer-menu-list">
+              <li><a href="#">About</a></li>
+              <li><a href="#">소개</a></li>
+              <li><a href="#">등록</a></li>
+              <li><a href="#">추가</a></li>
+            </ul>
+          </div>
+          <div class="footer-description">
+            가까운 지역 가까운 지인, 가지가지
+          </div>
+          <div>ⓒ gazigazi all rights reserved.</div>
+          <p>가지가지 로고</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // 버튼 2개로 움직일 거임
+      let activeItem = null;
+
+      window.addEventListener("click", e => {
+        const a = document.querySelector(".func-main");
+        if (e.target.classList.contains("item")) {
+          if (activeItem) {
+            activeItem.style.backgroundColor = "";
+            a.style.backgroundColor = "";
+          }
+
+          const clickedItem = e.target;
+          clickedItem.style.backgroundColor = "black";
+          activeItem = clickedItem;
+
+          // 이벤트 걸곳
+          console.log(a);
+          switch (clickedItem.id) {
+            case "1":
+              a.style.backgroundColor = "red";
+              break;
+            case "2":
+              a.style.backgroundColor = "blue";
+              break;
+            case "3":
+              a.style.backgroundColor = "yellow";
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
