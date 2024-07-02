@@ -50,22 +50,25 @@
         background-color: white;
         line-height: 2;
         /* css 조금 깨져있음  */
+        width: 100%;
+        height: 100%;
         margin-top: -2px;
       }
       .font-size30 {
         font-size: 30px;
       }
       .cut-text {
-        width: 262px;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      /* gpt한테 물어본거 _ js 안쓰고 그냥 이미지 뒤에 숨겨뒀다가 호버시에 올라오는 형식으로 가능하다함 */
       .container {
         position: relative;
         display: inline-block;
         z-index: 1;
+        width: 100%;
+        height: 100%;
       }
       .caption-img {
         display: block;
@@ -124,6 +127,8 @@
             </div>
             <div class="caption-area">
               <h1 class="font-size30">모임 리스트</h1>
+              <!-- 스와이퍼 들어올수도 있음. -->
+              <!-- 버튼 관련된건 media쪽에서 줄여야할듯. -->
               <div class="img-wrap">
                 <div class="img-container">
                   <div>
@@ -131,7 +136,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -158,7 +162,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -185,7 +188,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -212,7 +214,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -239,7 +240,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -266,7 +266,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -293,7 +292,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -320,7 +318,6 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">
@@ -347,7 +344,32 @@
                       <!-- 얘 맵돌릴때 url 바꿔야함 -->
                       <img src="../images/meetinga.png"
                         class="caption-img"
-                        style="width: 270px; height: 200px;"
+                      ></img>
+                      <div class="buttons">
+                        <div class="buttons-inner">
+                            <button class="button-style"></button>
+                            <button class="button-style"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="img-text-area">
+                        <!-- 얘 맵돌릴때 아이콘 바꿔야함 -->
+                        <div class="cut-text">
+                          🚗(아이콘으로변경)최서윤 님의 모임
+                        </div>
+                        <div class="cut-text">신나는 모임 어쩌구</div>
+                        <div class="cut-text">
+                          7월 7일(일) 18:00 홍대 플레이스오션
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="img-container">
+                  <div>
+                    <div class="container">
+                      <!-- 얘 맵돌릴때 url 바꿔야함 -->
+                      <img src="../images/meetinga.png"
+                        class="caption-img"
                       ></img>
                       <div class="buttons">
                         <div class="buttons-inner">

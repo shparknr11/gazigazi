@@ -13,6 +13,22 @@
       .item {
         width: 100%;
       }
+      .func-main {
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+      }
+      .func-main-inner {
+        width: 98%;
+        height: 98%;
+        border-radius: 4px;
+        background-color: white;
+        margin: 0 auto;
+      }
+      .divButtonStyle {
+        background-color: #d9d9d9;
+        color: #fff;
+      }
     </style>
   </head>
 
@@ -38,12 +54,19 @@
                 align-items: center;
               "
             >
-              <div id="1" class="item">1</div>
-              <div id="2" class="item">2</div>
-              <div id="3" class="item">3</div>
+              <div id="1" class="item">일정 관리</div>
+              <div id="2" class="item">모임 게시판</div>
             </div>
-            <div style="width: 100%; height: 600px">
-              <div style="width: 100%; height: 100%" class="func-main"></div>
+            <div class="func-main" style="width: 100%; height: 600px">
+              <div class="func-main-inner">
+                <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 -->
+                <div>
+                  <div>캘린더</div>
+                </div>
+                <div>
+                  <div>게시판리스트</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -69,20 +92,21 @@
 
     <script>
       // 버튼 2개로 움직일 거임
+      // 그 전에 태그를 담아 두는거
       let activeItem = null;
 
       window.addEventListener("click", e => {
         const a = document.querySelector(".func-main");
         if (e.target.classList.contains("item")) {
+          const clickedItem = e.target;
           if (activeItem) {
-            activeItem.style.backgroundColor = "";
-            a.style.backgroundColor = "";
+            activeItem.classList.remove("divButtonStyle");
           }
 
-          const clickedItem = e.target;
-          clickedItem.style.backgroundColor = "black";
-          activeItem = clickedItem;
+          clickedItem.classList.add("divButtonStyle");
 
+          activeItem = clickedItem;
+          console.log(clickedItem);
           // 이벤트 걸곳
           console.log(a);
           switch (clickedItem.id) {
@@ -91,9 +115,6 @@
               break;
             case "2":
               a.style.backgroundColor = "blue";
-              break;
-            case "3":
-              a.style.backgroundColor = "yellow";
               break;
             default:
               break;
