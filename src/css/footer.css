@@ -1,11 +1,11 @@
 .footer {
   background-color: aliceblue;
-  margin-top: 50px;
+  margin-top: 100px;
 }
 
 .footer-inner {
-  width: calc(100% - 150px);
-  max-width: 1620px;
+  width: calc(100% - 200px);
+  max-width: 1520px;
   /* height: auto; */
   margin: 0 auto;
   padding: 20px 20px;
