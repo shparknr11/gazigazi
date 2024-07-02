@@ -8,26 +8,57 @@
 .mt-banner-div {
   width: 100%;
   height: 450px;
-  margin-bottom: 50px;
+  margin-bottom: 85px;
   background: url("../images/banner1.png") no-repeat center;
   background-size: cover;
+  padding: 250px 150px 130px 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+.mt-banner-div span {
+  color: white;
+  margin-bottom: 40px;
+  font-size: 26px;
+}
+.mt-banner-div p {
+  color: white;
+  font-size: 26px;
 }
 .mt-searchbox-div {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 }
 .mt-searchbox {
-  width: 800px;
+  display: flex;
+}
+.mt-searchbox input {
+  width: 740px;
   height: 50px;
-  background-color: aliceblue;
-  border-radius: 25px;
+  border-radius: 25px 0px 0px 25px;
+  padding: 15px;
+  border: 1px solid antiquewhite;
+}
+.mt-searchicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 50px;
+  border-radius: 0px 25px 25px 0px;
+  border: 1px solid antiquewhite;
+
+  cursor: pointer;
+}
+.mt-searchicon svg {
+  width: 24px;
+  height: 24px;
 }
 .mt-category-div {
-  width: 100px;
-  height: 100px;
 }
 .mt-category-img {
   display: block;
@@ -35,6 +66,60 @@
   height: 80px;
   background: url("../images/cate1.png") no-repeat center;
   background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+.mt-category-imgone {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate3.png") no-repeat center;
+  background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+.mt-category-imgtwo {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate2.png") no-repeat center;
+  background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+.mt-category-imgthree {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate4.png") no-repeat center;
+  background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+.mt-category-imgfour {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate5.png") no-repeat center;
+  background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+.mt-category-imgfive {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: url("../images/cate6.png") no-repeat center;
+  background-size: cover;
+  border-radius: 55px;
+  cursor: pointer;
+}
+
+.mt-category-text {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 700;
 }
 
 .main-mid {
@@ -47,11 +132,16 @@
 }
 .mm-meeting-picks {
   position: relative;
-  padding: 0 170px;
-  margin-bottom: 40px;
+  padding: 0 200px;
+  margin-bottom: 90px;
+}
+.mm-meeting-title {
+  display: flex;
+  justify-content: space-between;
 }
 .mm-meeting-list {
   display: flex;
+  justify-content: space-between;
   gap: 20px;
   width: 100%;
   height: 285px;
@@ -60,7 +150,10 @@
   display: block;
   width: 220px;
   height: 285px;
-  background-color: aliceblue;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
+
+  border-radius: 10px;
 }
 .list-box-img {
   display: block;
@@ -87,14 +180,14 @@
 }
 .mm-meeting-around {
   position: relative;
-  padding: 0 170px;
-  margin-bottom: 40px;
+  padding: 0 200px;
+  margin-bottom: 90px;
 }
 
 .mm-meeting-deadline {
   position: relative;
-  padding: 0 170px;
-  margin-bottom: 40px;
+  padding: 0 200px;
+  margin-bottom: 90px;
 }
 .main-bottom {
   display: flex;
@@ -107,10 +200,10 @@
   font-weight: 700;
 }
 .mb-event-div {
-  padding-left: 170px;
+  padding-left: 200px;
 }
 .mb-rank-div {
-  padding-right: 170px;
+  padding-right: 200px;
 }
 .mb-event-list {
   width: 700px;
@@ -133,11 +226,12 @@
   font-size: 10px;
   rotate: 90deg;
 }
-.more-bt-icon svg {
+/* .more-bt-icon svg {
   position: absolute;
   bottom: 130px;
-  right: 250px;
+  right: 220px;
   width: 33px;
   height: 33px;
   font-size: 10px;
-}
+  cursor: pointer;
+} */
