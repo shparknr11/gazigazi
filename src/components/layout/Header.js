@@ -16,7 +16,7 @@ const Header = () => {
       <div className="header-inner">
         <div className="header-logo">
           <Link to="/">
-            <img alt="가지가지" className="header-logo-img" />
+            <img src="" alt="가지가지" className="header-logo-img" />
           </Link>
         </div>
         <nav className="header-menu">
