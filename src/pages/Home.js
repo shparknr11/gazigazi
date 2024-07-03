@@ -1,4 +1,3 @@
-import { TfiArrowCircleRight } from "react-icons/tfi";
 import { FaSearch } from "react-icons/fa";
 import styled from "@emotion/styled";
 
