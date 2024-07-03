@@ -9,6 +9,8 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import styled from "@emotion/styled";
 import Home from "./pages/Home";
+import MyMeeting from "./pages/meeting/MyMeeting";
+import MyMeetingFunc from "./pages/meeting/MyMeetingFunc";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -82,10 +84,10 @@ const App = () => {
             ></Route>
 
             {/* 담당자 : 윤성환 */}
-            <Route path="/mymeeting" element={<h1>내모임페이지 </h1>}></Route>
+            <Route path="/mymeeting" element={<MyMeeting />}></Route>
             <Route
               path="/mymeeting/:meetingId"
-              element={<h1>내모임상세페이지</h1>}
+              element={<MyMeetingFunc />}
             ></Route>
 
             <Route path="*" element={<h1>404 잘못된 경로입니다.</h1>}></Route>
