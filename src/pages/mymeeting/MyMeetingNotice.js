@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
+import { CiImageOff } from "react-icons/ci";
+import imageTest from "../../images/meetinga.png";
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
 
@@ -34,6 +36,7 @@ const MyMeetingNoticeStyle = styled.div`
   }
 `;
 const MyMeetingNotice = () => {
+  const [imgUrl, setImgUrl] = useState("meetinga.png");
   return (
     <MyMeetingNoticeStyle>
       <div className="notice-wrap">
@@ -43,7 +46,15 @@ const MyMeetingNotice = () => {
               {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
               <div className="meeting-introduce">
                 <div style={{ height: "150px" }}>
-                  <img src="./www/images/meetinga.png" />
+                  {imgUrl ? (
+                    <img src={imageTest} />
+                  ) : (
+                    <CiImageOff
+                      className="caption-img"
+                      size="150"
+                      style={{ textAlign: "center" }}
+                    />
+                  )}
                 </div>
                 <div style={{ width: "30%" }}>
                   <div

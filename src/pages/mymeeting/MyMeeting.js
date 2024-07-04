@@ -4,7 +4,14 @@ import { CiImageOff } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 const MyMeetingStyle = styled.div`
   width: 100%;
-  max-width: 1024px;
+
+  .metting-wrap {
+    width: calc(100% - 720px);
+    max-width: 1200px;
+    margin: 0 auto;
+    height: auto;
+    margin-top: 25px;
+  }
   .metting-inner {
     width: 100%;
     display: flex;
@@ -433,7 +440,7 @@ const MyMeeting = () => {
         ];
   return (
     <MyMeetingStyle>
-      <div style={{}}>
+      <div className="metting-wrap">
         <div className="metting-inner">
           <div className="metting-sidebar-inner">
             <div>
