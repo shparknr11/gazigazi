@@ -9,11 +9,16 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import styled from "@emotion/styled";
 import Home from "./pages/Home";
-import MyMeeting from "./pages/meeting/MyMeeting";
-import MyMeetingFunc from "./pages/meeting/MyMeetingFunc";
+
+
 import Create from "./pages/meeting/Create";
 import Review from "./pages/review/Review";
 import Mt from "./pages/meeting/Mt";
+
+import MyMeeting from "./pages/mymeeting/MyMeeting";
+import MyMeetingFunc from "./pages/mymeeting/MyMeetingFunc";
+import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
+
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -66,12 +71,18 @@ const App = () => {
             element={<h1>커뮤수정페이지</h1>}
           ></Route>
 
-          {/* 담당자 : 윤성환 */}
-          <Route path="/mymeeting" element={<MyMeeting />}></Route>
-          <Route
-            path="/mymeeting/:meetingId"
-            element={<MyMeetingFunc />}
-          ></Route>
+
+            {/* 담당자 : 윤성환 */}
+            <Route path="/mymeeting" element={<MyMeeting />}></Route>
+            <Route
+              path="/mymeeting/:meetingId"
+              element={<MyMeetingFunc />}
+            ></Route>
+            <Route
+              path="/mymeeting/mymeetingnotice/:meetingNoticeId"
+              element={<MyMeetingNotice />}
+            ></Route>
+
 
           <Route path="*" element={<h1>404 잘못된 경로입니다.</h1>}></Route>
         </Routes>
