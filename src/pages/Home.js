@@ -1,6 +1,16 @@
 import { FaSearch } from "react-icons/fa";
 import styled from "@emotion/styled";
 
+const HomeInnerStyle = styled.div`
+  width: 100%;
+  max-width: 1920px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+`;
+
 const CartegoryWrapStyle = styled.div`
   display: flex;
   align-items: center;
@@ -22,7 +32,7 @@ const CartegoryWrapStyle = styled.div`
 
 const Home = () => {
   return (
-    <>
+    <HomeInnerStyle>
       <div className="main-top">
         <div className="mt-banner-div">
           <span>집에만 있는 당신,</span>
@@ -60,14 +70,22 @@ const Home = () => {
           </div>
           <div className="mt-category-div">
             <div className="mt-category-imgfive"></div>
+            <div className="mt-category-text">문화•예술</div>
+          </div>
+          <div className="mt-category-div">
+            <div className="mt-category-imgsix"></div>
             <div className="mt-category-text">Bar</div>
+          </div>
+          <div className="mt-category-div">
+            <div className="mt-category-imgseven"></div>
+            <div className="mt-category-text">기타</div>
           </div>
         </CartegoryWrapStyle>
       </div>
       <div className="main-mid">
         <div className="mm-meeting-picks">
           <div className="mm-meeting-title">
-            <h1>신규, 추천 모임🔔</h1>
+            <h1>신규, 방금전 개설된 모임🔔</h1>
             <div>더보기</div>
           </div>
           {/* meeting-list api 연동 */}
@@ -159,7 +177,7 @@ const Home = () => {
           <div></div>
         </div>
       </div>
-    </>
+    </HomeInnerStyle>
   );
 };
 
