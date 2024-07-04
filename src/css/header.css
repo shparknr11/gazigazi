@@ -24,6 +24,11 @@
   align-items: center;
   justify-content: center;
 }
+.header-logo-img {
+  display: block;
+  width: 100px;
+  height: 50px;
+}
 .header-menu-list {
   display: flex;
   align-items: center;

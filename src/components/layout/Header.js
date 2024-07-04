@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { AiTwotoneHeart } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
 import styled from "@emotion/styled";
-
+import aaa from "../../images/logo2.png";
 const HeaderIconStyle = styled.div`
   svg {
     width: 22px;
@@ -16,7 +16,7 @@ const Header = () => {
       <div className="header-inner">
         <div className="header-logo">
           <Link to="/">
-            <img src="" alt="가지가지" className="header-logo-img" />
+            <img src={aaa} alt="가지가지" className="header-logo-img" />
           </Link>
         </div>
         <nav className="header-menu">
