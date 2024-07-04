@@ -5,7 +5,11 @@ import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link } from "react-router-dom";
 
 const MyMeetingFuncStyle = styled.div`
-  width: 100%;
+  width: calc(100% - 720px);
+  max-width: 1200px;
+  margin: 0 auto;
+  height: auto;
+  margin-top: 25px;
   .item {
     width: 100%;
   }
