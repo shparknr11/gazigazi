@@ -5,6 +5,8 @@ import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
 import "../../css/calendar/calendar.css";
 import { Link } from "react-router-dom";
+import { CiImageOff } from "react-icons/ci";
+
 const ReactCalendarStyle = styled.div`
   display: flex;
   flex-direction: column;
@@ -255,7 +257,7 @@ const MyMeetingCalendar = () => {
         />
       </div>
 
-      <TitleDivStyle>일정 상세 정보</TitleDivStyle>
+      <TitleDivStyle>일정 정보 리스트</TitleDivStyle>
       <ReactCalendarListStyle>
         <CalendarListUlStyle>
           <li>
@@ -289,7 +291,7 @@ const MyMeetingCalendar = () => {
                       }}
                     ></img>
                   ) : (
-                    <>이미지가 없습니다.</>
+                    <CiImageOff size={40} />
                   )}
                 </span>
                 <span>{allData.meetIntroduce}</span>

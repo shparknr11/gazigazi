@@ -11,14 +11,29 @@ const MyMeetingStyle = styled.div`
     margin: 0 auto;
     height: auto;
     margin-top: 25px;
+    transition: width 1s;
   }
+  // no-wrap _ 쓸수있는데 사용하자
+  @media (max-width: 1400px) {
+    .metting-wrap {
+      width: 100% !important;
+      transition: width 1s;
+    }
+  }
+  @media (max-width: 768px) {
+    .metting-wrap {
+      width: 100% !important;
+      transition: width 1s;
+    }
+  }
+
   .metting-inner {
     width: 100%;
     display: flex;
     height: 1000px;
   }
   .metting-sidebar-inner {
-    background-color: blue;
+    background-color: #f8ebd6;
     width: 15%;
     display: flex;
     flex-direction: column;
@@ -27,8 +42,8 @@ const MyMeetingStyle = styled.div`
     height: 100%;
   }
   .caption-area {
-    background-color: red;
-    width: 85%;
+    background-color: #f8ebd6;
+    width: 100%;
     height: 100%;
     padding: 20px;
     overflow: hidden;
@@ -115,7 +130,7 @@ const MyMeetingStyle = styled.div`
     cursor: pointer;
   }
   .span-pointer:hover {
-    background-color: gray;
+    color: #fff;
   }
 `;
 const MyMeeting = () => {
@@ -442,30 +457,41 @@ const MyMeeting = () => {
     <MyMeetingStyle>
       <div className="metting-wrap">
         <div className="metting-inner">
-          <div className="metting-sidebar-inner">
-            <div>
-              <span
-                className="span-pointer"
-                onClick={() => {
-                  setIsAuth(1);
-                }}
-              >
-                내가 속한 모임
-              </span>
-            </div>
-            <div>
-              <span
-                className="span-pointer"
-                onClick={() => {
-                  setIsAuth(2);
-                }}
-              >
-                내가 만든 모임
-              </span>
-            </div>
-          </div>
           <div className="caption-area">
-            <h1 className="font-size30">모임 리스트</h1>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h1 className="font-size30">모임 리스트</h1>
+              <div
+                className=""
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "40px",
+                  paddingRight: "55px",
+                }}
+              >
+                <div>
+                  <span
+                    className="span-pointer"
+                    onClick={() => {
+                      setIsAuth(1);
+                    }}
+                  >
+                    내가 속한 모임
+                  </span>
+                </div>
+                <div>
+                  <span
+                    className="span-pointer"
+                    onClick={() => {
+                      setIsAuth(2);
+                    }}
+                  >
+                    내가 만든 모임
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {/* <!-- 스와이퍼 들어올수도 있음. --> */}
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
