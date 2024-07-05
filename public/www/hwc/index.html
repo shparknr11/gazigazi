@@ -3,96 +3,149 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
     <link rel="stylesheet" href="../../../src/css/hwc/CreateAccount.css" />
-    <title>회원가입 페이지</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+
+    <style>
+      .main-inner {
+        width: 100%;
+        display: flex;
+        height: 1000px;
+      }
+    </style>
   </head>
   <body>
-    <div class="mypage-home">
-      <section class="mypage-info">
-        <h1 class="mypage-info-edit">개인 정보</h1>
-        <img src="/src/images/shield_icon.svg" class="mypage-shild" />
-        <div class="mypage-info-edit2">
-          하단 정보는 본인 확인 및 마케팅 수신 서비스에 사용되며, 절대로
-          프로필에 공개되지 않습니다.
-        </div>
-        <form class="mypage-info-detail">
-          <div class="mypage-detail">
-            <label for="name" placeholder="본명을 적어주세요." class="infos">
-              이름
-              <input type="text" style="font-size: 12pt" placeholder="" class="infos-input" />
-            </label>
-            </div>
-          <div class="mypage-detail2"
+    <div class="wrap">
+      <header class="header"></header>
+      <main class="main">
+        <div class="main-inner">
+          <div class="main-create">회원가입</div>
+          <form class="main-create-detail">
             <label>
-              <span>휴대전화 번호</span>
-              <input
-                type="text"
-                style="font-size: 12pt"
-                placeholder="-제외하고 입력해 주세요"
-              />
-              <input
-                type="text"
-                style="font-size: 12pt"
-                placeholder="인증번호(6자리 숫자)"
-              />
-            </label>
-          </div>
-          <div class="mypage-detail3">
-            <label>
-              <span>이메일</span>
+              <span class="create-span-e">이메일</span>
               <input
                 type="email"
                 style="font-size: 12pt"
-                placeholder="example@email.com"
+                placeholder=""
+                class="create-email-1"
               />
-            </label>
-          </div>
-            <label>
-              <span>생일</span>
-              <input type="date" style="font-size: 12pt" />
-            </label>
-            <div class="mypage-detail4">
-            <label>
-              <span>성별</span>
-              <input type="radio" name="gender" value="남성" />남성
-              <input type="radio" name="gender" value="여성" />여성
-            </label>
-            </div>
-          </div>
-        </form>
-        <div class="mypage-info-marketing">
-          <h1>개인 정보 처리 및 마케팅 수신 동의</h1>
-          <form>
-            <label class="info-title1">
-              <input type="checkbox" name="info-all" />
-              전체 동의(선택항목 포함)
-            </label>
-            <br />
-            <label class="info-title2">
-              <input type="checkbox" name="info-terms" />
-              이용약관(필수)
-            </label>
-            <br />
-            <label class="info-title3">
-              <input type="checkbox" name="info-guide" />
-              개인정보 수집 및 이용에 대한 안내(필수)
-            </label>
-            <br />
-            <label class="info-title4">
+              <i class="create-eee">@</i>
               <input
-                type="checkbox"
-                name="info-
-            reception"
+                type="email"
+                style="font-size: 12pt"
+                placeholder="email.com"
+                class="create-email-2"
               />
-              마케팅 수신(선택)
+              <button type="button" class="create-button-1">인증</button>
+              <button type="button" class="create-button-2">중복 확인</button>
             </label>
             <br />
-            <span>동의 시 알림 및 공지를 문자 및 이메일로 전송해드립니다.</span>
+            <label>
+              <span class="create-span-p-1">비밀번호</span>
+              <input
+                type="password"
+                style="font-size: 12pt"
+                placeholder=""
+                class="create-password-1"
+              />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-p-2">비밀번호 확인</span>
+              <input
+                type="password"
+                style="font-size: 12pt"
+                class="create-password-2"
+              />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-n-1">이름</span>
+              <input type="text" style="font-size: 12pt" class="create-name" />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-n-2">닉네임</span>
+              <input
+                type="text"
+                style="font-size: 12pt"
+                class="create-nickname"
+              />
+              <button type="button" class="create-button-3">중복 확인</button>
+            </label>
+            <br />
+            <label>
+              <span class="create-span-a">주소</span>
+              <input
+                type="text"
+                id="postcode"
+                name="zipcode"
+                size="5"
+                class="create-address"
+              />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-b">생년 월일</span>
+              <input
+                type="date"
+                style="font-size: 12pt"
+                class="create-birthday"
+              />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-pn">전화번호</span>
+              <input
+                type="text"
+                style="font-size: 12pt"
+                class="create-phone-number"
+              />
+            </label>
+            <br />
+            <label>
+              <span class="create-span-i">관심있는 분야</span>
+              <input
+                type="text"
+                style="font-size: 12pt"
+                class="create-interests"
+              />
+            </label>
+            <br />
+            <label for="select">
+              <span class="create-span-g">성별</span>
+              <input
+                type="radio"
+                name="gender"
+                value="남성"
+                class="create-boy"
+              />남
+              <input
+                type="radio"
+                name="gender"
+                value="여성"
+                class="create-girl"
+              />여
+            </label>
+            <br />
+            <label class="create-info-11">
+              <span class="create-span-in">자기 소개</span>
+              <input
+                type="text"
+                style="font-size: 12pt"
+                class="create-introduction"
+              />
+            </label>
+            <br />
+            <button type="submit" class="create-button-4">가입 완료</button>
           </form>
         </div>
-      </section>
-      <br />
-      <button type="button">가입 완료</button>
+      </main>
     </div>
   </body>
 </html>

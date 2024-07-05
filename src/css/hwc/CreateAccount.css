@@ -1,78 +1,315 @@
-.mypage-home {
-  box-sizing: border-box;
-  margin: 0;
-  min-width: 0;
-  flex-direction: column;
-  width: 100%;
-}
+.main-create {
+  /* 회원가입 */
+  position: absolute;
+  width: 216px;
+  height: 85px;
+  left: 50px;
+  top: 90px;
 
-.mypage-info-edit {
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  color: rgb(36, 36, 36);
-  font-size: 18px;
+  font-family: "Heebo";
+  font-style: normal;
   font-weight: 700;
-}
-
-.mypage-shild {
-  box-sizing: border-box;
-  margin: 0px 8px 0px 0px;
-  min-width: 0px;
-  max-width: 100%;
-  height: auto;
-}
-
-.mypage-info {
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  width: 100%;
-}
-
-.mypage-info-edit2 {
-  box-sizing: border-box;
-  margin: 20px 0px;
-  min-width: 0px;
-  background-color: rgb(247, 247, 247);
-  border-radius: 6px;
-  color: rgb(102, 102, 102);
-  font-size: 14px;
-  line-height: 24px;
-  padding: 8px;
-  width: 100%;
-}
-
-.infos {
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  width: 100%;
-  color: rgb(122, 126, 130);
-  font-weight: bold;
+  font-size: 40px;
+  line-height: 59px;
   display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  color: #000000;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.mypage-detail {
+.create-span-e {
+  /* 이메일 */
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 340px;
+  top: 275px;
+
+  color: #000000;
+}
+.create-email-1 {
   box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  width: 100%;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 268px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+.create-email-2 {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 700px;
+  top: 268px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+.create-eee {
+  /* @ */
+  position: absolute;
+  width: 54px;
+  height: 50px;
+  left: 675px;
+  top: 273px;
+
+  color: #000000;
+}
+.create-button-1 {
+  position: absolute;
+  width: 45px;
+  height: 25px;
+  left: 968px;
+  top: 271px;
+
+  color: #000000;
+}
+.create-button-2 {
+  position: absolute;
+  width: 70px;
+  height: 25px;
+  left: 1025px;
+  top: 271px;
+
+  color: #000000;
 }
 
-.infos-input {
+.create-span-p-1 {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 325px;
+  top: 340px;
+
+  color: #000000;
+}
+.create-password-1 {
   box-sizing: border-box;
-  margin: 0px 0px;
-  min-width: 0px;
-  display: block;
-  padding: 8px;
-  appearance: none;
-  font-size: inherit;
-  line-height: inherit;
-  border: 1px solid rgb(218, 220, 224);
-  color: inherit;
-  background-color: transparent;
-  border-radius: 10px;
-  height: 28px;
-  width: 50%;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 332px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+.create-span-p-2 {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 290px;
+  top: 400px;
+
+  color: #000000;
+}
+.create-password-2 {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 392px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-n-1 {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 353px;
+  top: 460px;
+
+  color: #000000;
+}
+.create-name {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 452px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-n-2 {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 338px;
+  top: 517px;
+
+  color: #000000;
+}
+.create-nickname {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 510px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+.create-button-3 {
+  position: absolute;
+  width: 70px;
+  height: 25px;
+  left: 678px;
+  top: 512px;
+
+  color: #000000;
+}
+
+.create-span-a {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 352px;
+  top: 575px;
+
+  color: #000000;
+}
+.create-address {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 568px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-b {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 318px;
+  top: 633px;
+
+  color: #000000;
+}
+.create-birthday {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 625px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-pn {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 321px;
+  top: 688px;
+
+  color: #000000;
+}
+.create-phone-number {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 681px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-i {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 286px;
+  top: 745px;
+
+  color: #000000;
+}
+.create-interests {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 256px;
+  height: 30px;
+  left: 410px;
+  top: 737px;
+
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+}
+
+.create-span-g {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 760px;
+  top: 338px;
+
+  color: #000000;
+}
+.create-boy {
+  position: absolute;
+  width: 48px;
+  height: 36px;
+  left: 860px;
+  top: 328px;
+}
+.create-girl {
+  position: absolute;
+  width: 48px;
+  height: 36px;
+  left: 1000px;
+  top: 328px;
+}
+
+.create-span-in {
+  position: absolute;
+  width: 110px;
+  height: 53px;
+  left: 745px;
+  top: 400px;
+
+  color: #000000;
+}
+.create-introduction {
 }
