@@ -10,8 +10,20 @@ const MyMeetingFuncStyle = styled.div`
   margin: 0 auto;
   height: auto;
   margin-top: 25px;
+  .item-wrap {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid #f7ebd5;
+    border-radius: 4px 4px 0px 0px;
+  }
   .item {
     width: 100%;
+    padding: 10px;
+    color: #383737;
   }
   .func-main {
     width: 100%;
@@ -26,10 +38,27 @@ const MyMeetingFuncStyle = styled.div`
     margin: 0 auto;
   }
   .divButtonStyle {
-    background-color: #d9d9d9;
+    background-color: #f8ebd6;
     color: #fff;
   }
+  .main-notice-ul {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    border: 1px solid #f8ebd6;
+    border-radius: 6px;
+  }
+  .main-notice-li {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid #f8ebd6;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
 `;
+
 const MyMeetingFunc = () => {
   const [isClicked, setIsClicked] = useState();
   useEffect(() => {
@@ -54,10 +83,10 @@ const MyMeetingFunc = () => {
       // 이벤트 걸곳
       switch (clickedItem.id) {
         case "1":
-          a.style.backgroundColor = "red";
+          a.style.backgroundColor = "#f8ebd6";
           break;
         case "2":
-          a.style.backgroundColor = "blue";
+          a.style.backgroundColor = "#f8ebd6";
           break;
         default:
           break;
@@ -75,14 +104,7 @@ const MyMeetingFunc = () => {
         }}
       >
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className="item-wrap">
           <div
             id="1"
             className="item"
@@ -112,22 +134,8 @@ const MyMeetingFunc = () => {
               // li map 돌릴거임
               <div>
                 <div>
-                  <ul
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "40px",
-                    }}
-                  >
-                    <li
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        alignItems: "center",
-                        borderBottom: "1px solid gray",
-                        paddingBottom: "10px",
-                      }}
-                    >
+                  <ul className="main-notice-ul">
+                    <li className="main-notice-li">
                       <div>글쓴이</div>
                       <div>제목</div>
                       <div>내용</div>
