@@ -129,7 +129,6 @@ const Review = () => {
           </div>
         </div>
       </ReviewItemStyle>
-      <ReviewModal />
     </ReviewInnerStyle>
   );
 };
