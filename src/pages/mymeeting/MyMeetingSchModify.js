@@ -7,7 +7,6 @@ const MyMeetingNoticeStyle = styled.div`
   align-items: center;
   .notice-wrap {
     width: 100%;
-    height: 650px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -78,13 +77,13 @@ const TitleDivStyle = styled.div`
   padding-left: 5px;
   padding-top: 20px;
 `;
-const MyMeetingNotice = () => {
+const MyMeetingSchModify = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   return (
     <>
       <MyMeetingNoticeStyle>
         <div className="notice-wrap">
-          <TitleDivStyle>모임 게시판</TitleDivStyle>
+          <TitleDivStyle>일정 수정 페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
               <form>
@@ -162,8 +161,8 @@ const MyMeetingNotice = () => {
                     ></textarea>
                   </div>
                   <div className="button-wrap">
-                    <button>수정</button>
-                    <button>삭제</button>
+                    <button type="button">수정</button>
+                    <button type="button">삭제</button>
                   </div>
                 </div>
               </form>
@@ -175,4 +174,4 @@ const MyMeetingNotice = () => {
   );
 };
 
-export default MyMeetingNotice;
+export default MyMeetingSchModify;

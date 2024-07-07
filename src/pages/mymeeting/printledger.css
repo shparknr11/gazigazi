@@ -1,0 +1,27 @@
+@media print {
+  #printTagId {
+    width: 680px;
+    position: fixed;
+    top: 0;
+  }
+  #titletext {
+    display: none !important;
+  }
+  #printDeleteTag {
+    display: none !important;
+  }
+  #title-print {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 40px;
+  }
+  header {
+    display: none !important;
+  }
+  footer {
+    display: none !important;
+  }
+  .item-wrap {
+    display: none !important;
+  }
+}
