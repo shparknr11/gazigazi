@@ -51,6 +51,7 @@ const TitleDivStyle = styled.div`
   font-weight: bold;
   color: black;
   padding-left: 5px;
+  padding-top: 20px;
 `;
 const CalendarListUlStyle = styled.div`
   display: flex;
@@ -240,8 +241,18 @@ const MyMeetingCalendar = () => {
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>일정 관리</TitleDivStyle>
-
-      <div style={{ margin: "0 auto" }}>
+      <div style={{ textAlign: "right", padding: "10px" }}>
+        <button
+          type="button"
+          onClick={() => {
+            navigate("/mymeeting/mymeetingschmemberlist/:meetingMemberlistid");
+          }}
+        >
+          신청멤버리스트
+        </button>
+      </div>
+      {/*  style={{ margin: "0 auto" }} */}
+      <div>
         {/* 굳이 밑에 리스트형식 및 아이콘으로 표현 해주는데 알려줄 필요가 있나? */}
         {/* <div>
           {clickDay}의 상세정보 : {clickInfo?.title}
@@ -258,6 +269,16 @@ const MyMeetingCalendar = () => {
       </div>
 
       <TitleDivStyle>일정 정보 리스트</TitleDivStyle>
+      <div style={{ textAlign: "end", marginRight: "10px" }}>
+        <button
+          type="button"
+          onClick={() => {
+            navigate("/mymeeting/mymeetingschresister", { state: clickDay });
+          }}
+        >
+          등록
+        </button>
+      </div>
       <ReactCalendarListStyle>
         <CalendarListUlStyle>
           <li>
@@ -270,7 +291,7 @@ const MyMeetingCalendar = () => {
         {allData ? (
           <CalendarListLiStyle>
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
-            <Link to={`/`} state={{}}>
+            <Link to={`/mymeeting/mymeetingschdetail/:meetingschid`} state={{}}>
               <li>
                 <span
                   style={{
@@ -313,19 +334,11 @@ const MyMeetingCalendar = () => {
               width: "100%",
             }}
           >
-            등록 된 일정이 없습니다.
+            <Link to={"/mymeeting/mymeetingSchresister"}>
+              등록 된 일정이 없습니다.
+            </Link>
           </div>
         )}
-        <div style={{ textAlign: "end", marginRight: "10px" }}>
-          <button
-            type="button"
-            onClick={() => {
-              navigate("/", { state: clickDay });
-            }}
-          >
-            일정 등록 페이지 만들면 그때 수정
-          </button>
-        </div>
       </ReactCalendarListStyle>
     </ReactCalendarStyle>
   );

@@ -133,6 +133,13 @@ const MyMeetingStyle = styled.div`
     color: #fff;
   }
 `;
+const TitleDivStyle = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+  padding-left: 5px;
+  padding-top: 20px;
+`;
 const MyMeeting = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [isAuth, setIsAuth] = useState(0);
@@ -459,7 +466,7 @@ const MyMeeting = () => {
         <div className="metting-inner">
           <div className="caption-area">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h1 className="font-size30">모임 리스트</h1>
+              <TitleDivStyle>모임 리스트</TitleDivStyle>
               <div
                 className=""
                 style={{
@@ -525,7 +532,7 @@ const MyMeeting = () => {
                                 className="button-style"
                                 onClick={e => {}}
                               >
-                                관리페이지
+                                관리
                               </button>
                             </>
                           ) : (
@@ -537,7 +544,17 @@ const MyMeeting = () => {
                                   navigate("/mymeeting/1");
                                 }}
                               >
-                                관리페이지
+                                관리
+                              </button>
+                              <button
+                                className="button-style"
+                                onClick={e => {
+                                  navigate(
+                                    "/mymeeting/mymeetingschmemberlist/:meetingMemberlistid",
+                                  );
+                                }}
+                              >
+                                멤버
                               </button>
                             </>
                           )}
