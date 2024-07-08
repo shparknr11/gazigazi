@@ -172,37 +172,53 @@ const MyMeetingSchDetail = () => {
                       >
                         <div
                           style={{
-                            width: "50%",
+                            width: "100%",
                             display: "flex",
+                            padding: "10px",
                             flexDirection: "column",
                             justifyContent: "center",
+                            gap: "10px",
                           }}
                         >
                           <label htmlFor="noticeid">일정명</label>
-                          <input id="noticeid" />
+                          <input
+                            id="noticeid"
+                            style={{ height: "30px", padding: "5px" }}
+                          />
                         </div>
                         <div
                           style={{
-                            width: "50%",
+                            width: "100%",
                             display: "flex",
+                            padding: "10px",
                             flexDirection: "column",
                             justifyContent: "center",
+                            gap: "10px",
                           }}
                         >
-                          <label htmlFor="noticeid">일정날짜</label>
                           {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
-                          <input type="date" id="noticeid" />
+                          <label htmlFor="schDateId">일정날짜</label>
+                          <input
+                            type="date"
+                            id="schDateId"
+                            style={{ height: "30px", padding: "5px" }}
+                          />
                         </div>
                         <div
                           style={{
-                            width: "50%",
+                            width: "100%",
+                            padding: "10px",
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
+                            gap: "10px",
                           }}
                         >
                           <label htmlFor="noticeid">인원수</label>
-                          <select id="">
+                          <select
+                            id=""
+                            style={{ height: "30px", paddingLeft: "5px" }}
+                          >
                             <option>30</option>
                             <option>100</option>
                             <option>200</option>
