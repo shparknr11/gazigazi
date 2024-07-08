@@ -80,7 +80,7 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingCalendar = () => {
+const MyMeetingCalendar = ({ isClicked }) => {
   const [calendarFilterData, setCalendarFilterData] = useState([]);
   const [userSeq, setUserSeq] = useState(null);
   const [page, setPage] = useState(1);
@@ -241,15 +241,20 @@ const MyMeetingCalendar = () => {
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>일정 관리</TitleDivStyle>
+
       <div style={{ textAlign: "right", padding: "10px" }}>
-        <button
-          type="button"
-          onClick={() => {
-            navigate("/mymeeting/mymeetingschmemberlist/:meetingMemberlistid");
-          }}
-        >
-          신청멤버리스트
-        </button>
+        {isClicked ? (
+          <button
+            type="button"
+            onClick={() => {
+              navigate(
+                "/mymeeting/mymeetingschmemberlist/:meetingMemberlistid",
+              );
+            }}
+          >
+            신청멤버리스트
+          </button>
+        ) : null}
       </div>
       {/*  style={{ margin: "0 auto" }} */}
       <div>
@@ -270,14 +275,16 @@ const MyMeetingCalendar = () => {
 
       <TitleDivStyle>일정 정보 리스트</TitleDivStyle>
       <div style={{ textAlign: "end", marginRight: "10px" }}>
-        <button
-          type="button"
-          onClick={() => {
-            navigate("/mymeeting/mymeetingschresister", { state: clickDay });
-          }}
-        >
-          등록
-        </button>
+        {isClicked === 1 ? (
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/mymeeting/mymeetingschresister", { state: clickDay });
+            }}
+          >
+            등록
+          </button>
+        ) : null}
       </div>
       <ReactCalendarListStyle>
         <CalendarListUlStyle>
@@ -334,9 +341,7 @@ const MyMeetingCalendar = () => {
               width: "100%",
             }}
           >
-            <Link to={"/mymeeting/mymeetingSchresister"}>
-              등록 된 일정이 없습니다.
-            </Link>
+            등록 된 일정이 없습니다.
           </div>
         )}
       </ReactCalendarListStyle>

@@ -14,19 +14,19 @@ import Create from "./pages/meeting/Create";
 import Review from "./pages/review/Review";
 
 import MyMeeting from "./pages/mymeeting/MyMeeting";
-import MyMeetingFunc from "./pages/mymeeting/MyMeetingFunc";
 import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
 
-import Detail from "./pages/meeting/Detail";
 import Category from "./pages/meeting/Category";
+import Detail from "./pages/meeting/Detail";
 import Write from "./pages/review/Write";
 
+import MyMeetingFuncLeader from "./pages/mymeeting/MyMeetingFuncLeader";
+import MyMeetingFuncUser from "./pages/mymeeting/MyMeetingFuncUser";
+import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 import MyMeetingSchDetail from "./pages/mymeeting/MyMeetingSchDetail";
-import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 import MyMeetingSchModify from "./pages/mymeeting/MyMeetingSchModify";
 import MyMeetingSchResister from "./pages/mymeeting/MyMeetingSchResister";
-import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
-
+import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -83,8 +83,12 @@ const App = () => {
           {/* 일단 쿼리스트링 이런건 고려 안하고 작성 */}
           <Route path="/mymeeting" element={<MyMeeting />}></Route>
           <Route
-            path="/mymeeting/:meetingId"
-            element={<MyMeetingFunc />}
+            path="/mymeeting/mymeetinguser/:meetingId"
+            element={<MyMeetingFuncUser />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingLeader/:meetingId"
+            element={<MyMeetingFuncLeader />}
           ></Route>
           <Route
             path="/mymeeting/mymeetingnotice/:meetingnoticeId"
