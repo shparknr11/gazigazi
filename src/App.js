@@ -1,13 +1,13 @@
+import styled from "@emotion/styled";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import "./css/reset.css";
+import Footer from "./components/layout/Footer";
+import Header from "./components/layout/Header";
 import "./css/common.css";
+import "./css/footer.css";
 import "./css/header.css";
 import "./css/main.css";
-import "./css/footer.css";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
-import styled from "@emotion/styled";
+import "./css/reset.css";
 import Home from "./pages/Home";
 
 import Create from "./pages/meeting/Create";
@@ -16,9 +16,17 @@ import Review from "./pages/review/Review";
 import MyMeeting from "./pages/mymeeting/MyMeeting";
 import MyMeetingFunc from "./pages/mymeeting/MyMeetingFunc";
 import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
+
 import Detail from "./pages/meeting/Detail";
 import Category from "./pages/meeting/Category";
 import Write from "./pages/review/Write";
+
+import MyMeetingSchDetail from "./pages/mymeeting/MyMeetingSchDetail";
+import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
+import MyMeetingSchModify from "./pages/mymeeting/MyMeetingSchModify";
+import MyMeetingSchResister from "./pages/mymeeting/MyMeetingSchResister";
+import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
+
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -72,14 +80,36 @@ const App = () => {
           ></Route>
 
           {/* 담당자 : 윤성환 */}
+          {/* 일단 쿼리스트링 이런건 고려 안하고 작성 */}
           <Route path="/mymeeting" element={<MyMeeting />}></Route>
           <Route
             path="/mymeeting/:meetingId"
             element={<MyMeetingFunc />}
           ></Route>
           <Route
-            path="/mymeeting/mymeetingnotice/:meetingNoticeId"
+            path="/mymeeting/mymeetingnotice/:meetingnoticeId"
             element={<MyMeetingNotice />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingmemberlist/:meetingmemberlistId"
+            element={<MyMeetingMemberList />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingschdetail/:meetingschid"
+            element={<MyMeetingSchDetail />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingschmodify/:meetingschid"
+            element={<MyMeetingSchModify />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingSchresister"
+            element={<MyMeetingSchResister />}
+          ></Route>
+
+          <Route
+            path="/mymeeting/mymeetingschmemberlist/:meetingMemberlistid"
+            element={<MyMeetingSchMemberList />}
           ></Route>
 
           <Route path="*" element={<h1>404 잘못된 경로입니다.</h1>}></Route>
