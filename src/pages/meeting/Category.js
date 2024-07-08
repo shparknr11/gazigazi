@@ -32,6 +32,7 @@ const CateInnerStyle = styled.div`
     width: 250px;
     height: 25px;
     border: 1px solid #000;
+    border-radius: 15px;
   }
   .category-search-input {
     border: none;

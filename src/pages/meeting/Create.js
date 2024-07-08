@@ -99,10 +99,14 @@ const LocalSelectWrapStyle = styled.div`
 const Create = () => {
   return (
     <CreateInnerStyle>
-      <h1>모임 등록하기</h1>
+      <h1>모임 등록신청</h1>
       <CreateCheckStyle>
         <div>
           <h1>모임등록 전 숙지사항</h1>
+          <span>
+            작성 후 관리자의 승인이 필요합니다. 관리자 심사 후 승인되면
+            알려드릴게요.
+          </span>
         </div>
       </CreateCheckStyle>
       <CreateFormDivStyle>

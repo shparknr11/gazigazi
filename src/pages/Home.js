@@ -1,5 +1,6 @@
 import { FaSearch } from "react-icons/fa";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 const HomeInnerStyle = styled.div`
   width: 100%;
@@ -12,14 +13,14 @@ const HomeInnerStyle = styled.div`
 `;
 const HomeMidInnerStyle = styled.div`
   width: 100%;
-  max-width: 1170px;
+  max-width: 1300px;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
 `;
 const HomeBtmInnerStyle = styled.div`
   width: 100%;
-  max-width: 1170px;
+  max-width: 1300px;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
@@ -44,6 +45,7 @@ const CartegoryWrapStyle = styled.div`
 `;
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <HomeInnerStyle>
       <div className="main-top">
@@ -60,7 +62,12 @@ const Home = () => {
         <CartegoryWrapStyle>
           {/* json or api 연동 예정 */}
           <div className="mt-category-div">
-            <div className="mt-category-img"></div>
+            <div
+              className="mt-category-img"
+              onClick={() => {
+                navigate(`/category`);
+              }}
+            ></div>
             <div className="mt-category-text">스포츠</div>
           </div>
           <div className="mt-category-div">
@@ -102,10 +109,15 @@ const Home = () => {
             </div>
             {/* meeting-list api 연동 */}
             <div className="mm-meeting-list">
-              <div className="list-box">
+              <div
+                className="list-box"
+                onClick={() => {
+                  navigate(`/meeting/detail`);
+                }}
+              >
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
-                  <span>OOO 모임장</span>
+                  <span>OOO 님의 모임</span>
                 </div>
                 <h3 className="list-box-text">
                   여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤

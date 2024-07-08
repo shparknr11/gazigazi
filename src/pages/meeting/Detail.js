@@ -1,9 +1,15 @@
 import styled from "@emotion/styled";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
+import meetimg from "../../images/meetinga.png";
 
 const MeetItemStyle = styled.div`
+  margin-top: 30px;
   .inner {
+    display: flex;
+    margin: 0 auto;
     flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
   }
 `;
 const MeetItemTitle = styled.div`
@@ -35,7 +41,7 @@ const MeetItemCard = styled.div`
   margin-bottom: 50px;
 
   .meet-item-img {
-    /* background: url() no-repeat center; */
+    background: url(${meetimg}) no-repeat center;
     background-size: cover;
     max-width: 390px;
     width: 100%;
@@ -99,6 +105,10 @@ const Detail = () => {
                 있어요. 서비스업 자영업자 새싹으로서 선배 자영업자 분들의 훈수
                 환영합니다.(단, 오셔서💙)
               </p>
+              <button style={{ marginTop: "30px", marginRight: "10px" }}>
+                찜하기
+              </button>
+              <button>신청하기</button>
             </div>
           </MeetItemCard>
         </MeetItemTitle>
