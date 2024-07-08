@@ -16,6 +16,9 @@ import Review from "./pages/review/Review";
 import MyMeeting from "./pages/mymeeting/MyMeeting";
 import MyMeetingFunc from "./pages/mymeeting/MyMeetingFunc";
 import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
+import Detail from "./pages/meeting/Detail";
+import Category from "./pages/meeting/Category";
+import Write from "./pages/review/Write";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -39,16 +42,13 @@ const App = () => {
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>
           <Route path="/meeting/create" element={<Create />}></Route>
-          <Route
-            path="/meeting/:meetingId"
-            element={<h1>모임 상세페이지</h1>}
-          ></Route>
+          <Route path="/meeting/:meetingId" element={<Detail />}></Route>
           <Route
             path="/meeting/modify/:meetingId"
             element={<h1>모임수정페이지</h1>}
           ></Route>
           <Route path="/search" element={<h1>검색페이지</h1>}></Route>
-          <Route path="/category" element={<h1>카테고리 페이지</h1>}></Route>
+          <Route path="/category" element={<Category />}></Route>
 
           {/* 기타 담당자 : 모두 */}
           <Route
@@ -65,7 +65,7 @@ const App = () => {
             path="/review/:boardId"
             element={<h1>커뮤상세페이지</h1>}
           ></Route>
-          <Route path="/review/write" element={<h1>커뮤등록페이지</h1>}></Route>
+          <Route path="/review/write" element={<Write />}></Route>
           <Route
             path="/review/modify/:boardId"
             element={<h1>커뮤수정페이지</h1>}

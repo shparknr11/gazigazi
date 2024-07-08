@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 const ModalFormDivStyle = styled.div`
   width: 100%;
   padding: 20px;
-  height: 3000px;
+  height: 300px;
   background-color: beige;
   display: flex;
   flex-direction: column;

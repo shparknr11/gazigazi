@@ -30,33 +30,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  margin-bottom: 80px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  height: 50px;
+  padding: 0 15px 0 55px;
+  box-shadow: 0px 5px 24px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 100px;
+  border-radius: 25px;
 }
 .mt-searchbox {
   display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 .mt-searchbox input {
-  width: 740px;
+  width: 640px;
+  font-size: 18px;
+  padding-left: 40px;
   height: 50px;
-  border-radius: 25px 0px 0px 25px;
-  padding: 15px;
-  border: 1px solid antiquewhite;
+  background: url(../images/searchicon.png) no-repeat center left;
+  background-size: 25px;
+  /* outline: none; */
+  border: none;
 }
-.mt-searchicon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 50px;
-  border-radius: 0px 25px 25px 0px;
-  border: 1px solid antiquewhite;
-
-  cursor: pointer;
-}
-.mt-searchicon svg {
-  width: 24px;
-  height: 24px;
+.mt-searchbt {
+  padding: 12px 22px;
+  border-radius: 25px;
+  background-color: antiquewhite;
 }
 .mt-category-div {
 }
@@ -73,7 +74,7 @@
   display: block;
   width: 80px;
   height: 80px;
-  background: url("../images/cate3.png") no-repeat center;
+  background: url("../images/cate2.png") no-repeat center;
   background-size: cover;
   border-radius: 55px;
   cursor: pointer;
@@ -82,7 +83,7 @@
   display: block;
   width: 80px;
   height: 80px;
-  background: url("../images/cate2.png") no-repeat center;
+  background: url("../images/cate3.png") no-repeat center;
   background-size: cover;
   border-radius: 55px;
   cursor: pointer;
@@ -150,7 +151,6 @@
 }
 .mm-meeting-picks {
   position: relative;
-  padding: 0 200px;
   margin-bottom: 90px;
 }
 .mm-meeting-title {
@@ -166,7 +166,8 @@
 }
 .list-box {
   display: block;
-  width: 220px;
+  width: 100%;
+  max-width: 250px;
   height: 285px;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
@@ -175,7 +176,6 @@
 }
 .list-box-img {
   display: block;
-  width: 220px;
   height: 150px;
   background: url("../images/meetinga.png") no-repeat center;
   background-size: cover;
@@ -197,19 +197,14 @@
   padding: 5px;
 }
 .mm-meeting-around {
-  position: relative;
-  padding: 0 200px;
   margin-bottom: 90px;
 }
 
 .mm-meeting-deadline {
-  position: relative;
-  padding: 0 200px;
   margin-bottom: 90px;
 }
 .main-bottom {
   display: flex;
-  justify-content: space-between;
   width: 100%;
 }
 .main-bottom h1 {
@@ -218,38 +213,16 @@
   font-weight: 700;
 }
 .mb-event-div {
-  padding-left: 200px;
 }
 .mb-rank-div {
-  padding-right: 200px;
 }
 .mb-event-list {
-  width: 700px;
+  width: 500px;
   height: 300px;
   background-color: aliceblue;
 }
 .mb-rank-list {
-  width: 700px;
+  width: 400px;
   height: 300px;
   background-color: aliceblue;
 }
-
-.more-bt {
-  position: absolute;
-  bottom: 133px;
-  right: 240px;
-  padding: 3px 5px;
-  border: solid 1px;
-  border-radius: 5px;
-  font-size: 10px;
-  rotate: 90deg;
-}
-/* .more-bt-icon svg {
-  position: absolute;
-  bottom: 130px;
-  right: 220px;
-  width: 33px;
-  height: 33px;
-  font-size: 10px;
-  cursor: pointer;
-} */
