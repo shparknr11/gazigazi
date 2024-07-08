@@ -26,7 +26,12 @@ import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 import MyMeetingSchDetail from "./pages/mymeeting/MyMeetingSchDetail";
 import MyMeetingSchModify from "./pages/mymeeting/MyMeetingSchModify";
 import MyMeetingSchResister from "./pages/mymeeting/MyMeetingSchResister";
+
+import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
+import Admin from "./pages/admin/Admin";
+
 import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
+
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -78,6 +83,8 @@ const App = () => {
             path="/review/modify/:boardId"
             element={<h1>커뮤수정페이지</h1>}
           ></Route>
+
+          <Route path="/admin" element={<Admin />}></Route>
 
           {/* 담당자 : 윤성환 */}
           {/* 일단 쿼리스트링 이런건 고려 안하고 작성 */}
