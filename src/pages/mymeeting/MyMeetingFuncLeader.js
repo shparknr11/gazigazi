@@ -98,10 +98,9 @@ const TitleDivStyle = styled.div`
   font-size: 20px;
   font-weight: bold;
   color: black;
-  padding-left: 5px;
-  padding-top: 20px;
+  padding: 20px 0px 20px 5px;
 `;
-const MyMeetingFunc = () => {
+const MyMeetingFuncLeader = () => {
   const [isClicked, setIsClicked] = useState();
   const [monthValue, setMonthValue] = useState(1);
   const [isDisplayNone, setIsDisplayNone] = useState(1);
@@ -125,26 +124,25 @@ const MyMeetingFunc = () => {
       }
 
       clickedItem.classList.add("divButtonStyle");
-      titletext.innerHTML =
-        "관리페이지" +
-        "(" +
-        document.getElementById(e.target.id).innerText +
-        ")";
-      activeItem = clickedItem;
-      // 이벤트 걸곳 axios 여기다 걸자
-      switch (clickedItem.id) {
-        case "1":
-          a.style.backgroundColor = "#f8ebd6";
+      if (titletext) {
+        titletext.innerHTML =
+          "Blog" + "(" + document.getElementById(e.target.id).innerText + ")";
+        activeItem = clickedItem;
+        // 이벤트 걸곳 axios 여기다 걸자
+        switch (clickedItem.id) {
+          case "1":
+            a.style.backgroundColor = "#f8ebd6";
 
-          break;
-        case "2":
-          a.style.backgroundColor = "#f8ebd6";
-          break;
-        case "3":
-          a.style.backgroundColor = "#f8ebd6";
-          break;
-        default:
-          break;
+            break;
+          case "2":
+            a.style.backgroundColor = "#f8ebd6";
+            break;
+          case "3":
+            a.style.backgroundColor = "#f8ebd6";
+            break;
+          default:
+            break;
+        }
       }
     }
   });
@@ -162,7 +160,7 @@ const MyMeetingFunc = () => {
   };
   return (
     <MyMeetingFuncStyle id="aaaaa">
-      <TitleDivStyle id="titletext">관리페이지</TitleDivStyle>
+      <TitleDivStyle id="titletext">Blog</TitleDivStyle>
       <div
         style={{
           display: "flex",
@@ -206,7 +204,7 @@ const MyMeetingFunc = () => {
           <div className="func-main-inner">
             {/* <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 --> */}
             {isClicked === 1 ? (
-              <MyMeetingCalendar />
+              <MyMeetingCalendar isClicked={isClicked} />
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
@@ -447,4 +445,4 @@ const MyMeetingFunc = () => {
   );
 };
 
-export default MyMeetingFunc;
+export default MyMeetingFuncLeader;

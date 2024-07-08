@@ -527,34 +527,63 @@ const MyMeeting = () => {
                         <div className="buttons-inner">
                           {isAuth === 1 ? (
                             <>
-                              <button className="button-style">탈퇴</button>
                               <button
                                 className="button-style"
-                                onClick={e => {}}
-                              >
-                                관리
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button className="button-style">수정</button>
-                              <button
-                                className="button-style"
-                                onClick={e => {
-                                  navigate("/mymeeting/1");
+                                onClick={() => {
+                                  if (
+                                    confirm("정말 모임을 탈퇴하시겠습니까?")
+                                  ) {
+                                    alert("탈퇴 되었습니다.");
+                                  }
                                 }}
                               >
-                                관리
+                                탈퇴
                               </button>
                               <button
                                 className="button-style"
                                 onClick={e => {
                                   navigate(
-                                    "/mymeeting/mymeetingschmemberlist/:meetingMemberlistid",
+                                    "/mymeeting/mymeetinguser/:meetingId",
                                   );
                                 }}
                               >
-                                멤버
+                                Blog
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                className="button-style"
+                                style={{ width: "100px" }}
+                                onClick={() => {
+                                  if (confirm("수정하시겠습니까?")) {
+                                    alert("수정페이지로 이동.");
+                                  }
+                                }}
+                              >
+                                수정
+                              </button>
+                              <button
+                                className="button-style"
+                                style={{ width: "100px" }}
+                                onClick={e => {
+                                  navigate(
+                                    "/mymeeting/mymeetingLeader/:meetingId",
+                                  );
+                                }}
+                              >
+                                Blog
+                              </button>
+                              <button
+                                className="button-style"
+                                style={{ width: "100px" }}
+                                onClick={e => {
+                                  navigate(
+                                    "/mymeeting/mymeetingmemberlist/:meetingMemberlistid",
+                                  );
+                                }}
+                              >
+                                모임 신청 관리
                               </button>
                             </>
                           )}
