@@ -1,24 +1,29 @@
 import styled from "@emotion/styled";
 import React from "react";
 const AdminInnerStyle = styled.div`
-  width: calc(100% - 720px);
-  max-width: 1200px;
+  width: calc(100% - 30px);
+  max-width: 1300px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
-  margin-top: 25px;
+  margin-top: 40px;
   display: flex;
 `;
 const AdminLeftDivStyle = styled.div`
   .admin-list {
   }
   .admin-list-item {
-    padding: 10px 16px 10px 24px;
-    border-bottom: 1px solid #000;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
     display: flex;
-    justify-content: end;
-    &:hover {
+    & span {
+      text-align: end;
+      width: 100%;
+      padding: 10px 16px 10px 24px;
+      margin-bottom: 5px;
+    }
+    & span:hover {
       background-color: rgba(0, 0, 0, 0.1);
     }
   }
@@ -46,10 +51,18 @@ const Admin = () => {
       <AdminLeftDivStyle>
         <nav>
           <ul className="admin-list">
-            <li className="admin-list-item">메인</li>
-            <li className="admin-list-item">모임 신청 관리</li>
-            <li className="admin-list-item">...</li>
-            <li className="admin-list-item">설정</li>
+            <li className="admin-list-item">
+              <span>메인</span>
+            </li>
+            <li className="admin-list-item">
+              <span>모임 신청 관리</span>
+            </li>
+            <li className="admin-list-item">
+              <span>...</span>
+            </li>
+            <li className="admin-list-item">
+              <span>설정</span>
+            </li>
           </ul>
         </nav>
       </AdminLeftDivStyle>

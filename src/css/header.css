@@ -7,19 +7,17 @@
   display: block;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   z-index: 9;
-
   background-color: #fff;
 }
 
 .header-inner {
-  width: calc(100% - 150px);
+  width: calc(100% - 30px);
   max-width: 1300px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  /* flex: 1 0 auto;   */
 }
 .header-logo {
   display: flex;
@@ -46,12 +44,4 @@
   justify-content: center;
   gap: 25px;
   margin-top: 10px;
-}
-
-.test-inner {
-  width: calc(100% - 150px);
-  max-width: 1170px;
-  margin: 0 auto;
-  height: 1000px;
-  background-color: aliceblue;
 }

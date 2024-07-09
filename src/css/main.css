@@ -185,15 +185,21 @@
 }
 .list-box-title {
   padding: 5px;
+  font-size: 14px;
 }
 .list-box-text {
   padding: 5px;
+  font-size: 14px;
 }
-.list-box-place {
+.list-box-local {
   font-size: 14px;
   padding: 5px;
 }
-.list-box-day {
+.list-box-gender {
+  font-size: 12px;
+  padding: 5px;
+}
+.list-box-age {
   font-size: 12px;
   padding: 5px;
 }

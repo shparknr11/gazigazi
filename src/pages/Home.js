@@ -1,4 +1,3 @@
-import { FaSearch } from "react-icons/fa";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
@@ -15,16 +14,19 @@ const HomeMidInnerStyle = styled.div`
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
+  display: flex;
   align-items: center;
   justify-content: center;
 `;
-const HomeBtmInnerStyle = styled.div`
-  width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
-  align-items: center;
-  justify-content: center;
-`;
+// const HomeBtmInnerStyle = styled.div`
+//   width: 100%;
+//   max-width: 1300px;
+//   margin: 0 auto;
+// display: flex;
+
+//   align-items: center;
+//   justify-content: center;
+// `;
 const CartegoryWrapStyle = styled.div`
   display: flex;
   align-items: center;
@@ -117,14 +119,16 @@ const Home = () => {
               >
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
+                  <img alt="프로필" />
                   <span>OOO 님의 모임</span>
                 </div>
                 <h3 className="list-box-text">
                   여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
                   사람? (with 제이팝) 🙌
                 </h3>
-                <p className="list-box-place">일본 디즈니랜드</p>
-                <span className="list-box-day">2024.02.08까지</span>
+                <p className="list-box-local">서울 강남구</p>
+                <span className="list-box-gender">성별 무관</span>
+                <span className="list-box-age">90~98년생</span>
               </div>
               <div className="list-box"></div>
               <div className="list-box"></div>
@@ -139,17 +143,24 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div className="list-box">
+              <div
+                className="list-box"
+                onClick={() => {
+                  navigate(`/meeting/detail`);
+                }}
+              >
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
-                  <span>OOO 모임장</span>
+                  <img alt="프로필" />
+                  <span>OOO 님의 모임</span>
                 </div>
                 <h3 className="list-box-text">
                   여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
                   사람? (with 제이팝) 🙌
                 </h3>
-                <p className="list-box-place">일본 디즈니랜드</p>
-                <span className="list-box-day">2024.02.08까지</span>
+                <p className="list-box-local">서울 강남구</p>
+                <span className="list-box-gender">성별 무관</span>
+                <span className="list-box-age">90~98년생</span>
               </div>
               <div className="list-box"></div>
               <div className="list-box"></div>
@@ -165,17 +176,24 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div className="list-box">
+              <div
+                className="list-box"
+                onClick={() => {
+                  navigate(`/meeting/detail`);
+                }}
+              >
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
-                  <span>OOO 모임장</span>
+                  <img alt="프로필" />
+                  <span>OOO 님의 모임</span>
                 </div>
                 <h3 className="list-box-text">
                   여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
                   사람? (with 제이팝) 🙌
                 </h3>
-                <p className="list-box-place">일본 디즈니랜드</p>
-                <span className="list-box-day">24.07.01(월) 마감</span>
+                <p className="list-box-local">서울 강남구</p>
+                <span className="list-box-gender">성별 무관</span>
+                <span className="list-box-age">90~98년생</span>
               </div>
               <div className="list-box"></div>
               <div className="list-box"></div>

@@ -1,14 +1,14 @@
 .footer {
-  background-color: antiquewhite;
+  background-color: rgba(250, 235, 215, 0.4);
   margin-top: 100px;
 }
 
 .footer-inner {
-  width: calc(100% - 200px);
+  width: calc(100% - 30px);
   max-width: 1300px;
   /* height: auto; */
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 20px 0px;
 }
 .footer-menu-list {
   display: flex;
