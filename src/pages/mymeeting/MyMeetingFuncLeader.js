@@ -4,34 +4,63 @@ import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
-const MyMeetingFuncStyle = styled.div`
+const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   height: auto;
   margin-top: 25px;
   transition: width 0.3s;
-  @media (max-width: 1340px) {
-    width: 100%;
-    transition: width 0.3s;
-  }
-  .item-wrap {
+  .meeting-wrap {
     display: flex;
     width: 100%;
+    text-align: center;
+  }
+
+  .item-wrap {
+    display: flex;
+    width: 20%;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     font-weight: bold;
     border: 1px solid #f7ebd5;
     border-radius: 4px 4px 0px 0px;
+    flex-direction: column;
+    justify-content: start;
   }
+  @media (max-width: 1340px) {
+    width: 100%;
+    transition: width 0.3s;
+    .meeting-wrap {
+      /* flex-direction: column !important; */
+    }
+    .item-wrap {
+      /* width: 100%; */
+      /* justify-content: center !important; */
+    }
+  }
+  @media (max-width: 1024px) {
+    width: 100%;
+    transition: width 0.3s;
+    .meeting-wrap {
+      flex-direction: column !important;
+    }
+    .item-wrap {
+      width: 100% !important;
+      justify-content: center !important;
+      flex-direction: row !important;
+    }
+  }
+
   .item {
     width: 100%;
     padding: 10px;
     color: #383737;
     cursor: pointer;
   }
-  .item-border-right {
+  .item-border {
     border-right: 1px solid #f7ebd5;
+    border-bottom: 1px solid #f7ebd5;
   }
   .func-main {
     width: 100%;
@@ -64,6 +93,11 @@ const MyMeetingFuncStyle = styled.div`
     font-size: 18px;
     font-weight: bold;
   }
+  .cut-text {
+    font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 `;
 const LedgerStyle = styled.div`
   .select-box-style {
@@ -90,6 +124,9 @@ const LedgerStyle = styled.div`
       width: 25%;
       padding: 20px;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 `;
@@ -159,21 +196,14 @@ const MyMeetingFuncLeader = () => {
     window.print();
   };
   return (
-    <MyMeetingFuncStyle id="aaaaa">
+    <MyMeetingFuncLeaderStyle id="aaaaa">
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
+      <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
         <div className="item-wrap">
           <div
             id="1"
-            className="item item-border-right"
+            className="item item-border cut-text"
             onClick={() => {
               setIsClicked(1);
             }}
@@ -182,7 +212,7 @@ const MyMeetingFuncLeader = () => {
           </div>
           <div
             id="2"
-            className="item item-border-right"
+            className="item item-border cut-text"
             onClick={() => {
               setIsClicked(2);
             }}
@@ -191,7 +221,7 @@ const MyMeetingFuncLeader = () => {
           </div>
           <div
             id="3"
-            className="item item-border-right"
+            className="item item-border cut-text"
             onClick={() => {
               setIsClicked(3);
             }}
@@ -218,7 +248,7 @@ const MyMeetingFuncLeader = () => {
                       padding: "30px 10px",
                     }}
                   >
-                    <button style={{ textAlign: "right" }}>등록</button>
+                    <button className="resister-btn">등록</button>
                   </div>
                 </div>
                 <div>
@@ -283,8 +313,14 @@ const MyMeetingFuncLeader = () => {
                         <option value="11">11</option>
                         <option value="12">12</option>
                       </select>
-                      {<button type="button">등록</button>}
+                      {
+                        <button type="button" className="resister-btn">
+                          등록
+                        </button>
+                      }
                       <button
+                        type="button"
+                        className="etc-btn"
                         onClick={() => {
                           handlePrint();
                         }}
@@ -441,7 +477,7 @@ const MyMeetingFuncLeader = () => {
           </div>
         </div>
       </div>
-    </MyMeetingFuncStyle>
+    </MyMeetingFuncLeaderStyle>
   );
 };
 

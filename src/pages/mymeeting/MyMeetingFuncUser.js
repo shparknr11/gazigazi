@@ -4,16 +4,13 @@ import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
-const MyMeetingFuncStyle = styled.div`
+const MyMeetingFuncUserStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   height: auto;
   margin-top: 25px;
   transition: width 0.3s;
-  @media (max-width: 1340px) {
-    width: 100%;
-    transition: width 0.3s;
-  }
+
   .item-wrap {
     display: flex;
     width: 100%;
@@ -24,6 +21,19 @@ const MyMeetingFuncStyle = styled.div`
     border: 1px solid #f7ebd5;
     border-radius: 4px 4px 0px 0px;
   }
+
+  @media (max-width: 1340px) {
+    width: 100%;
+    transition: width 0.3s;
+    .item-wrap {
+    }
+  }
+  .meeting-wrap {
+    display: flex;
+    width: 100%;
+    text-align: center;
+  }
+
   .item {
     width: 100%;
     padding: 10px;
@@ -159,16 +169,9 @@ const MyMeetingFuncUser = () => {
     window.print();
   };
   return (
-    <MyMeetingFuncStyle id="aaaaa">
+    <MyMeetingFuncUserStyle id="aaaaa">
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
+      <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
         <div className="item-wrap">
           <div
@@ -438,7 +441,7 @@ const MyMeetingFuncUser = () => {
           </div>
         </div>
       </div>
-    </MyMeetingFuncStyle>
+    </MyMeetingFuncUserStyle>
   );
 };
 
