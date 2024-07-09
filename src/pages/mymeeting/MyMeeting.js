@@ -6,7 +6,7 @@ const MyMeetingStyle = styled.div`
   width: 100%;
 
   .metting-wrap {
-    width: calc(100% - 720px);
+    width: calc(100% - 30px);
     max-width: 1200px;
     margin: 0 auto;
     height: auto;
@@ -47,6 +47,7 @@ const MyMeetingStyle = styled.div`
     height: 100%;
     padding: 20px;
     overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
   }
   .img-wrap {
     display: flex;
@@ -70,6 +71,8 @@ const MyMeetingStyle = styled.div`
     width: 100%;
     height: 100%;
     margin-top: -2px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
   }
   .font-size30 {
     font-size: 30px;
@@ -86,11 +89,13 @@ const MyMeetingStyle = styled.div`
     z-index: 1;
     width: 100%;
     height: 100%;
+    border-radius: 10px 10px 0 0;
   }
   .caption-img {
     display: block;
     width: 100%;
     transition: filter 0.3s;
+    border-radius: 10px 10px 0 0;
   }
   .caption-img.blur {
     filter: blur(5px);
@@ -528,7 +533,7 @@ const MyMeeting = () => {
                           {isAuth === 1 ? (
                             <>
                               <button
-                                className="button-style"
+                                className="button-style delete-btn"
                                 onClick={() => {
                                   if (
                                     confirm("정말 모임을 탈퇴하시겠습니까?")
@@ -540,7 +545,7 @@ const MyMeeting = () => {
                                 탈퇴
                               </button>
                               <button
-                                className="button-style"
+                                className="button-style etc-btn"
                                 onClick={e => {
                                   navigate(
                                     "/mymeeting/mymeetinguser/:meetingId",
@@ -553,7 +558,7 @@ const MyMeeting = () => {
                           ) : (
                             <>
                               <button
-                                className="button-style"
+                                className="button-style etc-btn"
                                 style={{ width: "100px" }}
                                 onClick={() => {
                                   if (confirm("수정하시겠습니까?")) {
@@ -564,7 +569,7 @@ const MyMeeting = () => {
                                 수정
                               </button>
                               <button
-                                className="button-style"
+                                className="button-style etc-btn"
                                 style={{ width: "100px" }}
                                 onClick={e => {
                                   navigate(
@@ -575,7 +580,7 @@ const MyMeeting = () => {
                                 Blog
                               </button>
                               <button
-                                className="button-style"
+                                className="button-style etc-btn"
                                 style={{ width: "100px" }}
                                 onClick={e => {
                                   navigate(

@@ -246,13 +246,14 @@ const MyMeetingCalendar = ({ isClicked }) => {
         {isClicked ? (
           <button
             type="button"
+            className="etc-btn"
             onClick={() => {
               navigate(
                 "/mymeeting/mymeetingschmemberlist/:meetingMemberlistid",
               );
             }}
           >
-            신청멤버리스트
+            멤버리스트
           </button>
         ) : null}
       </div>
@@ -277,6 +278,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
       <div style={{ textAlign: "end", marginRight: "10px" }}>
         {isClicked === 1 ? (
           <button
+            className="resister-btn"
             type="button"
             onClick={() => {
               navigate("/mymeeting/mymeetingschresister", { state: clickDay });

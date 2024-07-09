@@ -30,3 +30,67 @@ body {
 .wrap {
   padding-top: 70px;
 }
+
+/* 임시 버튼  */
+.confirm-btn {
+  background-color: #46db7a;
+  padding: 0 10px;
+  height: 30px;
+  border: 1px solid #babfc5;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 1px 1px 1px 1px #f4f2f2;
+  color: #fff;
+  cursor: pointer;
+}
+.confirm-btn:hover {
+  background-color: #1ad059;
+  box-shadow: 1px 1px 1px 1px inset gray;
+  font-weight: bold;
+}
+.resister-btn {
+  background-color: #2184fd;
+  padding: 0 10px;
+  height: 30px;
+  border: 1px solid #babfc5;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 1px 1px 1px 1px #f4f2f2;
+  color: #fff;
+  cursor: pointer;
+}
+.resister-btn:hover {
+  background-color: #5394e6;
+  box-shadow: 1px 1px 1px 1px inset gray;
+  font-weight: bold;
+}
+.delete-btn {
+  background-color: #dc4e4e;
+  padding: 0 10px;
+  height: 30px;
+  border: 1px solid #babfc5;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 1px 1px 1px 1px #f4f2f2;
+  color: #fff;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  background-color: #ec1919;
+  box-shadow: 1px 1px 1px 1px inset gray;
+  font-weight: bold;
+}
+.etc-btn {
+  background-color: #fdfdfd;
+  padding: 0 10px;
+  color: #6e6e6e;
+  height: 30px;
+  font-weight: bold;
+  border: 1px solid #babfc5;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 1px 1px 1px 1px #f4f2f2;
+  cursor: pointer;
+}
+.etc-btn:hover {
+  background-color: #ebebeb;
+  box-shadow: 1px 1px 1px 1px inset gray;
+  font-weight: bold;
+}
+/* 임시 버튼  */
