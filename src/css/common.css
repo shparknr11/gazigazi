@@ -27,9 +27,6 @@ body {
   font-optical-sizing: auto;
 }
 
-.wrap {
-  padding-top: 70px;
-}
 
 /* 임시 버튼  */
 .confirm-btn {
@@ -94,3 +91,4 @@ body {
   font-weight: bold;
 }
 /* 임시 버튼  */
+

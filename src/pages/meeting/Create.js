@@ -1,19 +1,24 @@
 import styled from "@emotion/styled";
-import ReviewModal from "../../components/modal/ReviewModal";
 
 const CreateInnerStyle = styled.div`
-  width: calc(100% - 720px);
-  max-width: 1200px;
-  /* maxwidth: */
+  width: calc(100% - 30px);
+  max-width: 1300px;
   margin: 0 auto;
   height: auto;
-  margin-top: 25px;
+  margin-top: 40px;
+  > h1 {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
 `;
 const CreateCheckStyle = styled.div`
   width: 100%;
   height: 100px;
   background-color: beige;
   margin-bottom: 25px;
+  h1 {
+    font-weight: 600;
+  }
 `;
 const CreateFormDivStyle = styled.div`
   width: 100%;
@@ -103,11 +108,13 @@ const Create = () => {
       <CreateCheckStyle>
         <div>
           <h1>모임등록 전 숙지사항</h1>
-          <span>
-            작성 후 관리자의 승인이 필요합니다. 관리자 심사 후 승인되면
-            알려드릴게요.
-          </span>
+          <p>1. 모임 신청 확인 후 3일 이내 모임승인여부를 알려드립니다</p>
+          <p>
+            2. 이미지를 저해시키는 모임을 신청했을 경우, 사전 통보없이 모임이
+            삭제 처리될 수 있습니다.
+          </p>
         </div>
+        <div>확인</div>
       </CreateCheckStyle>
       <CreateFormDivStyle>
         <div>
