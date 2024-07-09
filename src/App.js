@@ -27,11 +27,11 @@ import MyMeetingSchDetail from "./pages/mymeeting/MyMeetingSchDetail";
 import MyMeetingSchModify from "./pages/mymeeting/MyMeetingSchModify";
 import MyMeetingSchResister from "./pages/mymeeting/MyMeetingSchResister";
 
-import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 import Admin from "./pages/admin/Admin";
 
 import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
+import MyPage from "./pages/user/MyPage";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -64,10 +64,7 @@ const App = () => {
           <Route path="/category" element={<Category />}></Route>
 
           {/* 기타 담당자 : 모두 */}
-          <Route
-            path="/myprofile/:userId"
-            element={<h1>마이페이지</h1>}
-          ></Route>
+          <Route path="/myprofile/:userId" element={<MyPage />}></Route>
           <Route
             path="/interestlist/:userId"
             element={<h1>찜목록페이지</h1>}
