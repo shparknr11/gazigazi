@@ -1,13 +1,12 @@
 import styled from "@emotion/styled";
 import { FaStar } from "react-icons/fa";
-import ReviewModal from "../../components/modal/ReviewModal";
 const ReviewInnerStyle = styled.div`
-  width: calc(100% - 720px);
-  max-width: 1200px;
+  width: calc(100% - 30px);
+  max-width: 1300px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
-  margin-top: 25px;
+  margin-top: 40px;
   * {
     font-size: 14px;
     font-weight: 400;

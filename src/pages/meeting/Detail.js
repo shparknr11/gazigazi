@@ -8,7 +8,7 @@ const MeetItemStyle = styled.div`
     display: flex;
     margin: 0 auto;
     flex-direction: column;
-    width: 100%;
+    width: calc(100% - 30px);
     max-width: 1200px;
   }
 `;
