@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import MyMeetingCalendar from "./MyMeetingCalendar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
 const MyMeetingFuncLeaderStyle = styled.div`
@@ -101,7 +101,7 @@ const MyMeetingFuncLeaderStyle = styled.div`
 `;
 const LedgerStyle = styled.div`
   .select-box-style {
-    height: 20px;
+    height: 30px;
     border: 1px solid antiquewhite;
     text-align: center;
     width: 50px;
@@ -141,12 +141,16 @@ const MyMeetingFuncLeader = () => {
   const [isClicked, setIsClicked] = useState();
   const [monthValue, setMonthValue] = useState(1);
   const [isDisplayNone, setIsDisplayNone] = useState(1);
+  const navigate = useNavigate();
   useEffect(() => {
     console.log(isClicked);
   }, [isClicked]);
   useEffect(() => {
     console.log(monthValue);
   }, [monthValue]);
+  useEffect(() => {
+    document.getElementById(1).click();
+  }, []);
   // 버튼 2개로 움직일 거임
   // 그 전에 태그를 담아 두는거
   let activeItem = null;
@@ -241,14 +245,17 @@ const MyMeetingFuncLeader = () => {
               <div>
                 <div>
                   <TitleDivStyle>모임 게시판</TitleDivStyle>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "right",
-                      padding: "30px 10px",
-                    }}
-                  >
-                    <button className="resister-btn">등록</button>
+                  <div style={{ textAlign: "right", paddingRight: "10px" }}>
+                    <button
+                      className="resister-btn"
+                      onClick={() => {
+                        navigate(
+                          "/mymeeting/mymeetingnotice/mymeetingnoticeid",
+                        );
+                      }}
+                    >
+                      등록
+                    </button>
                   </div>
                 </div>
                 <div>

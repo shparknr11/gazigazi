@@ -16,19 +16,38 @@ const ReactCalendarStyle = styled.div`
   }
   .item-wrap {
     display: flex;
-    width: 100%;
+    width: 20%;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     font-weight: bold;
     border: 1px solid #f7ebd5;
     border-radius: 4px 4px 0px 0px;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .member-wrap {
+    display: flex;
+    width: 100%;
+    text-align: center;
   }
   .item {
     width: 100%;
     padding: 10px;
     color: #383737;
     cursor: pointer;
+  }
+  @media (max-width: 1024px) {
+    width: 100%;
+    transition: width 0.3s;
+    .member-wrap {
+      flex-direction: column !important;
+    }
+    .item-wrap {
+      width: 100% !important;
+      justify-content: center !important;
+      flex-direction: row !important;
+    }
   }
   .item-border-right {
     border-right: 1px solid #f7ebd5;
@@ -45,7 +64,10 @@ const ReactCalendarListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-
+  width: 80%;
+  @media all and (max-width: 1024px) {
+    width: 100%;
+  }
   ul {
     display: flex;
     width: 100%;
@@ -58,13 +80,22 @@ const ReactCalendarListStyle = styled.div`
   }
   li {
     padding-left: 10px;
-    height: 30px;
     width: 100%;
     border-bottom: 1px solid gray;
     display: flex;
     font-size: 18px !important;
     font-weight: 700;
     color: black;
+    height: 40px;
+  }
+  .none-sch-div {
+    display: flex;
+    font-weight: bold;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    width: 100%;
   }
 `;
 const TitleDivStyle = styled.div`
@@ -89,7 +120,7 @@ const CalendarListLiStyle = styled.div`
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    height: 60px;
+    height: 55px;
   }
   a {
     width: 100%;
@@ -150,6 +181,9 @@ const MyMeetingSchMemberList = () => {
       },
     ]);
   }, []);
+  useEffect(() => {
+    document.getElementById(1).click();
+  }, []);
   let activeItem = null;
   // todo : 정리 중 관리 페이지 식으로 갈지 ...
   window.addEventListener("click", e => {
@@ -181,35 +215,26 @@ const MyMeetingSchMemberList = () => {
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>신청 멤버 관리</TitleDivStyle>
-      <div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
-          <div className="item-wrap">
-            <div
-              id="1"
-              className="item item-border-right"
-              onClick={() => {
-                setIsClicked(1);
-              }}
-            >
-              일정 신청 멤버
-            </div>
-            <div
-              id="2"
-              className="item"
-              onClick={() => {
-                setIsClicked(2);
-              }}
-            >
-              일정 멤버 확인
-            </div>
+      <div className="member-wrap">
+        {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
+        <div className="item-wrap">
+          <div
+            id="1"
+            className="item item-border-right"
+            onClick={() => {
+              setIsClicked(1);
+            }}
+          >
+            일정 신청 멤버
+          </div>
+          <div
+            id="2"
+            className="item"
+            onClick={() => {
+              setIsClicked(2);
+            }}
+          >
+            일정 멤버 확인
           </div>
         </div>
         <ReactCalendarListStyle>
@@ -243,14 +268,16 @@ const MyMeetingSchMemberList = () => {
                         >
                           <button
                             type="button"
+                            className="resister-btn"
                             onClick={() => {
                               alert("승인");
                             }}
                           >
                             승인
                           </button>
-                          /
+                          &nbsp;&nbsp;
                           <button
+                            className="delete-btn"
                             type="button"
                             onClick={() => {
                               alert("반려");
@@ -263,20 +290,9 @@ const MyMeetingSchMemberList = () => {
                     </CalendarListLiStyle>
                   ))
                 ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      fontWeight: "bold",
-                      margin: "0 auto",
-                      height: "70px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderBottom: "1px solid #f8ebd6",
-                      width: "100%",
-                    }}
-                  >
+                  <div className="none-sch-div">
                     <Link to={"/mymeeting/mymeetingschresister"}>
-                      등록 된 일정이 없습니다.
+                      일정 신청한 멤버가 없습니다.
                     </Link>
                   </div>
                 )
@@ -293,20 +309,9 @@ const MyMeetingSchMemberList = () => {
                   </CalendarListLiStyle>
                 ))
               ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    fontWeight: "bold",
-                    margin: "0 auto",
-                    height: "70px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderBottom: "1px solid gray",
-                    width: "100%",
-                  }}
-                >
+                <div className="none-sch-div" style={{}}>
                   <Link to={"/mymeeting/mymeetingschresister"}>
-                    등록 된 일정이 없습니다.
+                    일정 신청한 멤버가 없습니다.
                   </Link>
                 </div>
               )}

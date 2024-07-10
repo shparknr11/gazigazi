@@ -13,13 +13,15 @@ const MyMeetingFuncUserStyle = styled.div`
 
   .item-wrap {
     display: flex;
-    width: 100%;
+    width: 20%;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     font-weight: bold;
     border: 1px solid #f7ebd5;
     border-radius: 4px 4px 0px 0px;
+    flex-direction: column;
+    justify-content: start;
   }
 
   @media (max-width: 1340px) {
@@ -28,6 +30,19 @@ const MyMeetingFuncUserStyle = styled.div`
     .item-wrap {
     }
   }
+  @media (max-width: 1024px) {
+    width: 100%;
+    transition: width 0.3s;
+    .meeting-wrap {
+      flex-direction: column !important;
+    }
+    .item-wrap {
+      width: 100% !important;
+      justify-content: center !important;
+      flex-direction: row !important;
+    }
+  }
+
   .meeting-wrap {
     display: flex;
     width: 100%;
@@ -77,7 +92,7 @@ const MyMeetingFuncUserStyle = styled.div`
 `;
 const LedgerStyle = styled.div`
   .select-box-style {
-    height: 20px;
+    height: 30px;
     border: 1px solid antiquewhite;
     text-align: center;
     width: 50px;
@@ -120,6 +135,9 @@ const MyMeetingFuncUser = () => {
   useEffect(() => {
     console.log(monthValue);
   }, [monthValue]);
+  useEffect(() => {
+    document.getElementById(1).click();
+  }, []);
   // 버튼 2개로 움직일 거임
   // 그 전에 태그를 담아 두는거
   let activeItem = null;
@@ -214,14 +232,8 @@ const MyMeetingFuncUser = () => {
               <div>
                 <div>
                   <TitleDivStyle>모임 게시판</TitleDivStyle>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "right",
-                      padding: "30px 10px",
-                    }}
-                  >
-                    <button style={{ textAlign: "right" }}>등록</button>
+                  <div style={{ textAlign: "right", paddingRight: "10px" }}>
+                    <button className="resister-btn">등록</button>
                   </div>
                 </div>
                 <div>
@@ -286,6 +298,7 @@ const MyMeetingFuncUser = () => {
                       <option value="12">12</option>
                     </select>
                     <button
+                      className="etc-btn"
                       onClick={() => {
                         handlePrint();
                       }}
