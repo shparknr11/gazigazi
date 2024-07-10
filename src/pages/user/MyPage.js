@@ -4,7 +4,7 @@ const MyPageStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 120vh;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
@@ -26,13 +26,13 @@ const MyPageInnerStyle = styled.div`
   padding: 20px;
 
   .mypage-container {
-    background-color: #ffffff;
+    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 450px;
+    max-width: 600px;
     width: 100%;
-    height: 80vh;
+    height: 108vh;
     box-sizing: border-box;
   }
   .mypage-container .profile-picture-container {
@@ -79,18 +79,18 @@ const MyPageInnerStyle = styled.div`
     cursor: pointer;
   }
   .edit-button {
-    background-color: #919bfa;
+    background-color: #ebddcc;
     color: white;
   }
   .edit-button:hover {
-    background-color: #919bfa;
+    background-color: #e0b88a;
   }
   .delete-button {
-    background-color: #919bfa;
+    background-color: #ebddcc;
     color: white;
   }
   .delete-button:hover {
-    background-color: #919bfa;
+    background-color: #e0b88a;
   }
 `;
 
@@ -109,8 +109,20 @@ const MyPage = () => {
                 />
               </div>
               <label>
+                <span>이메일</span>
+                <input type="email" value="user@example.com" readOnly />
+              </label>
+              <label>
                 <span>이름</span>
                 <input type="text" value="홍길동" readOnly />
+              </label>
+              <label>
+                <span>비밀번호</span>
+                <input type="password" placeholder="비밀번호" readOnly />
+              </label>
+              <label>
+                <span>비밀번호 확인</span>
+                <input type="password" placeholder="비밀번호 확인" readOnly />
               </label>
               <label>
                 <span>닉네임</span>
@@ -152,8 +164,12 @@ const MyPage = () => {
               </label>
             </form>
             <div className="mypage-buttons">
-              <button className="edit-button">정보 수정</button>
-              <button className="delete-button">회원 탈퇴</button>
+              <button type="button" className="edit-button">
+                정보 수정
+              </button>
+              <button type="button" className="delete-button">
+                회원 탈퇴
+              </button>
             </div>
           </div>
         </MyPageInnerStyle>

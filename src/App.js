@@ -33,6 +33,14 @@ import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 import MyPage from "./pages/user/MyPage";
 import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 
+import Login from "./pages/user/Login";
+import CreateAccount from "./pages/user/CreateAccount";
+import FindId from "./pages/user/FindId";
+import FindPw from "./pages/user/FindPw";
+import InfoEdit from "./pages/user/InfoEdit";
+import InterestList from "./pages/user/InterestList";
+
+
 const MainStyle = styled.div`
   padding-top: 70px;
 `;
@@ -44,13 +52,11 @@ const App = () => {
       <MainStyle>
         <Routes>
           {/* 담당자 : 황운철 */}
-          <Route path="/login" element={<h1>로그인페이지</h1>}></Route>
-          <Route
-            path="/createaccount"
-            element={<h1>회원가입페이지</h1>}
-          ></Route>
-          <Route path="/findid" element={<h1>아이디찾기</h1>}></Route>
-          <Route path="/findpw" element={<h1>비밀번호찾기</h1>}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/createaccount" element={<CreateAccount />}></Route>
+          <Route path="/findid" element={<FindId />}></Route>
+          <Route path="/findpw" element={<FindPw />}></Route>
+          <Route path="/info/:userId" element={<InfoEdit />}></Route>
 
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>
@@ -67,7 +73,7 @@ const App = () => {
           <Route path="/myprofile/:userId" element={<MyPage />}></Route>
           <Route
             path="/interestlist/:userId"
-            element={<h1>찜목록페이지</h1>}
+            element={<InterestList />}
           ></Route>
 
           <Route path="/review" element={<Review />}></Route>
