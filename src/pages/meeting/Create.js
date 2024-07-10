@@ -13,26 +13,71 @@ const CreateInnerStyle = styled.div`
 `;
 const CreateCheckStyle = styled.div`
   width: 100%;
-  height: 100px;
-  background-color: beige;
   margin-bottom: 25px;
+  padding: 15px;
+  box-shadow: 0.5px 1px 3px 0px;
+  /* background-color: #fefbf7; */
+
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+
   h1 {
-    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  .create-check-div {
+    /* width: calc(100% - 40px); */
+    width: 100%;
+
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+  .create-check-btn-div {
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+  }
+  .create-check-btn {
+    text-align: center;
+    /* width: calc(100% - 40px); */
+    width: 100%;
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    &:hover {
+      background-color: wheat;
+    }
   }
 `;
 const CreateFormDivStyle = styled.div`
   width: 100%;
-  padding: 20px;
-  height: 1000px;
-  background-color: beige;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  padding: 15px;
+  box-shadow: 0.5px 1px 3px 0px;
+  /* background-color: #fefbf7; */
+
+  margin-bottom: 25px;
+  > h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .create-option-group,
+  .create-input-group,
+  .create-form-group,
+  .create-file-group,
+  .create-textarea-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+  .create-radio-group {
+    margin-bottom: 40px;
+  }
 `;
 
 const LocalSelectWrapStyle = styled.div`
   display: flex;
-  padding: 20px 0px;
 
   .local-select-box {
     width: 285px;
@@ -100,26 +145,37 @@ const LocalSelectWrapStyle = styled.div`
     height: 100%;
   } */
 `;
+const CreateBtnWrapStyle = styled.div`
+  display: flex;
+  justify-content: end;
+  gap: 25px;
+  .create-button {
+    padding: 10px 20px;
+    border: 1px solid;
+    border-radius: 25px;
+  }
+`;
 
 const Create = () => {
   return (
     <CreateInnerStyle>
       <h1>모임 등록신청</h1>
       <CreateCheckStyle>
-        <div>
-          <h1>모임등록 전 숙지사항</h1>
+        <div className="create-check-div">
+          <h1>📝모임등록 전 숙지사항</h1>
           <p>1. 모임 신청 확인 후 3일 이내 모임승인여부를 알려드립니다</p>
           <p>
             2. 이미지를 저해시키는 모임을 신청했을 경우, 사전 통보없이 모임이
             삭제 처리될 수 있습니다.
           </p>
         </div>
-        <div>확인</div>
+        <div className="create-check-btn-div">
+          <div className="create-check-btn">확인</div>
+        </div>
       </CreateCheckStyle>
       <CreateFormDivStyle>
-        <div>
-          <h1>모임 등록양식</h1>
-        </div>
+        <h1>모임 등록양식</h1>
+
         <div className="create-option-group">
           <label htmlFor="level">모임의 카테고리를 선정해 주세요.</label>
           <select id="level">
@@ -366,6 +422,10 @@ const Create = () => {
           <label htmlFor="meetad">비허용</label>
         </div>
       </CreateFormDivStyle>
+      <CreateBtnWrapStyle>
+        <div className="create-button">취소</div>
+        <div className="create-button">등록신청</div>
+      </CreateBtnWrapStyle>
     </CreateInnerStyle>
   );
 };

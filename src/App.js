@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
+import "./App.css";
+import "./css/reset.css";
 import "./css/common.css";
 import "./css/footer.css";
 import "./css/header.css";
 import "./css/main.css";
-import "./css/reset.css";
 import Home from "./pages/Home";
 
 import Create from "./pages/meeting/Create";
@@ -30,12 +30,14 @@ import Admin from "./pages/admin/Admin";
 
 import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
-
 import MyPage from "./pages/user/MyPage";
-
+import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 
 const MainStyle = styled.div`
   padding-top: 70px;
+  /* background-color: #fefbf7;
+  background-color: white;
+  background-color: rgba(254, 251, 247, 0.4); */
 `;
 
 const App = () => {

@@ -9,7 +9,7 @@ const MeetItemStyle = styled.div`
     margin: 0 auto;
     flex-direction: column;
     width: calc(100% - 30px);
-    max-width: 1200px;
+    max-width: 1300px;
   }
 `;
 const MeetItemTitle = styled.div`
@@ -28,7 +28,6 @@ const MeetItemTitle = styled.div`
   }
 
   .meet-item-title {
-    font-weight: 700;
     font-size: 1.7rem;
     margin-top: 20px;
   }
@@ -71,12 +70,10 @@ const MeetItemInfo = styled.div`
 
   h2 {
     font-size: 1.75rem;
-    font-weight: 700;
   }
 
   p {
     margin-top: 30px;
-    font-size: 1.2rem;
     line-height: 1.7rem;
   }
 `;

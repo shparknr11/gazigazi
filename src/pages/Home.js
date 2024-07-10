@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-
+import meetingImg from "../images/meetinga.png";
 const HomeInnerStyle = styled.div`
   width: 100%;
   max-width: 1920px;
@@ -11,7 +11,7 @@ const HomeInnerStyle = styled.div`
   margin: 0 auto;
 `;
 const HomeMidInnerStyle = styled.div`
-  width: 100%;
+  width: calc(100% - 10px);
   max-width: 1300px;
   margin: 0 auto;
   display: flex;
@@ -45,6 +45,16 @@ const CartegoryWrapStyle = styled.div`
     font-size: 12px;
   }
 `;
+const ActiveCategoryStyle = styled.div`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 160px;
+  flex-wrap: wrap;
+  > div {
+    width: 25%;
+  }
+`;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -61,6 +71,16 @@ const Home = () => {
             <div className="mt-searchbt">SEARCH</div>
           </div>
         </div>
+        <ActiveCategoryStyle>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+          <div>카테고리</div>
+        </ActiveCategoryStyle>
         <CartegoryWrapStyle>
           {/* json or api 연동 예정 */}
           <div className="mt-category-div">
@@ -117,18 +137,22 @@ const Home = () => {
                   navigate(`/meeting/detail`);
                 }}
               >
-                <div className="list-box-img"></div>
-                <div className="list-box-title">
-                  <img alt="프로필" />
-                  <span>OOO 님의 모임</span>
+                <div className="list-box-img">
+                  <img src={meetingImg} alt="모임이미지" />
                 </div>
-                <h3 className="list-box-text">
-                  여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
-                  사람? (with 제이팝) 🙌
-                </h3>
-                <p className="list-box-local">서울 강남구</p>
-                <span className="list-box-gender">성별 무관</span>
-                <span className="list-box-age">90~98년생</span>
+                <div className="list-box-content">
+                  <div className="list-box-title">
+                    <img alt="프로필" />
+                    <span>OOO 님의 모임</span>
+                  </div>
+                  <h3 className="list-box-text">
+                    여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
+                    사람? (with 제이팝) 🙌
+                  </h3>
+                  <p className="list-box-local">서울 강남구</p>
+                  <span className="list-box-gender">성별 무관</span>
+                  <span className="list-box-age">90~98년생</span>
+                </div>
               </div>
               <div className="list-box"></div>
               <div className="list-box"></div>
@@ -163,10 +187,6 @@ const Home = () => {
                 <span className="list-box-age">90~98년생</span>
               </div>
               <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
             </div>
           </div>
 
@@ -195,10 +215,6 @@ const Home = () => {
                 <span className="list-box-gender">성별 무관</span>
                 <span className="list-box-age">90~98년생</span>
               </div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
               <div className="list-box"></div>
             </div>
             {/* <div className="more-bt-icon">
