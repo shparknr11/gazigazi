@@ -4,6 +4,7 @@ import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
+import { getMonthBudget } from "../../apis/mymeetingapi/budget/budgetapi";
 const MyMeetingFuncUserStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -129,12 +130,8 @@ const MyMeetingFuncUser = () => {
   const [isClicked, setIsClicked] = useState();
   const [monthValue, setMonthValue] = useState(1);
   const [isDisplayNone, setIsDisplayNone] = useState(0);
-  useEffect(() => {
-    console.log(isClicked);
-  }, [isClicked]);
-  useEffect(() => {
-    console.log(monthValue);
-  }, [monthValue]);
+  const [budgetList, setBudgetList] = useState([]);
+  useEffect(() => {}, [isClicked, monthValue]);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
@@ -186,6 +183,13 @@ const MyMeetingFuncUser = () => {
   const handlePrint = () => {
     window.print();
   };
+  const handleBudgetClick = async () => {
+    const budgetObj = { budgetPartySeq: 1, monthValue };
+
+    const res = await getMonthBudget(budgetObj);
+    setBudgetList(res);
+  };
+
   return (
     <MyMeetingFuncUserStyle id="aaaaa">
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
@@ -215,6 +219,7 @@ const MyMeetingFuncUser = () => {
             className="item item-border-right"
             onClick={() => {
               setIsClicked(3);
+              handleBudgetClick();
             }}
           >
             가계부
@@ -284,15 +289,15 @@ const MyMeetingFuncUser = () => {
                       }}
                     >
                       {/* 외부 적용 예정 */}
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
+                      <option value="01">1</option>
+                      <option value="02">2</option>
+                      <option value="03">3</option>
+                      <option value="04">4</option>
+                      <option value="05">5</option>
+                      <option value="06">6</option>
+                      <option value="07">7</option>
+                      <option value="08">8</option>
+                      <option value="09">9</option>
                       <option value="10">10</option>
                       <option value="11">11</option>
                       <option value="12">12</option>
@@ -317,86 +322,16 @@ const MyMeetingFuncUser = () => {
                       <span>금액</span>
                       <span>일자</span>
                     </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>1</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>2</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>3</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>4</span>
-                      <span>{"지출"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>5</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>6</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>7</span>
-                      <span>{"지출"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>8</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>9</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>10</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
+                    {budgetList?.map(item => (
+                      <li className="ledger-li" key={item.budgetSeq}>
+                        <span>{item.budgetAmount}</span>
+                        <span>{item.cdNm}</span>
+                        {/* 일단 해둠 */}
+                        <span>{item.budgetAmount}</span>
+                        <span>{item.budgetAmount}</span>
+                        <span>{item.budgetDt}</span>
+                      </li>
+                    ))}
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span
