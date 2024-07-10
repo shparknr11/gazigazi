@@ -30,9 +30,8 @@ import Admin from "./pages/admin/Admin";
 
 import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
-
 import MyPage from "./pages/user/MyPage";
-
+import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
 
 const MainStyle = styled.div`
   padding-top: 70px;
