@@ -9,7 +9,6 @@ const ReviewInnerStyle = styled.div`
   margin-top: 40px;
   * {
     font-size: 14px;
-    font-weight: 400;
     line-height: 1.5;
   }
 `;

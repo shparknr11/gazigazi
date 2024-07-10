@@ -12,11 +12,14 @@ const MemberListInnerStyle = styled.div`
 const MemberListMenuStyle = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20%;
+  span {
+    padding: 10px 0px;
+    text-align: end;
+    font-size: 18px;
+  }
 `;
 
 const MemberListMainStyle = styled.div`
-  width: 80%;
   > h1 {
     margin-bottom: 10px;
   }
@@ -38,7 +41,7 @@ const MyMeetingMemberList = () => {
     <MemberListInnerStyle>
       <MemberListMenuStyle>
         <span>모임원 관리</span>
-        <span>모임신청 관리</span>
+        <span>모임 신청관리</span>
       </MemberListMenuStyle>
 
       <MemberListMainStyle>

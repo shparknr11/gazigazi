@@ -13,7 +13,6 @@ const AdminLeftDivStyle = styled.div`
   .admin-list {
   }
   .admin-list-item {
-    position: relative;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
     display: flex;
@@ -29,7 +28,6 @@ const AdminLeftDivStyle = styled.div`
   }
 `;
 const AdminRightDivStyle = styled.div`
-  max-width: 1000px;
   padding: 0px 50px;
   margin-left: 50px;
   h1 {
