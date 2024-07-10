@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MyMeetingStyle = styled.div`
   width: 100%;
 
-  .metting-wrap {
+  .meeting-wrap {
     width: calc(100% - 30px);
     max-width: 1200px;
     margin: 0 auto;
@@ -15,24 +15,24 @@ const MyMeetingStyle = styled.div`
   }
   // no-wrap _ 쓸수있는데 사용하자
   @media (max-width: 1400px) {
-    .metting-wrap {
+    .meeting-wrap {
       width: 100% !important;
       transition: width 1s;
     }
   }
   @media (max-width: 768px) {
-    .metting-wrap {
+    .meeting-wrap {
       width: 100% !important;
       transition: width 1s;
     }
   }
 
-  .metting-inner {
+  .meeting-inner {
     width: 100%;
     display: flex;
-    height: 1000px;
+    /* height: 1000px; */
   }
-  .metting-sidebar-inner {
+  .meeting-sidebar-inner {
     background-color: #f8ebd6;
     width: 15%;
     display: flex;
@@ -54,7 +54,7 @@ const MyMeetingStyle = styled.div`
     gap: 30px;
     flex-wrap: wrap;
     padding-top: 30px;
-    padding-left: 20px;
+    padding-left: 50px;
   }
   .img-container {
     width: 30%;
@@ -98,7 +98,7 @@ const MyMeetingStyle = styled.div`
     border-radius: 10px 10px 0 0;
   }
   .caption-img.blur {
-    filter: blur(5px);
+    filter: blur(3px);
   }
   .buttons {
     position: absolute;
@@ -467,8 +467,8 @@ const MyMeeting = () => {
         ];
   return (
     <MyMeetingStyle>
-      <div className="metting-wrap">
-        <div className="metting-inner">
+      <div className="meeting-wrap">
+        <div className="meeting-inner">
           <div className="caption-area">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <TitleDivStyle>모임 리스트</TitleDivStyle>
@@ -607,6 +607,10 @@ const MyMeeting = () => {
                       <div className="cut-text">{item.partyIntro}</div>
                       <div className="cut-text">
                         {item.address}
+                        {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
+                      </div>
+                      <div className="cut-text">
+                        현재 참가 인원 : 10 / 30
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                     </div>
