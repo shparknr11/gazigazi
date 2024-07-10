@@ -80,6 +80,8 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingNotice = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
+  const [textAreaVal, setTextAreaVal] = useState("");
+  const [textAreaLength, setTextAreaLength] = useState(0);
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -145,25 +147,45 @@ const MyMeetingNotice = () => {
                 <div className="noitce-form-container">
                   <div className="flex-column">
                     <div>
-                      <label htmlFor="noticeid">제목</label>
+                      <label
+                        htmlFor="noticeid"
+                        style={{ paddingBottom: "30px", display: "block" }}
+                      >
+                        제목
+                      </label>
                     </div>
                     <div>
                       <input id="noticeid" />
                     </div>
                   </div>
                   <div className="flex-column">
-                    <label htmlFor="noticecontent">
-                      내용/ 에디터 형식이 될듯함 사진 배치 이런것들이 들어가서
+                    <label
+                      htmlFor="noticecontent"
+                      style={{ paddingBottom: "30px", display: "block" }}
+                    >
+                      내용/ 에디터 형식이 될듯함 사진 배치_ 등록 페이지 따로 뺌
                     </label>
                     <textarea
                       id="noticecontent"
                       className="notice-textarea"
                       rows="10"
+                      value={textAreaVal}
+                      maxLength={300}
+                      onChange={e => {
+                        setTextAreaVal(e.target.value);
+                        setTextAreaLength(e.target.value.length);
+                      }}
                     ></textarea>
+                    <div style={{ textAlign: "right" }}>
+                      <span>
+                        <strong style={{ color: "red" }}>*</strong>
+                        제한 숫자{textAreaLength}/300
+                      </span>
+                    </div>
                   </div>
                   <div className="button-wrap">
-                    <button>수정</button>
-                    <button>삭제</button>
+                    <button className="resister-btn">수정</button>
+                    <button className="delete-btn">삭제</button>
                   </div>
                 </div>
               </form>

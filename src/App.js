@@ -32,12 +32,14 @@ import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
 import MyPage from "./pages/user/MyPage";
 import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
+
 import Login from "./pages/user/Login";
 import CreateAccount from "./pages/user/CreateAccount";
 import FindId from "./pages/user/FindId";
 import FindPw from "./pages/user/FindPw";
 import InfoEdit from "./pages/user/InfoEdit";
 import InterestList from "./pages/user/InterestList";
+
 
 const MainStyle = styled.div`
   padding-top: 70px;

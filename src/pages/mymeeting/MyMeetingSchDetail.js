@@ -245,8 +245,14 @@ const MyMeetingSchDetail = () => {
                     </div>
                   </div>
                   <div className="button-wrap">
-                    <button type="button">수정</button>
-                    <button type="button" onClick={() => {}}>
+                    <button type="button" className="resister-btn">
+                      수정
+                    </button>
+                    <button
+                      type="button"
+                      className="delete-btn"
+                      onClick={() => {}}
+                    >
                       취소
                     </button>
                   </div>
