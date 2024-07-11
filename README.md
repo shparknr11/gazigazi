@@ -37,3 +37,10 @@
 [이미지파일 123.png , project.png, start123.png]
 
 ## 라우터패스 설정
+
+## 라이브러리 설치
+
+- react quill
+- mui `npm install @mui/material`
+- react spinner
+- `npm install --save react-toastify`
