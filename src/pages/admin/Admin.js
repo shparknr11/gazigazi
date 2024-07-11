@@ -31,7 +31,7 @@ const AdminRightDivStyle = styled.div`
   padding: 0px 50px;
   margin-left: 50px;
   h1 {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     font-size: 28px;
   }
   .admin-application {
