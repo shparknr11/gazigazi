@@ -1,4 +1,7 @@
 import styled from "@emotion/styled";
+import LocalSelect from "../../components/meeting/LocalSelect";
+import { useEffect, useState } from "react";
+import { getLocal } from "../../apis/meeting/createapi";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -74,77 +77,12 @@ const CreateFormDivStyle = styled.div`
   .create-radio-group {
     margin-bottom: 40px;
   }
+  .create-clubplace {
+    width: 785px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
 `;
 
-const LocalSelectWrapStyle = styled.div`
-  display: flex;
-
-  .local-select-box {
-    width: 285px;
-    border: 1px solid #000;
-  }
-  .local-select-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-  }
-  .local-select-list > li {
-    margin: 5px 0px;
-    padding: 5px 50px;
-    cursor: pointer;
-    text-align: left;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-  .local-select-detail-box {
-    width: 500px;
-    border: 1px solid #000;
-  }
-  .local-select-detail-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .local-select-detail-list li {
-    width: 33.33%;
-  }
-
-  .local-select-detail-list label {
-  }
-
-  /* .local-select-detail-list li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
- */
-  /* 
-  .local-select-detail-box {
-    border: 1px solid #000;
-  }
-  .local-select-detail-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .local-select-detail-list li {
-    padding: 20px;
-    width: 33%;
-    display: flex;
-    border: 1px solid transparent;
-    &:hover {
-      border: 1px solid #000;
-    }
-  }
-
-  .local-select-detail-list label {
-    display: block;
-    width: 100%;
-    height: 100%;
-  } */
-`;
 const CreateBtnWrapStyle = styled.div`
   display: flex;
   justify-content: end;
@@ -157,8 +95,79 @@ const CreateBtnWrapStyle = styled.div`
 `;
 
 const Create = () => {
+  // form
+  // const [clubCate, setclubCate] = useState("");
+  const [clubName, setclubName] = useState("");
+
+  // local
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const [localList, setLocalList] = useState([]);
+  const [localData, setLocalData] = useState("");
+  const [localDetailData, setLocaDetaillData] = useState("");
+  // file
+  const [imgFile, setImgFile] = useState(null);
+  const [previewImg, setPreviewImg] = useState("");
+
+  useEffect(() => {
+    // console.log(localList);
+    // console.log(localData);
+    // console.log(localDetailData);
+  }, [localList, localData, localDetailData]);
+
+  // 도시 불러오기
+  const handleClickLocal = async () => {
+    setSelectorOpen(true);
+
+    const data = { cd: "LO-00", cd_gb: "00" };
+
+    const result = await getLocal(data);
+    if (result.code !== "SU") {
+      alert(result.resultMsg);
+      return;
+    }
+    // console.log("result", result);
+    console.log("resultData", result.resultData);
+    setLocalList(result.resultData);
+  };
+
+  // 파일 인풋
+  const handleFileChange = e => {
+    const tempFile = e.target.files[0];
+    console.log(e.target.files[0]);
+
+    if (tempFile) {
+      setImgFile(tempFile);
+      const tempUrl = URL.createObjectURL(tempFile);
+      setPreviewImg(tempUrl);
+    } else {
+      setPreviewImg("");
+      setImgFile(null);
+    }
+  };
+
+  // 모임 생성 신청
+  const handleClickCreate = () => {
+    console.log("모임생성 신청");
+  };
+  const handSubmitCreate = e => {
+    e.preventDefault();
+    const formData = new FormData();
+    const infoData = JSON.stringify({
+      // 보낼 input 데이터 담기
+      // 속성명: 속성값,
+      // 속성명: 속성값,
+    });
+    const data = new Blob([infoData], { type: "application/json" });
+    formData.append("p", data);
+    formData.append("키명", imgFile);
+  };
+
   return (
-    <CreateInnerStyle>
+    <CreateInnerStyle
+      onSubmit={() => {
+        handSubmitCreate();
+      }}
+    >
       <h1>모임 등록신청</h1>
       <CreateCheckStyle>
         <div className="create-check-div">
@@ -178,7 +187,12 @@ const Create = () => {
 
         <div className="create-option-group">
           <label htmlFor="level">모임의 카테고리를 선정해 주세요.</label>
-          <select id="level">
+          <select
+            id="level"
+            onChange={() => {
+              console.log("카테고리");
+            }}
+          >
             <option value="1">스포츠</option>
             <option value="2">게임</option>
             <option value="3">맛집</option>
@@ -190,241 +204,87 @@ const Create = () => {
           </select>
         </div>
         <div className="create-input-group">
-          <label htmlFor="meetname">모임의 제목을 지어주세요.</label>
-          <input type="text" id="meetname" />
+          <label htmlFor="clubname">모임의 제목을 지어주세요.</label>
+          <input
+            type="text"
+            id="clubname"
+            value={clubName}
+            onChange={e => {
+              setclubName(e.target.value);
+            }}
+          />
         </div>
 
         <div className="create-form-group">
-          <label htmlFor="meetplace">모임지역을 선택해 주세요.</label>
-          <input type="text" id="meetplace" />
-          <LocalSelectWrapStyle>
-            <div className="local-select-box">
-              <ul className="local-select-list">
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-                <li>
-                  <span>서울</span>
-                </li>
-              </ul>
-            </div>
-            <div className="local-select-detail-box">
-              <ul className="local-select-detail-list">
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox1" name="local-select" />
-                    <label htmlFor="checkbox1">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox2" name="local-select" />
-                    <label htmlFor="checkbox2">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox3" name="local-select" />
-                    <label htmlFor="checkbox3">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox4" name="local-select" />
-                    <label htmlFor="checkbox4">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox5" name="local-select" />
-                    <label htmlFor="checkbox5">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox6" name="local-select" />
-                    <label htmlFor="checkbox6">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox7" name="local-select" />
-                    <label htmlFor="checkbox7">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox8" name="local-select" />
-                    <label htmlFor="checkbox8">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox9" name="local-select" />
-                    <label htmlFor="checkbox9">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox10" name="local-select" />
-                    <label htmlFor="checkbox10">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox11" name="local-select" />
-                    <label htmlFor="checkbox11">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox12" name="local-select" />
-                    <label htmlFor="checkbox12">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox13" name="local-select" />
-                    <label htmlFor="checkbox13">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox14" name="local-select" />
-                    <label htmlFor="checkbox14">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox15" name="local-select" />
-                    <label htmlFor="checkbox15">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox16" name="local-select" />
-                    <label htmlFor="checkbox16">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox17" name="local-select" />
-                    <label htmlFor="checkbox17">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox18" name="local-select" />
-                    <label htmlFor="checkbox18">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox19" name="local-select" />
-                    <label htmlFor="checkbox19">북구</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="local-select-div">
-                    <input type="radio" id="checkbox20" name="local-select" />
-                    <label htmlFor="checkbox20">북구</label>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </LocalSelectWrapStyle>
+          <label htmlFor="clubplace">모임지역을 선택해 주세요.</label>
+          <input
+            type="text"
+            id="clubplace"
+            value={`${localData}${localDetailData}`}
+            onClick={() => {
+              handleClickLocal();
+            }}
+            readOnly
+          />
+          {selectorOpen ? (
+            <LocalSelect
+              localList={localList}
+              setSelectorOpen={setSelectorOpen}
+              setLocalList={setLocalList}
+              setLocalData={setLocalData}
+              setLocaDetaillData={setLocaDetaillData}
+            />
+          ) : null}
         </div>
 
         <div className="create-radio-group">
           <h1>모집 성별조건</h1>
-          <input type="radio" id="meetgenderm" name="gender-select" />
-          <label htmlFor="meetgenderm">남자만</label>
+          <input type="radio" id="clubgenderm" name="gender-select" />
+          <label htmlFor="clubgenderm">남자만</label>
 
-          <input type="radio" id="meetgenderw" name="gender-select" />
-          <label htmlFor="meetgenderw">여자만</label>
+          <input type="radio" id="clubgenderw" name="gender-select" />
+          <label htmlFor="clubgenderw">여자만</label>
 
-          <input type="radio" id="meetgender" name="gender-select" />
-          <label htmlFor="meetgender">성별무관</label>
+          <input type="radio" id="clubgender" name="gender-select" />
+          <label htmlFor="clubgender">성별무관</label>
         </div>
 
         <div className="create-input-group">
-          <label htmlFor="meetage">모집 연령조건</label>
-          <input type="text" id="meetage" />
+          <label htmlFor="clubage">모집 연령조건</label>
+          <input type="text" id="clubage" />
         </div>
         <div className="create-file-group">
-          <label htmlFor="meetfile">더 상세히 모임을 소개해 주세요.</label>
-          <input type="file" id="meetfile" />
+          <label htmlFor="clubfile">파일점부</label>
+          <input
+            type="file"
+            id="clubfile"
+            accept="image/jpg, image/png, image/gif"
+            onChange={e => {
+              handleFileChange(e);
+            }}
+          />
+          {previewImg ? (
+            <img style={{ width: "50%" }} src={previewImg} />
+          ) : null}
         </div>
         <div className="create-textarea-group">
-          <label htmlFor="meettext">더 상세히 모임을 소개해 주세요.</label>
-          <textarea type="" id="meettext" />
+          <label htmlFor="clubtext">더 상세히 모임을 소개해 주세요.</label>
+          <textarea type="textfield" id="clubtext" />
         </div>
         <div className="create-radio-group">
           <h1>허용/비허용</h1>
-          <input type="radio" id="meetad" name="ad-select" />
-          <label htmlFor="meetad">허용</label>
+          <input type="radio" id="clubadd" name="add-select" />
+          <label htmlFor="clubadd">허용</label>
 
-          <input type="radio" id="meetad" name="ad-select" />
-          <label htmlFor="meetad">비허용</label>
+          <input type="radio" id="clubadd" name="add-select" />
+          <label htmlFor="clubadd">비허용</label>
         </div>
       </CreateFormDivStyle>
       <CreateBtnWrapStyle>
         <div className="create-button">취소</div>
-        <div className="create-button">등록신청</div>
+        <div className="create-button" onClick={handleClickCreate()}>
+          등록신청
+        </div>
       </CreateBtnWrapStyle>
     </CreateInnerStyle>
   );
