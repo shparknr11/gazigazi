@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 import mainlogo from "../../images/logo2.png";
 
 const LoginStyle = styled.div`
@@ -113,8 +114,9 @@ const Login = () => {
                     <button type="submit">로그인</button>
                   </form>
                   <div className="login-options">
-                    <a href="#">이메일 / 비밀번호 찾기</a>
-                    <a href="#">회원가입</a>
+                    <Link to="findid">이메일 찾기</Link>
+                    <Link to="findpw">비밀번호 찾기</Link>
+                    <Link to="/createAccount">회원가입</Link>
                   </div>
                 </div>
               </div>
