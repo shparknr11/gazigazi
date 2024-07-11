@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import {
+  getMyMeetLeaderList,
+  getMyMeetMemberList,
+} from "../../apis/mymeetingapi/mymeetingapi";
+
 const MyMeetingStyle = styled.div`
   width: 100%;
 
@@ -148,323 +153,37 @@ const TitleDivStyle = styled.div`
 const MyMeeting = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [isAuth, setIsAuth] = useState(0);
+  const [imgError, setImgError] = useState(false);
+  const [allData, setAllData] = useState([]);
+  const [userSeq, setUserSeq] = useState(9);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+
   const navigate = useNavigate();
   // 나중에 axios 들어오면 이거 그냥 필요없음
   // 권한에 따라 쏘고 받고만 하면됨
-  const dummyData =
-    isAuth === 2
-      ? [
-          {
-            planSeq: 1,
-            address: "대구광역시 더미 주소 1",
-            partyIntro: "모임 소개 글 더미 1",
-            userName: "모임장1",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 2,
-            address: "대구광역시 더미 주소 2",
-            partyIntro: "모임 소개 글 더미 2",
-            userName: "모임장2",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 3,
-            address: "대구광역시 더미 주소 3",
-            partyIntro: "모임 소개 글 더미 3",
-            userName: "모임장3",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 4,
-            address: "대구광역시 더미 주소 4",
-            partyIntro: "모임 소개 글 더미 4",
-            userName: "모임장4",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 5,
-            address: "대구광역시 더미 주소 5",
-            partyIntro: "모임 소개 글 더미 5",
-            userName: "모임장5",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 6,
-            address: "대구광역시 더미 주소 6",
-            partyIntro: "모임 소개 글 더미 6",
-            userName: "모임장6",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 7,
-            address: "대구광역시 더미 주소 7",
-            partyIntro: "모임 소개 글 더미 7",
-            userName: "모임장7",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 8,
-            address: "대구광역시 더미 주소 8",
-            partyIntro: "모임 소개 글 더미 8",
-            userName: "모임장8",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 9,
-            address: "대구광역시 더미 주소 9",
-            partyIntro: "모임 소개 글 더미 9",
-            userName: "모임장9",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 10,
-            address: "대구광역시 더미 주소 10",
-            partyIntro: "모임 소개 글 더미 10",
-            userName: "모임장10",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 11,
-            address: "대구광역시 더미 주소 11",
-            partyIntro: "모임 소개 글 더미 11",
-            userName: "모임장11",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 12,
-            address: "대구광역시 더미 주소 12",
-            partyIntro: "모임 소개 글 더미 12",
-            userName: "모임장12",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 13,
-            address: "대구광역시 더미 주소 13",
-            partyIntro: "모임 소개 글 더미 13",
-            userName: "모임장13",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 14,
-            address: "대구광역시 더미 주소 14",
-            partyIntro: "모임 소개 글 더미 14",
-            userName: "모임장14",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 15,
-            address: "대구광역시 더미 주소 15",
-            partyIntro: "모임 소개 글 더미 15",
-            userName: "모임장15",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 16,
-            address: "대구광역시 더미 주소 16",
-            partyIntro: "모임 소개 글 더미 16",
-            userName: "모임장16",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 17,
-            address: "대구광역시 더미 주소 17",
-            partyIntro: "모임 소개 글 더미 17",
-            userName: "모임장17",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 18,
-            address: "대구광역시 더미 주소 18",
-            partyIntro: "모임 소개 글 더미 18",
-            userName: "모임장18",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 19,
-            address: "대구광역시 더미 주소 19",
-            partyIntro: "모임 소개 글 더미 19",
-            userName: "모임장19",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 20,
-            address: "대구광역시 더미 주소 20",
-            partyIntro: "모임 소개 글 더미 20",
-            userName: "모임장20",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 21,
-            address: "대구광역시 더미 주소 21",
-            partyIntro: "모임 소개 글 더미 21",
-            userName: "모임장21",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 22,
-            address: "대구광역시 더미 주소 22",
-            partyIntro: "모임 소개 글 더미 22",
-            userName: "모임장22",
-            imgUrl: imgUrl,
-          },
-        ]
-      : [
-          {
-            planSeq: 1,
-            address: "대구광역시 더미 속한 주소 1",
-            partyIntro: "모임 소개 글 더미 속한 1",
-            userName: "모임장1",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 2,
-            address: "대구광역시 더미 속한 주소 2",
-            partyIntro: "모임 소개 글 더미 속한 2",
-            userName: "모임장2",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 3,
-            address: "대구광역시 더미 속한 주소 3",
-            partyIntro: "모임 소개 글 더미 속한 3",
-            userName: "모임장3",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 4,
-            address: "대구광역시 더미 속한 주소 4",
-            partyIntro: "모임 소개 글 더미 속한 4",
-            userName: "모임장4",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 5,
-            address: "대구광역시 더미 속한 주소 5",
-            partyIntro: "모임 소개 글 더미 속한 5",
-            userName: "모임장5",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 6,
-            address: "대구광역시 더미 속한 주소 6",
-            partyIntro: "모임 소개 글 더미 속한 6",
-            userName: "모임장6",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 7,
-            address: "대구광역시 더미 속한 주소 7",
-            partyIntro: "모임 소개 글 더미 속한 7",
-            userName: "모임장7",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 8,
-            address: "대구광역시 더미 속한 주소 8",
-            partyIntro: "모임 소개 글 더미 속한 8",
-            userName: "모임장8",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 9,
-            address: "대구광역시 더미 속한 주소 9",
-            partyIntro: "모임 소개 글 더미 속한 9",
-            userName: "모임장9",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 10,
-            address: "대구광역시 더미 속한 주소 10",
-            partyIntro: "모임 소개 글 더미 속한 10",
-            userName: "모임장10",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 11,
-            address: "대구광역시 더미 속한 주소 11",
-            partyIntro: "모임 소개 글 더미 속한 11",
-            userName: "모임장11",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 12,
-            address: "대구광역시 더미 속한 주소 12",
-            partyIntro: "모임 소개 글 더미 속한 12",
-            userName: "모임장12",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 13,
-            address: "대구광역시 더미 속한 주소 13",
-            partyIntro: "모임 소개 글 더미 속한 13",
-            userName: "모임장13",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 14,
-            address: "대구광역시 더미 속한 주소 14",
-            partyIntro: "모임 소개 글 더미 속한 14",
-            userName: "모임장14",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 15,
-            address: "대구광역시 더미 속한 주소 15",
-            partyIntro: "모임 소개 글 더미 속한 15",
-            userName: "모임장15",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 16,
-            address: "대구광역시 더미 속한 주소 16",
-            partyIntro: "모임 소개 글 더미 속한 16",
-            userName: "모임장16",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 17,
-            address: "대구광역시 더미 속한 주소 17",
-            partyIntro: "모임 소개 글 더미 속한 17",
-            userName: "모임장17",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 18,
-            address: "대구광역시 더미 속한 주소 18",
-            partyIntro: "모임 소개 글 더미 속한 18",
-            userName: "모임장18",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 19,
-            address: "대구광역시 더미 속한 주소 19",
-            partyIntro: "모임 소개 글 더미 속한 19",
-            userName: "모임장19",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 20,
-            address: "대구광역시 더미 속한 주소 20",
-            partyIntro: "모임 소개 글 더미 속한 20",
-            userName: "모임장20",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 21,
-            address: "대구광역시 더미 속한 주소 21",
-            partyIntro: "모임 소개 글 더미 속한 21",
-            userName: "모임장21",
-            imgUrl: imgUrl,
-          },
-          {
-            planSeq: 22,
-            address: "대구광역시 더미 속한 주소 22",
-            partyIntro: "모임 소개 글 더미 속한 22",
-            userName: "모임장22",
-            imgUrl: imgUrl,
-          },
-        ];
+  const handleClickEnterMeet = async () => {
+    // userSeq 변경 해야하고 page, 는 나중에 수정
+    // size 는
+    const enterMeetObj = {
+      userSeq: 9,
+      page,
+    };
+    const res = await getMyMeetMemberList(enterMeetObj);
+    setAllData(res);
+  };
+  const handleClickMakeMeet = async () => {
+    const enterMeetObj = {
+      userSeq: 1,
+      page,
+    };
+    const res = await getMyMeetLeaderList(enterMeetObj);
+    setAllData(res);
+  };
+  useEffect(() => {}, []);
+  const imgOnError = () => {
+    setImgError(true);
+  };
   return (
     <MyMeetingStyle>
       <div className="meeting-wrap">
@@ -486,6 +205,7 @@ const MyMeeting = () => {
                     className="span-pointer"
                     onClick={() => {
                       setIsAuth(1);
+                      handleClickEnterMeet();
                     }}
                   >
                     내가 속한 모임
@@ -496,6 +216,7 @@ const MyMeeting = () => {
                     className="span-pointer"
                     onClick={() => {
                       setIsAuth(2);
+                      handleClickMakeMeet();
                     }}
                   >
                     내가 만든 모임
@@ -507,19 +228,20 @@ const MyMeeting = () => {
             {/* <!-- 스와이퍼 들어올수도 있음. --> */}
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
-              {dummyData.map(item => (
-                <div className="img-container" key={item.planSeq}>
+              {allData?.map(item => (
+                <div className="img-container" key={item.partySeq}>
                   <div>
                     <div className="container">
                       {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
-                      {imgUrl ? (
+                      {imgUrl && imgError ? (
                         <img
                           className="caption-img"
-                          src={`./www/images/${item.imgUrl}`}
+                          src={`./www/images/${item.partyPic}`}
                           style={{
                             width: "100%",
                             height: "100%",
                           }}
+                          onError={imgOnError}
                         ></img>
                       ) : (
                         <CiImageOff
@@ -610,7 +332,7 @@ const MyMeeting = () => {
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                       <div className="cut-text">
-                        현재 참가 인원 : 10 / 30
+                        현재 참가 인원 : 10 / {item.partyMaximum}
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                     </div>

@@ -163,7 +163,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
     // DD : 2자리 일
     const checkDay = moment(date).format("yyyy-MM-DD");
     // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
-    console.log("sadfasdfasdfdsaf", monthData);
     const dayResult = monthData?.find(
       item => checkDay === item.managementDate.toString(),
     );
