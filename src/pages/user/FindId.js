@@ -121,7 +121,6 @@ const FindId = () => {
                     </div>
                     <div className="button-container">
                       <button type="submit">이메일 찾기</button>
-                      <button type="button">취소</button>
                     </div>
                   </form>
                   <p id="result"></p>
