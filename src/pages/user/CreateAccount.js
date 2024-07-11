@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import userapi from "../../apis/userapi/userapi";
 
 const AccountStyle = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ const AccountInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 100%;
+    width: 150%;
     box-sizing: border-box;
   }
   .main-create-detail {
@@ -67,6 +68,13 @@ const AccountInnerStyle = styled.div`
   .main-create-detail input[type="date"] {
     width: 100%;
     padding: 10px;
+    font-size: 10pt;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .email-addres {
     font-size: 10pt;
     box-sizing: border-box;
     border: 1px solid #ccc;
@@ -141,12 +149,30 @@ const CreateAccount = () => {
                         className="create-profile-picture-input"
                       />
                     </div>
-                    <label>
-                      이메일
-                      <div className="create-email-button-group-1">
-                        <input type="email" className="create-email-1" />
-                        <i className="create-eee">@</i>
-                        <input type="email" className="create-email-2" />
+                    <label form="user_email">
+                      <small>이메일</small>
+                      <input type="email" className="create-email-1" />
+                      <div
+                        className="create-email-button-group-2"
+                        id="user_email"
+                      >
+                        <span id="middle">
+                          <small>@</small>
+                        </span>
+                        <input type="email" className="create-email-3" />
+                        <select
+                          id="email-address"
+                          name="email-addres"
+                          title="이메일 선택"
+                          className="email-addres"
+                        >
+                          <option value="naver.com">naver.com</option>
+                          <option value="gmail.com">gmail.com</option>
+                          <option value="daum.net">daum.net</option>
+                          <option value="hanmail.net">hanmail.net</option>
+                          <option value="nate.com">nate.com</option>
+                          <option value="direct">직접입력</option>
+                        </select>
                       </div>
                       <div className="create-button-group">
                         <button type="button">중복 확인</button>

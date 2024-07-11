@@ -103,7 +103,6 @@ const FindPw = () => {
                     </div>
                     <div className="button-container">
                       <button type="submit">비밀번호 발급</button>
-                      <button type="button">취소</button>
                     </div>
                   </form>
                   <p id="result"></p>
