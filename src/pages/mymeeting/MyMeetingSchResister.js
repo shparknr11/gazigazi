@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CiImageOff } from "react-icons/ci";
+import { getMonthCalculateBudget } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
   display: flex;
@@ -44,8 +46,8 @@ const MyMeetingNoticeStyle = styled.div`
     display: flex;
     justify-content: right;
     width: 100%;
-    padding: 10px;
     gap: 20px;
+    height: 60px;
   }
   .flex-column {
     width: 100%;
@@ -59,12 +61,25 @@ const MyMeetingNoticeStyle = styled.div`
     width: 100%;
     justify-content: center;
     align-items: center;
+    label {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
   }
   .notice-textarea {
     resize: none;
-    padding: 10px;
     line-height: 2;
     width: 100%;
+    border-radius: 6px;
+    overflow-y: hidden;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .input-style {
+    height: 30px;
+    padding: 5px;
+    border-radius: 4px;
   }
 `;
 const TitleDivStyle = styled.div`
@@ -79,16 +94,42 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingSchResister = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
-  const [textAreaVal, setTextAreaVal] = useState("");
-  const [textAreaLength, setTextAreaLength] = useState(0);
+  const [postData, setPostData] = useState({});
+  const a = formId => {
+    // 값을 담을 객체 생성
+    let formData = {};
+    const form = document.getElementById(formId);
+
+    // Form 요소 안의 각 input 값을 객체에 저장
+    for (let i = 0; i < form.elements.length; i++) {
+      const element = form.elements[i];
+      console.log(form.elements);
+      if (element.type !== "submit") {
+        if (element.value !== "") {
+          formData[element.name] = element.value;
+        }
+      }
+    }
+    // 객체 출력 (개발자 도구 콘솔에 출력)
+
+    // 필요한 경우 여기서 객체를 다루거나 서버로 보낼 수 있습니다.
+    return formData;
+  };
+  const handleClick = async () => {
+    const res = await getMonthCalculateBudget({ planPartySeq: 1, ...postData });
+    console.log(res);
+  };
+  useEffect(() => {
+    console.log(postData);
+  }, []);
   return (
     <>
       <MyMeetingNoticeStyle>
         <div className="notice-wrap">
-          <TitleDivStyle>일정 등록 페이지</TitleDivStyle>
+          <TitleDivStyle>일정 등록페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              <form>
+              <form id="asd" name="aaa">
                 {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
                 {/* <div className="meeting-introduce">
                 <div style={{ height: "150px" }}>
@@ -145,46 +186,150 @@ const MyMeetingSchResister = () => {
               </div> */}
                 <div className="noitce-form-container">
                   <div className="flex-column">
-                    <div>
-                      <label
-                        htmlFor="noticeid"
-                        style={{ paddingBottom: "30px", display: "block" }}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* <div
+                        style={{
+                          width: "50%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
                       >
-                        제목
-                      </label>
-                    </div>
-                    <div>
-                      <input id="noticeid" />
+                        {<CiImageOff size={200} />}
+                      </div> */}
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          gap: "20px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          <label htmlFor="noticeid">일정명</label>
+                          <input
+                            id="planTitle"
+                            name="planTitle"
+                            className="input-style"
+                            style={{ height: "30px", padding: "5px" }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                          <label htmlFor="schDateId">일정날짜</label>
+                          <input
+                            type="date"
+                            id="planStartDt"
+                            name="planStartDt"
+                            className="input-style"
+                          />
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                          <label htmlFor="schDateId">일정시간</label>
+                          <input
+                            id="planStartTime"
+                            name="planStartTime"
+                            type="time"
+                            className="input-style"
+                            style={{ height: "30px", padding: "5px" }}
+                            onChange={e => {}}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          <label htmlFor="noticeid">장소</label>
+                          <input
+                            type="text"
+                            id="planLocation"
+                            name="planLocation"
+                            className="input-style"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="flex-column">
-                    <label
-                      htmlFor="noticecontent"
-                      style={{ paddingBottom: "30px", display: "block" }}
-                    >
-                      내용/ 에디터 형식이 될듯함 사진 배치 이런것들이 들어가서
-                    </label>
+                    <label htmlFor="noticecontent">일정 소개</label>
                     <textarea
-                      id="noticecontent"
+                      type="textarea"
+                      id="planContents"
+                      name="planContents"
                       className="notice-textarea"
-                      rows="10"
-                      value={textAreaVal}
-                      maxLength={300}
-                      onChange={e => {
-                        setTextAreaVal(e.target.value);
-                        setTextAreaLength(e.target.value.length);
-                      }}
+                      rows="3"
                     ></textarea>
-                    <div style={{ textAlign: "right" }}>
-                      <span>
-                        <strong style={{ color: "red" }}>*</strong>
-                        제한 숫자{textAreaLength}/300
-                      </span>
-                    </div>
                   </div>
+                  {/* <div className="flex-column">
+                    <label htmlFor="noticecontent">모임 일정 장소</label>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "400px",
+                        border: "1px solid black",
+                      }}
+                    >
+                      지도 API 들어올 자리
+                    </div>
+                  </div> */}
                   <div className="button-wrap">
-                    <button className="resister-btn">수정</button>
-                    <button className="delete-btn">삭제</button>
+                    <button
+                      type="button"
+                      className="resister-btn"
+                      onClick={() => {
+                        setPostData(a("asd"));
+                        handleClick();
+                      }}
+                    >
+                      등록
+                    </button>
+                    <button
+                      type="button"
+                      className="delete-btn"
+                      onClick={() => {}}
+                    >
+                      취소
+                    </button>
                   </div>
                 </div>
               </form>
