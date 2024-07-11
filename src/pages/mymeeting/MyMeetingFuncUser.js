@@ -183,13 +183,15 @@ const MyMeetingFuncUser = () => {
   const handlePrint = () => {
     window.print();
   };
-  const handleBudgetClick = async () => {
+  const handleBudgetClick = async e => {
     const budgetObj = { budgetPartySeq: 1, monthValue };
 
     const res = await getMonthBudget(budgetObj);
     setBudgetList(res);
   };
-
+  useEffect(() => {
+    handleBudgetClick();
+  }, [monthValue]);
   return (
     <MyMeetingFuncUserStyle id="aaaaa">
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
@@ -284,7 +286,7 @@ const MyMeetingFuncUser = () => {
                       onChange={e => {
                         setMonthValue(e.target.value);
                       }}
-                      onClick={() => {
+                      onClick={e => {
                         // axios get 들어올 자리
                       }}
                     >
@@ -324,61 +326,41 @@ const MyMeetingFuncUser = () => {
                     </li>
                     {budgetList?.map(item => (
                       <li className="ledger-li" key={item.budgetSeq}>
-                        <span>{item.budgetAmount}</span>
+                        <span>
+                          <img src={`../../images/{item.budgetPic}`} />
+                        </span>
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
-                        <span>{item.budgetAmount}</span>
+                        <span>{item.budgetText}</span>
                         <span>{item.budgetAmount}</span>
                         <span>{item.budgetDt}</span>
                       </li>
                     ))}
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
-                      <span
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "50%",
-                          height: "100%",
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      >
-                        <div style={{ width: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            회비 미납입 인원
-                          </span>
-                        </div>
-                        <div style={{ width: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            50 / 100
-                          </span>
-                        </div>
-                        <div style={{ width: "100%", height: "100%" }}>
-                          <span
-                            style={{
-                              display: "inline-block",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          >
-                            {monthValue} 월 금액 내역
-                          </span>
-                        </div>
-                        <div style={{ width: "100%", height: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            100,000
-                          </span>
-                        </div>
+                      <span style={{ display: "inline-block", width: "100%" }}>
+                        회비 미납입 인원
                       </span>
-                      <span style={{ width: "50%", border: "none" }}>
-                        {<CiImageOff size={160} />}
+                      <div style={{ width: "100%" }}>
+                        <span
+                          style={{ display: "inline-block", width: "100%" }}
+                        >
+                          50 / 100
+                        </span>
+                      </div>
+                      <div style={{ width: "100%", height: "100%" }}>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
+                          {monthValue} 월 금액 내역
+                        </span>
+                      </div>
+                      <span style={{ display: "inline-block", width: "100%" }}>
+                        100,000
                       </span>
                     </li>
                     <li className="ledger-li"></li>

@@ -52,19 +52,21 @@ export const getSchMemberAll = async schSeq => {
 //   }
 
 export const getMonthCalculateBudget = async ({
-  planSeq,
+  planPartySeq,
   planStartDt,
   planStartTime,
   planTitle,
   planContents,
+  planLocation,
 }) => {
   try {
     const res = await axios.post(`/api/plan`, {
-      planSeq,
+      planPartySeq,
       planStartDt,
-      planStartTime,
       planTitle,
       planContents,
+      planStartTime,
+      planLocation,
     });
     return res.data.resultData;
   } catch (error) {
@@ -108,7 +110,7 @@ export const patchSch = async ({
     const res = await axios.patch(`/api/plan`, {
       planSeq,
       planStartDt,
-      planStartTime,
+      planStartTime: planStartTime + ":00",
       planTitle,
       planContents,
     });

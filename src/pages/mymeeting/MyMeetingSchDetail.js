@@ -207,6 +207,26 @@ const MyMeetingSchDetail = () => {
                         <div
                           style={{
                             width: "100%",
+                            display: "flex",
+                            padding: "10px",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                          <label htmlFor="schDateId">일정시간</label>
+                          <input
+                            type="time"
+                            style={{ height: "30px", padding: "5px" }}
+                            onChange={e => {
+                              console.log(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
                             padding: "10px",
                             display: "flex",
                             flexDirection: "column",
