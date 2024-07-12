@@ -1,5 +1,6 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import userapi from "../../apis/userapi/userapi";
+import axios from "axios";
 
 const AccountStyle = styled.div`
   display: flex;
@@ -96,7 +97,6 @@ const AccountInnerStyle = styled.div`
     width: 50%;
     padding: 10px;
     font-size: 10pt;
-    margin-top: 10px;
     cursor: pointer;
     background-color: #ebddcc;
     color: white;
@@ -126,6 +126,121 @@ const AccountInnerStyle = styled.div`
 `;
 
 const CreateAccount = () => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    userNickname: "",
+    userAddr: "",
+    userBirth: "",
+    userPhone: "",
+    userFav: "",
+    userGender: "",
+    userIntro: "",
+  });
+
+  const handleChange = e => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다!");
+      return;
+    }
+    if (form.password === "") {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordRegex.test(form.password)) {
+      alert(
+        "비밀번호는 최소 8자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.",
+      );
+      return;
+    }
+    try {
+      const response = await axios.post("/api/user/sign_up", form);
+      if (response.data.success) {
+        alert("계정이 성공적으로 생성되었습니다!");
+      } else {
+        alert("계정 생성에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("계정 생성 오류:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const checkEmailDuplication = async () => {
+    if (!emailRegex.test(form.email)) {
+      alert("유효한 이메일 주소를 입력해주세요.");
+      return;
+    }
+
+    if (form.email === "") {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`/api/user/duplicated?str=1&num=2`, {
+        params: {
+          email: form.email,
+        },
+      });
+
+      if (response.data.exists) {
+        alert("이미 존재하는 이메일입니다. 이메일을 다시 확인해주세요!");
+      } else {
+        alert("사용 가능한 이메일입니다! 다음 단계로 이행해주세요!");
+      }
+    } catch (error) {
+      console.error("이메일 중복 확인 오류:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const checkNickNameDuplication = async () => {
+    try {
+      const response = await axios.get(`/api/user/duplicated?str=1&num=2`, {
+        nickname: form.userNickname,
+      });
+      // 입력된 이메일이 유효할 경우
+      if (response.data.exists) {
+        alert("이미 존재하는 닉네임입니다. 닉네임을 다시 확인해주세요!");
+      } else {
+        alert("사용 가능한 닉네임입니다! 다음 단계로 이행해주세요!");
+      }
+    } catch (error) {
+      console.error("이메일 중복 확인 오류:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const ProfilePicture = () => {
+    const [image, setImage] = useState(null);
+
+    const handleImageChange = e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  };
+
   return (
     <AccountStyle>
       <AccountWrapStyle>
@@ -134,7 +249,7 @@ const CreateAccount = () => {
             <main className="main">
               <div className="main-inner">
                 <div className="signup-container">
-                  <form className="main-create-detail">
+                  <form className="main-create-detail" onSubmit={handleSubmit}>
                     <div className="profile-picture-container">
                       <img
                         src="https://via.placeholder.com/100"
@@ -147,102 +262,138 @@ const CreateAccount = () => {
                         accept="image/*"
                         id="profilePicture"
                         className="create-profile-picture-input"
+                        name="userPic"
+                        onChange={handleImageChange}
                       />
                     </div>
-                    <label form="user_email">
-                      <small>이메일</small>
-                      <input type="email" className="create-email-1" />
-                      <div
-                        className="create-email-button-group-2"
-                        id="user_email"
-                      >
-                        <span id="middle">
-                          <small>@</small>
-                        </span>
-                        <input type="email" className="create-email-3" />
-                        <select
-                          id="email-address"
-                          name="email-addres"
-                          title="이메일 선택"
-                          className="email-addres"
-                        >
-                          <option value="naver.com">naver.com</option>
-                          <option value="gmail.com">gmail.com</option>
-                          <option value="daum.net">daum.net</option>
-                          <option value="hanmail.net">hanmail.net</option>
-                          <option value="nate.com">nate.com</option>
-                          <option value="direct">직접입력</option>
-                        </select>
-                      </div>
-                      <div className="create-button-group">
-                        <button type="button">중복 확인</button>
-                        <button type="button">인증</button>
+                    <label htmlFor="userEmail">
+                      <small>이메일*</small>
+                      <input
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                      />
+                      <div className="create-button-group-1">
+                        <button type="button" onClick={checkEmailDuplication}>
+                          중복 확인
+                        </button>
                       </div>
                     </label>
                     <label>
-                      비밀번호
-                      <input type="password" className="create-password-1" />
+                      비밀번호*
+                      <input
+                        type="password"
+                        name="password"
+                        value={form.password}
+                        onChange={handleChange}
+                        required
+                      />
                     </label>
                     <label>
-                      비밀번호 확인
-                      <input type="password" className="create-password-2" />
+                      비밀번호 확인*
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={form.confirmPassword}
+                        onChange={handleChange}
+                        required
+                      />
                     </label>
                     <label>
-                      이름
-                      <input type="text" className="create-name" />
+                      이름*
+                      <input
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        required
+                      />
                     </label>
                     <label>
                       닉네임
                       <div className="create-nickname-button-group">
-                        <input type="text" className="create-nickname" />
-                        <button type="button">중복 확인</button>
+                        <input
+                          type="text"
+                          name="userNickname"
+                          value={form.userNickname}
+                          onChange={handleChange}
+                        />
+                        <button
+                          type="button"
+                          onClick={checkNickNameDuplication}
+                        >
+                          중복 확인
+                        </button>
                       </div>
                     </label>
                     <label>
                       주소
                       <input
                         type="text"
-                        id="postcode"
-                        name="zipcode"
-                        className="create-address"
+                        name="userAddr"
+                        value={form.userAddr}
+                        onChange={handleChange}
                       />
                     </label>
                     <label>
-                      생년 월일
-                      <input type="date" className="create-birthday" />
+                      생년 월일*
+                      <input
+                        type="date"
+                        name="userBirth"
+                        value={form.userBirth}
+                        onChange={handleChange}
+                        required
+                      />
                     </label>
                     <label>
                       전화번호
-                      <input type="text" className="create-phone-number" />
+                      <input
+                        type="text"
+                        name="userPhone"
+                        value={form.userPhone}
+                        onChange={handleChange}
+                      />
                     </label>
                     <label>
                       관심있는 분야
-                      <input type="text" className="create-interests" />
+                      <input
+                        type="text"
+                        name="userFav"
+                        value={form.userFav}
+                        onChange={handleChange}
+                      />
                     </label>
                     <label className="create-gender-group">
-                      성별
+                      성별*
                       <div className="create-gender-item">
                         <input
                           type="radio"
-                          name="gender"
+                          name="userGender"
                           value="남성"
-                          className="create-boy"
+                          onChange={handleChange}
                         />
                         남
                       </div>
                       <div className="create-gender-item">
                         <input
                           type="radio"
-                          name="gender"
+                          name="userGender"
                           value="여성"
-                          className="create-girl"
+                          onChange={handleChange}
                         />
                         여
                       </div>
                     </label>
                     <label>
                       자기 소개
-                      <input type="text" className="create-introduction" />
+                      <input
+                        type="text"
+                        name="userIntro"
+                        value={form.userIntro}
+                        onChange={handleChange}
+                      />
                     </label>
                     <button type="submit">가입 완료</button>
                   </form>
