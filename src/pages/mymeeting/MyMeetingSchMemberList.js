@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "../../css/calendar/calendar.css";
+import { getSchMemberAll } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 
 const ReactCalendarStyle = styled.div`
   max-width: 1024px;
@@ -135,55 +136,22 @@ const CalendarListLiStyle = styled.div`
 const MyMeetingSchMemberList = () => {
   const [allData, setAllData] = useState([]);
   const [isClicked, setIsClicked] = useState(0);
-  useEffect(() => {
-    setAllData([
-      {
-        pk: 1,
-        meetName: "모임명1",
-        meetMember: "멤버명1",
-        meetPlace: "대구광역시 동구",
-        managementDate: "2024-07-04",
-      },
-      {
-        pk: 2,
-        meetName: "모임명2",
-        meetMember: "멤버명2",
-        meetPlace: "대구광역시 남구",
-        managementDate: "2024-07-07",
-      },
-      {
-        pk: 3,
-        meetName: "모임명3",
-        meetMember: "멤버명3",
-        meetPlace: "대구광역시 북구",
-        managementDate: "2024-07-02",
-      },
-      {
-        pk: 4,
-        meetName: "모임명4",
-        meetMember: "멤버명4",
-        meetPlace: "하와이",
-        managementDate: "2024-07-09",
-      },
-      {
-        pk: 5,
-        meetName: "모임명5",
-        meetMember: "멤버명5",
-        meetPlace: "제주도",
-        managementDate: "2024-07-10",
-      },
-      {
-        pk: 6,
-        meetName: "모임명6",
-        meetMember: "멤버명6",
-        meetPlace: "대구광역시 서구",
-        managementDate: "2024-07-18",
-      },
-    ]);
-  }, []);
+  const params = useParams();
+  const location = useLocation();
+  useEffect(() => {}, []);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
+  const a = async () => {
+    console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
+    const res = await getSchMemberAll(params.meetingId);
+    console.log(res);
+  };
+
+  const b = async () => {
+    const res = await getSchMemberAll(params.meetingId);
+    console.log(res);
+  };
   let activeItem = null;
   // todo : 정리 중 관리 페이지 식으로 갈지 ...
   window.addEventListener("click", e => {
@@ -191,7 +159,6 @@ const MyMeetingSchMemberList = () => {
     // const a = document.querySelector("");
     if (e.target.classList.contains("item")) {
       const clickedItem = e.target;
-      console.log(clickedItem);
       if (activeItem) {
         activeItem.classList.remove("divButtonStyle");
       }
@@ -222,6 +189,7 @@ const MyMeetingSchMemberList = () => {
             id="1"
             className="item item-border-right"
             onClick={() => {
+              a();
               setIsClicked(1);
             }}
           >
@@ -231,6 +199,7 @@ const MyMeetingSchMemberList = () => {
             id="2"
             className="item"
             onClick={() => {
+              b();
               setIsClicked(2);
             }}
           >

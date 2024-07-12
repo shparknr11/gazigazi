@@ -1,6 +1,15 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
+import {
+  deleteSchOne,
+  getSchOne,
+  patchSch,
+} from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import { useLocation } from "react-router";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
   display: flex;
@@ -80,6 +89,67 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingSchDetail = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
+  const [planTitle, setPlanTitle] = useState("");
+  const [planStartDt, setPlanStartDt] = useState("");
+  const [planStartTime, setPlanStartTime] = useState("");
+  const [planLocation, setPlanLocation] = useState("");
+  const [planContents, setPlanContents] = useState("");
+  const [planObj, setPlanObj] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+  const a = async () => {
+    // const res = await getSchOne(location.state.planSeq);
+  };
+  const getDataOne = async () => {
+    console.log(location.state.planSeq);
+    const res = await getSchOne(location.state.planSeq);
+    console.log(res);
+    // setPlanObj(res);
+    setPlanTitle(res.planTitle);
+    setPlanStartDt(res.planStartDt);
+    setPlanStartTime(res.planStartTime);
+    setPlanLocation(res.planLocation);
+    setPlanContents(res.planContents);
+    console.log(planObj);
+  };
+  useEffect(() => {
+    getDataOne();
+  }, []);
+  const formDataFunc = formId => {
+    let formData = {};
+    const form = document.getElementById(formId);
+
+    for (let i = 0; i < form.elements.length; i++) {
+      const element = form.elements[i];
+      if (element.type !== "submit") {
+        if (element.value !== "") {
+          formData[element.name] = element.value;
+        }
+      }
+    }
+
+    return formData;
+  };
+  useEffect(() => {
+    a();
+  }, []);
+  const handleClick = async () => {
+    console.log(location.state.planSeq);
+    console.log({
+      planPartySeq: location.state.planSeq,
+      ...formDataFunc("dataForm"),
+    });
+    try {
+      const res = await patchSch({
+        planSeq: location.state.planSeq,
+        ...formDataFunc("dataForm"),
+      });
+      toast.success("일정이 수정되었습니다.");
+      navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+    } catch (error) {
+      toast.warning(error);
+    }
+  };
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -87,61 +157,7 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              <form>
-                {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
-                {/* <div className="meeting-introduce">
-                <div style={{ height: "150px" }}>
-                  {imgUrl ? (
-                    <img src={imageTest} />
-                  ) : (
-                    <CiImageOff
-                      className="caption-img"
-                      size="150"
-                      style={{ textAlign: "center" }}
-                    />
-                  )}
-                </div>
-                <div style={{ width: "30%" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "30px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        textAlign: "left",
-                      }}
-                    >
-                      <label htmlFor="mettingname" style={{ width: "25%" }}>
-                        모임명
-                      </label>
-                      <input id="mettingname" style={{ width: "73%" }} />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        textAlign: "left",
-                      }}
-                    >
-                      <label htmlFor="mettingdata" style={{ width: "25%" }}>
-                        모임날짜
-                      </label>
-                      <input
-                        id="mettingdata"
-                        type="date"
-                        style={{ width: "73%" }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div> */}
+              <form id="dataForm" name="dataForm">
                 <div className="noitce-form-container">
                   <div className="flex-column">
                     <div
@@ -153,17 +169,7 @@ const MyMeetingSchDetail = () => {
                     >
                       <div
                         style={{
-                          width: "50%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        {<CiImageOff size={200} />}
-                      </div>
-                      <div
-                        style={{
-                          width: "50%",
+                          width: "100%",
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
@@ -174,7 +180,7 @@ const MyMeetingSchDetail = () => {
                           style={{
                             width: "100%",
                             display: "flex",
-                            padding: "10px",
+
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -182,15 +188,21 @@ const MyMeetingSchDetail = () => {
                         >
                           <label htmlFor="noticeid">일정명</label>
                           <input
-                            id="noticeid"
+                            id="planTitle"
+                            name="planTitle"
+                            className="input-style"
+                            value={planTitle}
                             style={{ height: "30px", padding: "5px" }}
+                            onChange={e => {
+                              setPlanTitle(e.target.value);
+                            }}
                           />
                         </div>
                         <div
                           style={{
                             width: "100%",
                             display: "flex",
-                            padding: "10px",
+
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -200,15 +212,20 @@ const MyMeetingSchDetail = () => {
                           <label htmlFor="schDateId">일정날짜</label>
                           <input
                             type="date"
-                            id="schDateId"
-                            style={{ height: "30px", padding: "5px" }}
+                            id="planStartDt"
+                            name="planStartDt"
+                            value={planStartDt}
+                            className="input-style"
+                            onChange={e => {
+                              setPlanStartDt(e.target.value);
+                            }}
                           />
                         </div>
                         <div
                           style={{
                             width: "100%",
                             display: "flex",
-                            padding: "10px",
+
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -217,42 +234,56 @@ const MyMeetingSchDetail = () => {
                           {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
                           <label htmlFor="schDateId">일정시간</label>
                           <input
+                            id="planStartTime"
+                            name="planStartTime"
                             type="time"
+                            className="input-style"
                             style={{ height: "30px", padding: "5px" }}
+                            value={planStartTime}
                             onChange={e => {
-                              console.log(e.target.value);
+                              setPlanStartTime(e.target.value);
                             }}
                           />
                         </div>
                         <div
                           style={{
                             width: "100%",
-                            padding: "10px",
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
                           }}
                         >
-                          <label htmlFor="noticeid">인원수</label>
-                          <select
-                            id=""
-                            style={{ height: "30px", paddingLeft: "5px" }}
-                          >
-                            <option>30</option>
-                            <option>100</option>
-                            <option>200</option>
-                            <option>300</option>
-                          </select>
+                          <label htmlFor="noticeid">장소</label>
+                          <input
+                            type="text"
+                            id="planLocation"
+                            name="planLocation"
+                            value={planLocation}
+                            className="input-style"
+                            onChange={e => {
+                              setPlanLocation(e.target.value);
+                            }}
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="flex-column">
-                    <label htmlFor="noticecontent">모임 소개</label>
-                    <textarea className="notice-textarea" rows="3"></textarea>
+                    <label htmlFor="noticecontent">일정 소개</label>
+                    <textarea
+                      type="textarea"
+                      id="planContents"
+                      name="planContents"
+                      value={planContents}
+                      className="notice-textarea"
+                      rows="3"
+                      onChange={e => {
+                        setPlanContents(e.target.value);
+                      }}
+                    ></textarea>
                   </div>
-                  <div className="flex-column">
+                  {/* <div className="flex-column">
                     <label htmlFor="noticecontent">모임 일정 장소</label>
                     <div
                       style={{
@@ -263,17 +294,27 @@ const MyMeetingSchDetail = () => {
                     >
                       지도 API 들어올 자리
                     </div>
-                  </div>
+                  </div> */}
                   <div className="button-wrap">
-                    <button type="button" className="resister-btn">
+                    <button
+                      type="button"
+                      className="resister-btn"
+                      onClick={() => {
+                        handleClick();
+                      }}
+                    >
                       수정
                     </button>
                     <button
                       type="button"
                       className="delete-btn"
-                      onClick={() => {}}
+                      onClick={() => {
+                        if (confirm("삭제하시겠습니까?")) {
+                          deleteSchOne(location.state.planSeq);
+                        }
+                      }}
                     >
-                      취소
+                      삭제
                     </button>
                   </div>
                 </div>
