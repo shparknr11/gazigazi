@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { getLocalDetail } from "../../apis/meeting/createapi";
+import { getLocalDetail } from "../../apis/meeting/meetingcreateapi";
 
 const LocalSelectWrapStyle = styled.div`
   display: flex;
@@ -59,16 +59,16 @@ const LocalSelect = ({
   const [localDetailList, setLocalDetailList] = useState([]);
   const [localRadioChecked, setLocalRadioChecked] = useState(null);
 
-  const handleClickLocalDetail = async (_cdGbNM, _cdGb) => {
+  const handleClickLocalDetail = async (_cdGbNm, _cdGb) => {
     setLocalDetailOpen(true);
-    setLocalData(_cdGbNM);
+    setLocalData(_cdGbNm);
     setLocaDetaillData("");
     setLocalRadioChecked(null);
 
-    const data = { cd: `LO-${_cdGb}`, cd_gb: "00" };
+    const data = { cd: `LO-${_cdGb}`, cdGb: "00" };
     const result = await getLocalDetail(data);
     // console.log(result);
-    if (result.code !== "SU") {
+    if (result.code !== 1) {
       alert(result.resultMsg);
       return;
     }

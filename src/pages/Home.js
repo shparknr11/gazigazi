@@ -102,11 +102,11 @@ const Home = () => {
           </div>
           <div className="mt-category-div">
             <div className="mt-category-imgthree"></div>
-            <div className="mt-category-text">스터디</div>
+            <div className="mt-category-text">패션</div>
           </div>
           <div className="mt-category-div">
             <div className="mt-category-imgfour"></div>
-            <div className="mt-category-text">패션</div>
+            <div className="mt-category-text">자기개발</div>
           </div>
           <div className="mt-category-div">
             <div className="mt-category-imgfive"></div>
@@ -129,7 +129,6 @@ const Home = () => {
               <h1>신규, 방금전 개설된 모임🔔</h1>
               <div>더보기</div>
             </div>
-            {/* meeting-list api 연동 */}
             <div className="mm-meeting-list">
               <div
                 className="list-box"
