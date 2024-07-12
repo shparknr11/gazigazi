@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import meetimg from "../../images/meetinga.png";
+import { AiTwotoneHeart } from "react-icons/ai";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -30,6 +31,7 @@ const MeetItemTitle = styled.div`
   .meet-item-title {
     font-size: 1.7rem;
     margin-top: 20px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -42,21 +44,48 @@ const MeetItemCard = styled.div`
   .meet-item-img {
     background: url(${meetimg}) no-repeat center;
     background-size: cover;
-    max-width: 390px;
+    max-width: 500px;
     width: 100%;
-    height: 240px;
+    height: 308px;
   }
 
   .meet-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* padding: 25px; */
+  }
+  .meet-item-leader {
+    margin-top: 10px;
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 0px 20px;
+  }
+  .meet-condition,
+  .meet-apply-form {
+    padding: 25px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     span {
-      font-weight: 600;
-      margin-left: 20px;
-      font-size: 1.2rem;
-    }
-
-    p {
+      text-align: center;
+      font-weight: 700;
       font-size: 1.1rem;
     }
+  }
+  .meet-item-button-div {
+    display: flex;
+    justify-content: space-around;
+  }
+  .meet-item-button {
+    display: flex;
+    padding: 10px 20px;
+    border: 1px solid;
+    border-radius: 25px;
   }
 `;
 const UnderLine = styled.div`
@@ -85,27 +114,34 @@ const Detail = () => {
         <MeetItemTitle>
           <div className="meet-item-category">
             <BsFillTicketPerforatedFill />
-            <span>소모임</span>
+            <span>모임</span>
           </div>
           <div className="meet-item-title">
             <span>금요일 양반차림 (우리의 상반기, 당신의 이야기)</span>
           </div>
+          <div>모임인원 0/20</div>
           <MeetItemCard>
             <div className="meet-item-img"></div>
             <div className="meet-item-content">
-              <UnderLine />
-              <span>최서윤 소모임장</span>
-              <UnderLine />
-              <p>
-                안녕하세요. 유머러스한 불효자들 - 성장하며 흔들리는 영화
-                캐릭터처럼’의 모임장입니다. 홍대 플레이스 오션의 운영을 돕고
-                있어요. 서비스업 자영업자 새싹으로서 선배 자영업자 분들의 훈수
-                환영합니다.(단, 오셔서💙)
-              </p>
-              <button style={{ marginTop: "30px", marginRight: "10px" }}>
-                찜하기
-              </button>
-              <button>신청하기</button>
+              <span className="meet-item-leader">
+                <img src="" alt="프로필" />
+                최서윤 모임장
+              </span>
+              <div className="meet-condition">
+                <span>가입 조건 </span>
+                <p> 남여 무관, 98년생~00년생</p>
+              </div>
+              <div className="meet-apply-form">
+                <span>신청서 양식</span>
+                <p>자유형식</p>
+              </div>
+              <div className="meet-item-button-div">
+                <div className="meet-item-button">
+                  <AiTwotoneHeart />
+                  찜하기
+                </div>
+                <div className="meet-item-button">신청하기</div>
+              </div>
             </div>
           </MeetItemCard>
         </MeetItemTitle>

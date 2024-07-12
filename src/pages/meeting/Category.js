@@ -37,6 +37,12 @@ const CateInnerStyle = styled.div`
   .category-search-input {
     border: none;
   }
+  .mm-meeting-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+  }
 `;
 const Category = () => {
   return (
@@ -48,7 +54,7 @@ const Category = () => {
           <div className="category-item">게임</div>
           <div className="category-item">맛집</div>
           <div className="category-item">패션</div>
-          <div className="category-item">스터디</div>
+          <div className="category-item">자기개발</div>
           <div className="category-item">문화•예술</div>
           <div className="category-item">Bar</div>
           <div className="category-item">기타</div>
@@ -64,17 +70,28 @@ const Category = () => {
         </div>
       </div>
       <div className="mm-meeting-list">
-        <div className="list-box">
-          <div className="list-box-img"></div>
-          <div className="list-box-title">
-            <span>OOO 모임장</span>
+        <div
+          className="list-box"
+          // onClick={() => {
+          //   navigate(`/meeting/detail`);
+          // }}
+        >
+          <div className="list-box-img">
+            <img src="" alt="모임이미지" />
           </div>
-          <h3 className="list-box-text">
-            여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤 사람?
-            (with 제이팝) 🙌
-          </h3>
-          <p className="list-box-place">일본 디즈니랜드</p>
-          <span className="list-box-day">2024.02.08까지</span>
+          <div className="list-box-content">
+            <div className="list-box-title">
+              <img alt="프로필" />
+              <span>OOO 님의 모임</span>
+            </div>
+            <h3 className="list-box-text">
+              여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤 사람?
+              (with 제이팝) 🙌
+            </h3>
+            <p className="list-box-local">서울 강남구</p>
+            <span className="list-box-gender">성별 무관</span>
+            <span className="list-box-age">90~98년생</span>
+          </div>
         </div>
         <div className="list-box"></div>
         <div className="list-box"></div>

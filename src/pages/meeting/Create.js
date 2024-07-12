@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
-import { getLocal } from "../../apis/meeting/createapi";
+import { getLocal, postParty } from "../../apis/meeting/meetingcreateapi";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -42,17 +42,18 @@ const CreateCheckStyle = styled.div`
     align-items: center;
     justify-content: center; */
   }
-  .create-check-btn {
-    text-align: center;
-    /* width: calc(100% - 40px); */
-    width: 100%;
-    padding: 10px;
-    margin: 0 auto;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    &:hover {
-      background-color: wheat;
-    }
-  }
+`;
+const CreateCheckBtn = styled.div`
+  user-select: none;
+  text-align: center;
+  /* width: calc(100% - 40px); */
+  width: 100%;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  background-color: ${props =>
+    props.isChecked ? "wheat" : "rgba(0,0,0,0.05)"};
 `;
 const CreateFormDivStyle = styled.div`
   width: 100%;
@@ -77,10 +78,6 @@ const CreateFormDivStyle = styled.div`
   .create-radio-group {
     margin-bottom: 40px;
   }
-  .create-clubplace {
-    width: 785px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-  }
 `;
 
 const CreateBtnWrapStyle = styled.div`
@@ -95,9 +92,17 @@ const CreateBtnWrapStyle = styled.div`
 `;
 
 const Create = () => {
+  const [isChecked, setIsChecked] = useState(false);
   // form
-  // const [clubCate, setclubCate] = useState("");
-  const [clubName, setclubName] = useState("");
+  const [partyName, setPartyName] = useState("");
+  const [partyGenre, setPartyGenre] = useState(null);
+  // const [partyLocation, setPartyLocation] = useState("");
+  const [partyMinAge, setPartyMinAge] = useState("");
+  const [partyMaxAge, setPartyMaxAge] = useState("");
+  const [partyMaximum, setPartyMaximum] = useState("");
+  const [partyGender, setPartyGender] = useState("");
+  const [partyIntro, setPartyIntro] = useState("");
+  const [partyJoinForm, setPartyJoinForm] = useState("");
 
   // local
   const [selectorOpen, setSelectorOpen] = useState(false);
@@ -105,46 +110,105 @@ const Create = () => {
   const [localData, setLocalData] = useState("");
   const [localDetailData, setLocaDetaillData] = useState("");
   // file
-  const [imgFile, setImgFile] = useState(null);
+  const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
 
-  useEffect(() => {
-    // console.log(localList);
-    // console.log(localData);
-    // console.log(localDetailData);
-  }, [localList, localData, localDetailData]);
+  // useEffect(() => {
+  //   // console.log(localList);
+  //   // console.log(localData);
+  //   // console.log(localDetailData);
+  // }, [localList, localData, localDetailData]);
 
-  // 도시 불러오기
+  // 년도
+  const years = Array.from({ length: 2009 - 1924 + 1 }, (v, i) => 1924 + i);
+
+  // 이용약관 동의
+  const handleClickCheck = () => {
+    setIsChecked(!isChecked);
+  };
+
+  // 모임 명 작성
+  const handleChangePartyName = e => {
+    setPartyName(e.target.value);
+  };
+
+  // 카테고리 선택
+  const handleChangeGenre = e => {
+    // console.log(e.target.value);
+    const partyGenre = parseInt(e.target.value);
+    if (!partyGenre) {
+      alert("장르를 선택해주세요");
+    }
+    setPartyGenre(e.target.value);
+  };
+  // 지역 선택(도시 불러오기)
   const handleClickLocal = async () => {
     setSelectorOpen(true);
 
-    const data = { cd: "LO-00", cd_gb: "00" };
+    const data = { cd: "LO-00", cdGb: "00" };
 
     const result = await getLocal(data);
-    if (result.code !== "SU") {
+    if (result.code !== 1) {
       alert(result.resultMsg);
       return;
     }
-    // console.log("result", result);
+    console.log("result", result);
     console.log("resultData", result.resultData);
     setLocalList(result.resultData);
   };
+  // 성별 선택
+  const handleChangeGender = e => {
+    const gender = parseInt(e.target.value);
+    setPartyGender(gender);
+  };
+  // 연령제한 선택
+  const handleChangeMinAge = e => {
+    console.log("min", e.target.value);
+    const minAge = parseInt(e.target.value);
+    setPartyMinAge(minAge);
+    if (minAge > partyMaxAge) {
+      alert("최대년도보다 낮게 설정해주세요.");
+    }
+  };
+  const handleChangeMaxAge = e => {
+    console.log("max", e.target.value);
+    const maxAge = parseInt(e.target.value);
+    setPartyMaxAge(e.target.value);
+    if (partyMinAge > maxAge) {
+      alert("최소년도보다 높게 설정해주세요.");
+    }
+  };
 
-  // 파일 인풋
+  // 파일 선택
   const handleFileChange = e => {
     const tempFile = e.target.files[0];
     console.log(e.target.files[0]);
 
     if (tempFile) {
-      setImgFile(tempFile);
+      setPartyPic(tempFile);
       const tempUrl = URL.createObjectURL(tempFile);
       setPreviewImg(tempUrl);
     } else {
+      setPartyPic(null);
       setPreviewImg("");
-      setImgFile(null);
     }
   };
 
+  // 최대인원 선택
+  const handleChangeMaximum = e => {
+    // console.log(e.target.value);
+    const maximum = parseInt(e.target.value);
+    setPartyMaximum(maximum);
+  };
+
+  // 모임소개 작성
+  const handleChangeIntro = e => {
+    setPartyIntro(e.target.value);
+  };
+  // 모임 신청양식 작성
+  const handleChangeJoinForm = e => {
+    setPartyJoinForm(e.target.value);
+  };
   // 모임 생성 신청
   const handleClickCreate = () => {
     console.log("모임생성 신청");
@@ -156,47 +220,77 @@ const Create = () => {
       // 보낼 input 데이터 담기
       // 속성명: 속성값,
       // 속성명: 속성값,
+      // "userSeq": 9007199254740991,
+      // "partyName": "string",
+      // "partyGenre": 1073741824,
+      // "partyLocation": 1073741824,
+      // "partyMinAge": 1073741824,
+      // "partyMaxAge": 1073741824,
+      // "partyGender": 1073741824,
+      // "partyMaximum": 1073741824,
+      // "partyJoinGb": 1073741824,
+      // "partyIntro": "string",
+      // "partyJoinForm": "string"
+      userSeq: 1,
+      partyName,
+      partyGenre,
+      partyLocation: 101,
+      partyMinAge,
+      partyMaxAge,
+      partyGender,
+      partyMaximum,
+      partyJonGb: 1,
+      partyJoinForm,
+      partyIntro,
     });
+    console.log("infoData", infoData);
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
-    formData.append("키명", imgFile);
+    formData.append("partyPic", partyPic);
+
+    postParty(formData);
   };
 
   return (
-    <CreateInnerStyle
-      onSubmit={() => {
-        handSubmitCreate();
-      }}
-    >
+    <CreateInnerStyle>
       <h1>모임 등록신청</h1>
       <CreateCheckStyle>
         <div className="create-check-div">
           <h1>📝모임등록 전 숙지사항</h1>
           <p>1. 모임 신청 확인 후 3일 이내 모임승인여부를 알려드립니다</p>
           <p>
-            2. 이미지를 저해시키는 모임을 신청했을 경우, 사전 통보없이 모임이
-            삭제 처리될 수 있습니다.
+            2. 이미지를 저해시키는 요소가 포함되어 있을 경우, 사전 통보없이
+            모임이 삭제 처리될 수 있습니다.
           </p>
         </div>
         <div className="create-check-btn-div">
-          <div className="create-check-btn">확인</div>
+          <CreateCheckBtn
+            onClick={() => {
+              handleClickCheck();
+            }}
+            isChecked={isChecked}
+          >
+            확인했습니다.
+          </CreateCheckBtn>
         </div>
       </CreateCheckStyle>
+
       <CreateFormDivStyle>
         <h1>모임 등록양식</h1>
 
         <div className="create-option-group">
-          <label htmlFor="level">모임의 카테고리를 선정해 주세요.</label>
+          <label htmlFor="partygenre">모임의 카테고리를 선정해 주세요.</label>
           <select
-            id="level"
-            onChange={() => {
-              console.log("카테고리");
+            id="partygenre"
+            onChange={e => {
+              handleChangeGenre(e);
             }}
           >
+            <option value="">---카테고리를 선택해주세요---</option>
             <option value="1">스포츠</option>
             <option value="2">게임</option>
             <option value="3">맛집</option>
-            <option value="4">스터디</option>
+            <option value="4">자기개발</option>
             <option value="5">패션</option>
             <option value="6">문화•예술</option>
             <option value="7">Bar</option>
@@ -204,26 +298,28 @@ const Create = () => {
           </select>
         </div>
         <div className="create-input-group">
-          <label htmlFor="clubname">모임의 제목을 지어주세요.</label>
+          <label htmlFor="partyname">모임의 제목을 지어주세요.</label>
           <input
+            autoComplete="off"
             type="text"
-            id="clubname"
-            value={clubName}
+            id="partyname"
+            value={partyName}
             onChange={e => {
-              setclubName(e.target.value);
+              handleChangePartyName(e);
             }}
           />
         </div>
 
         <div className="create-form-group">
-          <label htmlFor="clubplace">모임지역을 선택해 주세요.</label>
+          <label htmlFor="partyplace">모임지역을 선택해 주세요.</label>
           <input
             type="text"
-            id="clubplace"
+            id="partyplace"
             value={`${localData}${localDetailData}`}
             onClick={() => {
               handleClickLocal();
             }}
+            autoComplete="off"
             readOnly
           />
           {selectorOpen ? (
@@ -239,25 +335,96 @@ const Create = () => {
 
         <div className="create-radio-group">
           <h1>모집 성별조건</h1>
-          <input type="radio" id="clubgenderm" name="gender-select" />
-          <label htmlFor="clubgenderm">남자만</label>
+          <input
+            type="radio"
+            id="partygenderm"
+            name="gender-select"
+            value="1"
+            onChange={e => {
+              handleChangeGender(e);
+            }}
+          />
+          <label htmlFor="partygenderm">남성</label>
 
-          <input type="radio" id="clubgenderw" name="gender-select" />
-          <label htmlFor="clubgenderw">여자만</label>
+          <input
+            type="radio"
+            id="partygenderw"
+            name="gender-select"
+            value="2"
+            onChange={e => {
+              handleChangeGender(e);
+            }}
+          />
+          <label htmlFor="partygenderw">여성</label>
 
-          <input type="radio" id="clubgender" name="gender-select" />
-          <label htmlFor="clubgender">성별무관</label>
+          <input
+            type="radio"
+            id="partygendero"
+            name="gender-select"
+            value="3"
+            onChange={e => {
+              handleChangeGender(e);
+            }}
+          />
+          <label htmlFor="partygendero">성별무관</label>
         </div>
 
         <div className="create-input-group">
-          <label htmlFor="clubage">모집 연령조건</label>
-          <input type="text" id="clubage" />
+          <div>
+            <p>연령 제한</p>
+          </div>
+          <label htmlFor="partyminage">최소</label>
+          <select
+            id="partyminage"
+            onChange={e => {
+              handleChangeMinAge(e);
+            }}
+          >
+            <option value="0000">
+              --- 최소 연령을 선택해주세요 (연령무관)---
+            </option>
+            {years.map((item, index) => (
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="partymaxage">최대</label>
+          <select
+            id="partymaxage"
+            onChange={e => {
+              handleChangeMaxAge(e);
+            }}
+          >
+            <option value="9999">
+              --- 최대 연령을 선택해주세요 (연령무관)---
+            </option>
+            {years.map((item, index) => (
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
         </div>
+
+        <div className="create-input-group">
+          <label htmlFor="partyMaximum">모임의 허용인원을 설정해 주세요</label>
+          <input
+            autoComplete="off"
+            type="number"
+            id="partyMaximum"
+            onChange={e => {
+              handleChangeMaximum(e);
+            }}
+          />
+          명
+        </div>
+
         <div className="create-file-group">
-          <label htmlFor="clubfile">파일점부</label>
+          <label htmlFor="partyfile">사진으로 모임을 소개해 주세요.</label>
           <input
             type="file"
-            id="clubfile"
+            id="partyfile"
             accept="image/jpg, image/png, image/gif"
             onChange={e => {
               handleFileChange(e);
@@ -268,21 +435,46 @@ const Create = () => {
           ) : null}
         </div>
         <div className="create-textarea-group">
-          <label htmlFor="clubtext">더 상세히 모임을 소개해 주세요.</label>
-          <textarea type="textfield" id="clubtext" />
+          <label htmlFor="partytext">더 상세히 모임을 소개해 주세요.</label>
+          <textarea
+            type="textfield"
+            id="partytext"
+            autoComplete="off"
+            value={partyIntro}
+            onChange={e => {
+              handleChangeIntro(e);
+            }}
+          />
         </div>
-        <div className="create-radio-group">
+        <div className="create-textarea-group">
+          <label htmlFor="partyform">모임의 신청양식을 작성해 주세요.</label>
+          <textarea
+            type="textfield"
+            id="partyform"
+            autoComplete="off"
+            value={partyJoinForm}
+            onChange={e => {
+              handleChangeJoinForm(e);
+            }}
+          />
+        </div>
+        {/* <div className="create-radio-group">
           <h1>허용/비허용</h1>
-          <input type="radio" id="clubadd" name="add-select" />
-          <label htmlFor="clubadd">허용</label>
+          <input type="radio" id="partyadd" name="add-select" />
+          <label htmlFor="partyadd">허용</label>
 
-          <input type="radio" id="clubadd" name="add-select" />
-          <label htmlFor="clubadd">비허용</label>
-        </div>
+          <input type="radio" id="partyadd" name="add-select" />
+          <label htmlFor="partyadd">비허용</label>
+        </div> */}
       </CreateFormDivStyle>
       <CreateBtnWrapStyle>
         <div className="create-button">취소</div>
-        <div className="create-button" onClick={handleClickCreate()}>
+        <div
+          className="create-button"
+          onClick={e => {
+            handSubmitCreate(e);
+          }}
+        >
           등록신청
         </div>
       </CreateBtnWrapStyle>
