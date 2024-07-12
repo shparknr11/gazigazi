@@ -51,7 +51,7 @@ export const getSchMemberAll = async schSeq => {
 //     "planContents": "단체 회식"
 //   }
 
-export const getMonthCalculateBudget = async ({
+export const postMonthCalculateBudget = async ({
   planPartySeq,
   planStartDt,
   planStartTime,
@@ -78,9 +78,10 @@ export const getMonthCalculateBudget = async ({
 // /api/plan
 // 모임 일정 삭제
 // /api/plan?plan_seq=${}
+// /api/plan?plan_seq=1032
 export const deleteSchOne = async schSeq => {
   try {
-    const res = await axios.get(`/api/plan?plan_seq=${schSeq}`);
+    const res = await axios.delete(`/api/plan?plan_seq=${schSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -103,6 +104,7 @@ export const patchSch = async ({
   planSeq,
   planStartDt,
   planStartTime,
+  planLocation,
   planTitle,
   planContents,
 }) => {
@@ -110,7 +112,8 @@ export const patchSch = async ({
     const res = await axios.patch(`/api/plan`, {
       planSeq,
       planStartDt,
-      planStartTime: planStartTime + ":00",
+      planStartTime,
+      planLocation,
       planTitle,
       planContents,
     });

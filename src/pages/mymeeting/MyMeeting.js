@@ -180,7 +180,9 @@ const MyMeeting = () => {
     const res = await getMyMeetLeaderList(enterMeetObj);
     setAllData(res);
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(allData);
+  }, []);
   const imgOnError = () => {
     setImgError(true);
   };
@@ -270,7 +272,7 @@ const MyMeeting = () => {
                                 className="button-style etc-btn"
                                 onClick={e => {
                                   navigate(
-                                    "/mymeeting/mymeetinguser/:meetingId",
+                                    `/mymeeting/mymeetinguser/${item.partySeq}`,
                                   );
                                 }}
                               >
@@ -295,7 +297,7 @@ const MyMeeting = () => {
                                 style={{ width: "100px" }}
                                 onClick={e => {
                                   navigate(
-                                    "/mymeeting/mymeetingLeader/:meetingId",
+                                    `/mymeeting/mymeetingLeader/${item.partySeq}`,
                                   );
                                 }}
                               >
@@ -306,7 +308,7 @@ const MyMeeting = () => {
                                 style={{ width: "100px" }}
                                 onClick={e => {
                                   navigate(
-                                    "/mymeeting/mymeetingmemberlist/:meetingMemberlistid",
+                                    `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
                                   );
                                 }}
                               >
@@ -332,7 +334,8 @@ const MyMeeting = () => {
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                       <div className="cut-text">
-                        현재 참가 인원 : 10 / {item.partyMaximum}
+                        현재 참가 인원 : {item.partyNowMem} /{" "}
+                        {item.partyMaximum}
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                     </div>

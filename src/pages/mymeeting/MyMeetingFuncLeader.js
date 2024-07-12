@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import MyMeetingCalendar from "./MyMeetingCalendar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
+import { toast } from "react-toastify";
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -142,6 +143,8 @@ const MyMeetingFuncLeader = () => {
   const [monthValue, setMonthValue] = useState(1);
   const [isDisplayNone, setIsDisplayNone] = useState(1);
   const navigate = useNavigate();
+  const params = useParams();
+  console.log(params);
   useEffect(() => {
     console.log(isClicked);
   }, [isClicked]);
@@ -250,7 +253,7 @@ const MyMeetingFuncLeader = () => {
                       className="resister-btn"
                       onClick={() => {
                         navigate(
-                          "/mymeeting/mymeetingnotice/mymeetingnoticeid",
+                          "/mymeeting/mymeetingnotice/:mymeetingnoticeid",
                         );
                       }}
                     >

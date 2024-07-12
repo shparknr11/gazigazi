@@ -1,7 +1,14 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { CiImageOff } from "react-icons/ci";
-import { getMonthCalculateBudget } from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import {
+  deleteSchOne,
+  postMonthCalculateBudget,
+} from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import { useNavigate } from "react-router";
+import Loading from "../../components/common/Loading";
+import { useLocation } from "react-router";
+import { toast } from "react-toastify";
+
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
   display: flex;
@@ -95,33 +102,50 @@ const TitleDivStyle = styled.div`
 const MyMeetingSchResister = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [postData, setPostData] = useState({});
-  const a = formId => {
-    // 값을 담을 객체 생성
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const formDataFunc = formId => {
     let formData = {};
     const form = document.getElementById(formId);
 
-    // Form 요소 안의 각 input 값을 객체에 저장
     for (let i = 0; i < form.elements.length; i++) {
       const element = form.elements[i];
-      console.log(form.elements);
       if (element.type !== "submit") {
         if (element.value !== "") {
           formData[element.name] = element.value;
         }
       }
     }
-    // 객체 출력 (개발자 도구 콘솔에 출력)
 
-    // 필요한 경우 여기서 객체를 다루거나 서버로 보낼 수 있습니다.
     return formData;
-  };
-  const handleClick = async () => {
-    const res = await getMonthCalculateBudget({ planPartySeq: 1, ...postData });
-    console.log(res);
   };
   useEffect(() => {
     console.log(postData);
   }, []);
+  const handleClick = async () => {
+    console.log(location.state);
+    console.log(location);
+    if (isLoading === false) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await postMonthCalculateBudget({
+        planPartySeq: location.state.planSeq,
+        ...formDataFunc("dataForm"),
+      });
+      toast.success("일정이 저장되었습니다.");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+  };
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -129,7 +153,7 @@ const MyMeetingSchResister = () => {
           <TitleDivStyle>일정 등록페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              <form id="asd" name="aaa">
+              <form id="dataForm" name="dataForm">
                 {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
                 {/* <div className="meeting-introduce">
                 <div style={{ height: "150px" }}>
@@ -317,17 +341,12 @@ const MyMeetingSchResister = () => {
                       type="button"
                       className="resister-btn"
                       onClick={() => {
-                        setPostData(a("asd"));
                         handleClick();
                       }}
                     >
                       등록
                     </button>
-                    <button
-                      type="button"
-                      className="delete-btn"
-                      onClick={() => {}}
-                    >
+                    <button type="button" className="delete-btn">
                       취소
                     </button>
                   </div>

@@ -2,11 +2,13 @@ import styled from "@emotion/styled";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../../css/calendar/calendar.css";
 import { Link } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import { getSchAll } from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import Loading from "../../components/common/Loading";
+import { toast } from "react-toastify";
 
 const ReactCalendarStyle = styled.div`
   display: flex;
@@ -91,7 +93,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
   const [clickDay, setClickDay] = useState(moment().format("YYYY-MM-DD"));
   const [clickInfo, setClickInfo] = useState(null);
   const [monthData, setMonthData] = useState([]);
+  const [planSeq, setPlanSeq] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -197,6 +202,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
   // if (isLoading) {
   //   return <Loading></Loading>;
   // }
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>일정 관리</TitleDivStyle>
@@ -207,9 +216,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
             type="button"
             className="etc-btn"
             onClick={() => {
-              navigate(
-                "/mymeeting/mymeetingschmemberlist/:meetingMemberlistid",
-              );
+              navigate(`/mymeeting/mymeetingschmemberlist/${params.meetingId}`);
             }}
           >
             멤버리스트
@@ -240,7 +247,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
             className="resister-btn"
             type="button"
             onClick={() => {
-              navigate("/mymeeting/mymeetingschresister", { state: clickDay });
+              console.log(clickDay, allData?.planSeq);
+              navigate(`/mymeeting/mymeetingschresister`, {
+                state: { clickDay, planSeq: allData?.planSeq },
+              });
             }}
           >
             등록
@@ -259,7 +269,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
         {allData ? (
           <CalendarListLiStyle>
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
-            <Link to={`/mymeeting/mymeetingschdetail/:meetingschid`} state={{}}>
+            <Link
+              to={`/mymeeting/mymeetingschdetail/${allData.planSeq}`}
+              state={{ planSeq: allData.planSeq }}
+            >
               <li>
                 <span
                   style={{
