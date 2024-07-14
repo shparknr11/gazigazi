@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
 import { toast } from "react-toastify";
+import { getMonthBudget } from "../../apis/mymeetingapi/budget/budgetapi";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Loading from "../../components/common/Loading";
+import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -76,6 +80,7 @@ const MyMeetingFuncLeaderStyle = styled.div`
     margin: 0 auto;
   }
   .divButtonStyle {
+    transition: background-color 0.5s ease;
     background-color: #f8ebd6;
     color: #c5861f;
   }
@@ -140,17 +145,20 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingFuncLeader = () => {
   const [isClicked, setIsClicked] = useState();
-  const [monthValue, setMonthValue] = useState(1);
+  const [monthValue, setMonthValue] = useState("01");
   const [isDisplayNone, setIsDisplayNone] = useState(1);
+  const [budgetList, setBudgetList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPopup, setIsPopup] = useState(false);
+
+  const funcRef = useRef();
+  const itemRef = useRef();
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params);
-  useEffect(() => {
-    console.log(isClicked);
-  }, [isClicked]);
-  useEffect(() => {
-    console.log(monthValue);
-  }, [monthValue]);
+  const location = useLocation();
+  useEffect(() => {}, [isClicked]);
+  useEffect(() => {}, [monthValue]);
+  useEffect(() => {}, [isPopup]);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
@@ -199,11 +207,36 @@ const MyMeetingFuncLeader = () => {
   // window.onbeforeprint = b();
   // window.print();
   // window.onafterprint = document.body.innerHTML = resetHtml;
+  const handleBudgetClick = async e => {
+    setIsLoading(true);
+    const budgetObj = {
+      budgetPartySeq: params?.meetingId,
+      month: e?.target.value === undefined ? "01" : e?.target.value,
+    };
+    try {
+      const res = await getMonthBudget(budgetObj);
+      setBudgetList(res);
+      console.log(budgetList);
+      toast.success(`${e.target.value}월 데이터가 조회되었습니다.`);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+    setTimeout(() => {
+      funcRef.current.style.backgroundColor = "#f8ebd6";
+      itemRef.current.classList.add("divButtonStyle");
+      activeItem = itemRef.current;
+    }, 100);
+  };
   const handlePrint = () => {
     window.print();
   };
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
-    <MyMeetingFuncLeaderStyle id="aaaaa">
+    <MyMeetingFuncLeaderStyle>
+      {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
       <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
@@ -231,17 +264,22 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(3);
+              handleBudgetClick();
             }}
+            ref={itemRef}
           >
             가계부
           </div>
         </div>
         {/*  height: "600px */}
-        <div className="func-main" style={{ width: "100%" }}>
+        <div className="func-main" style={{ width: "100%" }} ref={funcRef}>
           <div className="func-main-inner">
             {/* <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 --> */}
             {isClicked === 1 ? (
-              <MyMeetingCalendar isClicked={isClicked} />
+              <MyMeetingCalendar
+                isClicked={isClicked}
+                partyAuthGb={location.state.partyAuthGb}
+              />
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
@@ -298,33 +336,45 @@ const MyMeetingFuncLeader = () => {
                         gap: "20px",
                       }}
                     >
-                      <select
-                        id="monthselect"
-                        name="monthselect"
-                        className="select-box-style"
-                        onChange={e => {
-                          setMonthValue(e.target.value);
-                        }}
-                        onClick={() => {
-                          // axios get 들어올 자리
-                        }}
-                      >
-                        {/* 외부 적용 예정 */}
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                      </select>
+                      <Box sx={{ minWidth: 80 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">
+                            months
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="monthselect"
+                            name="monthselect"
+                            value={monthValue}
+                            label="Age"
+                            onChange={e => {
+                              setMonthValue(e.target.value);
+                              handleBudgetClick(e);
+                            }}
+                          >
+                            <MenuItem value={"01"}>1월</MenuItem>
+                            <MenuItem value={"02"}>2월</MenuItem>
+                            <MenuItem value={"03"}>3월</MenuItem>
+                            <MenuItem value={"04"}>4월</MenuItem>
+                            <MenuItem value={"05"}>5월</MenuItem>
+                            <MenuItem value={"06"}>6월</MenuItem>
+                            <MenuItem value={"07"}>7월</MenuItem>
+                            <MenuItem value={"08"}>8월</MenuItem>
+                            <MenuItem value={"09"}>9월</MenuItem>
+                            <MenuItem value={"10"}>10월</MenuItem>
+                            <MenuItem value={"11"}>11월</MenuItem>
+                            <MenuItem value={"12"}>12월</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
                       {
-                        <button type="button" className="resister-btn">
+                        <button
+                          type="button"
+                          className="resister-btn"
+                          onClick={() => {
+                            setIsPopup(true);
+                          }}
+                        >
                           등록
                         </button>
                       }
@@ -342,94 +392,18 @@ const MyMeetingFuncLeader = () => {
 
                   {/* 권한 나왔을 때.... 조건 걸어서 보여주고 안보여주고 해야함. */}
                   <ul className="ledger-ul">
-                    <li className="ledger-li">
-                      <span>순서</span>
-                      <span>회계 구분</span>
-                      {/* 일단 해둠 */}
-                      <span>멤버명</span>
-                      <span>금액</span>
-                      <span>일자</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>1</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>2</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>3</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>4</span>
-                      <span>{"지출"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>5</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>6</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>7</span>
-                      <span>{"지출"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>8</span>
-                      <span>{"입금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>9</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
-                    <li className="ledger-li">
-                      {/* 이게 필요없으면 없앰 */}
-                      <span>10</span>
-                      <span>{"후원금"}</span>
-                      <span>길동이</span>
-                      <span>100,000</span>
-                      <span>2024-03-20</span>
-                    </li>
+                    {budgetList?.map(item => (
+                      <li className="ledger-li" key={item?.budgetSeq}>
+                        <span>
+                          <img src={`../../images/{item.budgetPic}`} />
+                        </span>
+                        <span>{item.cdNm}</span>
+                        {/* 일단 해둠 */}
+                        <span>{item.budgetText}</span>
+                        <span>{item.budgetAmount}</span>
+                        <span>{item.budgetDt}</span>
+                      </li>
+                    ))}
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span
