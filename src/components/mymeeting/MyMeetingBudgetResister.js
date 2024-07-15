@@ -176,11 +176,14 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
     e.preventDefault();
     // 1. 전송데이터 포맷 만들기
     const formData = new FormData();
+    // 모임장 seq, budgetMemberSeq 2개
     const form = {
-      budgetPartySeq: params.meetingId,
-      budgetMemberSeq: 1,
+      budgetPartySeq: Number(params.meetingId),
+      budgetMemberSeq: 550,
       ...formDataFunc("formData"),
     };
+    form.budgetAmount = form.budgetAmount.replaceAll(",", "");
+
     // 2. 보낼데이터 (json 형식의 문자열로 만들기)
     const infoData = JSON.stringify(form);
 
@@ -338,7 +341,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                             type="text"
                             style={{ width: "100%" }}
                             value={money}
-                            maxLength={15}
+                            maxLength={8}
                             onChange={e => {
                               handleChange(e);
                             }}
@@ -346,7 +349,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                           />
                           <span style={{ fontSize: "13px" }}>
                             <strong style={{ color: "red" }}>*</strong>금액은
-                            15자리까지 가능합니다.
+                            8자리까지 가능합니다.
                           </span>
                         </div>
                       </div>

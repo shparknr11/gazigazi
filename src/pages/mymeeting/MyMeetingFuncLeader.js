@@ -5,7 +5,12 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
 import { toast } from "react-toastify";
-import { getMonthBudget } from "../../apis/mymeetingapi/budget/budgetapi";
+import {
+  deleteBudget,
+  getMemberBudget,
+  getMonthBudget,
+  getMonthCalculateBudget,
+} from "../../apis/mymeetingapi/budget/budgetapi";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loading from "../../components/common/Loading";
 import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
@@ -146,8 +151,9 @@ const TitleDivStyle = styled.div`
 const MyMeetingFuncLeader = () => {
   const [isClicked, setIsClicked] = useState();
   const [monthValue, setMonthValue] = useState("01");
-  const [isDisplayNone, setIsDisplayNone] = useState(1);
   const [budgetList, setBudgetList] = useState([]);
+  const [depositSum, setDepositSum] = useState(0);
+  const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
 
@@ -215,9 +221,12 @@ const MyMeetingFuncLeader = () => {
     };
     try {
       const res = await getMonthBudget(budgetObj);
+      const resData = await getMonthCalculateBudget(budgetObj);
+      const resDataMember = await getMemberBudget(budgetObj);
+      setDepositSum(resData?.depositSum.toLocaleString());
+      setDepositMember(resDataMember);
       setBudgetList(res);
-      console.log(budgetList);
-      toast.success(`${e.target.value}월 데이터가 조회되었습니다.`);
+      toast.success(`${budgetObj.month}월 데이터가 조회되었습니다.`);
     } catch (error) {
       console.log(error);
     }
@@ -227,6 +236,17 @@ const MyMeetingFuncLeader = () => {
       itemRef.current.classList.add("divButtonStyle");
       activeItem = itemRef.current;
     }, 100);
+  };
+  const handleBudgetDelete = async budgetSeq => {
+    if (confirm("삭제하시겠습니까?")) {
+      try {
+        await deleteBudget(budgetSeq);
+        handleBudgetClick();
+      } catch (error) {
+        console.log(error);
+      }
+      toast.success("회계내역이 삭제되었습니다.");
+    }
   };
   const handlePrint = () => {
     window.print();
@@ -325,132 +345,130 @@ const MyMeetingFuncLeader = () => {
                   <TitleDivStyle id="title-print">
                     {monthValue} 월 명세자료
                   </TitleDivStyle>
-                  {isDisplayNone ? (
-                    <div
-                      id="printDeleteTag"
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "right",
-                        padding: "30px 10px",
-                        gap: "20px",
-                      }}
-                    >
-                      <Box sx={{ minWidth: 80 }}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">
-                            months
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="monthselect"
-                            name="monthselect"
-                            value={monthValue}
-                            label="Age"
-                            onChange={e => {
-                              setMonthValue(e.target.value);
-                              handleBudgetClick(e);
-                            }}
-                          >
-                            <MenuItem value={"01"}>1월</MenuItem>
-                            <MenuItem value={"02"}>2월</MenuItem>
-                            <MenuItem value={"03"}>3월</MenuItem>
-                            <MenuItem value={"04"}>4월</MenuItem>
-                            <MenuItem value={"05"}>5월</MenuItem>
-                            <MenuItem value={"06"}>6월</MenuItem>
-                            <MenuItem value={"07"}>7월</MenuItem>
-                            <MenuItem value={"08"}>8월</MenuItem>
-                            <MenuItem value={"09"}>9월</MenuItem>
-                            <MenuItem value={"10"}>10월</MenuItem>
-                            <MenuItem value={"11"}>11월</MenuItem>
-                            <MenuItem value={"12"}>12월</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                      {
-                        <button
-                          type="button"
-                          className="resister-btn"
-                          onClick={() => {
-                            setIsPopup(true);
+                  <div
+                    id="printDeleteTag"
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "right",
+                      padding: "30px 10px",
+                      gap: "20px",
+                    }}
+                  >
+                    <Box sx={{ minWidth: 80 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          months
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="monthselect"
+                          name="monthselect"
+                          value={monthValue}
+                          label="Age"
+                          onChange={e => {
+                            setMonthValue(prevCount => {
+                              return e.target.value;
+                            });
+                            handleBudgetClick(e);
                           }}
                         >
-                          등록
-                        </button>
-                      }
-                      <button
-                        type="button"
-                        className="etc-btn"
-                        onClick={() => {
-                          handlePrint();
-                        }}
-                      >
-                        출력
-                      </button>
-                    </div>
-                  ) : null}
+                          <MenuItem value={"01"}>1월</MenuItem>
+                          <MenuItem value={"02"}>2월</MenuItem>
+                          <MenuItem value={"03"}>3월</MenuItem>
+                          <MenuItem value={"04"}>4월</MenuItem>
+                          <MenuItem value={"05"}>5월</MenuItem>
+                          <MenuItem value={"06"}>6월</MenuItem>
+                          <MenuItem value={"07"}>7월</MenuItem>
+                          <MenuItem value={"08"}>8월</MenuItem>
+                          <MenuItem value={"09"}>9월</MenuItem>
+                          <MenuItem value={"10"}>10월</MenuItem>
+                          <MenuItem value={"11"}>11월</MenuItem>
+                          <MenuItem value={"12"}>12월</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                    <button
+                      type="button"
+                      className="resister-btn"
+                      onClick={() => {
+                        setIsPopup(true);
+                      }}
+                    >
+                      등록
+                    </button>
+                    <button
+                      className="etc-btn"
+                      onClick={() => {
+                        handlePrint();
+                      }}
+                    >
+                      출력
+                    </button>
+                  </div>
 
                   {/* 권한 나왔을 때.... 조건 걸어서 보여주고 안보여주고 해야함. */}
                   <ul className="ledger-ul">
+                    <li className="ledger-li">
+                      <span>순서</span>
+                      <span>회계 구분</span>
+                      {/* 일단 해둠 */}
+                      <span>멤버명</span>
+                      <span>금액</span>
+                      <span>일자</span>
+                      <span>삭제</span>
+                    </li>
                     {budgetList?.map(item => (
                       <li className="ledger-li" key={item?.budgetSeq}>
                         <span>
-                          <img src={`../../images/{item.budgetPic}`} />
+                          {item?.budgetSeq}
+                          {/* <img src={`../../images/${item.budgetPic}`} /> */}
                         </span>
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
                         <span>{item.budgetText}</span>
                         <span>{item.budgetAmount}</span>
                         <span>{item.budgetDt}</span>
+                        <span
+                          style={{ paddingTop: "13px", paddingBottom: "13px" }}
+                        >
+                          <button
+                            className="delete-btn"
+                            onClick={() => {
+                              handleBudgetDelete(item.budgetSeq);
+                            }}
+                          >
+                            내역삭제
+                          </button>
+                        </span>
                       </li>
                     ))}
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
-                      <span
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "50%",
-                          height: "100%",
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      >
-                        <div style={{ width: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            회비 미납입 인원
-                          </span>
-                        </div>
-                        <div style={{ width: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            50 / 100
-                          </span>
-                        </div>
-                        <div style={{ width: "100%", height: "100%" }}>
-                          <span
-                            style={{
-                              display: "inline-block",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          >
-                            {monthValue} 월 금액 내역
-                          </span>
-                        </div>
-                        <div style={{ width: "100%", height: "100%" }}>
-                          <span
-                            style={{ display: "inline-block", width: "100%" }}
-                          >
-                            100,000
-                          </span>
-                        </div>
+                      <span style={{ display: "inline-block", width: "100%" }}>
+                        납입 내역(미납입: {depositMember?.unDepositedMember}명)
                       </span>
-                      <span style={{ width: "50%", border: "none" }}>
-                        {<CiImageOff size={160} />}
+                      <div style={{ width: "100%" }}>
+                        <span
+                          style={{ display: "inline-block", width: "100%" }}
+                        >
+                          {depositMember?.depositedMember}
+                          /&nbsp;
+                          {depositMember?.memberSum}명
+                        </span>
+                      </div>
+                      <div style={{ width: "100%" }}>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            width: "100%",
+                          }}
+                        >
+                          {monthValue} 월 금액 내역
+                        </span>
+                      </div>
+                      <span style={{ display: "inline-block", width: "100%" }}>
+                        {depositSum} 원
                       </span>
                     </li>
                     <li className="ledger-li"></li>

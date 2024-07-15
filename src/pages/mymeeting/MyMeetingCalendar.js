@@ -212,20 +212,6 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>일정 관리</TitleDivStyle>
-
-      <div style={{ textAlign: "right", padding: "10px" }}>
-        {isClicked ? (
-          <button
-            type="button"
-            className="etc-btn"
-            onClick={() => {
-              navigate(`/mymeeting/mymeetingschmemberlist/${params.meetingId}`);
-            }}
-          >
-            멤버리스트
-          </button>
-        ) : null}
-      </div>
       {/*  style={{ margin: "0 auto" }} */}
       <div>
         {/* 굳이 밑에 리스트형식 및 아이콘으로 표현 해주는데 알려줄 필요가 있나? */}
@@ -246,17 +232,39 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
       <TitleDivStyle>일정 정보 리스트</TitleDivStyle>
       <div style={{ textAlign: "end", marginRight: "10px" }}>
         {isClicked === 1 ? (
-          <button
-            className="resister-btn"
-            type="button"
-            onClick={() => {
-              navigate(`/mymeeting/mymeetingschresister`, {
-                state: { clickDay, planSeq: params.meetingId },
-              });
-            }}
-          >
-            등록
-          </button>
+          <div style={{ textAlign: "right", padding: "10px" }}>
+            {/* TODO : 중요 _ 일정 명 넘길 것 / 그리고 일정 날짜도 넘길 것 */}
+            <button
+              type="button"
+              className="etc-btn"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                navigate(
+                  `/mymeeting/mymeetingschmemberlist/${params.meetingId}`,
+                  {
+                    state: {
+                      clickDay,
+                      planSeq: params.meetingId,
+                      planTitle: allData?.planTitle,
+                    },
+                  },
+                );
+              }}
+            >
+              멤버리스트
+            </button>
+            <button
+              className="resister-btn"
+              type="button"
+              onClick={() => {
+                navigate(`/mymeeting/mymeetingschresister`, {
+                  state: { clickDay, planSeq: params.meetingId },
+                });
+              }}
+            >
+              등록
+            </button>
+          </div>
         ) : null}
       </div>
       <ReactCalendarListStyle>
@@ -273,7 +281,10 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
             <Link
               to={`/mymeeting/mymeetingschdetail/${allData.planSeq}`}
-              state={{ planSeq: allData.planSeq, partyAuthGb }}
+              state={{
+                planSeq: allData.planSeq,
+                partyAuthGb,
+              }}
             >
               <li>
                 <span>{allData.planTitle}</span>

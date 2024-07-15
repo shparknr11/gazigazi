@@ -205,13 +205,13 @@ const MyMeetingFuncUser = () => {
   const handlePrint = () => {
     window.print();
   };
-  let currentPage = 1;
-  const todosPerPage = 2;
-  const handleNextScroll = currentTodos => {
-    // 다음페이지 가기
-    console.log(currentPage);
-    console.log(currentTodos);
-  };
+  // let currentPage = 1;
+  // const todosPerPage = 9;
+  // const handleNextScroll = currentTodos => {
+  //   // 다음페이지 가기
+  //   console.log(currentPage);
+  //   console.log(currentTodos);
+  // };
   const handleBudgetClick = async e => {
     setIsLoading(true);
     const budgetObj = {
@@ -220,37 +220,32 @@ const MyMeetingFuncUser = () => {
     };
     try {
       const res = await getMonthBudget(budgetObj);
-      window.addEventListener("scroll", () => {
-        // 스크롤 값 구해서 내릴 때 마다 + 하면서 위로 쏘면됨.
-        let WscrollY = 100 * currentPage;
-        const totalPages = Math.ceil(res.length / todosPerPage);
-        const indexStart = (currentPage - 1) * todosPerPage;
-        const currentTodos = res.slice(indexStart, indexStart + todosPerPage);
-        // 교수님 한테 물어볼 것
-        // 무한스크롤
-        // %로 잡아야함.
-        //  [...currentTodos, currentTodos]
-        console.log(window.scrollY >= WscrollY);
-        if (window.scrollY <= WscrollY) return;
-        currentPage = currentPage + 1;
-        if (currentTodos.length > 0) {
-          // TODO: 중요 사항 : ...currentTodos로 뜯어서 넣을 경우 넣는 데이터가 2배로 들어감 이거만 해결하면 끝
-          console.log(currentTodos);
-          const daats = [...currentTodos, ...currentTodos];
-          setBudgetList(daats);
-          console.log(budgetList);
-        }
-        // else {
-        //   alert("더이상 정보가 없어요.");
-        // }
-      });
+      // window.addEventListener("scroll", () => {
+      //   // 스크롤 값 구해서 내릴 때 마다 + 하면서 위로 쏘면됨.
+      //   let WscrollY = 100 * currentPage;
+      //   const totalPages = Math.ceil(res.length / todosPerPage);
+      //   const indexStart = (currentPage - 1) * todosPerPage;
+      //   const currentTodos = res.slice(indexStart, indexStart + todosPerPage);
+      //   console.log(window.scrollY >= WscrollY);
+      //   if (window.scrollY <= WscrollY) return;
+      //   currentPage = currentPage + 1;
+      //   if (currentTodos.length > 0) {
+      //     // TODO: 중요 사항 : ...currentTodos로 뜯어서 넣을 경우 넣는 데이터가 2배로 들어감 이거만 해결하면 끝
+      //     console.log(currentTodos);
+      //     const daats = [...currentTodos, ...currentTodos];
+      //     setBudgetList(daats);
+      //     console.log(budgetList);
+      //   }
+      //   // else {
+      //   //   alert("더이상 정보가 없어요.");
+      //   // }
+      // });
       const resData = await getMonthCalculateBudget(budgetObj);
       const resDataMember = await getMemberBudget(budgetObj);
-      // setBudgetList(res);
-
-      setDepositSum(resData.depositSum.toLocaleString());
+      setBudgetList(res);
+      setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
-      toast.success(`${e.target.value}월 데이터가 조회되었습니다.`);
+      toast.success(`${budgetObj.month}월 데이터가 조회되었습니다.`);
     } catch (error) {
       console.log(error);
     }
@@ -448,14 +443,15 @@ const MyMeetingFuncUser = () => {
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        납입 내역(미납입: {depositMember.unDepositedMember}명)
+                        납입 내역(미납입: {depositMember?.unDepositedMember}명)
                       </span>
                       <div style={{ width: "100%" }}>
                         <span
                           style={{ display: "inline-block", width: "100%" }}
                         >
-                          {depositMember.depositedMember} /&nbsp;
-                          {depositMember.memberSum} 명
+                          {depositMember?.depositedMember}
+                          /&nbsp;
+                          {depositMember?.memberSum}명
                         </span>
                       </div>
                       <div style={{ width: "100%" }}>

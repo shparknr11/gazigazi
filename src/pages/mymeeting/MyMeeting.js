@@ -329,14 +329,13 @@ const MyMeeting = () => {
                       {/* <!-- 얘 맵돌릴때 아이콘 바꿔야함 --> */}
 
                       <div className="cut-text">
-                        {item.icon}
-                        {item.userName}
+                        모임장 : {item.userName}
                         {/* 🚗(아이콘으로변경)최서윤 님의 모임 */}
                       </div>
                       {/* <div className="cut-text">신나는 모임 어쩌구</div> */}
                       <div className="cut-text">{item.partyIntro}</div>
                       <div className="cut-text">
-                        {item.address}
+                        모임명 : {item.partyName}
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                       <div className="cut-text">
