@@ -170,7 +170,7 @@ const MyMeeting = () => {
       page,
     };
     const res = await getMyMeetMemberList(enterMeetObj);
-    setAllData(res);
+    setAllData(res?.list);
   };
   const handleClickMakeMeet = async () => {
     const enterMeetObj = {
@@ -178,7 +178,7 @@ const MyMeeting = () => {
       page,
     };
     const res = await getMyMeetLeaderList(enterMeetObj);
-    setAllData(res);
+    setAllData(res?.list);
   };
   useEffect(() => {
     console.log(allData);
@@ -273,6 +273,9 @@ const MyMeeting = () => {
                                 onClick={e => {
                                   navigate(
                                     `/mymeeting/mymeetinguser/${item.partySeq}`,
+                                    {
+                                      state: { partyAuthGb: item.partyAuthGb },
+                                    },
                                   );
                                 }}
                               >
@@ -298,6 +301,9 @@ const MyMeeting = () => {
                                 onClick={e => {
                                   navigate(
                                     `/mymeeting/mymeetingLeader/${item.partySeq}`,
+                                    {
+                                      state: { partyAuthGb: item.partyAuthGb },
+                                    },
                                   );
                                 }}
                               >

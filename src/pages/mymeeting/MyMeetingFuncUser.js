@@ -1,17 +1,24 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+// import "../mymeeting/common.js";
+import {
+  deleteBudget,
+  getMemberBudget,
+  getMonthBudget,
+  getMonthCalculateBudget,
+} from "../../apis/mymeetingapi/budget/budgetapi";
+import Loading from "../../components/common/Loading";
 import MyMeetingCalendar from "./MyMeetingCalendar";
-import { Link } from "react-router-dom";
-import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
-import { getMonthBudget } from "../../apis/mymeetingapi/budget/budgetapi";
 const MyMeetingFuncUserStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   height: auto;
   margin-top: 25px;
   transition: width 0.3s;
-
   .item-wrap {
     display: flex;
     width: 20%;
@@ -64,6 +71,10 @@ const MyMeetingFuncUserStyle = styled.div`
     height: 100%;
     padding: 20px;
   }
+  .func-main-active {
+    transition: background-color 1s ease;
+    background-color: #f8ebd6;
+  }
   .func-main-inner {
     width: 98%;
     height: 98%;
@@ -72,6 +83,7 @@ const MyMeetingFuncUserStyle = styled.div`
     margin: 0 auto;
   }
   .divButtonStyle {
+    transition: background-color 0.2s ease;
     background-color: #f8ebd6;
     color: #c5861f;
   }
@@ -114,9 +126,13 @@ const LedgerStyle = styled.div`
     span {
       border: 1px solid rgb(248, 235, 214);
       width: 25%;
+      height: 61px;
       padding: 20px;
       font-weight: bold;
     }
+  }
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 4px !important;
   }
 `;
 
@@ -128,10 +144,18 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingFuncUser = () => {
   const [isClicked, setIsClicked] = useState();
-  const [monthValue, setMonthValue] = useState(1);
+  const [monthValue, setMonthValue] = useState("01");
   const [isDisplayNone, setIsDisplayNone] = useState(0);
   const [budgetList, setBudgetList] = useState([]);
-  useEffect(() => {}, [isClicked, monthValue]);
+  const [depositSum, setDepositSum] = useState(0);
+  const [depositMember, setDepositMember] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const params = useParams();
+  const funcRef = useRef();
+  const itemRef = useRef();
+  console.log(params);
+  useEffect(() => {}, [isClicked]);
+  useEffect(() => {}, [monthValue]);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
@@ -140,14 +164,13 @@ const MyMeetingFuncUser = () => {
   let activeItem = null;
   // onclick 형태로 고쳐야함
   window.addEventListener("click", e => {
-    const a = document.querySelector(".func-main");
+    const item = document.querySelector(".func-main");
     const titletext = document.querySelector("#titletext");
     if (e.target.classList.contains("item")) {
       const clickedItem = e.target;
       if (activeItem) {
         activeItem.classList.remove("divButtonStyle");
       }
-
       clickedItem.classList.add("divButtonStyle");
       if (titletext) {
         titletext.innerHTML =
@@ -156,14 +179,13 @@ const MyMeetingFuncUser = () => {
         // 이벤트 걸곳 axios 여기다 걸자
         switch (clickedItem.id) {
           case "1":
-            a.style.backgroundColor = "#f8ebd6";
-
+            item.classList.add("func-main-active");
             break;
           case "2":
-            a.style.backgroundColor = "#f8ebd6";
+            item.classList.add("func-main-active");
             break;
           case "3":
-            a.style.backgroundColor = "#f8ebd6";
+            item.classList.add("func-main-active");
             break;
           default:
             break;
@@ -183,15 +205,79 @@ const MyMeetingFuncUser = () => {
   const handlePrint = () => {
     window.print();
   };
-  const handleBudgetClick = async e => {
-    const budgetObj = { budgetPartySeq: 1, monthValue };
-
-    const res = await getMonthBudget(budgetObj);
-    setBudgetList(res);
+  let currentPage = 1;
+  const todosPerPage = 2;
+  const handleNextScroll = currentTodos => {
+    // 다음페이지 가기
+    console.log(currentPage);
+    console.log(currentTodos);
   };
-  useEffect(() => {
-    handleBudgetClick();
-  }, [monthValue]);
+  const handleBudgetClick = async e => {
+    setIsLoading(true);
+    const budgetObj = {
+      budgetPartySeq: params?.meetingId,
+      month: e?.target.value === undefined ? "01" : e?.target.value,
+    };
+    try {
+      const res = await getMonthBudget(budgetObj);
+      window.addEventListener("scroll", () => {
+        // 스크롤 값 구해서 내릴 때 마다 + 하면서 위로 쏘면됨.
+        let WscrollY = 100 * currentPage;
+        const totalPages = Math.ceil(res.length / todosPerPage);
+        const indexStart = (currentPage - 1) * todosPerPage;
+        const currentTodos = res.slice(indexStart, indexStart + todosPerPage);
+        // 교수님 한테 물어볼 것
+        // 무한스크롤
+        // %로 잡아야함.
+        //  [...currentTodos, currentTodos]
+        console.log(window.scrollY >= WscrollY);
+        if (window.scrollY <= WscrollY) return;
+        currentPage = currentPage + 1;
+        if (currentTodos.length > 0) {
+          // TODO: 중요 사항 : ...currentTodos로 뜯어서 넣을 경우 넣는 데이터가 2배로 들어감 이거만 해결하면 끝
+          console.log(currentTodos);
+          const daats = [...currentTodos, ...currentTodos];
+          setBudgetList(daats);
+          console.log(budgetList);
+        }
+        // else {
+        //   alert("더이상 정보가 없어요.");
+        // }
+      });
+      const resData = await getMonthCalculateBudget(budgetObj);
+      const resDataMember = await getMemberBudget(budgetObj);
+      // setBudgetList(res);
+
+      setDepositSum(resData.depositSum.toLocaleString());
+      setDepositMember(resDataMember);
+      toast.success(`${e.target.value}월 데이터가 조회되었습니다.`);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+    // 일반 js가 시점을 못잡음
+    setTimeout(() => {
+      funcRef.current.style.backgroundColor = "#f8ebd6";
+      itemRef.current.classList.add("divButtonStyle");
+      activeItem = itemRef.current;
+    }, 100);
+
+    // funcRef.current.style.backgroundColor = "#f8ebd6";
+  };
+  const handleBudgetDelete = async budgetSeq => {
+    if (confirm("삭제하시겠습니까?")) {
+      try {
+        await deleteBudget(budgetSeq);
+        handleBudgetClick();
+      } catch (error) {
+        console.log(error);
+      }
+      toast.success("회계내역이 삭제되었습니다.");
+    }
+  };
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <MyMeetingFuncUserStyle id="aaaaa">
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
@@ -223,12 +309,13 @@ const MyMeetingFuncUser = () => {
               setIsClicked(3);
               handleBudgetClick();
             }}
+            ref={itemRef}
           >
             가계부
           </div>
         </div>
         {/*  height: "600px */}
-        <div className="func-main" style={{ width: "100%" }}>
+        <div className="func-main" style={{ width: "100%" }} ref={funcRef}>
           <div className="func-main-inner">
             {/* <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 --> */}
             {isClicked === 1 ? (
@@ -279,31 +366,39 @@ const MyMeetingFuncUser = () => {
                       gap: "20px",
                     }}
                   >
-                    <select
-                      id="monthselect"
-                      name="monthselect"
-                      className="select-box-style"
-                      onChange={e => {
-                        setMonthValue(e.target.value);
-                      }}
-                      onClick={e => {
-                        // axios get 들어올 자리
-                      }}
-                    >
-                      {/* 외부 적용 예정 */}
-                      <option value="01">1</option>
-                      <option value="02">2</option>
-                      <option value="03">3</option>
-                      <option value="04">4</option>
-                      <option value="05">5</option>
-                      <option value="06">6</option>
-                      <option value="07">7</option>
-                      <option value="08">8</option>
-                      <option value="09">9</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                    </select>
+                    <Box sx={{ minWidth: 80 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          months
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="monthselect"
+                          name="monthselect"
+                          value={monthValue}
+                          label="Age"
+                          onChange={e => {
+                            setMonthValue(prevCount => {
+                              return e.target.value;
+                            });
+                            handleBudgetClick(e);
+                          }}
+                        >
+                          <MenuItem value={"01"}>1월</MenuItem>
+                          <MenuItem value={"02"}>2월</MenuItem>
+                          <MenuItem value={"03"}>3월</MenuItem>
+                          <MenuItem value={"04"}>4월</MenuItem>
+                          <MenuItem value={"05"}>5월</MenuItem>
+                          <MenuItem value={"06"}>6월</MenuItem>
+                          <MenuItem value={"07"}>7월</MenuItem>
+                          <MenuItem value={"08"}>8월</MenuItem>
+                          <MenuItem value={"09"}>9월</MenuItem>
+                          <MenuItem value={"10"}>10월</MenuItem>
+                          <MenuItem value={"11"}>11월</MenuItem>
+                          <MenuItem value={"12"}>12월</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
                     <button
                       className="etc-btn"
                       onClick={() => {
@@ -323,44 +418,58 @@ const MyMeetingFuncUser = () => {
                       <span>멤버명</span>
                       <span>금액</span>
                       <span>일자</span>
+                      <span>삭제</span>
                     </li>
                     {budgetList?.map(item => (
-                      <li className="ledger-li" key={item.budgetSeq}>
+                      <li className="ledger-li" key={item?.budgetSeq}>
                         <span>
-                          <img src={`../../images/{item.budgetPic}`} />
+                          {item?.budgetSeq}
+                          {/* <img src={`../../images/${item.budgetPic}`} /> */}
                         </span>
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
                         <span>{item.budgetText}</span>
                         <span>{item.budgetAmount}</span>
                         <span>{item.budgetDt}</span>
+                        <span
+                          style={{ paddingTop: "13px", paddingBottom: "13px" }}
+                        >
+                          <button
+                            className="delete-btn"
+                            onClick={() => {
+                              handleBudgetDelete(item.budgetSeq);
+                            }}
+                          >
+                            내역삭제
+                          </button>
+                        </span>
                       </li>
                     ))}
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        회비 미납입 인원
+                        납입 내역(미납입: {depositMember.unDepositedMember}명)
                       </span>
                       <div style={{ width: "100%" }}>
                         <span
                           style={{ display: "inline-block", width: "100%" }}
                         >
-                          50 / 100
+                          {depositMember.depositedMember} /&nbsp;
+                          {depositMember.memberSum} 명
                         </span>
                       </div>
-                      <div style={{ width: "100%", height: "100%" }}>
+                      <div style={{ width: "100%" }}>
                         <span
                           style={{
                             display: "inline-block",
                             width: "100%",
-                            height: "100%",
                           }}
                         >
                           {monthValue} 월 금액 내역
                         </span>
                       </div>
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        100,000
+                        {depositSum} 원
                       </span>
                     </li>
                     <li className="ledger-li"></li>

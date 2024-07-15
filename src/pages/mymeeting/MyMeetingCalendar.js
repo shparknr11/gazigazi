@@ -83,7 +83,7 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingCalendar = ({ isClicked }) => {
+const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   const [calendarFilterData, setCalendarFilterData] = useState([]);
   const [userSeq, setUserSeq] = useState(null);
   const [page, setPage] = useState(1);
@@ -95,8 +95,8 @@ const MyMeetingCalendar = ({ isClicked }) => {
   const [monthData, setMonthData] = useState([]);
   const [planSeq, setPlanSeq] = useState(0);
   const navigate = useNavigate();
-  const location = useLocation();
   const params = useParams();
+  console.log(location);
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -108,13 +108,13 @@ const MyMeetingCalendar = ({ isClicked }) => {
     // const monthData = clickDay.replaceAll("-", "");
     getMonthCalendars();
   }, []);
-  const getMonthCalendars = async (userSeq = 1, clickDay) => {
+  const getMonthCalendars = async clickDay => {
     // const result = await getMonthCalendar(userSeq, clickDay);
     // const result = setMonthData([
     //   { pk: 1, title: "모임명", planStartDt: "2024-07-04" },
     // ]);
     // setMonthData(result);
-    const res = await getSchAll(userSeq);
+    const res = await getSchAll(params.meetingId);
     setMonthData(res);
     onClickDay(moment().format("yyyy-MM-DD"));
   };
@@ -150,8 +150,11 @@ const MyMeetingCalendar = ({ isClicked }) => {
         <div>
           {dayResultArr?.map(item => (
             <div key={item.planSeq}>
-              <div className="cut-text">{item.planContents}</div>
-              <div className="cut-text">{item.planStartDt}</div>
+              <div className="cut-text">{item.planTitle}</div>
+              <div className="cut-text">
+                {item.planStartDt}&nbsp;/&nbsp;{item.planStartTime}
+              </div>
+              <div>{item.cdNm}</div>
             </div>
           ))}
         </div>
@@ -247,9 +250,8 @@ const MyMeetingCalendar = ({ isClicked }) => {
             className="resister-btn"
             type="button"
             onClick={() => {
-              console.log(clickDay, allData?.planSeq);
               navigate(`/mymeeting/mymeetingschresister`, {
-                state: { clickDay, planSeq: allData?.planSeq },
+                state: { clickDay, planSeq: params.meetingId },
               });
             }}
           >
@@ -260,10 +262,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
       <ReactCalendarListStyle>
         <CalendarListUlStyle>
           <li>
-            <span>이미지</span>
-            <span>일정소개</span>
+            <span>일정명</span>
             <span>장소</span>
             <span>모임날짜</span>
+            <span>진행중 / 종료</span>
           </li>
         </CalendarListUlStyle>
         {allData ? (
@@ -271,32 +273,10 @@ const MyMeetingCalendar = ({ isClicked }) => {
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
             <Link
               to={`/mymeeting/mymeetingschdetail/${allData.planSeq}`}
-              state={{ planSeq: allData.planSeq }}
+              state={{ planSeq: allData.planSeq, partyAuthGb }}
             >
               <li>
-                <span
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* 이미지 */}
-                  {allData.meetingPic ? (
-                    <img
-                      src={allData.meetingPic}
-                      style={{
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "contain",
-                        width: "50px",
-                        height: "50px",
-                      }}
-                    ></img>
-                  ) : (
-                    <CiImageOff size={40} />
-                  )}
-                </span>
-                <span>{allData.planContents}</span>
+                <span>{allData.planTitle}</span>
                 {/* <span>{allData.meetPlace}</span> */}
                 <span>{allData.planLocation}</span>
                 <span style={{ fontSize: "16px" }}>
@@ -304,6 +284,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
                   <br />
                   {allData.planStartTime}
                 </span>
+                <span>{allData.cdNm === "완료" ? "완료" : "진행중"}</span>
               </li>
             </Link>
           </CalendarListLiStyle>
