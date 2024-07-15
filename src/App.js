@@ -39,8 +39,12 @@ import FindId from "./pages/user/FindId";
 import FindPw from "./pages/user/FindPw";
 import InfoEdit from "./pages/user/InfoEdit";
 import InterestList from "./pages/user/InterestList";
+
+import LogOut from "./pages/user/LogOut";
+
 import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
+
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -57,6 +61,7 @@ const App = () => {
         <Routes>
           {/* 담당자 : 황운철 */}
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/logout" element={<LogOut />}></Route>
           <Route path="/createaccount" element={<CreateAccount />}></Route>
           <Route path="/findid" element={<FindId />}></Route>
           <Route path="/login/findid" element={<FindId />}></Route>

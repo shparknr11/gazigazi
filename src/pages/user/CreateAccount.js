@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 const AccountStyle = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const AccountInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 150%;
+    width: 100%;
     box-sizing: border-box;
   }
   .main-create-detail {
@@ -55,7 +56,6 @@ const AccountInnerStyle = styled.div`
     cursor: pointer;
   }
   .create-profile-picture-input {
-    display: none;
   }
   .main-create-detail label {
     display: block;
@@ -126,119 +126,173 @@ const AccountInnerStyle = styled.div`
 `;
 
 const CreateAccount = () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-    userNickname: "",
+  const [user, setUser] = useState({
+    userPic: "",
+    userEmail: "",
+    userPw: "",
+    userPwCheck: "",
+    userName: "",
     userAddr: "",
-    userBirth: "",
-    userPhone: "",
+    userNickname: "",
     userFav: "",
-    userGender: "",
+    userBirth: "",
+    userGender: "", // 초기값을 빈 문자열로 설정
+    userPhone: "",
     userIntro: "",
   });
 
+  const [accountPic, setAccountPic] = useState(null);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
   const handleChange = e => {
-    setForm({
-      ...form,
+    setUser({
+      ...user,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    if (form.password !== form.confirmPassword) {
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/jpg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(file.type) || file.size > 2 * 1024 * 1024) {
+        alert("유효한 이미지 파일을 업로드해주세요. (2MB 이하)");
+        setAccountPic(null);
+        return;
+      }
+      setAccountPic(file);
+    }
+  };
+
+  const validateForm = () => {
+    if (user.userPw !== user.userPwCheck) {
       alert("비밀번호가 일치하지 않습니다!");
-      return;
+      return false;
     }
-    if (form.password === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }
-    if (!passwordRegex.test(form.password)) {
+    if (!passwordRegex.test(user.userPw)) {
       alert(
         "비밀번호는 최소 8자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.",
       );
-      return;
+      return false;
     }
-    try {
-      const response = await axios.post("/api/user/sign_up", form);
-      if (response.data.success) {
-        alert("계정이 성공적으로 생성되었습니다!");
-      } else {
-        alert("계정 생성에 실패했습니다. 다시 시도해주세요.");
-      }
-    } catch (error) {
-      console.error("계정 생성 오류:", error);
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    if (!isEmailChecked) {
+      alert("이메일 중복 확인을 해주세요.");
+      return false;
     }
+    if (!isNicknameChecked) {
+      alert("닉네임 중복 확인을 해주세요.");
+      return false;
+    }
+    return true;
   };
 
-  const checkEmailDuplication = async () => {
-    if (!emailRegex.test(form.email)) {
-      alert("유효한 이메일 주소를 입력해주세요.");
-      return;
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const formData = new FormData();
+    if (accountPic) {
+      formData.append("userPic", accountPic);
     }
 
-    if (form.email === "") {
-      alert("이메일을 입력해주세요.");
-      return;
-    }
-
-    try {
-      const response = await axios.get(`/api/user/duplicated?str=1&num=2`, {
-        params: {
-          email: form.email,
-        },
-      });
-
-      if (response.data.exists) {
-        alert("이미 존재하는 이메일입니다. 이메일을 다시 확인해주세요!");
-      } else {
-        alert("사용 가능한 이메일입니다! 다음 단계로 이행해주세요!");
-      }
-    } catch (error) {
-      console.error("이메일 중복 확인 오류:", error);
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
-
-  const checkNickNameDuplication = async () => {
-    try {
-      const response = await axios.get(`/api/user/duplicated?str=1&num=2`, {
-        nickname: form.userNickname,
-      });
-      // 입력된 이메일이 유효할 경우
-      if (response.data.exists) {
-        alert("이미 존재하는 닉네임입니다. 닉네임을 다시 확인해주세요!");
-      } else {
-        alert("사용 가능한 닉네임입니다! 다음 단계로 이행해주세요!");
-      }
-    } catch (error) {
-      console.error("이메일 중복 확인 오류:", error);
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
-
-  const ProfilePicture = () => {
-    const [image, setImage] = useState(null);
-
-    const handleImageChange = e => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImage(reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
+    // p 객체에 사용자 정보 추가
+    const userData = {
+      userEmail: user.userEmail,
+      userPw: user.userPw,
+      userPwCheck: user.userPwCheck,
+      userName: user.userName,
+      userAddr: user.userAddr,
+      userNickname: user.userNickname,
+      userFav: user.userFav,
+      userBirth: user.userBirth,
+      userGender: user.userGender,
+      userPhone: user.userPhone,
+      userIntro: user.userIntro,
     };
+
+    formData.append(
+      "p",
+      new Blob([JSON.stringify(userData)], { type: "application/json" }),
+    );
+
+    // FormData 내용 확인
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/sign_up",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+
+      if (response.data.success) {
+        console.log(response.data);
+        alert("계정이 성공적으로 생성되었습니다!");
+        Navigate("/login");
+      } else {
+        console.log(response.data);
+        alert(response.data.message || "계정 생성에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("계정 생성 오류:", error.response?.data || error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const checkDuplication = async (type, value) => {
+    if (!value) {
+      alert(
+        `${type === "userEmail" ? "이메일" : "닉네임"}을(를) 입력해주세요.`,
+      );
+      return;
+    }
+
+    try {
+      const num = type === "userEmail" ? 1 : 2;
+      console.log(`중복 체크 API 요청: ${type} - ${value}`); // 요청 로그 추가
+      const response = await axios.get(`/api/user/duplicated`, {
+        params: { str: value, num },
+      });
+
+      console.log(`API 응답: ${response.data}`); // API 응답 로그 확인
+
+      if (response.data.resultData === 0) {
+        alert(
+          `사용 가능한 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
+        );
+        if (type === "userEmail") {
+          setIsEmailChecked(true);
+        } else {
+          setIsNicknameChecked(true);
+          console.log("닉네임 중복 체크 상태:", true);
+        }
+      } else {
+        alert(
+          `이미 존재하는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다.`,
+        );
+        if (type === "userEmail") {
+          setIsEmailChecked(false);
+        } else {
+          setIsNicknameChecked(false);
+          console.log("닉네임 중복 체크 상태:", false);
+        }
+      }
+    } catch (error) {
+      console.error(
+        `${type === "userEmail" ? "이메일" : "닉네임"} 중복 확인 오류:`,
+        error,
+      );
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -251,17 +305,10 @@ const CreateAccount = () => {
                 <div className="signup-container">
                   <form className="main-create-detail" onSubmit={handleSubmit}>
                     <div className="profile-picture-container">
-                      <img
-                        src="https://via.placeholder.com/100"
-                        alt="프로필 사진"
-                        className="profile-picture"
-                        id="profilePreview"
-                      />
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpg, image/png, image/gif"
                         id="profilePicture"
-                        className="create-profile-picture-input"
                         name="userPic"
                         // onChange={handleImageChange}
                       />
@@ -270,13 +317,18 @@ const CreateAccount = () => {
                       <small>이메일*</small>
                       <input
                         type="email"
-                        name="email"
-                        value={form.email}
+                        name="userEmail"
+                        value={user.userEmail}
                         onChange={handleChange}
                         required
                       />
-                      <div className="create-button-group-1">
-                        <button type="button" onClick={checkEmailDuplication}>
+                      <div className="create-button-group">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            checkDuplication("userEmail", user.userEmail)
+                          }
+                        >
                           중복 확인
                         </button>
                       </div>
@@ -285,8 +337,8 @@ const CreateAccount = () => {
                       비밀번호*
                       <input
                         type="password"
-                        name="password"
-                        value={form.password}
+                        name="userPw"
+                        value={user.userPw}
                         onChange={handleChange}
                         required
                       />
@@ -295,8 +347,8 @@ const CreateAccount = () => {
                       비밀번호 확인*
                       <input
                         type="password"
-                        name="confirmPassword"
-                        value={form.confirmPassword}
+                        name="userPwCheck"
+                        value={user.userPwCheck}
                         onChange={handleChange}
                         required
                       />
@@ -305,8 +357,8 @@ const CreateAccount = () => {
                       이름*
                       <input
                         type="text"
-                        name="name"
-                        value={form.name}
+                        name="userName"
+                        value={user.userName}
                         onChange={handleChange}
                         required
                       />
@@ -317,12 +369,14 @@ const CreateAccount = () => {
                         <input
                           type="text"
                           name="userNickname"
-                          value={form.userNickname}
+                          value={user.userNickname}
                           onChange={handleChange}
                         />
                         <button
                           type="button"
-                          onClick={checkNickNameDuplication}
+                          onClick={() =>
+                            checkDuplication("userNickname", user.userNickname)
+                          }
                         >
                           중복 확인
                         </button>
@@ -333,7 +387,7 @@ const CreateAccount = () => {
                       <input
                         type="text"
                         name="userAddr"
-                        value={form.userAddr}
+                        value={user.userAddr}
                         onChange={handleChange}
                       />
                     </label>
@@ -342,7 +396,7 @@ const CreateAccount = () => {
                       <input
                         type="date"
                         name="userBirth"
-                        value={form.userBirth}
+                        value={user.userBirth}
                         onChange={handleChange}
                         required
                       />
@@ -352,7 +406,7 @@ const CreateAccount = () => {
                       <input
                         type="text"
                         name="userPhone"
-                        value={form.userPhone}
+                        value={user.userPhone}
                         onChange={handleChange}
                       />
                     </label>
@@ -361,7 +415,7 @@ const CreateAccount = () => {
                       <input
                         type="text"
                         name="userFav"
-                        value={form.userFav}
+                        value={user.userFav}
                         onChange={handleChange}
                       />
                     </label>
@@ -371,7 +425,7 @@ const CreateAccount = () => {
                         <input
                           type="radio"
                           name="userGender"
-                          value="남성"
+                          value="1"
                           onChange={handleChange}
                         />
                         남
@@ -380,7 +434,7 @@ const CreateAccount = () => {
                         <input
                           type="radio"
                           name="userGender"
-                          value="여성"
+                          value="2"
                           onChange={handleChange}
                         />
                         여
@@ -391,11 +445,16 @@ const CreateAccount = () => {
                       <input
                         type="text"
                         name="userIntro"
-                        value={form.userIntro}
+                        value={user.userIntro}
                         onChange={handleChange}
                       />
                     </label>
-                    <button type="submit">가입 완료</button>
+                    <button
+                      type="submit"
+                      disabled={!isEmailChecked || !isNicknameChecked}
+                    >
+                      가입 완료
+                    </button>
                   </form>
                 </div>
               </div>
