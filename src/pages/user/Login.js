@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import mainlogo from "../../images/logo2.png";
 
 const LoginStyle = styled.div`
@@ -67,7 +70,7 @@ const LoginInnerStyle = styled.div`
     cursor: pointer;
   }
   .login-container button:hover {
-    background-color: #ebddcc;
+    background-color: #e0b88a;
   }
   .login-options {
     display: flex;
@@ -85,6 +88,55 @@ const LoginInnerStyle = styled.div`
 `;
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      alert("이미 로그인된 상태입니다.");
+      navigate("/"); // 로그인 후 메인 페이지로 리다이렉트
+    }
+  }, [navigate]);
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/sign_in",
+        {
+          userEmail: email,
+          userPw: password,
+        },
+      );
+
+      if (response.data.code === 1) {
+        const { userSeq, accessToken } = response.data.resultData;
+        localStorage.setItem("userSeq", userSeq); // 로컬 스토리지에 userSeq 저장
+        localStorage.setItem("token", accessToken); // 로컬 스토리지에 token 저장.
+
+        // Redux에 사용자 정보 저장
+        dispatch({ type: "SET_USER", payload: { userSeq, userEmail: email } });
+
+        alert("로그인 성공!");
+        navigate(`/myprofile/${userSeq}`);
+      } else {
+        alert(response.data.resultMsg || "로그인에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 오류:", error.response?.data || error);
+      alert(
+        error.response?.data?.message ||
+          "오류가 발생했습니다. 다시 시도해주세요.",
+      );
+    }
+  };
+
+  if (localStorage.getItem("token")) return null;
+
   return (
     <LoginStyle>
       <LoginWrapStyle>
@@ -94,12 +146,14 @@ const Login = () => {
               <div className="main-inner">
                 <div className="login-container">
                   <img src={mainlogo} alt="mainlogo" className="logo" />
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <label htmlFor="username">이메일</label>
                     <input
                       type="email"
                       id="username"
                       name="username"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
                       required
                     />
 
@@ -108,6 +162,8 @@ const Login = () => {
                       type="password"
                       id="password"
                       name="password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
                       required
                     />
 
