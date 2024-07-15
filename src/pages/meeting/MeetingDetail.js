@@ -172,7 +172,9 @@ const MeetingDetail = () => {
           <div className="meet-item-title">
             <span>{detailList.partyName}</span>
           </div>
-          <div>모임인원 0/{detailList.partyMaximum}</div>
+          <div>
+            모임인원 {detailList.partyNowMem}/{detailList.partyMaximum}
+          </div>
           <MeetItemCard>
             {/* style={{
                 background: `url(${detailList.partyPic}) no-repeat center`,

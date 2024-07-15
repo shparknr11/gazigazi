@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getLocalDetail } from "../../apis/meeting/meetingapi";
 
 const LocalSelectWrapStyle = styled.div`
@@ -54,6 +54,8 @@ const LocalSelect = ({
   setLocalList,
   setLocalData,
   setLocaDetaillData,
+  partyLocation,
+  setPartyLocation,
 }) => {
   const [localDetailOpen, setLocalDetailOpen] = useState(false);
   const [localDetailList, setLocalDetailList] = useState([]);
@@ -87,10 +89,19 @@ const LocalSelect = ({
   };
 
   const handleRadioChange = item => {
+    // console.log(item);
+    const locationForInt = `${item.cdSub}${item.cdGb}`;
+    console.log(locationForInt);
+    const cdInt = parseInt(locationForInt);
+    console.log(cdInt);
+    setPartyLocation(cdInt);
     setLocaDetaillData(item.cdGbNm);
     setLocalRadioChecked(item.cdGbNm);
   };
 
+  useEffect(() => {
+    console.log("partyLocation", partyLocation);
+  }, [partyLocation]);
   return (
     <LocalSelectWrapStyle>
       <div className="local-select-box">

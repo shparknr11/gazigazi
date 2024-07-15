@@ -47,6 +47,7 @@ export const postParty = async _data => {
   }
 };
 
+// 지역 불러오기 api
 export const getLocal = async _data => {
   try {
     const response = await axios.get(

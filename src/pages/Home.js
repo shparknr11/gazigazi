@@ -213,12 +213,7 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div
-                className="list-box"
-                onClick={() => {
-                  navigate(`/meeting/detail`);
-                }}
-              >
+              <div className="list-box">
                 <div className="list-box-img">
                   <img src={meetingImg} alt="모임이미지" />
                 </div>
@@ -249,12 +244,7 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div
-                className="list-box"
-                onClick={() => {
-                  navigate(`/meeting/detail`);
-                }}
-              >
+              <div className="list-box">
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
                   <img alt="프로필" />
@@ -278,12 +268,7 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div
-                className="list-box"
-                onClick={() => {
-                  navigate(`/meeting/detail`);
-                }}
-              >
+              <div className="list-box">
                 <div className="list-box-img"></div>
                 <div className="list-box-title">
                   <img alt="프로필" />
