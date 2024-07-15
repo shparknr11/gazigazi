@@ -146,11 +146,13 @@ const MyMeetingSchMemberList = () => {
   const a = async () => {
     console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
     const res = await getSchMemberAll(params.meetingMemberlistid);
-    console.log(res);
+    console.log(res.resultData);
+    setAllData(res);
   };
 
   const b = async () => {
     const res = await getSchMemberAll(params.meetingMemberlistid);
+    setAllData(res);
     console.log(res);
   };
   let activeItem = null;
@@ -194,9 +196,9 @@ const MyMeetingSchMemberList = () => {
               setIsClicked(1);
             }}
           >
-            일정 신청 멤버
+            일정 멤버 확인
           </div>
-          <div
+          {/* <div
             id="2"
             className="item"
             onClick={() => {
@@ -204,32 +206,38 @@ const MyMeetingSchMemberList = () => {
               setIsClicked(2);
             }}
           >
-            일정 멤버 확인
-          </div>
+            일정 신청 확인
+          </div> */}
         </div>
         <ReactCalendarListStyle>
           <CalendarListUlStyle>
             <li>
               <span>순번</span>
-              <span>모임명</span>
+              <span>일정명</span>
               <span>멤버명</span>
-              <span>신청일자</span>
-              {isClicked === 1 ? <span>승인 / 반려</span> : null}
+              <span>일정날짜</span>
+              {/* <span>신청일자</span> */}
+              {/* {isClicked === 1 ? <span>승인 / 반려</span> : null} */}
             </li>
           </CalendarListUlStyle>
           <div className="func-main" style={{ width: "100%" }}>
             <div className="func-main-inner">
               {isClicked === 1 ? (
                 allData.length > 0 ? (
-                  allData.map(item => (
+                  allData.map((item, index) => (
                     <CalendarListLiStyle key={item.pk}>
                       {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                       <li>
-                        <span>{item.pk}</span>
-                        <span>{item.meetName}</span>
-                        <span>{item.meetMember}</span>
-                        <span>{item.managementDate}</span>
-                        <span
+                        <span>{index + 1}</span>
+                        <span>
+                          {location?.state.planTitle
+                            ? location?.state.planTitle
+                            : "일정명"}
+                        </span>
+                        <span>{item?.userName}</span>
+                        <span>{location?.state.clickDay}</span>
+                        {/* <span>{item.managementDate}</span> */}
+                        {/* <span
                           style={{
                             display: "flex",
                             justifyContent: "center",
@@ -255,7 +263,7 @@ const MyMeetingSchMemberList = () => {
                           >
                             반려
                           </button>
-                        </span>
+                        </span> */}
                       </li>
                     </CalendarListLiStyle>
                   ))
@@ -265,14 +273,13 @@ const MyMeetingSchMemberList = () => {
                   </div>
                 )
               ) : allData.length > 0 ? (
-                allData.map(item => (
+                allData.map((item, index) => (
                   <CalendarListLiStyle key={item.pk}>
                     {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                     <li>
-                      <span>{item.pk}</span>
-                      <span>{item.meetName}</span>
-                      <span>{item.meetMember}</span>
-                      <span>{item.managementDate}</span>
+                      <span>{index}</span>
+                      <span>일정명_앞에서 가져옴</span>
+                      <span>{item.userName}</span>
                     </li>
                   </CalendarListLiStyle>
                 ))
