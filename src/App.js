@@ -16,8 +16,6 @@ import Review from "./pages/review/Review";
 import MyMeeting from "./pages/mymeeting/MyMeeting";
 import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
 
-import Category from "./pages/meeting/Category";
-import Detail from "./pages/meeting/backupdetail";
 import Write from "./pages/review/Write";
 
 import MyMeetingFuncLeader from "./pages/mymeeting/MyMeetingFuncLeader";
@@ -44,7 +42,6 @@ import LogOut from "./pages/user/LogOut";
 
 import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
-
 
 const MainStyle = styled.div`
   padding-top: 70px;

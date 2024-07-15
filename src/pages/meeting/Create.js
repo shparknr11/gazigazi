@@ -99,7 +99,7 @@ const Create = () => {
   // form
   const [partyName, setPartyName] = useState("");
   const [partyGenre, setPartyGenre] = useState(null);
-  // const [partyLocation, setPartyLocation] = useState("");
+  const [partyLocation, setPartyLocation] = useState("");
   const [partyMinAge, setPartyMinAge] = useState(1940);
   const [partyMaxAge, setPartyMaxAge] = useState(2024);
   const [partyMaximum, setPartyMaximum] = useState("");
@@ -325,6 +325,8 @@ const Create = () => {
               setLocalList={setLocalList}
               setLocalData={setLocalData}
               setLocaDetaillData={setLocaDetaillData}
+              partyLocation={partyLocation}
+              setPartyLocation={setPartyLocation}
             />
           ) : null}
         </div>

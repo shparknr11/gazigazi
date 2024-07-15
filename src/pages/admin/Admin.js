@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
+import { postApproval } from "../../apis/meeting/joinapi";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -68,22 +69,22 @@ const AdminRightDivStyle = styled.div`
 const Admin = () => {
   const [partyAllList, setPartyAllList] = useState([]);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
-
+  const getData = async () => {
+    try {
+      const result = await getPartyAll();
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      setPartyAllList(result.resultData);
+      // console.log(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     // api함수
-    const getData = async () => {
-      try {
-        const result = await getPartyAll();
-        if (result.code !== 1) {
-          alert(result.resultMsg);
-          return;
-        }
-        setPartyAllList(result.resultData);
-        // console.log(result.resultData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+
     getData();
   }, []);
 
@@ -93,6 +94,19 @@ const Admin = () => {
     console.log("uadateList", updateList);
     setFilteredPartyList(updateList);
   }, [partyAllList]);
+
+  const handleClickApproval = async _partySeq => {
+    try {
+      const result = await postApproval(_partySeq, 1);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      await getData(); // 목록을 다시 가져와 업데이트
+    } catch (error) {
+      console.error("Approval error:", error);
+    }
+  };
 
   return (
     <AdminInnerStyle>
@@ -121,7 +135,13 @@ const Admin = () => {
             <div key={index}>
               <div className="admin-application">{item.partyName}</div>
               <div className="admin-application-btn">
-                <button>승인</button>
+                <button
+                  onClick={() => {
+                    handleClickApproval(item.partySeq);
+                  }}
+                >
+                  승인
+                </button>
                 <button>반려</button>
               </div>
             </div>

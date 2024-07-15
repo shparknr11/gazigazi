@@ -129,7 +129,8 @@ const CategoryOthers = () => {
   useEffect(() => {
     const updateList = partyAllList.filter(
       item =>
-        item.partyAuthGb === "2" &&
+        // 여기수정******************************************************
+        item.partyAuthGb === "1" &&
         (partyGenre === "0" || item.partyGenre === partyGenre) &&
         (!searchKeyword || item.partyName.includes(searchKeyword)),
     );
@@ -142,6 +143,22 @@ const CategoryOthers = () => {
     navigate(`/meeting/${_partySeq}`);
   };
 
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
+
+  const getYearLastTwoDigits = year => {
+    return `${year.toString().slice(-2)}년생`;
+  };
   return (
     <CateInnerStyle>
       <div>
@@ -229,9 +246,16 @@ const CategoryOthers = () => {
               handleClickDetail(item.partySeq);
             }}
           >
-            <div className="cate-box-img">
-              <img src={item.partyPic} alt="모임이미지" />
-            </div>
+            <div
+              className="cate-box-img"
+              style={{
+                // 임시
+                backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+            ></div>
             <div className="cate-box-content">
               <div className="cate-box-title">
                 <img alt="프로필" />
@@ -239,9 +263,12 @@ const CategoryOthers = () => {
               </div>
               <h3 className="cate-box-text">{item.partyName}</h3>
               <p className="cate-box-local">{item.partyLocation}</p>
-              <span className="cate-box-gender">{item.partyGender}</span>
+              <span className="cate-box-gender">
+                {getGenderText(item.partyGender)}
+              </span>
               <span className="cate-box-age">
-                {item.partyMinAge}~{item.partyMaxAge}
+                {getYearLastTwoDigits(item.partyMinAge)}~
+                {getYearLastTwoDigits(item.partyMaxAge)}
               </span>
             </div>
           </div>
