@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 const CateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -22,9 +22,9 @@ const CateInnerStyle = styled.div`
       &:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
-    }
-    .allview {
-      background-color: rgba(0, 0, 0, 0.1);
+      &.active {
+        background-color: lightblue;
+      }
     }
   }
   .category-search-div {
@@ -98,10 +98,11 @@ const CateInnerStyle = styled.div`
     padding: 5px;
   }
 `;
-const Category = () => {
+const CategoryOthers = () => {
   const [partyAllList, setPartyAllList] = useState([]);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const navigate = useNavigate();
+  const { partyGenre } = useParams();
 
   useEffect(() => {
     // api함수
@@ -124,9 +125,13 @@ const Category = () => {
   // partyAuthGb 0:미확인 1:승인 2: 삭제
   useEffect(() => {
     // console.log(partyAllList);
-    const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
+    const updateList = partyAllList.filter(
+      item =>
+        item.partyAuthGb === "2" &&
+        (partyGenre === "0" || item.partyGenre === partyGenre),
+    );
     setFilteredPartyList(updateList);
-  }, [partyAllList]);
+  }, [partyAllList, partyGenre]);
 
   const handleClickDetail = _partySeq => {
     console.log(_partySeq);
@@ -142,8 +147,8 @@ const Category = () => {
     <CateInnerStyle>
       <div>
         <div className="category-category">
-          <Link to="/category">
-            <div className="category-item allview">전체보기</div>
+          <Link to="/category/0">
+            <div className="category-item">전체보기</div>
           </Link>
           <Link to="/category/1">
             <div className="category-item">스포츠</div>
@@ -211,4 +216,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryOthers;

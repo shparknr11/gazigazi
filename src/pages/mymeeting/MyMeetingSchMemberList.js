@@ -138,18 +138,19 @@ const MyMeetingSchMemberList = () => {
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
   const location = useLocation();
+  console.log(params);
   useEffect(() => {}, []);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
   const a = async () => {
     console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
-    const res = await getSchMemberAll(params.meetingId);
+    const res = await getSchMemberAll(params.meetingMemberlistid);
     console.log(res);
   };
 
   const b = async () => {
-    const res = await getSchMemberAll(params.meetingId);
+    const res = await getSchMemberAll(params.meetingMemberlistid);
     console.log(res);
   };
   let activeItem = null;
@@ -260,9 +261,7 @@ const MyMeetingSchMemberList = () => {
                   ))
                 ) : (
                   <div className="none-sch-div">
-                    <Link to={"/mymeeting/mymeetingschresister"}>
-                      일정 신청한 멤버가 없습니다.
-                    </Link>
+                    일정 신청한 멤버가 없습니다.
                   </div>
                 )
               ) : allData.length > 0 ? (
@@ -279,9 +278,7 @@ const MyMeetingSchMemberList = () => {
                 ))
               ) : (
                 <div className="none-sch-div" style={{}}>
-                  <Link to={"/mymeeting/mymeetingschresister"}>
-                    일정 신청한 멤버가 없습니다.
-                  </Link>
+                  일정 신청한 멤버가 없습니다.
                 </div>
               )}
             </div>

@@ -310,7 +310,7 @@ const CreateAccount = () => {
                         accept="image/jpg, image/png, image/gif"
                         id="profilePicture"
                         name="userPic"
-                        onChange={handleImageChange}
+                        // onChange={handleImageChange}
                       />
                     </div>
                     <label htmlFor="userEmail">

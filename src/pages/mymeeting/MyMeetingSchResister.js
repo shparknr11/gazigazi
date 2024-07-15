@@ -124,11 +124,6 @@ const MyMeetingSchResister = () => {
     console.log(postData);
   }, []);
   const handleClick = async () => {
-    console.log(location.state);
-    console.log(location);
-    if (isLoading === false) {
-      return;
-    }
     setIsLoading(true);
     try {
       const res = await postMonthCalculateBudget({
@@ -271,6 +266,8 @@ const MyMeetingSchResister = () => {
                             id="planStartDt"
                             name="planStartDt"
                             className="input-style"
+                            value={location.state.clickDay}
+                            readOnly
                           />
                         </div>
                         <div

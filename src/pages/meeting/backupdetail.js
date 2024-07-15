@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import meetimg from "../../images/meetinga.png";
 import { AiTwotoneHeart } from "react-icons/ai";
+import useModal from "../../hooks/useModal";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -108,6 +109,16 @@ const MeetItemInfo = styled.div`
 `;
 
 const Detail = () => {
+  const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
+
+  const handleJoinModal = () => {
+    openModal({
+      onConfirm: () => {
+        closeModal();
+      },
+    });
+  };
+
   return (
     <MeetItemStyle>
       <div className="inner">
@@ -140,7 +151,14 @@ const Detail = () => {
                   <AiTwotoneHeart />
                   찜하기
                 </div>
-                <div className="meet-item-button">신청하기</div>
+                <div
+                  className="meet-item-button"
+                  onClick={() => {
+                    handleJoinModal();
+                  }}
+                >
+                  신청하기
+                </div>
               </div>
             </div>
           </MeetItemCard>

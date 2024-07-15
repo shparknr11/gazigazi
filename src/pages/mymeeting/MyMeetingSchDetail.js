@@ -5,6 +5,8 @@ import {
   deleteSchOne,
   getSchOne,
   patchSch,
+  patchSchComp,
+  postSchJoin,
 } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 import { useLocation } from "react-router";
 import { toast } from "react-toastify";
@@ -26,17 +28,29 @@ const MyMeetingNoticeStyle = styled.div`
   }
   .notice-inner {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .notice-form-area {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 30px;
     max-width: 900px;
     border: 1px solid gray;
     border-radius: 4px;
     box-shadow: 1px 1px 1px 1px gray;
+    label {
+      font-size: 18px;
+    }
+    .input-style {
+      height: 40px;
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 10px;
+    }
   }
   .meeting-introduce {
     display: flex;
@@ -75,6 +89,7 @@ const MyMeetingNoticeStyle = styled.div`
     padding: 10px;
     line-height: 2;
     width: 100%;
+    margin-top: 15px;
   }
 `;
 const TitleDivStyle = styled.div`
@@ -94,12 +109,12 @@ const MyMeetingSchDetail = () => {
   const [planStartTime, setPlanStartTime] = useState("");
   const [planLocation, setPlanLocation] = useState("");
   const [planContents, setPlanContents] = useState("");
-  const [planObj, setPlanObj] = useState({});
+  const [planCdNm, setPlanCdNm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuth, setIsAuth] = useState();
   const location = useLocation();
   const navigate = useNavigate();
-  const a = async () => {
-    // const res = await getSchOne(location.state.planSeq);
-  };
+
   const getDataOne = async () => {
     console.log(location.state.planSeq);
     const res = await getSchOne(location.state.planSeq);
@@ -110,7 +125,8 @@ const MyMeetingSchDetail = () => {
     setPlanStartTime(res.planStartTime);
     setPlanLocation(res.planLocation);
     setPlanContents(res.planContents);
-    console.log(planObj);
+    setPlanCdNm(res.cdNm);
+    setIsAuth(location.state.partyAuthGb);
   };
   useEffect(() => {
     getDataOne();
@@ -130,11 +146,10 @@ const MyMeetingSchDetail = () => {
 
     return formData;
   };
-  useEffect(() => {
-    a();
-  }, []);
+  useEffect(() => {}, []);
   const handleClick = async () => {
     console.log(location.state.planSeq);
+    setIsLoading(true);
     console.log({
       planPartySeq: location.state.planSeq,
       ...formDataFunc("dataForm"),
@@ -148,6 +163,34 @@ const MyMeetingSchDetail = () => {
       navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
     } catch (error) {
       toast.warning(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClickSchComp = async () => {
+    setIsLoading(true);
+    try {
+      const res = await patchSchComp(location.state.planSeq);
+      console.log(res);
+      toast.success("일정이 완료 되었습니다!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClickSchEnter = async (userSeq = 1) => {
+    setIsLoading(true);
+    try {
+      const res = await postSchJoin(location.state.planSeq, userSeq);
+      console.log(res);
+      toast.success("일정에 참가되었습니다!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -157,6 +200,70 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
+              {isAuth === "0" ? (
+                <div
+                  style={{
+                    width: "100%",
+                    margin: "0 10px",
+                    display: "flex",
+                    justifyContent: "end",
+                    marginRight: "30px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {planCdNm === "완료" ? (
+                    <button
+                      className="etc-btn"
+                      onClick={() => {
+                        toast.warning("일정이 완료된 일정입니다.");
+                      }}
+                    >
+                      일정완료
+                    </button>
+                  ) : (
+                    <button
+                      className="etc-btn"
+                      onClick={() => {
+                        handleClickSchComp();
+                      }}
+                      disabled
+                    >
+                      진행중
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    margin: "0 10px",
+                    display: "flex",
+                    justifyContent: "end",
+                    marginRight: "30px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {planCdNm === "완료" ? (
+                    <button
+                      className="etc-btn"
+                      onClick={() => {
+                        toast.warning("일정이 완료된 일정입니다.");
+                      }}
+                    >
+                      참가완료
+                    </button>
+                  ) : (
+                    <button
+                      className="etc-btn"
+                      onClick={() => {
+                        handleClickSchEnter();
+                      }}
+                    >
+                      일정참가
+                    </button>
+                  )}
+                </div>
+              )}
               <form id="dataForm" name="dataForm">
                 <div className="noitce-form-container">
                   <div className="flex-column">

@@ -79,6 +79,7 @@ export const postMonthCalculateBudget = async ({
 // 모임 일정 삭제
 // /api/plan?plan_seq=${}
 // /api/plan?plan_seq=1032
+// /api/plan?plan_seq=
 export const deleteSchOne = async schSeq => {
   try {
     const res = await axios.delete(`/api/plan?plan_seq=${schSeq}`);
@@ -130,6 +131,35 @@ export const patchSch = async ({
 export const patchSchComp = async schSeq => {
   try {
     const res = await axios.patch(`/api/plan/${schSeq}`);
+    return res.data.resultData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// DELETE
+// /api/plan/join
+// 모임 일정 참가 신청 취소
+export const deleteSchJoin = async (planSeq, userSeq) => {
+  try {
+    const res = await axios.delete(`/api/plan/join`, {
+      plmemberPlanSeq: planSeq,
+      plmemberMemberSeq: userSeq,
+    });
+    return res.data.resultData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+// POST
+// /api/plan/join
+// 모임 일정 참가 신청
+export const postSchJoin = async (planSeq, userSeq) => {
+  try {
+    const res = await axios.post(`/api/plan/join`, {
+      plmemberPlanSeq: planSeq,
+      plmemberMemberSeq: userSeq,
+    });
     return res.data.resultData;
   } catch (error) {
     console.log(error);

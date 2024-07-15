@@ -13,6 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <App />
-    <ToastContainer autoClose={500}></ToastContainer>
+      {/*  limit={1} */}
+    <ToastContainer autoClose={500} closeOnClick></ToastContainer>
   </Provider>,
 );
