@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import UserDelete from "./UserDelete";
 
 const MyPageStyle = styled.div`
   display: flex;
@@ -147,18 +148,24 @@ const MyPage = () => {
 
   const handleCertificationSend = async () => {
     try {
-      const response = await axios.post("/api/mailSend", {});
+      setLoading(true); // 로딩 상태 시작
+      const response = await axios.post("/api/mailSend", {
+        email: userData.userEmail,
+      });
       console.log(response.data);
       alert("인증번호가 발송되었습니다. 이메일을 확인해주세요.");
       setIsCertifying(true);
     } catch (error) {
       console.error("인증번호 발송 오류", error);
       alert("인증번호 발송에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false); // 로딩 상태 종료
     }
   };
 
-  const handleCertificationCheck = async () => {
+  const handleCertificationCheck = async code => {
     try {
+      setLoading(true); // 로딩 상태 시작
       const response = await axios.post("/api/mailauthCheck", {
         code: certificationCode,
       });
@@ -169,6 +176,8 @@ const MyPage = () => {
     } catch (error) {
       console.error("인증번호 입력 오류", error);
       alert("인증번호가 일치하지 않습니다. 다시 확인해주세요.");
+    } finally {
+      setLoading(false); // 로딩 상태 종료
     }
   };
 
@@ -280,9 +289,7 @@ const MyPage = () => {
               <button type="button" className="edit-button">
                 정보 수정
               </button>
-              <button type="button" className="delete-button">
-                회원 탈퇴
-              </button>
+              <UserDelete />
             </div>
           </div>
         </MyPageInnerStyle>
