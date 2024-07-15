@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getPartyAll } from "../../apis/meeting/meetingapi";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -10,12 +11,20 @@ const AdminInnerStyle = styled.div`
   display: flex;
 `;
 const AdminLeftDivStyle = styled.div`
+  nav {
+    width: 150px;
+  }
+  ul,
+  li {
+    width: 100%;
+  }
   .admin-list {
   }
   .admin-list-item {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
     display: flex;
+
     & span {
       text-align: end;
       width: 100%;
@@ -34,16 +43,57 @@ const AdminRightDivStyle = styled.div`
     margin-bottom: 40px;
     font-size: 28px;
   }
+  .admin-application-div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    width: 100%;
+  }
   .admin-application {
-    width: 100px;
+    width: 200px;
     height: 100px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .admin-application-btn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    button {
+    }
+  }
 `;
 const Admin = () => {
+  const [partyAllList, setPartyAllList] = useState([]);
+  const [filteredPartyList, setFilteredPartyList] = useState([]);
+
+  useEffect(() => {
+    // api함수
+    const getData = async () => {
+      try {
+        const result = await getPartyAll();
+        if (result.code !== 1) {
+          alert(result.resultMsg);
+          return;
+        }
+        setPartyAllList(result.resultData);
+        // console.log(result.resultData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, []);
+
+  // partyAuthGb 0:미확인 1:승인 2: 삭제
+  useEffect(() => {
+    const updateList = partyAllList.filter(item => item.partyAuthGb === "0");
+    console.log("uadateList", updateList);
+    setFilteredPartyList(updateList);
+  }, [partyAllList]);
+
   return (
     <AdminInnerStyle>
       <AdminLeftDivStyle>
@@ -66,35 +116,16 @@ const Admin = () => {
       </AdminLeftDivStyle>
       <AdminRightDivStyle>
         <h1>모임 신청 리스트</h1>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
-        </div>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
-        </div>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
-        </div>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
-        </div>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
-        </div>
-        <div>
-          <div className="admin-application">리스트</div>
-          <button>승인</button>
-          <button>반려</button>
+        <div className="admin-application-div">
+          {filteredPartyList.map((item, index) => (
+            <div key={index}>
+              <div className="admin-application">{item.partyName}</div>
+              <div className="admin-application-btn">
+                <button>승인</button>
+                <button>반려</button>
+              </div>
+            </div>
+          ))}
         </div>
       </AdminRightDivStyle>
     </AdminInnerStyle>

@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { prColor } from "../../css/color";
 const CateInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -15,16 +16,16 @@ const CateInnerStyle = styled.div`
     gap: 10px;
     margin-bottom: 20px;
     .category-item {
-      border: 1px solid #000;
+      border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 12px;
       border-radius: 25px;
       box-shadow: 1px 3px 2px 0px rgba(0, 0, 0, 0.1);
       &:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
-    }
-    .allview {
-      background-color: rgba(0, 0, 0, 0.1);
+      &.active {
+        background-color: ${prColor.pr02};
+      }
     }
   }
   .category-search-div {
@@ -55,7 +56,6 @@ const CateInnerStyle = styled.div`
     display: block;
     width: 100%;
     max-width: 220px;
-    height: 278px;
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 0px;
     border-radius: 10px;
@@ -98,10 +98,14 @@ const CateInnerStyle = styled.div`
     padding: 5px;
   }
 `;
-const Category = () => {
+const CategoryOthers = () => {
   const [partyAllList, setPartyAllList] = useState([]);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const navigate = useNavigate();
+  //   const { partyGenre } = useParams();
+  const [searchParams] = useSearchParams();
+  const partyGenre = searchParams.get("partyGenre");
+  const searchKeyword = searchParams.get("search");
 
   useEffect(() => {
     // api함수
@@ -123,61 +127,97 @@ const Category = () => {
 
   // partyAuthGb 0:미확인 1:승인 2: 삭제
   useEffect(() => {
-    // console.log(partyAllList);
-    const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
+    const updateList = partyAllList.filter(
+      item =>
+        item.partyAuthGb === "2" &&
+        (partyGenre === "0" || item.partyGenre === partyGenre) &&
+        (!searchKeyword || item.partyName.includes(searchKeyword)),
+    );
+    console.log("uadateList", updateList);
     setFilteredPartyList(updateList);
-  }, [partyAllList]);
+  }, [partyAllList, partyGenre, searchKeyword]);
 
   const handleClickDetail = _partySeq => {
     console.log(_partySeq);
     navigate(`/meeting/${_partySeq}`);
   };
 
-  useEffect(() => {
-    // api함수
-    console.log(filteredPartyList);
-  }, [filteredPartyList]);
-
   return (
     <CateInnerStyle>
       <div>
         <div className="category-category">
-          <Link to="/category">
-            <div className="category-item allview">전체보기</div>
+          <Link to="/category?partyGenre=0">
+            <div
+              className={`category-item ${partyGenre === "0" ? "active" : ""}`}
+            >
+              전체보기
+            </div>
           </Link>
-          <Link to="/category/1">
-            <div className="category-item">스포츠</div>
+          <Link to="/category?partyGenre=1">
+            <div
+              className={`category-item ${partyGenre === "1" ? "active" : ""}`}
+            >
+              스포츠
+            </div>
           </Link>
-          <Link to="/category/2">
-            <div className="category-item">게임</div>
+          <Link to="/category?partyGenre=2">
+            <div
+              className={`category-item ${partyGenre === "2" ? "active" : ""}`}
+            >
+              게임
+            </div>
           </Link>
-          <Link to="/category/3">
-            <div className="category-item">맛집</div>
+          <Link to="/category?partyGenre=3">
+            <div
+              className={`category-item ${partyGenre === "3" ? "active" : ""}`}
+            >
+              맛집
+            </div>
           </Link>
-          <Link to="/category/4">
-            <div className="category-item">패션</div>
+          <Link to="/category?partyGenre=4">
+            <div
+              className={`category-item ${partyGenre === "4" ? "active" : ""}`}
+            >
+              패션
+            </div>
           </Link>
-          <Link to="/category/5">
-            <div className="category-item">자기개발</div>
+          <Link to="/category?partyGenre=5">
+            <div
+              className={`category-item ${partyGenre === "5" ? "active" : ""}`}
+            >
+              자기개발
+            </div>
           </Link>
-          <Link to="/category/6">
-            <div className="category-item">문화•예술</div>
+          <Link to="/category?partyGenre=6">
+            <div
+              className={`category-item ${partyGenre === "6" ? "active" : ""}`}
+            >
+              문화•예술
+            </div>
           </Link>
-          <Link to="/category/7">
-            <div className="category-item">Bar</div>
+          <Link to="/category?partyGenre=7">
+            <div
+              className={`category-item ${partyGenre === "7" ? "active" : ""}`}
+            >
+              Bar
+            </div>
           </Link>
-          <Link to="/category/8">
-            <div className="category-item">기타</div>
+          <Link to="/category?partyGenre=8">
+            <div
+              className={`category-item ${partyGenre === "8" ? "active" : ""}`}
+            >
+              기타
+            </div>
           </Link>
         </div>
         <div className="category-search-div">
-          <div className="category-search">
+          {/* <div className="category-search">
             <input
               type="text"
               placeholder="검색어를 입력하세요."
               className="category-search-input"
             ></input>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mm-meeting-cate">
@@ -211,4 +251,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryOthers;

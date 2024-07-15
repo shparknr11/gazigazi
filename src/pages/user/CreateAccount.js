@@ -263,7 +263,7 @@ const CreateAccount = () => {
                         id="profilePicture"
                         className="create-profile-picture-input"
                         name="userPic"
-                        onChange={handleImageChange}
+                        // onChange={handleImageChange}
                       />
                     </div>
                     <label htmlFor="userEmail">

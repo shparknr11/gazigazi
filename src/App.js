@@ -17,7 +17,7 @@ import MyMeeting from "./pages/mymeeting/MyMeeting";
 import MyMeetingNotice from "./pages/mymeeting/MyMeetingNotice";
 
 import Category from "./pages/meeting/Category";
-import Detail from "./pages/meeting/Detail";
+import Detail from "./pages/meeting/backupdetail";
 import Write from "./pages/review/Write";
 
 import MyMeetingFuncLeader from "./pages/mymeeting/MyMeetingFuncLeader";
@@ -39,6 +39,8 @@ import FindId from "./pages/user/FindId";
 import FindPw from "./pages/user/FindPw";
 import InfoEdit from "./pages/user/InfoEdit";
 import InterestList from "./pages/user/InterestList";
+import MeetingDetail from "./pages/meeting/MeetingDetail";
+import CategoryOthers from "./pages/meeting/CategoryOthers";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -65,14 +67,17 @@ const App = () => {
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>
           <Route path="/meeting/create" element={<Create />}></Route>
-          <Route path="/meeting/:meetingId" element={<Detail />}></Route>
+          <Route path="/meeting/:partySeq" element={<MeetingDetail />}></Route>
           <Route
             path="/meeting/modify/:meetingId"
             element={<h1>모임수정페이지</h1>}
           ></Route>
           <Route path="/search" element={<h1>검색페이지</h1>}></Route>
-          <Route path="/category" element={<Category />}></Route>
-
+          {/* <Route
+            path="/category/:partyGenre"
+            element={<CategoryOthers />}
+          ></Route> */}
+          <Route path="/category" element={<CategoryOthers />}></Route>
           {/* 기타 담당자 : 모두 */}
           <Route path="/myprofile/:userId" element={<MyPage />}></Route>
           <Route

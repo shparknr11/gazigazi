@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Rating } from "@mui/material";
+import { Rating } from "@mui/material";
 import { useState } from "react";
 const WriteInnerStyle = styled.div`
   width: calc(100% - 30px);
