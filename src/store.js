@@ -1,22 +1,10 @@
-// store.js
-import { createStore } from 'redux';
+import { createStore, combineReducers } from "redux";
+import userReducer from "./userSlice"; // 경로를 조정하세요
 
-// 초기 상태
-const initialState = {
-  user: null,
-};
+const rootReducer = combineReducers({
+  user: userReducer,
+});
 
-// 리듀서
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'SET_USER':
-      return { ...state, user: action.payload };
-    default:
-      return state;
-  }
-};
-
-// 스토어 생성
-const store = createStore(reducer);
+const store = createStore(rootReducer);
 
 export default store;

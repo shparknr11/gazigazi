@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AccountStyle = styled.div`
   display: flex;
@@ -126,8 +126,12 @@ const AccountInnerStyle = styled.div`
 `;
 
 const CreateAccount = () => {
+  const navigate = useNavigate();
+
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,20}$/;
+  const emailRegex = /^[a-zA-Z0-9]{6,15}@[a-z]{3,7}\.(com|net)$/;
+  const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
 
   const [user, setUser] = useState({
     userPic: "",
@@ -169,14 +173,14 @@ const CreateAccount = () => {
   };
 
   const validateForm = () => {
-    if (user.userPw !== user.userPwCheck) {
-      alert("비밀번호가 일치하지 않습니다!");
-      return false;
-    }
     if (!passwordRegex.test(user.userPw)) {
       alert(
-        "비밀번호는 최소 8자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.",
+        "비밀번호는 최소 10자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.",
       );
+      return false;
+    }
+    if (user.userPw !== user.userPwCheck) {
+      alert("비밀번호가 일치하지 않습니다!");
       return false;
     }
     if (!isEmailChecked) {
@@ -185,6 +189,14 @@ const CreateAccount = () => {
     }
     if (!isNicknameChecked) {
       alert("닉네임 중복 확인을 해주세요.");
+      return false;
+    }
+    if (!nicknameRegex.test(user.userNickname)) {
+      alert("닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.");
+      return false;
+    }
+    if (!emailRegex.test(user.userEmail)) {
+      alert("이메일 형식이 올바르지 않습니다.");
       return false;
     }
     return true;
@@ -200,7 +212,7 @@ const CreateAccount = () => {
       formData.append("userPic", accountPic);
     }
 
-    // p 객체에 사용자 정보 추가
+    // 사용자 정보 추가
     const userData = {
       userEmail: user.userEmail,
       userPw: user.userPw,
@@ -220,11 +232,6 @@ const CreateAccount = () => {
       new Blob([JSON.stringify(userData)], { type: "application/json" }),
     );
 
-    // FormData 내용 확인
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     try {
       const response = await axios.post(
         "http://localhost:3000/api/user/sign_up",
@@ -237,7 +244,7 @@ const CreateAccount = () => {
       if (response.data.success) {
         console.log(response.data);
         alert("계정이 성공적으로 생성되었습니다!");
-        Navigate("/login");
+        navigate("/login");
       } else {
         console.log(response.data);
         alert(response.data.message || "계정 생성에 실패했습니다.");
@@ -310,7 +317,7 @@ const CreateAccount = () => {
                         accept="image/jpg, image/png, image/gif"
                         id="profilePicture"
                         name="userPic"
-                        // onChange={handleImageChange}
+                        onChange={handleImageChange}
                       />
                     </div>
                     <label htmlFor="userEmail">
