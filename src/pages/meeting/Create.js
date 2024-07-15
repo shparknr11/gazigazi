@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
-import { getLocal, postParty } from "../../apis/meeting/meetingcreateapi";
+import { getLocal, postParty } from "../../apis/meeting/meetingapi";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -88,6 +88,9 @@ const CreateBtnWrapStyle = styled.div`
     padding: 10px 20px;
     border: 1px solid;
     border-radius: 25px;
+    &:hover {
+      background-color: wheat;
+    }
   }
 `;
 
@@ -97,8 +100,8 @@ const Create = () => {
   const [partyName, setPartyName] = useState("");
   const [partyGenre, setPartyGenre] = useState(null);
   // const [partyLocation, setPartyLocation] = useState("");
-  const [partyMinAge, setPartyMinAge] = useState("");
-  const [partyMaxAge, setPartyMaxAge] = useState("");
+  const [partyMinAge, setPartyMinAge] = useState(1940);
+  const [partyMaxAge, setPartyMaxAge] = useState(2024);
   const [partyMaximum, setPartyMaximum] = useState("");
   const [partyGender, setPartyGender] = useState("");
   const [partyIntro, setPartyIntro] = useState("");
@@ -112,6 +115,12 @@ const Create = () => {
   // file
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
+
+  useEffect(() => {
+    // console.log(localList);
+    console.log(partyMinAge);
+    console.log(partyMaxAge);
+  }, [partyMaxAge, partyMinAge]);
 
   // useEffect(() => {
   //   // console.log(localList);
@@ -135,17 +144,18 @@ const Create = () => {
   // 카테고리 선택
   const handleChangeGenre = e => {
     // console.log(e.target.value);
-    const partyGenre = parseInt(e.target.value);
-    if (!partyGenre) {
+    const genre = parseInt(e.target.value);
+    console.log(genre);
+    if (!genre) {
       alert("장르를 선택해주세요");
     }
-    setPartyGenre(e.target.value);
+    setPartyGenre(genre);
   };
   // 지역 선택(도시 불러오기)
   const handleClickLocal = async () => {
     setSelectorOpen(true);
 
-    const data = { cd: "LO-00", cdGb: "00" };
+    const data = { cdSub: 0, cdGb: 0 };
 
     const result = await getLocal(data);
     if (result.code !== 1) {
@@ -173,7 +183,7 @@ const Create = () => {
   const handleChangeMaxAge = e => {
     console.log("max", e.target.value);
     const maxAge = parseInt(e.target.value);
-    setPartyMaxAge(e.target.value);
+    setPartyMaxAge(maxAge);
     if (partyMinAge > maxAge) {
       alert("최소년도보다 높게 설정해주세요.");
     }
@@ -217,20 +227,6 @@ const Create = () => {
     e.preventDefault();
     const formData = new FormData();
     const infoData = JSON.stringify({
-      // 보낼 input 데이터 담기
-      // 속성명: 속성값,
-      // 속성명: 속성값,
-      // "userSeq": 9007199254740991,
-      // "partyName": "string",
-      // "partyGenre": 1073741824,
-      // "partyLocation": 1073741824,
-      // "partyMinAge": 1073741824,
-      // "partyMaxAge": 1073741824,
-      // "partyGender": 1073741824,
-      // "partyMaximum": 1073741824,
-      // "partyJoinGb": 1073741824,
-      // "partyIntro": "string",
-      // "partyJoinForm": "string"
       userSeq: 1,
       partyName,
       partyGenre,
@@ -377,10 +373,11 @@ const Create = () => {
           <select
             id="partyminage"
             onChange={e => {
+              console.log(e.target.value);
               handleChangeMinAge(e);
             }}
           >
-            <option value="0000">
+            <option value="1940">
               --- 최소 연령을 선택해주세요 (연령무관)---
             </option>
             {years.map((item, index) => (
@@ -396,7 +393,7 @@ const Create = () => {
               handleChangeMaxAge(e);
             }}
           >
-            <option value="9999">
+            <option value="2024">
               --- 최대 연령을 선택해주세요 (연령무관)---
             </option>
             {years.map((item, index) => (

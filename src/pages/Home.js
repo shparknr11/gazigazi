@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import meetingImg from "../images/meetinga.png";
+import { useEffect, useState } from "react";
+import { getPartyAll } from "../apis/meeting/meetingapi";
+import { Link } from "react-router-dom";
+
 const HomeInnerStyle = styled.div`
   width: 100%;
   max-width: 1920px;
@@ -58,6 +62,62 @@ const ActiveCategoryStyle = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
+  const [partyAllList, setPartyAllList] = useState([]);
+  const [filteredPartyList, setFilteredPartyList] = useState([]);
+  const [randomParties, setRandomParties] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  useEffect(() => {
+    // api함수
+    const getData = async () => {
+      try {
+        const result = await getPartyAll();
+        if (result.code != 1) {
+          alert(result.resultMsg);
+          return;
+        }
+
+        setPartyAllList(result.resultData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    console.log(partyAllList);
+    const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
+    setFilteredPartyList(updateList);
+  }, [partyAllList]);
+
+  useEffect(() => {
+    console.log(filteredPartyList);
+    // filteredPartyList가 업데이트될 때마다 랜덤한 6개의 요소를 선택하여 randomParties 상태로 설정
+    if (filteredPartyList.length > 0) {
+      const randomItems = getRandomItems(filteredPartyList, 6);
+      setRandomParties(randomItems);
+    }
+  }, [filteredPartyList]);
+
+  function getRandomItems(arr, count) {
+    const result = [];
+    while (result.length < count) {
+      const randomIndex = Math.floor(Math.random() * arr.length);
+      const randomItem = arr[randomIndex];
+      if (!result.includes(randomItem)) {
+        result.push(randomItem);
+      }
+    }
+    return result;
+  }
+
+  const handleChangeSearch = e => {
+    setSearchKeyword(e.target.value);
+  };
+  const handleClickSearch = () => {
+    navigate(`/category?partyGenre=0&search=${searchKeyword}`);
+  };
   return (
     <HomeInnerStyle>
       <div className="main-top">
@@ -67,8 +127,21 @@ const Home = () => {
         </div>
         <div className="mt-searchbox-div">
           <div className="mt-searchbox">
-            <input type="text"></input>
-            <div className="mt-searchbt">SEARCH</div>
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={e => {
+                handleChangeSearch(e);
+              }}
+            ></input>
+            <div
+              className="mt-searchbt"
+              onClick={() => {
+                handleClickSearch();
+              }}
+            >
+              SEARCH
+            </div>
           </div>
         </div>
         <ActiveCategoryStyle>
@@ -82,44 +155,54 @@ const Home = () => {
           <div>카테고리</div>
         </ActiveCategoryStyle>
         <CartegoryWrapStyle>
-          {/* json or api 연동 예정 */}
-          <div className="mt-category-div">
-            <div
-              className="mt-category-img"
-              onClick={() => {
-                navigate(`/category`);
-              }}
-            ></div>
-            <div className="mt-category-text">스포츠</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgone"></div>
-            <div className="mt-category-text">게임</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgtwo"></div>
-            <div className="mt-category-text">맛집</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgthree"></div>
-            <div className="mt-category-text">패션</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgfour"></div>
-            <div className="mt-category-text">자기개발</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgfive"></div>
-            <div className="mt-category-text">문화•예술</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgsix"></div>
-            <div className="mt-category-text">Bar</div>
-          </div>
-          <div className="mt-category-div">
-            <div className="mt-category-imgseven"></div>
-            <div className="mt-category-text">기타</div>
-          </div>
+          <Link to="/category?partyGenre=1">
+            <div className="mt-category-div">
+              <div className="mt-category-img"></div>
+              <div className="mt-category-text">스포츠</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=2">
+            <div className="mt-category-div">
+              <div className="mt-category-imgone"></div>
+              <div className="mt-category-text">게임</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=3">
+            <div className="mt-category-div">
+              <div className="mt-category-imgtwo"></div>
+              <div className="mt-category-text">맛집</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=4">
+            <div className="mt-category-div">
+              <div className="mt-category-imgthree"></div>
+              <div className="mt-category-text">패션</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=5">
+            <div className="mt-category-div">
+              <div className="mt-category-imgfour"></div>
+              <div className="mt-category-text">자기개발</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=6">
+            <div className="mt-category-div">
+              <div className="mt-category-imgfive"></div>
+              <div className="mt-category-text">문화•예술</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=7">
+            <div className="mt-category-div">
+              <div className="mt-category-imgsix"></div>
+              <div className="mt-category-text">Bar</div>
+            </div>
+          </Link>
+          <Link to="/category?partyGenre=8">
+            <div className="mt-category-div">
+              <div className="mt-category-imgseven"></div>
+              <div className="mt-category-text">기타</div>
+            </div>
+          </Link>
         </CartegoryWrapStyle>
       </div>
       <HomeMidInnerStyle>

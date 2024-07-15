@@ -16,6 +16,7 @@
   /* 옵션 */
   outline-style: none;
   box-sizing: border-box;
+  font-family: "Pretendard-Regular", "Noto Sans KR";
 }
 a {
   text-decoration: none;
