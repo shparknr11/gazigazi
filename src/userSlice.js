@@ -1,19 +1,6 @@
 import { combineReducers } from "redux";
 
-const initialState = {
-  userSeq: null,
-  userEmail: "",
-  userPw: "",
-  userPwCheck: "",
-  userName: "",
-  userAddr: "",
-  userNickname: "",
-  userFav: "",
-  userBirth: "",
-  userGender: "",
-  userPhone: "",
-  userIntro: "",
-};
+const initialState = {};
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {

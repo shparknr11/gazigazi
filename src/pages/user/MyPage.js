@@ -37,7 +37,7 @@ const MyPageInnerStyle = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     width: 60%;
-    height: 92vh;
+    height: 95vh;
     box-sizing: border-box;
   }
   .mypage-container .profile-picture-container {
@@ -107,6 +107,10 @@ const MyPage = () => {
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.userEmail);
 
+  const handleEditClick = () => {
+    navigate("/info/:userId");
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       const userSeq = localStorage.getItem("userSeq");
@@ -135,7 +139,7 @@ const MyPage = () => {
       } catch (error) {
         console.error("유저 정보 가져오기 오류:", error);
         if (error.response && error.response.status === 401) {
-          alert("인증에 실패했습니다. 다시 로그인해주세요.");
+          alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
           navigate("/login");
         }
       } finally {
@@ -149,9 +153,20 @@ const MyPage = () => {
   const handleCertificationSend = async () => {
     try {
       setLoading(true); // 로딩 상태 시작
-      const response = await axios.post("/api/mailSend", {
-        email: userData.userEmail,
-      });
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3000/api/user/mailSend",
+        {
+          email: userData.userEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        },
+      );
       console.log(response.data);
       alert("인증번호가 발송되었습니다. 이메일을 확인해주세요.");
       setIsCertifying(true);
@@ -163,12 +178,23 @@ const MyPage = () => {
     }
   };
 
-  const handleCertificationCheck = async code => {
+  const handleCertificationCheck = async () => {
     try {
       setLoading(true); // 로딩 상태 시작
-      const response = await axios.post("/api/mailauthCheck", {
-        code: certificationCode,
-      });
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3000/api/user/mailauthCheck",
+        {
+          code: certificationCode,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        },
+      );
       console.log(response.data);
       alert("인증번호가 일치합니다. 인증이 완료되었습니다!");
       setIsCertifying(false);
@@ -286,7 +312,11 @@ const MyPage = () => {
               </label>
             </form>
             <div className="mypage-buttons">
-              <button type="button" className="edit-button">
+              <button
+                type="button"
+                className="edit-button"
+                onClick={handleEditClick}
+              >
                 정보 수정
               </button>
               <UserDelete />
