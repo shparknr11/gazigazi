@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
 import mainlogo from "../../images/logo2.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const InfoEditStyle = styled.div`
   display: flex;
@@ -106,6 +109,90 @@ const InfoEditInnerStyle = styled.div`
 `;
 
 const InfoEdit = () => {
+  const [userInfo, setUserInfo] = useState({
+    nickname: "",
+    address: "",
+    interests: "",
+    phone_number: "",
+    introduction: "",
+  });
+
+  const navigate = useNavigate();
+  const [originalInfo, setOriginalInfo] = useState({ ...userInfo });
+  const [profilePic, setProfilePic] = useState(mainlogo);
+
+  useEffect(() => {
+    // 서버에서 기존 사용자 정보를 가져오는 코드
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get("/api/user/update/myInfo");
+        setUserInfo(response.data);
+        setOriginalInfo(response.data);
+        setProfilePic(response.data.profilePic || mainlogo);
+      } catch (error) {
+        console.error("사용자 정보 가져오기 오류:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setUserInfo(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/jpg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(file.type) || file.size > 2 * 1024 * 1024) {
+        alert("유효한 이미지 파일을 업로드해주세요. (2MB 이하)");
+        return;
+      }
+      setProfilePic(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      if (profilePic !== mainlogo) {
+        formData.append("profilePic", profilePic);
+      }
+      formData.append(
+        "userInfo",
+        new Blob([JSON.stringify(userInfo)], { type: "application/json" }),
+      );
+
+      const response = await axios.post("/api/user/update/myInfo", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.data.success) {
+        alert("정보가 성공적으로 수정되었습니다!");
+        setOriginalInfo(userInfo);
+      } else {
+        alert(response.data.message || "정보 수정에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("정보 수정 오류:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const handleCancel = () => {
+    setUserInfo(originalInfo);
+    setProfilePic(originalInfo.profilePic || mainlogo);
+  };
+
+  const handleCancele = () => {
+    navigate("/myprofile/:userId"); //
+  };
+
   return (
     <InfoEditStyle>
       <InfoEditWrapStyle>
@@ -117,16 +204,20 @@ const InfoEdit = () => {
                   <form>
                     <div className="profile-picture-container">
                       <img
-                        src={mainlogo}
+                        src={profilePic}
                         alt="프로필 사진"
                         className="profile-picture"
                         id="profilePreview"
+                        onClick={() =>
+                          document.getElementById("profilePicture").click()
+                        }
                       />
                       <input
                         type="file"
                         accept="image/*"
                         id="profilePicture"
                         className="create-profile-picture-input"
+                        onChange={handleImageChange}
                       />
                     </div>
                     <label htmlFor="nickname">닉네임</label>
@@ -134,37 +225,59 @@ const InfoEdit = () => {
                       <input
                         type="text"
                         id="nickname"
-                        className="info-i-nick"
+                        name="nickname"
+                        value={userInfo.nickname}
+                        onChange={handleChange}
                       />
                       <button type="button" className="info-n-button">
                         중복 확인
                       </button>
                     </div>
                     <label htmlFor="address">주소</label>
-                    <input type="text" id="address" className="info-i-add" />
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={userInfo.address}
+                      onChange={handleChange}
+                    />
                     <label htmlFor="interests">관심 분야</label>
                     <input
                       type="text"
                       id="interests"
-                      className="info-in-intere"
+                      name="interests"
+                      value={userInfo.interests}
+                      onChange={handleChange}
                     />
                     <label htmlFor="phone_number">전화번호</label>
                     <input
                       type="text"
                       id="phone_number"
-                      className="info-number"
+                      name="phone_number"
+                      value={userInfo.phone_number}
+                      onChange={handleChange}
                     />
                     <label htmlFor="introduction">자기소개</label>
                     <input
                       type="text"
                       id="introduction"
-                      className="info-introd-g"
+                      name="introduction"
+                      value={userInfo.introduction}
+                      onChange={handleChange}
                     />
                     <div className="button-group">
-                      <button type="button" className="info-s-button">
+                      <button
+                        type="button"
+                        className="info-s-button"
+                        onClick={handleSave}
+                      >
                         저장
                       </button>
-                      <button type="button" className="info-e-button">
+                      <button
+                        type="button"
+                        className="info-e-button"
+                        onClick={handleCancele}
+                      >
                         취소
                       </button>
                     </div>

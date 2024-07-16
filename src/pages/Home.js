@@ -84,11 +84,13 @@ const Home = () => {
     getData();
   }, []);
 
+
   // useEffect(() => {
   //   console.log(partyAllList);
   //   const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
   //   setFilteredPartyList(updateList);
   // }, []);
+
 
   // useEffect(() => {
   //   console.log(filteredPartyList);
