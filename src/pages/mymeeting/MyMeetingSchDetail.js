@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { CiImageOff } from "react-icons/ci";
 import {
   deleteSchOne,
   getSchOne,
@@ -34,6 +35,7 @@ const MyMeetingNoticeStyle = styled.div`
   }
   .notice-form-area {
     width: 100%;
+    border-right: 1px solid gray;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,10 +79,12 @@ const MyMeetingNoticeStyle = styled.div`
     padding: 20px 0;
   }
   .noitce-form-container {
+    border-right: 1px solid gray;
     display: flex;
+    padding: 0 3%;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
+    width: 65%;
     justify-content: center;
     align-items: center;
   }
@@ -111,11 +115,11 @@ const MyMeetingSchDetail = () => {
   const [planContents, setPlanContents] = useState("");
   const [planCdNm, setPlanCdNm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState(0);
+  const [isAuth, setIsAuth] = useState();
+  const [planMemberSeq, setPlanMemberSeq] = useState();
+  const [planMemberJoinFunc, setPlanMemberJoinFunc] = useState(() => {});
   const location = useLocation();
   const navigate = useNavigate();
-
-  console.log(location);
   const getDataOne = async () => {
     console.log(location.state.planSeq);
     const res = await getSchOne(location.state.planSeq);
@@ -127,13 +131,11 @@ const MyMeetingSchDetail = () => {
     setPlanLocation(res.planLocation);
     setPlanContents(res.planContents);
     setPlanCdNm(res.cdNm);
+    setIsAuth(location.state.partyAuthGb);
     console.log(location.state.partyAuthGb);
-    setIsAuth(0);
-    console.log(isAuth);
   };
   useEffect(() => {
     getDataOne();
-    console.log(isAuth);
   }, []);
   const formDataFunc = formId => {
     let formData = {};
@@ -185,10 +187,13 @@ const MyMeetingSchDetail = () => {
     }
   };
 
-  const handleClickSchEnter = async (userSeq = 1) => {
+  const handleClickSchEnter = async userSeq => {
     setIsLoading(true);
     try {
-      const res = await postSchJoin(location.state.planSeq, userSeq);
+      const res = await postSchJoin(
+        location.state.planSeq,
+        (userSeq = sessionStorage.getItem("userSeq")),
+      );
       console.log(res);
       toast.success("일정에 참가되었습니다!");
     } catch (error) {
@@ -197,7 +202,6 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -205,7 +209,7 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              {isAuth === 0 ? (
+              {location.state.partyAuthGb === "1" ? (
                 <div
                   style={{
                     width: "100%",
@@ -232,9 +236,9 @@ const MyMeetingSchDetail = () => {
                           navigate("/review/write", {
                             state: {
                               planSeq: location.state.planSeq,
-                              planMemberSeq: 1,
+                              planMemberSeq: planMemberSeq,
                               planTitle: planTitle,
-                              partyName: "더미",
+                              partyName: location.state.partyName,
                             },
                           });
                         }}
@@ -249,11 +253,14 @@ const MyMeetingSchDetail = () => {
                         onClick={() => {
                           handleClickSchComp();
                         }}
-                        disabled
                       >
                         진행중
                       </button>
-                      <button className={"etc-btn"} disabled>
+                      <button
+                        className={"etc-btn"}
+                        style={{ backgroundColor: "gray" }}
+                        disabled
+                      >
                         리뷰 작성
                       </button>
                     </>
@@ -271,28 +278,58 @@ const MyMeetingSchDetail = () => {
                   }}
                 >
                   {planCdNm === "완료" ? (
-                    <button
-                      className="etc-btn"
-                      onClick={() => {
-                        toast.warning("일정이 완료된 일정입니다.");
-                      }}
-                    >
-                      참가완료
-                    </button>
+                    <>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          toast.warning("일정이 완료된 일정입니다.");
+                        }}
+                      >
+                        참가완료
+                      </button>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          navigate("/review/write", {
+                            state: {
+                              planSeq: location.state.planSeq,
+                              planMemberSeq: planMemberSeq,
+                              planTitle: planTitle,
+                              partyName: "더미",
+                            },
+                          });
+                        }}
+                      >
+                        리뷰 작성
+                      </button>
+                    </>
                   ) : (
-                    <button
-                      className="etc-btn"
-                      onClick={() => {
-                        handleClickSchComp();
-                        // handleClickSchEnter();
-                      }}
-                    >
-                      일정참가
-                    </button>
+                    <>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          handleClickSchEnter();
+                          // handleClickSchEnter();
+                        }}
+                      >
+                        일정참가
+                      </button>
+                      <button
+                        className={"etc-btn"}
+                        style={{ backgroundColor: "gray" }}
+                        disabled
+                      >
+                        리뷰 작성
+                      </button>
+                    </>
                   )}
                 </div>
               )}
-              <form id="dataForm" name="dataForm">
+              <form
+                id="dataForm"
+                name="dataForm"
+                style={{ display: "flex", width: "100%" }}
+              >
                 <div className="noitce-form-container">
                   <div className="flex-column">
                     <div
@@ -315,6 +352,7 @@ const MyMeetingSchDetail = () => {
                           style={{
                             width: "100%",
                             display: "flex",
+
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -359,6 +397,7 @@ const MyMeetingSchDetail = () => {
                           style={{
                             width: "100%",
                             display: "flex",
+
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -451,14 +490,15 @@ const MyMeetingSchDetail = () => {
                     </button>
                   </div>
                 </div>
+                <MyMeetingSchMemberList
+                  meetingId={location.state.planSeq}
+                  setPlanMemberSeq={setPlanMemberSeq}
+                ></MyMeetingSchMemberList>
               </form>
             </div>
           </div>
         </div>
       </MyMeetingNoticeStyle>
-      <MyMeetingSchMemberList
-        meetingId={location.state.planSeq}
-      ></MyMeetingSchMemberList>
     </>
   );
 };
