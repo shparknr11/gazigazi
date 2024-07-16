@@ -127,7 +127,7 @@ const MyMeetingSchResister = () => {
     setIsLoading(true);
     try {
       const res = await postMonthCalculateBudget({
-        planPartySeq: location.state.planSeq,
+        planPartySeq: location?.state.planSeq,
         ...formDataFunc("dataForm"),
       });
       toast.success("일정이 저장되었습니다.");

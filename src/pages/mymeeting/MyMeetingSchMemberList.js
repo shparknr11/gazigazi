@@ -133,26 +133,23 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingSchMemberList = () => {
+const MyMeetingSchMemberList = ({ meetingId }) => {
   const [allData, setAllData] = useState([]);
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
   const location = useLocation();
   console.log(params);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    a();
+  }, []);
   useEffect(() => {
     document.getElementById(1).click();
   }, []);
-  const a = async () => {
-    console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
-    const res = await getSchMemberAll(params.meetingMemberlistid);
-    console.log(res.resultData);
-    setAllData(res);
-  };
 
   const b = async () => {
-    const res = await getSchMemberAll(params.meetingMemberlistid);
+    const res = await getSchMemberAll(meetingId);
     setAllData(res);
+
     console.log(res);
   };
   let activeItem = null;
@@ -182,6 +179,11 @@ const MyMeetingSchMemberList = () => {
       }
     }
   });
+  const a = async () => {
+    console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
+    const res = await getSchMemberAll(meetingId);
+    setAllData(res);
+  };
   return (
     <ReactCalendarStyle>
       <TitleDivStyle>신청 멤버 관리</TitleDivStyle>
@@ -223,7 +225,7 @@ const MyMeetingSchMemberList = () => {
           <div className="func-main" style={{ width: "100%" }}>
             <div className="func-main-inner">
               {isClicked === 1 ? (
-                allData.length > 0 ? (
+                allData?.length > 0 ? (
                   allData.map((item, index) => (
                     <CalendarListLiStyle key={item.pk}>
                       {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
@@ -272,8 +274,8 @@ const MyMeetingSchMemberList = () => {
                     일정 신청한 멤버가 없습니다.
                   </div>
                 )
-              ) : allData.length > 0 ? (
-                allData.map((item, index) => (
+              ) : allData?.length > 0 ? (
+                allData?.map((item, index) => (
                   <CalendarListLiStyle key={item.pk}>
                     {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                     <li>
