@@ -13,7 +13,7 @@ const initialState = {
   userGender: sessionStorage.getItem("userGender") || "",
   userPhone: sessionStorage.getItem("userPhone") || "",
   userIntro: sessionStorage.getItem("userIntro") || null,
-  isDeleted: false,
+  isDeleted: sessionStorage.getItem("isDeleted") === "true",
 };
 
 const userReducer = (state = initialState, action) => {
