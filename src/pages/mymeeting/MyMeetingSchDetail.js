@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { CiImageOff } from "react-icons/ci";
 import {
   deleteSchOne,
   getSchOne,
@@ -11,6 +10,7 @@ import {
 import { useLocation } from "react-router";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import MyMeetingSchMemberList from "./MyMeetingSchMemberList";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -111,10 +111,11 @@ const MyMeetingSchDetail = () => {
   const [planContents, setPlanContents] = useState("");
   const [planCdNm, setPlanCdNm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState();
+  const [isAuth, setIsAuth] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
+  console.log(location);
   const getDataOne = async () => {
     console.log(location.state.planSeq);
     const res = await getSchOne(location.state.planSeq);
@@ -126,10 +127,13 @@ const MyMeetingSchDetail = () => {
     setPlanLocation(res.planLocation);
     setPlanContents(res.planContents);
     setPlanCdNm(res.cdNm);
-    setIsAuth(location.state.partyAuthGb);
+    console.log(location.state.partyAuthGb);
+    setIsAuth(0);
+    console.log(isAuth);
   };
   useEffect(() => {
     getDataOne();
+    console.log(isAuth);
   }, []);
   const formDataFunc = formId => {
     let formData = {};
@@ -193,6 +197,7 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -200,7 +205,7 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              {isAuth === "0" ? (
+              {isAuth === 0 ? (
                 <div
                   style={{
                     width: "100%",
@@ -212,24 +217,46 @@ const MyMeetingSchDetail = () => {
                   }}
                 >
                   {planCdNm === "완료" ? (
-                    <button
-                      className="etc-btn"
-                      onClick={() => {
-                        toast.warning("일정이 완료된 일정입니다.");
-                      }}
-                    >
-                      일정완료
-                    </button>
+                    <>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          toast.warning("일정이 완료된 일정입니다.");
+                        }}
+                      >
+                        일정완료
+                      </button>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          navigate("/review/write", {
+                            state: {
+                              planSeq: location.state.planSeq,
+                              planMemberSeq: 1,
+                              planTitle: planTitle,
+                              partyName: "더미",
+                            },
+                          });
+                        }}
+                      >
+                        리뷰 작성
+                      </button>
+                    </>
                   ) : (
-                    <button
-                      className="etc-btn"
-                      onClick={() => {
-                        handleClickSchComp();
-                      }}
-                      disabled
-                    >
-                      진행중
-                    </button>
+                    <>
+                      <button
+                        className="etc-btn"
+                        onClick={() => {
+                          handleClickSchComp();
+                        }}
+                        disabled
+                      >
+                        진행중
+                      </button>
+                      <button className={"etc-btn"} disabled>
+                        리뷰 작성
+                      </button>
+                    </>
                   )}
                 </div>
               ) : (
@@ -256,7 +283,8 @@ const MyMeetingSchDetail = () => {
                     <button
                       className="etc-btn"
                       onClick={() => {
-                        handleClickSchEnter();
+                        handleClickSchComp();
+                        // handleClickSchEnter();
                       }}
                     >
                       일정참가
@@ -287,7 +315,6 @@ const MyMeetingSchDetail = () => {
                           style={{
                             width: "100%",
                             display: "flex",
-
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -332,7 +359,6 @@ const MyMeetingSchDetail = () => {
                           style={{
                             width: "100%",
                             display: "flex",
-
                             flexDirection: "column",
                             justifyContent: "center",
                             gap: "10px",
@@ -430,6 +456,9 @@ const MyMeetingSchDetail = () => {
           </div>
         </div>
       </MyMeetingNoticeStyle>
+      <MyMeetingSchMemberList
+        meetingId={location.state.planSeq}
+      ></MyMeetingSchMemberList>
     </>
   );
 };

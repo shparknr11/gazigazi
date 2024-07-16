@@ -205,7 +205,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   // if (isLoading) {
   //   return <Loading></Loading>;
   // }
-
+  console.log(partyAuthGb);
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -279,25 +279,45 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
         {allData ? (
           <CalendarListLiStyle>
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
-            <Link
-              to={`/mymeeting/mymeetingschdetail/${allData.planSeq}`}
-              state={{
-                planSeq: allData.planSeq,
-                partyAuthGb,
+            <li
+              onClick={() => {
+                navigate(`/mymeeting/mymeetingschdetail/${allData.planSeq}`, {
+                  state: {
+                    planSeq: allData.planSeq,
+                    partyAuthGb,
+                  },
+                });
               }}
             >
-              <li>
-                <span>{allData.planTitle}</span>
-                {/* <span>{allData.meetPlace}</span> */}
-                <span>{allData.planLocation}</span>
-                <span style={{ fontSize: "16px" }}>
-                  {allData.planStartDt}
-                  <br />
-                  {allData.planStartTime}
-                </span>
-                <span>{allData.cdNm === "완료" ? "완료" : "진행중"}</span>
-              </li>
-            </Link>
+              <span>{allData.planTitle}</span>
+              {/* <span>{allData.meetPlace}</span> */}
+              <span>{allData.planLocation}</span>
+              <span style={{ fontSize: "16px" }}>
+                {allData.planStartDt}
+                <br />
+                {allData.planStartTime}
+              </span>
+              <span>
+                {allData.cdNm === "완료" ? (
+                  <button
+                    type="button"
+                    className="etc-btn"
+                    onClick={() => {
+                      navigate("/review/write", {
+                        state: {
+                          planSeq: params.meetingId,
+                          planMemberSeq: 0,
+                        },
+                      });
+                    }}
+                  >
+                    리뷰작성
+                  </button>
+                ) : (
+                  "진행중"
+                )}
+              </span>
+            </li>
           </CalendarListLiStyle>
         ) : (
           <div

@@ -254,6 +254,7 @@ const MyMeetingFuncLeader = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
+  console.log(location);
   return (
     <MyMeetingFuncLeaderStyle>
       {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}
@@ -296,10 +297,7 @@ const MyMeetingFuncLeader = () => {
           <div className="func-main-inner">
             {/* <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 --> */}
             {isClicked === 1 ? (
-              <MyMeetingCalendar
-                isClicked={isClicked}
-                partyAuthGb={location.state.partyAuthGb}
-              />
+              <MyMeetingCalendar isClicked={isClicked} />
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
