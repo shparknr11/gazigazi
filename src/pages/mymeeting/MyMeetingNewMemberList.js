@@ -26,6 +26,7 @@ const MemberListMenuStyle = styled.div`
       background-color: #efede5;
     }
     &.active {
+      /* 활성화됐을 때 스타일 */
       background-color: #e6e2d5;
     }
   }
@@ -49,7 +50,7 @@ const MemberListMainStyle = styled.div`
   }
   .membelist-member {
     display: flex;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px dashed rgba(0, 0, 0, 0.2);
     width: 30%;
     padding: 10px;
   }
@@ -58,7 +59,7 @@ const MemberListMainStyle = styled.div`
   }
 `;
 
-const MyMeetingMemberList = () => {
+const MyMeetingNewMemberList = () => {
   const { partySeq } = useParams();
   const location = useLocation();
   console.log(partySeq);
@@ -128,4 +129,4 @@ const MyMeetingMemberList = () => {
   );
 };
 
-export default MyMeetingMemberList;
+export default MyMeetingNewMemberList;

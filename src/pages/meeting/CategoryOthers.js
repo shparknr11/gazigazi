@@ -58,7 +58,7 @@ const CateInnerStyle = styled.div`
     max-width: 220px;
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 0px;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-bottom: 50px;
   }
   .cate-box-img {
@@ -67,12 +67,13 @@ const CateInnerStyle = styled.div`
     /* background: url("../images/meetinga.png") no-repeat center;
   background-size: cover; */
     margin-bottom: 5px;
+    border-radius: 15px 15px 0px 0px;
   }
   .cate-box-img img {
     display: block;
     width: 100%;
     height: 100%;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 15px 15px 0px 0px;
   }
   .cate-box-content {
     margin-bottom: 5px;
@@ -157,7 +158,8 @@ const CategoryOthers = () => {
   };
 
   const getYearLastTwoDigits = year => {
-    return `${year.toString().slice(-2)}년생`;
+    // return year.toString().slice(-2);
+    return year.toString();
   };
   return (
     <CateInnerStyle>
@@ -268,7 +270,7 @@ const CategoryOthers = () => {
               </span>
               <span className="cate-box-age">
                 {getYearLastTwoDigits(item.partyMinAge)}~
-                {getYearLastTwoDigits(item.partyMaxAge)}
+                {getYearLastTwoDigits(item.partyMaxAge)}년생
               </span>
             </div>
           </div>

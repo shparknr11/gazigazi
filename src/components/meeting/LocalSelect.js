@@ -91,9 +91,9 @@ const LocalSelect = ({
   const handleRadioChange = item => {
     // console.log(item);
     const locationForInt = `${item.cdSub}${item.cdGb}`;
-    console.log(locationForInt);
+    // console.log(locationForInt);
     const cdInt = parseInt(locationForInt);
-    console.log(cdInt);
+    // console.log(cdInt);
     setPartyLocation(cdInt);
     setLocaDetaillData(item.cdGbNm);
     setLocalRadioChecked(item.cdGbNm);

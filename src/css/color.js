@@ -16,6 +16,7 @@ export const prColor = {
   // pr05: rgb(85,77,54)
   pr05: "#554D36",
 
+  // pr02
   p000: "#f9f8f5",
   p100: "#efede5",
   p200: "#e6e2d5",

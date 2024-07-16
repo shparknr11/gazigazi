@@ -230,7 +230,7 @@ const Create = () => {
       userSeq: 1,
       partyName,
       partyGenre,
-      partyLocation: 101,
+      partyLocation,
       partyMinAge,
       partyMaxAge,
       partyGender,
@@ -286,8 +286,8 @@ const Create = () => {
             <option value="1">스포츠</option>
             <option value="2">게임</option>
             <option value="3">맛집</option>
-            <option value="4">자기개발</option>
-            <option value="5">패션</option>
+            <option value="4">패션</option>
+            <option value="5">자기개발</option>
             <option value="6">문화•예술</option>
             <option value="7">Bar</option>
             <option value="8">기타</option>

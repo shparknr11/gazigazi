@@ -63,7 +63,7 @@
   height: 150px;
   background: url("../images/meetinga.png") no-repeat center;
   background-size: cover;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 15px 15px 0px 0px;
   margin-bottom: 5px;
 }
 .list-box-title {
