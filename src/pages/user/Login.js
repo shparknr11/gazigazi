@@ -94,7 +94,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       alert("이미 로그인된 상태입니다.");
       navigate("/"); // 로그인 후 메인 페이지로 리다이렉트
@@ -114,15 +114,34 @@ const Login = () => {
       );
 
       if (response.data.code === 1) {
-        const { userSeq, accessToken } = response.data.resultData;
-        localStorage.setItem("userSeq", userSeq); // 로컬 스토리지에 userSeq 저장
-        localStorage.setItem("token", accessToken); // 로컬 스토리지에 token 저장.
+        const {
+          userSeq,
+          accessToken,
+          userPic,
+          userGender,
+          userBirth,
+          userName,
+          isDeleted,
+        } = response.data.resultData;
+
+        if (isDeleted) {
+          alert("존재하지 않는 계정입니다.");
+          return;
+        }
 
         // Redux에 사용자 정보 저장
         dispatch({ type: "SET_USER", payload: { userSeq, userEmail: email } });
 
+        console.log(response.data);
+        sessionStorage.setItem("userSeq", userSeq);
+        sessionStorage.setItem("token", accessToken);
+        sessionStorage.setItem("userPic", userPic);
+        sessionStorage.setItem("userGender", userGender);
+        sessionStorage.setItem("userBirth", userBirth);
+        sessionStorage.setItem("userName", userName);
+
         alert("로그인 성공!");
-        navigate(`/myprofile/${userSeq}`);
+        navigate(`/`);
       } else {
         alert(response.data.resultMsg || "로그인에 실패했습니다.");
       }
@@ -135,7 +154,7 @@ const Login = () => {
     }
   };
 
-  if (localStorage.getItem("token")) return null;
+  if (sessionStorage.getItem("token")) return null;
 
   return (
     <LoginStyle>

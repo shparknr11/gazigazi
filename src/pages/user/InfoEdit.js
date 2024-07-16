@@ -120,12 +120,15 @@ const InfoEdit = () => {
   const navigate = useNavigate();
   const [originalInfo, setOriginalInfo] = useState({ ...userInfo });
   const [profilePic, setProfilePic] = useState(mainlogo);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    // 서버에서 기존 사용자 정보를 가져오는 코드
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("/api/user/update/myInfo");
+        const userSeq = sessionStorage.getItem("userSeq");
+        const response = await axios.get(
+          `http://localhost:3000/api/user/update/myInfo/${userSeq}`,
+        );
         setUserInfo(response.data);
         setOriginalInfo(response.data);
         setProfilePic(response.data.profilePic || mainlogo);
@@ -154,23 +157,29 @@ const InfoEdit = () => {
         return;
       }
       setProfilePic(URL.createObjectURL(file));
+      setSelectedFile(file);
     }
   };
 
   const handleSave = async () => {
     try {
+      const userSeq = sessionStorage.getItem("userSeq");
       const formData = new FormData();
-      if (profilePic !== mainlogo) {
-        formData.append("profilePic", profilePic);
+      if (selectedFile) {
+        formData.append("profilePic", selectedFile);
       }
       formData.append(
         "userInfo",
         new Blob([JSON.stringify(userInfo)], { type: "application/json" }),
       );
 
-      const response = await axios.post("/api/user/update/myInfo", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `http://localhost:3000/api/user/update/myInfo/${userSeq}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       if (response.data.success) {
         alert("정보가 성공적으로 수정되었습니다!");
@@ -190,7 +199,8 @@ const InfoEdit = () => {
   };
 
   const handleCancele = () => {
-    navigate("/myprofile/:userId"); //
+    const userSeq = sessionStorage.getItem("userSeq");
+    navigate(`/myprofile/${userSeq}`);
   };
 
   return (
@@ -276,9 +286,16 @@ const InfoEdit = () => {
                       <button
                         type="button"
                         className="info-e-button"
-                        onClick={handleCancele}
+                        onClick={handleCancel}
                       >
                         취소
+                      </button>
+                      <button
+                        type="button"
+                        className="info-e-button"
+                        onClick={handleCancele}
+                      >
+                        프로필로 이동
                       </button>
                     </div>
                   </form>

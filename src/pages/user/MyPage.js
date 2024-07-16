@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserDelete from "./UserDelete";
+import Loading from "../../components/common/Loading";
 
 const MyPageStyle = styled.div`
   display: flex;
@@ -104,17 +105,22 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [certificationCode, setCertificationCode] = useState("");
   const [isCertifying, setIsCertifying] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const [tokenExpiry, setTokenExpiry] = useState(null);
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.userEmail);
+  const userEmail = sessionStorage.getItem("userEmail");
 
+  console.log(userEmail);
   const handleEditClick = () => {
     navigate("/info/:userId");
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userSeq = localStorage.getItem("userSeq");
-      const token = localStorage.getItem("token");
+      const userSeq = sessionStorage.getItem("userSeq");
+      const token = sessionStorage.getItem("token");
 
       if (!userSeq) {
         alert("유저 Email을 찾을 수 없습니다. 로그인 상태를 확인하세요.");
@@ -150,65 +156,69 @@ const MyPage = () => {
     fetchUserData();
   }, [navigate, userSeq]);
 
-  const handleCertificationSend = async () => {
+  useEffect(() => {
+    if (tokenExpiry) {
+      const currentTime = new Date().getTime();
+      const remainingTime = tokenExpiry - currentTime;
+
+      if (remainingTime <= 0) {
+        setIsCertifying(false);
+        setCertificationCode("");
+        setTokenExpiry(null);
+      } else {
+        setTimer(
+          setTimeout(() => {
+            setIsCertifying(false);
+            setCertificationCode("");
+            setTokenExpiry(null);
+          }, remainingTime),
+        );
+      }
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [tokenExpiry]);
+
+  const sendCertificationCode = async () => {
     try {
-      setLoading(true); // 로딩 상태 시작
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://localhost:3000/api/user/mailSend",
-        {
-          email: userData.userEmail,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
-          },
-        },
-      );
-      console.log(response.data);
-      alert("인증번호가 발송되었습니다. 이메일을 확인해주세요.");
+      await axios.post(`/mailSend`, { userEmail });
+      alert("인증 코드가 이메일로 발송되었습니다.");
       setIsCertifying(true);
+
+      const currentTime = new Date().getTime();
+      setTokenExpiry(currentTime + 60000); // 60초 후 만료
     } catch (error) {
-      console.error("인증번호 발송 오류", error);
-      alert("인증번호 발송에 실패했습니다. 다시 시도해주세요.");
-    } finally {
-      setLoading(false); // 로딩 상태 종료
+      console.error("인증 코드 발송 오류:", error);
+      alert("인증 코드 발송에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  const handleCertificationCheck = async () => {
+  const verifyCertificationCode = async () => {
     try {
-      setLoading(true); // 로딩 상태 시작
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://localhost:3000/api/user/mailauthCheck",
-        {
-          code: certificationCode,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
-          },
-        },
-      );
-      console.log(response.data);
-      alert("인증번호가 일치합니다. 인증이 완료되었습니다!");
-      setIsCertifying(false);
-      setCertificationCode("");
+      const response = await axios.post(`/mailauthCheck`, {
+        userEmail,
+        authNum: certificationCode,
+      });
+      if (response.data.code === 1) {
+        alert("이메일 인증이 완료되었습니다.");
+        setIsEmailVerified(true);
+        setIsCertifying(false);
+        setTokenExpiry(null);
+      } else {
+        alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
+      }
     } catch (error) {
-      console.error("인증번호 입력 오류", error);
-      alert("인증번호가 일치하지 않습니다. 다시 확인해주세요.");
-    } finally {
-      setLoading(false); // 로딩 상태 종료
+      console.error("인증 코드 검증 오류:", error);
+      alert("인증 코드 검증에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return <Loading>로딩 중...</Loading>;
   }
 
   if (!userData) {
@@ -239,7 +249,7 @@ const MyPage = () => {
                       onChange={e => setCertificationCode(e.target.value)}
                       placeholder="인증번호 입력"
                     />
-                    <button type="button" onClick={handleCertificationCheck}>
+                    <button type="button" onClick={verifyCertificationCode}>
                       인증하기
                     </button>
                   </>
@@ -247,10 +257,10 @@ const MyPage = () => {
                 <button
                   type="button"
                   className="certification_button"
-                  onClick={handleCertificationSend}
-                  disabled={userData.userGb === 0}
+                  onClick={sendCertificationCode}
+                  disabled={isEmailVerified}
                 >
-                  {userData.userGb === 1 ? "미인증" : "인증완료"}
+                  {isEmailVerified ? "인증완료" : "이메일 인증"}
                 </button>
               </label>
               <label>

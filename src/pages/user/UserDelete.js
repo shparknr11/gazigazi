@@ -24,8 +24,8 @@ const UserDelete = () => {
 
       if (response.data.code === 1) {
         dispatch(deleteUserAccount());
-        localStorage.removeItem("token");
-        localStorage.removeItem("userSeq");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("userSeq");
         alert("회원 탈퇴가 완료되었습니다.");
         navigate("/");
       } else {
