@@ -44,7 +44,21 @@
   justify-content: center;
   gap: 25px;
   margin-top: 10px;
+  width: 100%;
 }
 .header-icon-list svg {
   cursor: pointer;
+  width: 25px;
+  height: 25px;
+}
+
+.header-profileicon {
+  width: 29px;
+  height: 29px;
+  border: 1px solid #999;
+  border-radius: 60%;
+  cursor: pointer;
+}
+.header-profileicon:hover {
+  background-color: red;
 }
