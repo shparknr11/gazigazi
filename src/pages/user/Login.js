@@ -105,13 +105,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/sign_in",
-        {
-          userEmail: email,
-          userPw: password,
-        },
-      );
+      const response = await axios.post("/api/user/sign_in", {
+        userEmail: email,
+        userPw: password,
+      });
 
       if (response.data.code === 1) {
         const {

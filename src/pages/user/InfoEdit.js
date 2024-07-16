@@ -109,81 +109,43 @@ const InfoEditInnerStyle = styled.div`
 `;
 
 const InfoEdit = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
-    nickname: "",
-    address: "",
-    interests: "",
-    phone_number: "",
-    introduction: "",
+    userNickname: sessionStorage.getItem("userNickname") || "",
+    userAddr: sessionStorage.getItem("userAddr") || "",
+    userFav: sessionStorage.getItem("userFav") || "",
+    userPhone: sessionStorage.getItem("userPhone") || "",
+    userIntro: sessionStorage.getItem("userIntro") || "",
+    userSeq: sessionStorage.getItem("userSeq"),
   });
 
-  const navigate = useNavigate();
-  const [originalInfo, setOriginalInfo] = useState({ ...userInfo });
-  const [profilePic, setProfilePic] = useState(mainlogo);
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const userSeq = sessionStorage.getItem("userSeq");
-        const response = await axios.get(
-          `http://localhost:3000/api/user/update/myInfo/${userSeq}`,
-        );
-        setUserInfo(response.data);
-        setOriginalInfo(response.data);
-        setProfilePic(response.data.profilePic || mainlogo);
-      } catch (error) {
-        console.error("사용자 정보 가져오기 오류:", error);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setUserInfo(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = e => {
-    const file = e.target.files[0];
-    if (file) {
-      const allowedTypes = ["image/jpg", "image/png", "image/gif"];
-      if (!allowedTypes.includes(file.type) || file.size > 2 * 1024 * 1024) {
-        alert("유효한 이미지 파일을 업로드해주세요. (2MB 이하)");
-        return;
-      }
-      setProfilePic(URL.createObjectURL(file));
-      setSelectedFile(file);
-    }
-  };
+  const originalInfo = { ...userInfo };
 
   const handleSave = async () => {
+    const { userSeq } = userInfo;
     try {
-      const userSeq = sessionStorage.getItem("userSeq");
-      const formData = new FormData();
-      if (selectedFile) {
-        formData.append("profilePic", selectedFile);
-      }
-      formData.append(
-        "userInfo",
-        new Blob([JSON.stringify(userInfo)], { type: "application/json" }),
-      );
-
-      const response = await axios.post(
-        `http://localhost:3000/api/user/update/myInfo/${userSeq}`,
-        formData,
+      const response = await axios.patch(
+        "/api/user/update/myInfo",
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          userNickname: userInfo.userNickname,
+          userAddr: userInfo.userAddr,
+          userFav: userInfo.userFav || null,
+          userPhone: userInfo.userPhone,
+          userIntro: userInfo.userIntro || null,
+          userSeq,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "*/*",
+          },
         },
       );
 
-      if (response.data.success) {
-        alert("정보가 성공적으로 수정되었습니다!");
-        setOriginalInfo(userInfo);
+      if (response.data.status === 1) {
+        console.log(response.data);
+        alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
+        navigate(`/myprofile/${userInfo.userSeq}`);
       } else {
         alert(response.data.message || "정보 수정에 실패했습니다.");
       }
@@ -193,14 +155,17 @@ const InfoEdit = () => {
     }
   };
 
-  const handleCancel = () => {
-    setUserInfo(originalInfo);
-    setProfilePic(originalInfo.profilePic || mainlogo);
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setUserInfo(prevInfo => ({
+      ...prevInfo,
+      [name]: value,
+    }));
   };
 
-  const handleCancele = () => {
-    const userSeq = sessionStorage.getItem("userSeq");
-    navigate(`/myprofile/${userSeq}`);
+  const handleCancel = () => {
+    setUserInfo(originalInfo);
+    navigate(`/myprofile/${userInfo.userSeq}`);
   };
 
   return (
@@ -212,68 +177,45 @@ const InfoEdit = () => {
               <div className="main-inner">
                 <div className="info-container">
                   <form>
-                    <div className="profile-picture-container">
-                      <img
-                        src={profilePic}
-                        alt="프로필 사진"
-                        className="profile-picture"
-                        id="profilePreview"
-                        onClick={() =>
-                          document.getElementById("profilePicture").click()
-                        }
-                      />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        id="profilePicture"
-                        className="create-profile-picture-input"
-                        onChange={handleImageChange}
-                      />
-                    </div>
-                    <label htmlFor="nickname">닉네임</label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        id="nickname"
-                        name="nickname"
-                        value={userInfo.nickname}
-                        onChange={handleChange}
-                      />
-                      <button type="button" className="info-n-button">
-                        중복 확인
-                      </button>
-                    </div>
-                    <label htmlFor="address">주소</label>
+                    <label htmlFor="userNickname">닉네임</label>
                     <input
                       type="text"
-                      id="address"
-                      name="address"
-                      value={userInfo.address}
-                      onChange={handleChange}
+                      id="userNickname"
+                      name="userNickname"
+                      value={userInfo.userNickname}
+                      onChange={handleInputChange}
                     />
-                    <label htmlFor="interests">관심 분야</label>
+                    <label htmlFor="userAddr">주소</label>
                     <input
                       type="text"
-                      id="interests"
-                      name="interests"
-                      value={userInfo.interests}
-                      onChange={handleChange}
+                      id="userAddr"
+                      name="userAddr"
+                      value={userInfo.userAddr}
+                      onChange={handleInputChange}
                     />
-                    <label htmlFor="phone_number">전화번호</label>
+                    <label htmlFor="userFav">관심 분야</label>
                     <input
                       type="text"
-                      id="phone_number"
-                      name="phone_number"
-                      value={userInfo.phone_number}
-                      onChange={handleChange}
+                      id="userFav"
+                      name="userFav"
+                      value={userInfo.userFav}
+                      onChange={handleInputChange}
                     />
-                    <label htmlFor="introduction">자기소개</label>
+                    <label htmlFor="userPhone">전화번호</label>
                     <input
                       type="text"
-                      id="introduction"
-                      name="introduction"
-                      value={userInfo.introduction}
-                      onChange={handleChange}
+                      id="userPhone"
+                      name="userPhone"
+                      value={userInfo.userPhone}
+                      onChange={handleInputChange}
+                    />
+                    <label htmlFor="userIntro">자기소개</label>
+                    <input
+                      type="text"
+                      id="userIntro"
+                      name="userIntro"
+                      value={userInfo.userIntro}
+                      onChange={handleInputChange}
                     />
                     <div className="button-group">
                       <button
@@ -289,13 +231,6 @@ const InfoEdit = () => {
                         onClick={handleCancel}
                       >
                         취소
-                      </button>
-                      <button
-                        type="button"
-                        className="info-e-button"
-                        onClick={handleCancele}
-                      >
-                        프로필로 이동
                       </button>
                     </div>
                   </form>
