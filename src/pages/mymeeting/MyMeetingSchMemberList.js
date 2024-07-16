@@ -5,11 +5,12 @@ import "../../css/calendar/calendar.css";
 import { getSchMemberAll } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 
 const ReactCalendarStyle = styled.div`
-  max-width: 1024px;
+  width: 35%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
+  padding: 20px;
   .cut-text {
     white-space: nowrap;
     overflow: hidden;
@@ -59,13 +60,12 @@ const ReactCalendarStyle = styled.div`
   }
 `;
 const ReactCalendarListStyle = styled.div`
+  width: 100%;
   border: 1px solid gray;
   border-radius: 4px;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 80%;
   @media all and (max-width: 1024px) {
     width: 100%;
   }
@@ -83,6 +83,7 @@ const ReactCalendarListStyle = styled.div`
     padding-left: 10px;
     width: 100%;
     border-bottom: 1px solid gray;
+    align-items: center;
     display: flex;
     font-size: 18px !important;
     font-weight: 700;
@@ -133,7 +134,7 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingSchMemberList = ({ meetingId }) => {
+const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
   const [allData, setAllData] = useState([]);
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
@@ -142,14 +143,11 @@ const MyMeetingSchMemberList = ({ meetingId }) => {
   useEffect(() => {
     a();
   }, []);
-  useEffect(() => {
-    document.getElementById(1).click();
-  }, []);
+  useEffect(() => {}, []);
 
   const b = async () => {
-    const res = await getSchMemberAll(meetingId);
+    const res = await getSchMemberAll(params.meetingMemberlistid);
     setAllData(res);
-
     console.log(res);
   };
   let activeItem = null;
@@ -183,13 +181,22 @@ const MyMeetingSchMemberList = ({ meetingId }) => {
     console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
     const res = await getSchMemberAll(meetingId);
     setAllData(res);
+    const a = Number(sessionStorage.getItem("userSeq"));
+    console.log("asdasdasdasd" + a);
+    console.log("fsalkfjsdalkfjsdlk", res.userSeq);
+    if (allData?.length > 0) {
+      const b = allData?.filter(item => {
+        return Number(item?.userSeq) === Number(a);
+      });
+      setPlanMemberSeq(b[0]?.plmemberSeq);
+    }
   };
   return (
     <ReactCalendarStyle>
-      <TitleDivStyle>신청 멤버 관리</TitleDivStyle>
+      <label>신청 멤버 관리</label>
       <div className="member-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
-        <div className="item-wrap">
+        {/* <div className="item-wrap">
           <div
             id="1"
             className="item item-border-right"
@@ -209,15 +216,13 @@ const MyMeetingSchMemberList = ({ meetingId }) => {
             }}
           >
             일정 신청 확인
-          </div> */}
-        </div>
+          </div>
+        </div> */}
         <ReactCalendarListStyle>
           <CalendarListUlStyle>
             <li>
               <span>순번</span>
-              <span>일정명</span>
               <span>멤버명</span>
-              <span>일정날짜</span>
               {/* <span>신청일자</span> */}
               {/* {isClicked === 1 ? <span>승인 / 반려</span> : null} */}
             </li>
@@ -225,19 +230,13 @@ const MyMeetingSchMemberList = ({ meetingId }) => {
           <div className="func-main" style={{ width: "100%" }}>
             <div className="func-main-inner">
               {isClicked === 1 ? (
-                allData?.length > 0 ? (
+                allData.length > 0 ? (
                   allData.map((item, index) => (
                     <CalendarListLiStyle key={item.pk}>
                       {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                       <li>
                         <span>{index + 1}</span>
-                        <span>
-                          {location?.state.planTitle
-                            ? location?.state.planTitle
-                            : "일정명"}
-                        </span>
                         <span>{item?.userName}</span>
-                        <span>{location?.state.clickDay}</span>
                         {/* <span>{item.managementDate}</span> */}
                         {/* <span
                           style={{
@@ -274,13 +273,12 @@ const MyMeetingSchMemberList = ({ meetingId }) => {
                     일정 신청한 멤버가 없습니다.
                   </div>
                 )
-              ) : allData?.length > 0 ? (
-                allData?.map((item, index) => (
+              ) : allData.length > 0 ? (
+                allData.map((item, index) => (
                   <CalendarListLiStyle key={item.pk}>
                     {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                     <li>
-                      <span>{index}</span>
-                      <span>일정명_앞에서 가져옴</span>
+                      <span>{index + 1}</span>
                       <span>{item.userName}</span>
                     </li>
                   </CalendarListLiStyle>

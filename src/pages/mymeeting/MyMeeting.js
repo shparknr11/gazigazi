@@ -166,7 +166,7 @@ const MyMeeting = () => {
     // userSeq 변경 해야하고 page, 는 나중에 수정
     // size 는
     const enterMeetObj = {
-      userSeq: 9,
+      userSeq: sessionStorage.getItem("userSeq"),
       page,
     };
     const res = await getMyMeetMemberList(enterMeetObj);
@@ -174,7 +174,7 @@ const MyMeeting = () => {
   };
   const handleClickMakeMeet = async () => {
     const enterMeetObj = {
-      userSeq: 1,
+      userSeq: sessionStorage.getItem("userSeq"),
       page,
     };
     const res = await getMyMeetLeaderList(enterMeetObj);
@@ -274,7 +274,10 @@ const MyMeeting = () => {
                                   navigate(
                                     `/mymeeting/mymeetinguser/${item.partySeq}`,
                                     {
-                                      state: { partyAuthGb: item.partyAuthGb },
+                                      state: {
+                                        partyAuthGb: item.partyAuthGb,
+                                        partyName: item.partyName,
+                                      },
                                     },
                                   );
                                 }}
@@ -289,9 +292,7 @@ const MyMeeting = () => {
                                 style={{ width: "100px" }}
                                 onClick={() => {
                                   if (confirm("수정하시겠습니까?")) {
-                                    navigate(
-                                      `/meeting/modify/${item.partySeq}`,
-                                    );
+                                    alert("수정페이지로 이동.");
                                   }
                                 }}
                               >
@@ -304,13 +305,17 @@ const MyMeeting = () => {
                                   navigate(
                                     `/mymeeting/mymeetingLeader/${item.partySeq}`,
                                     {
-                                      state: { partyAuthGb: item.partyAuthGb },
+                                      state: {
+                                        partyAuthGb: item.partyAuthGb,
+                                        partyName: item.partyName,
+                                      },
                                     },
                                   );
                                 }}
                               >
                                 Blog
                               </button>
+                              <div>{item.partyAuthGb}</div>
                               <button
                                 className="button-style etc-btn"
                                 style={{ width: "100px" }}

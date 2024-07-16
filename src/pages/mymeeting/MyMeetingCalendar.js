@@ -96,7 +96,8 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   const [planSeq, setPlanSeq] = useState(0);
   const navigate = useNavigate();
   const params = useParams();
-  console.log(location);
+  const location = useLocation();
+  console.log("sadfkjsalf[jas;ldkfjsdlk", location);
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -205,7 +206,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   // if (isLoading) {
   //   return <Loading></Loading>;
   // }
-  console.log(partyAuthGb);
+
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -246,6 +247,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
                       clickDay,
                       planSeq: params.meetingId,
                       planTitle: allData?.planTitle,
+                      partyName: location.state.partyName,
                     },
                   },
                 );
@@ -284,39 +286,22 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
                 navigate(`/mymeeting/mymeetingschdetail/${allData.planSeq}`, {
                   state: {
                     planSeq: allData.planSeq,
-                    partyAuthGb,
+                    partyAuthGb: location.state.partyAuthGb,
                   },
                 });
               }}
             >
-              <span>{allData.planTitle}</span>
-              {/* <span>{allData.meetPlace}</span> */}
-              <span>{allData.planLocation}</span>
-              <span style={{ fontSize: "16px" }}>
-                {allData.planStartDt}
-                <br />
-                {allData.planStartTime}
-              </span>
-              <span>
-                {allData.cdNm === "완료" ? (
-                  <button
-                    type="button"
-                    className="etc-btn"
-                    onClick={() => {
-                      navigate("/review/write", {
-                        state: {
-                          planSeq: params.meetingId,
-                          planMemberSeq: 0,
-                        },
-                      });
-                    }}
-                  >
-                    리뷰작성
-                  </button>
-                ) : (
-                  "진행중"
-                )}
-              </span>
+              <li>
+                <span>{allData.planTitle}</span>
+                {/* <span>{allData.meetPlace}</span> */}
+                <span>{allData.planLocation}</span>
+                <span style={{ fontSize: "16px" }}>
+                  {allData.planStartDt}
+                  <br />
+                  {allData.planStartTime}
+                </span>
+                <span>{allData.cdNm === "완료" ? "완료" : "진행중"}</span>
+              </li>
             </li>
           </CalendarListLiStyle>
         ) : (
