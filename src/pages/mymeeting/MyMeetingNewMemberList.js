@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { getApplication } from "../../apis/meeting/joinapi";
 
 const MemberListInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -60,10 +61,31 @@ const MemberListMainStyle = styled.div`
 `;
 
 const MyMeetingNewMemberList = () => {
+  const [applicationList, setApplicationList] = useState([]);
+
   const { partySeq } = useParams();
   const location = useLocation();
+  const userSeq = localStorage.getItem("userSeq");
   console.log(partySeq);
-  useEffect(() => {}, []);
+  console.log(userSeq);
+  // api함수
+  const getData = async () => {
+    try {
+      const result = await getApplication(partySeq, userSeq);
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      setApplicationList(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <MemberListInnerStyle>
       <MemberListMenuStyle>
@@ -84,45 +106,22 @@ const MyMeetingNewMemberList = () => {
       <MemberListMainStyle>
         <h1>회원관리</h1>
         <div className="memberlist-member-div">
-          <div className="membelist-member">
-            <div>
-              <img src="" alt="프로필" />
+          {applicationList.map((item, index) => (
+            <div key={index} className="membelist-member">
+              <div>
+                <img src="" alt="프로필" />
+              </div>
+              <div>
+                <div>남</div>
+                <div>{item.joinUserSeq}</div>
+                <div>2024세</div>
+                <div>{item.joinMsg}</div>
+              </div>
+              <div>
+                <input type="checkbox" className="member-checkbox" />
+              </div>
             </div>
-            <div>
-              <div>남</div>
-              <div>박성호</div>
-              <div>2024세</div>
-            </div>
-            <div>
-              <input type="checkbox" className="member-checkbox" />
-            </div>
-          </div>
-          <div className="membelist-member">
-            <div>
-              <img src="" alt="프로필" />
-            </div>
-            <div>
-              <div>남</div>
-              <div>박성호</div>
-              <div>2024세</div>
-            </div>
-            <div>
-              <input type="checkbox" className="member-checkbox" />
-            </div>
-          </div>
-          <div className="membelist-member">
-            <div>
-              <img src="" alt="프로필" />
-            </div>
-            <div>
-              <div>남</div>
-              <div>박성호</div>
-              <div>2024세</div>
-            </div>
-            <div>
-              <input type="checkbox" className="member-checkbox" />
-            </div>
-          </div>
+          ))}
         </div>
       </MemberListMainStyle>
     </MemberListInnerStyle>

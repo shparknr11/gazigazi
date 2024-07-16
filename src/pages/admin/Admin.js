@@ -97,7 +97,7 @@ const Admin = () => {
 
   const handleClickApproval = async _partySeq => {
     try {
-      const result = await postApproval(_partySeq, 1);
+      const result = await postApproval(_partySeq, 1010);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;

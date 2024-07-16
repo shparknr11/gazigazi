@@ -43,6 +43,7 @@ import LogOut from "./pages/user/LogOut";
 import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
 import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
+import Modify from "./pages/meeting/Modify";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -71,10 +72,7 @@ const App = () => {
           <Route path="/" element={<Home />}></Route>
           <Route path="/meeting/create" element={<Create />}></Route>
           <Route path="/meeting/:partySeq" element={<MeetingDetail />}></Route>
-          <Route
-            path="/meeting/modify/:meetingId"
-            element={<h1>모임수정페이지</h1>}
-          ></Route>
+          <Route path="/meeting/modify/:partySeq" element={<Modify />}></Route>
           <Route path="/search" element={<h1>검색페이지</h1>}></Route>
           {/* <Route
             path="/category/:partyGenre"

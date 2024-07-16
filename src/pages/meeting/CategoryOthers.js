@@ -260,17 +260,26 @@ const CategoryOthers = () => {
             ></div>
             <div className="cate-box-content">
               <div className="cate-box-title">
-                <img alt="프로필" />
-                <span>OOO 님의 모임</span>
+                <div className="cate-box-profileimg" style={{}}></div>
+                <span style={{ fontWeight: "bold" }}>{item.userName}</span>
+                <span style={{ color: "#999" }}> 님의 모임</span>
               </div>
-              <h3 className="cate-box-text">{item.partyName}</h3>
-              <p className="cate-box-local">{item.partyLocation}</p>
+              <h3 className="cate-box-text" style={{ fontWeight: "bold" }}>
+                {item.partyName}
+              </h3>
+              <p className="cate-box-local" style={{ fontSize: "13px" }}>
+                {item.partyLocation1} {item.partyLocation2}
+              </p>
               <span className="cate-box-gender">
                 {getGenderText(item.partyGender)}
               </span>
               <span className="cate-box-age">
-                {getYearLastTwoDigits(item.partyMinAge)}~
-                {getYearLastTwoDigits(item.partyMaxAge)}년생
+                {getYearLastTwoDigits(item.partyMinAge) === "1940"
+                  ? "연령무관"
+                  : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                {getYearLastTwoDigits(item.partyMaxAge) === "2024"
+                  ? ""
+                  : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
               </span>
             </div>
           </div>
