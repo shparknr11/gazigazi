@@ -219,10 +219,7 @@ const Modify = () => {
   const handleChangeJoinForm = e => {
     setPartyJoinForm(e.target.value);
   };
-  // 모임 생성 신청
-  const handleClickCreate = () => {
-    console.log("모임생성 신청");
-  };
+
   const handSubmitCreate = e => {
     e.preventDefault();
     if (selectorOpen) {
@@ -252,27 +249,7 @@ const Modify = () => {
 
   return (
     <CreateInnerStyle>
-      <h1>모임 등록신청</h1>
-      <CreateCheckStyle>
-        <div className="create-check-div">
-          <h1>📝모임등록 전 숙지사항</h1>
-          <p>1. 모임 신청 확인 후 3일 이내 모임승인여부를 알려드립니다</p>
-          <p>
-            2. 이미지를 저해시키는 요소가 포함되어 있을 경우, 사전 통보없이
-            모임이 삭제 처리될 수 있습니다.
-          </p>
-        </div>
-        <div className="create-check-btn-div">
-          <CreateCheckBtn
-            onClick={() => {
-              handleClickCheck();
-            }}
-            isChecked={isChecked}
-          >
-            확인했습니다.
-          </CreateCheckBtn>
-        </div>
-      </CreateCheckStyle>
+      <h1>내 모임 수정</h1>
 
       <CreateFormDivStyle>
         <h1>모임 등록양식</h1>
@@ -477,7 +454,7 @@ const Modify = () => {
             handSubmitCreate(e);
           }}
         >
-          등록신청
+          수정하기
         </div>
       </CreateBtnWrapStyle>
     </CreateInnerStyle>

@@ -186,6 +186,7 @@
   /* background: url("../images/meetinga.png") no-repeat center;
   background-size: cover; */
   margin-bottom: 5px;
+  border-radius: 15px 15px 0px 0px;
 }
 .list-box-img img {
   display: block;
@@ -197,9 +198,20 @@
   margin-bottom: 5px;
 }
 .list-box-title {
+  display: flex;
+  align-items: center;
   padding: 5px;
   font-size: 14px;
 }
+.list-box-profileimg {
+  height: 18px;
+  width: 18px;
+  border: 1px solid #999;
+  border-radius: 15px;
+  margin-right: 5px;
+  overflow: hidden;
+}
+
 .list-box-text {
   padding: 5px;
   font-size: 14px;

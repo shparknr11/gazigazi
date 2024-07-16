@@ -65,7 +65,7 @@ const MyMeetingNewMemberList = () => {
 
   const { partySeq } = useParams();
   const location = useLocation();
-  const userSeq = localStorage.getItem("userSeq");
+  const userSeq = sessionStorage.getItem("userSeq");
   console.log(partySeq);
   console.log(userSeq);
   // api함수

@@ -251,7 +251,6 @@ const CategoryOthers = () => {
             <div
               className="cate-box-img"
               style={{
-                // 임시
                 backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",

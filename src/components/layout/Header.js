@@ -1,17 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { AiTwotoneHeart } from "react-icons/ai";
+import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import styled from "@emotion/styled";
 import logo from "../../images/logo2.png";
-const HeaderIconStyle = styled.div`
-  svg {
-    width: 22px;
-    height: 22px;
-  }
-`;
+import { useRef } from "react";
 
 const Header = () => {
-  const userSeq = localStorage.getItem("userSeq");
+  const userSeq = sessionStorage.getItem("userSeq");
+  const userPic = sessionStorage.getItem("userPic");
   const navigate = useNavigate();
   const handleClickProfile = () => {
     if (!userSeq) {
@@ -48,29 +44,33 @@ const Header = () => {
           <ul className="header-icon-list">
             <li>
               <Link to="/">
-                <HeaderIconStyle>
-                  <AiTwotoneHeart />
-                </HeaderIconStyle>
+                <div>
+                  <PiHeartLight />
+                </div>
               </Link>
             </li>
             <li>
               {!userSeq ? (
-                <HeaderIconStyle
+                <div
                   onClick={() => {
                     handleClickProfile();
                   }}
                 >
                   <BsPerson />
-                </HeaderIconStyle>
+                </div>
               ) : (
                 <div
                   className="header-profileicon"
+                  style={{
+                    backgroundImage: `url(/pic/user/${userSeq}/${userPic})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                  }}
                   onClick={() => {
                     handleClickProfile();
                   }}
-                >
-                  프로필 이미지
-                </div>
+                ></div>
               )}
             </li>
           </ul>

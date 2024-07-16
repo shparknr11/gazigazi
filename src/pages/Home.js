@@ -63,9 +63,31 @@ const ActiveCategoryStyle = styled.div`
 const Home = () => {
   const navigate = useNavigate();
   const [partyAllList, setPartyAllList] = useState([]);
-  const [filteredPartyList, setFilteredPartyList] = useState([]);
+  const [arroundPartyList, setArroundPartyList] = useState([]);
+  const [popularList, setPopularList] = useState([]);
   const [randomParties, setRandomParties] = useState([]);
+
+  // 검색
   const [searchKeyword, setSearchKeyword] = useState("");
+
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
+
+  const getYearLastTwoDigits = year => {
+    // return year.toString().slice(-2);
+    return year.toString();
+  };
+
   // api함수
   const getData = async () => {
     try {
@@ -79,41 +101,44 @@ const Home = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getData();
   }, []);
 
   // useEffect(() => {
-  //   console.log(partyAllList);
-  // }, [partyAllList]);
+  //   console.log(popularList);
+  // }, [popularList]);
 
-  // useEffect(() => {
-  //   console.log(partyAllList);
-  //   const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
-  //   setFilteredPartyList(updateList);
-  // }, []);
+  useEffect(() => {
+    // 내주변 모임 필터
+    const filteredList = partyAllList.filter(
+      // location 부분 수정*****************************************
+      item => item.partyAuthGb === "1" && item.partyLocation1 === "서울",
+    );
+    setArroundPartyList(filteredList);
 
-  // useEffect(() => {
-  //   console.log(filteredPartyList);
-  //   // filteredPartyList가 업데이트될 때마다 랜덤한 6개의 요소를 선택하여 randomParties 상태로 설정
-  //   if (filteredPartyList.length > 0) {
-  //     const randomItems = getRandomItems(filteredPartyList, 6);
-  //     setRandomParties(randomItems);
-  //   }
-  // }, []);
+    // // 마감임박 모임 필터
+    // const filterList = partyAllList.filter(
+    //   // location 부분 수정*****************************************
+    //   item =>
+    //     item.partyAuthGb === "1" && item.partyNowMem / item.partyMaximum > 0.5,
+    // );
+    // setPopularList(filterList);
+  }, [partyAllList]);
 
-  // function getRandomItems(arr, count) {
-  //   const result = [];
-  //   while (result.length < count) {
-  //     const randomIndex = Math.floor(Math.random() * arr.length);
-  //     const randomItem = arr[randomIndex];
-  //     if (!result.includes(randomItem)) {
-  //       result.push(randomItem);
-  //     }
-  //   }
-  //   return result;
-  // }
+  // arroundPartyList에서 무작위로 6개 선택
+  useEffect(() => {
+    if (arroundPartyList.length > 0) {
+      const randomItems = getRandomItems(arroundPartyList, 5);
+      setRandomParties(randomItems);
+    }
+  }, [arroundPartyList]);
+
+  // 무작위 항목을 선택하는 함수
+  function getRandomItems(arr, count) {
+    const shuffled = arr.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
 
   const handleChangeSearch = e => {
     setSearchKeyword(e.target.value);
@@ -121,6 +146,13 @@ const Home = () => {
   const handleClickSearch = () => {
     navigate(`/category?partyGenre=0&search=${searchKeyword}`);
   };
+
+  // 클릭시 상페 페이지로
+  const handleClickDetail = _partySeq => {
+    console.log(_partySeq);
+    navigate(`/meeting/${_partySeq}`);
+  };
+
   return (
     <HomeInnerStyle>
       <div className="main-top">
@@ -246,26 +278,68 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div className="list-box">
-                <div className="list-box-img"></div>
-                <div className="list-box-title">
-                  <img alt="프로필" />
-                  <span>OOO 님의 모임</span>
+              {randomParties.map((item, index) => (
+                <div
+                  key={index}
+                  className="list-box"
+                  onClick={() => {
+                    handleClickDetail(item.partySeq);
+                  }}
+                >
+                  <div
+                    className="list-box-img"
+                    style={{
+                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                    }}
+                  ></div>
+                  <div className="list-box-content">
+                    <div className="list-box-title">
+                      <div
+                        className="list-box-profileimg"
+                        style={{
+                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                        }}
+                      ></div>
+                      <span style={{ fontWeight: "bold" }}>
+                        {item.userName}
+                      </span>
+                      <span style={{ color: "#999" }}> 님의 모임</span>
+                    </div>
+                    <h3
+                      className="list-box-text"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      {item.partyName}
+                    </h3>
+                    <p className="list-box-local" style={{ fontSize: "13px" }}>
+                      {item.partyLocation1} {item.partyLocation2}
+                    </p>
+                    <span className="list-box-gender">
+                      {getGenderText(item.partyGender)}
+                    </span>
+                    <span className="list-box-age">
+                      {getYearLastTwoDigits(item.partyMinAge) === "1940"
+                        ? "연령무관"
+                        : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                      {getYearLastTwoDigits(item.partyMaxAge) === "2024"
+                        ? ""
+                        : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="list-box-text">
-                  여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
-                  사람? (with 제이팝) 🙌
-                </h3>
-                <p className="list-box-local">서울 강남구</p>
-                <span className="list-box-gender">성별 무관</span>
-                <span className="list-box-age">90~98년생</span>
-              </div>
+              ))}
             </div>
           </div>
 
           <div className="mm-meeting-deadline">
             <div className="mm-meeting-title">
-              <h1>곧 마감되는 모임🕛</h1>
+              <h1>실시간 인기있는, 곧 마감되는 모임🕛</h1>
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
