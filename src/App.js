@@ -42,6 +42,7 @@ import LogOut from "./pages/user/LogOut";
 
 import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
+import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -116,8 +117,12 @@ const App = () => {
             element={<MyMeetingNotice />}
           ></Route>
           <Route
-            path="/mymeeting/mymeetingmemberlist/:meetingmemberlistId"
+            path="/mymeeting/mymeetingmemberlist/:partySeq"
             element={<MyMeetingMemberList />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingnewmemberlist/:partySeq"
+            element={<MyMeetingNewMemberList />}
           ></Route>
           <Route
             path="/mymeeting/mymeetingschdetail/:meetingschid"

@@ -32,3 +32,21 @@ export const postApproval = async (_partySeq, _userSeq) => {
     console.log(error);
   }
 };
+
+// 신청서 불러오기
+export const getApplication = async (_partySeq, _userSeq) => {
+  try {
+    const response = await axios.get(
+      `api/join/${_partySeq}?leaderUserSeq=${_userSeq}`,
+    );
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -66,51 +66,50 @@ const Home = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const [randomParties, setRandomParties] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
+  // api함수
+  const getData = async () => {
+    try {
+      const result = await getPartyAll();
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      setPartyAllList(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    // api함수
-    const getData = async () => {
-      try {
-        const result = await getPartyAll();
-        if (result.code != 1) {
-          alert(result.resultMsg);
-          return;
-        }
-
-        setPartyAllList(result.resultData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log(partyAllList);
-    const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
-    setFilteredPartyList(updateList);
-  }, [partyAllList]);
+  // useEffect(() => {
+  //   console.log(partyAllList);
+  //   const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
+  //   setFilteredPartyList(updateList);
+  // }, []);
 
-  useEffect(() => {
-    console.log(filteredPartyList);
-    // filteredPartyList가 업데이트될 때마다 랜덤한 6개의 요소를 선택하여 randomParties 상태로 설정
-    if (filteredPartyList.length > 0) {
-      const randomItems = getRandomItems(filteredPartyList, 6);
-      setRandomParties(randomItems);
-    }
-  }, [filteredPartyList]);
+  // useEffect(() => {
+  //   console.log(filteredPartyList);
+  //   // filteredPartyList가 업데이트될 때마다 랜덤한 6개의 요소를 선택하여 randomParties 상태로 설정
+  //   if (filteredPartyList.length > 0) {
+  //     const randomItems = getRandomItems(filteredPartyList, 6);
+  //     setRandomParties(randomItems);
+  //   }
+  // }, []);
 
-  function getRandomItems(arr, count) {
-    const result = [];
-    while (result.length < count) {
-      const randomIndex = Math.floor(Math.random() * arr.length);
-      const randomItem = arr[randomIndex];
-      if (!result.includes(randomItem)) {
-        result.push(randomItem);
-      }
-    }
-    return result;
-  }
+  // function getRandomItems(arr, count) {
+  //   const result = [];
+  //   while (result.length < count) {
+  //     const randomIndex = Math.floor(Math.random() * arr.length);
+  //     const randomItem = arr[randomIndex];
+  //     if (!result.includes(randomItem)) {
+  //       result.push(randomItem);
+  //     }
+  //   }
+  //   return result;
+  // }
 
   const handleChangeSearch = e => {
     setSearchKeyword(e.target.value);
@@ -231,7 +230,6 @@ const Home = () => {
                   <span className="list-box-age">90~98년생</span>
                 </div>
               </div>
-              <div className="list-box"></div>
               <div className="list-box"></div>
               <div className="list-box"></div>
               <div className="list-box"></div>

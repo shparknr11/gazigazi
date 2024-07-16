@@ -8,6 +8,7 @@ import { getPartyOne } from "../../apis/meeting/meetingapi";
 import useModal from "../../hooks/useModal";
 import JoinModal from "../../components/modal/JoinModal";
 import { postApplication } from "../../apis/meeting/joinapi";
+import { IoPersonSharp } from "react-icons/io5";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -35,9 +36,22 @@ const MeetItemTitle = styled.div`
   }
 
   .meet-item-title {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+    font-weight: bold;
     margin-top: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .meet-item-member {
+    display: flex;
+  }
+  .meet-item-member span {
+    display: flex;
+    align-items: center;
+  }
+
+  .meet-item-member svg {
+    width: 19px;
+    height: 19px;
   }
 `;
 
@@ -45,20 +59,22 @@ const MeetItemCard = styled.div`
   display: flex;
   gap: 30px;
   margin-top: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 
   .meet-item-img {
     /* background: url(${meetimg}) no-repeat center;
     background-size: cover; */
+    display: block;
     max-width: 500px;
     width: 100%;
     height: 308px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    img {
+
+    /* img {
       display: block;
       width: 100%;
       height: 100%;
-    }
+    } */
   }
 
   .meet-item-content {
@@ -68,12 +84,10 @@ const MeetItemCard = styled.div`
     /* padding: 25px; */
   }
   .meet-item-leader {
-    margin-top: 10px;
     display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 1.2rem;
-    padding: 0px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 20px;
   }
   .meet-condition,
   .meet-apply-form {
@@ -106,11 +120,13 @@ const UnderLine = styled.div`
   background-color: rgb(227, 229, 231);
   margin: 20px 0;
 `;
+
 const MeetItemInfo = styled.div`
   margin-top: 50px;
 
   h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   p {
@@ -172,17 +188,31 @@ const MeetingDetail = () => {
           <div className="meet-item-title">
             <span>{detailList.partyName}</span>
           </div>
-          <div>
-            모임인원 {detailList.partyNowMem}/{detailList.partyMaximum}
+          <div className="meet-item-member">
+            <span style={{ color: "rgba(0,0,0,0.5)", marginRight: "5px" }}>
+              <IoPersonSharp />
+              참여인원
+            </span>
+            <span>
+              {detailList.partyNowMem}/{detailList.partyMaximum}
+            </span>
           </div>
           <MeetItemCard>
             {/* style={{
                 background: `url(${detailList.partyPic}) no-repeat center`,
                 backgroundSize: "cover",
               }} */}
-            <div className="meet-item-img">
-              <img src={detailList.partyPic} alt={detailList.partyPic} />
-            </div>
+            <div
+              className="meet-item-img"
+              style={{
+                // 임시
+                backgroundImage: `url(/pic/party/${detailList.partySeq}/${detailList.partyPic})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+            ></div>
+
             <div className="meet-item-content">
               <span className="meet-item-leader">
                 <img src="" alt="프로필" />
@@ -216,7 +246,23 @@ const MeetingDetail = () => {
         <UnderLine />
         <MeetItemInfo>
           <div>
-            <h2>{detailList.partyGenre}</h2>
+            <h2>
+              {detailList.partyGenre === "1"
+                ? "🏈 내 취미는 스포츠"
+                : detailList.partyGenre === "2"
+                  ? "🎮 게임이 최고야"
+                  : detailList.partyGenre === "3"
+                    ? "🍨 모여서 맛집탐방"
+                    : detailList.partyGenre === "4"
+                      ? "🛍 내가 패션왕"
+                      : detailList.partyGenre === "5"
+                        ? "📔 자기개발 끝판왕"
+                        : detailList.partyGenre === "6"
+                          ? "✨ 문화 / 예술 즐기기"
+                          : detailList.partyGenre === "7"
+                            ? "🍷 분위기 있게 한잔"
+                            : "💬 기타"}
+            </h2>
             <p>{detailList.partyIntro}</p>
           </div>
           <div className="meet-item-imgs"></div>
