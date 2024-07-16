@@ -84,13 +84,15 @@ const Home = () => {
     getData();
   }, []);
 
+  // useEffect(() => {
+  //   console.log(partyAllList);
+  // }, [partyAllList]);
 
   // useEffect(() => {
   //   console.log(partyAllList);
   //   const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
   //   setFilteredPartyList(updateList);
   // }, []);
-
 
   // useEffect(() => {
   //   console.log(filteredPartyList);
@@ -258,7 +260,6 @@ const Home = () => {
                 <span className="list-box-gender">성별 무관</span>
                 <span className="list-box-age">90~98년생</span>
               </div>
-              <div className="list-box"></div>
             </div>
           </div>
 

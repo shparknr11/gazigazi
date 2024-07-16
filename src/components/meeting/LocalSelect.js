@@ -82,6 +82,7 @@ const LocalSelect = ({
       alert("지역을 선택해주세요.");
       return;
     }
+
     setLocalDetailList([]);
     setLocalDetailOpen(false);
     setLocalList([]);
@@ -90,6 +91,9 @@ const LocalSelect = ({
 
   const handleRadioChange = item => {
     // console.log(item);
+    if (!item.cdGb) {
+      alert("상세지역을 선택해주세요");
+    }
     const locationForInt = `${item.cdSub}${item.cdGb}`;
     // console.log(locationForInt);
     const cdInt = parseInt(locationForInt);

@@ -34,11 +34,27 @@ export const postApproval = async (_partySeq, _userSeq) => {
 };
 
 // 신청서 불러오기
-export const getApplication = async (_partySeq, _userSeq) => {
+export const getApplication = async (_partySeq, _leaderUserSeq) => {
   try {
     const response = await axios.get(
-      `api/join/${_partySeq}?leaderUserSeq=${_userSeq}`,
+      `/api/join/${_partySeq}?leaderUserSeq=${_leaderUserSeq}`,
     );
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 모임 맴버 불러오기
+export const getMemberList = async _partySeq => {
+  try {
+    const response = await axios.get(`/api/member/${_partySeq}`);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       console.log("response", response.data);

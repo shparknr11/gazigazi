@@ -11,14 +11,12 @@ const HeaderIconStyle = styled.div`
 `;
 
 const Header = () => {
+  const userSeq = localStorage.getItem("userSeq");
   const navigate = useNavigate();
   const handleClickProfile = () => {
-    const userSeq = localStorage.getItem("userSeq");
     if (!userSeq) {
-      // userSeq가 있으면 로그인된 상태로 간주하여 '/login' 페이지로 이동
       navigate("/login");
     } else {
-      // userSeq가 없으면 비로그인 상태로 간주하여 '/mypage' 페이지로 이동
       navigate(`/myprofile/${userSeq}`);
     }
   };
@@ -56,13 +54,24 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <HeaderIconStyle
-                onClick={() => {
-                  handleClickProfile();
-                }}
-              >
-                <BsPerson />
-              </HeaderIconStyle>
+              {!userSeq ? (
+                <HeaderIconStyle
+                  onClick={() => {
+                    handleClickProfile();
+                  }}
+                >
+                  <BsPerson />
+                </HeaderIconStyle>
+              ) : (
+                <div
+                  className="header-profileicon"
+                  onClick={() => {
+                    handleClickProfile();
+                  }}
+                >
+                  프로필 이미지
+                </div>
+              )}
             </li>
           </ul>
         </nav>

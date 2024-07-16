@@ -225,9 +225,12 @@ const Create = () => {
   };
   const handSubmitCreate = e => {
     e.preventDefault();
+    if (selectorOpen) {
+      alert("상세 모임을 선택해주세요");
+    }
     const formData = new FormData();
     const infoData = JSON.stringify({
-      userSeq: 1,
+      userSeq: 1010,
       partyName,
       partyGenre,
       partyLocation,
