@@ -151,11 +151,10 @@ const TitleDivStyle = styled.div`
   padding-top: 20px;
 `;
 const MyMeeting = () => {
-  const [imgUrl, setImgUrl] = useState("meetinga.png");
+  const [imgUrl, setImgUrl] = useState();
   const [isAuth, setIsAuth] = useState(0);
   const [imgError, setImgError] = useState(false);
   const [allData, setAllData] = useState([]);
-  const [userSeq, setUserSeq] = useState(9);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
 
@@ -235,28 +234,21 @@ const MyMeeting = () => {
                   <div>
                     <div className="container">
                       {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
-                      {imgUrl && imgError ? (
-                        <img
-                          className="caption-img"
-                          src={`./www/images/${item.partyPic}`}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                          }}
-                          onError={imgOnError}
-                        ></img>
-                      ) : (
-                        <CiImageOff
-                          className="caption-img"
-                          size="216"
-                          style={{ textAlign: "center" }}
-                        />
-                      )}
+                      <img
+                        className="caption-img"
+                        src={`http://112.222.157.156:5122/pic/party/${item.partySeq}/${item.partyPic}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        onError={imgOnError}
+                      ></img>
                       <div className="buttons">
                         <div className="buttons-inner">
                           {isAuth === 1 ? (
                             <>
                               <button
+                                style={{ display: "none" }}
                                 className="button-style delete-btn"
                                 onClick={() => {
                                   if (
@@ -315,7 +307,7 @@ const MyMeeting = () => {
                               >
                                 Blog
                               </button>
-                              <div>{item.partyAuthGb}</div>
+                              {/* <div>{item.partyAuthGb}</div> */}
                               <button
                                 className="button-style etc-btn"
                                 style={{ width: "100px" }}
@@ -346,8 +338,15 @@ const MyMeeting = () => {
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                       <div className="cut-text">
-                        현재 참가 인원 : {item.partyNowMem} /{" "}
-                        {item.partyMaximum}
+                        {/* 일단 물어볼 것 */}
+                        {item.partyAuthGb !== "0" ? (
+                          <>
+                            현재 참가 인원 : {item.partyNowMem} /{" "}
+                            {item.partyMaximum}
+                          </>
+                        ) : (
+                          "모임 승인 대기중"
+                        )}
                         {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                       </div>
                     </div>

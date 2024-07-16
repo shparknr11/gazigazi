@@ -155,7 +155,13 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
               <div className="cut-text">
                 {item.planStartDt}&nbsp;/&nbsp;{item.planStartTime}
               </div>
-              <div>{item.cdNm}</div>
+              <div style={{ fontWeight: "bold" }}>
+                {item.planCompleted === 2 ? (
+                  <span style={{ color: "red" }}>일정 종료</span>
+                ) : (
+                  <span>진행중</span>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -236,26 +242,6 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
           <div style={{ textAlign: "right", padding: "10px" }}>
             {/* TODO : 중요 _ 일정 명 넘길 것 / 그리고 일정 날짜도 넘길 것 */}
             <button
-              type="button"
-              className="etc-btn"
-              style={{ marginRight: "10px" }}
-              onClick={() => {
-                navigate(
-                  `/mymeeting/mymeetingschmemberlist/${params.meetingId}`,
-                  {
-                    state: {
-                      clickDay,
-                      planSeq: params.meetingId,
-                      planTitle: allData?.planTitle,
-                      partyName: location.state.partyName,
-                    },
-                  },
-                );
-              }}
-            >
-              멤버리스트
-            </button>
-            <button
               className="resister-btn"
               type="button"
               onClick={() => {
@@ -275,7 +261,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
             <span>일정명</span>
             <span>장소</span>
             <span>모임날짜</span>
-            <span>진행중 / 종료</span>
+            <span>진행중 / 일정종료</span>
           </li>
         </CalendarListUlStyle>
         {allData ? (
@@ -300,7 +286,9 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
                   <br />
                   {allData.planStartTime}
                 </span>
-                <span>{allData.cdNm === "완료" ? "완료" : "진행중"}</span>
+                <span>
+                  {allData.planCompleted === 2 ? "일정종료" : "진행중"}
+                </span>
               </li>
             </li>
           </CalendarListLiStyle>

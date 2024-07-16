@@ -273,6 +273,7 @@ const MyMeetingFuncLeader = () => {
           </div>
           <div
             id="2"
+            style={{ display: "none" }}
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(2);
@@ -301,7 +302,7 @@ const MyMeetingFuncLeader = () => {
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
-              <div>
+              <div style={{ display: "none" }}>
                 <div>
                   <TitleDivStyle>모임 게시판</TitleDivStyle>
                   <div style={{ textAlign: "right", paddingRight: "10px" }}>
