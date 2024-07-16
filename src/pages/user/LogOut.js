@@ -6,10 +6,14 @@ const LogOut = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleLogout = () => {
-    // Remove all user-related data from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("userSeq");
-    localStorage.removeItem("userEmail"); // Add any other items if needed
+    // Remove all user-related data from sessionStorage
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userSeq");
+    sessionStorage.removeItem("userEmail");
+    sessionStorage.removeItem("userPic");
+    sessionStorage.removeItem("userGender");
+    sessionStorage.removeItem("userBirth");
+    sessionStorage.removeItem("userName");
 
     alert("로그아웃 되었습니다.");
     navigate("/login");
