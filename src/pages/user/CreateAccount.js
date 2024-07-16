@@ -129,9 +129,11 @@ const CreateAccount = () => {
   const navigate = useNavigate();
 
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,20}$/;
-  const emailRegex = /^[a-zA-Z0-9]{6,15}@[a-z]{3,7}\.(com|net)$/;
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])\S{10,20}$/;
+  const emailRegex = /^[a-zA-Z0-9]{6,15}@[a-z]{3,7}\.(com|net){1}$/;
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
+  const NameRegex = /^[가-힣]{2,6}$/;
+  const PhoneRegex = /^01[01](?:\d{3}|\d{4})\d{4}$/;
 
   const [user, setUser] = useState({
     userPic: "",
@@ -199,6 +201,16 @@ const CreateAccount = () => {
       alert("이메일 형식이 올바르지 않습니다.");
       return false;
     }
+    if (!NameRegex.test(user.userName)) {
+      alert("이름은 한글 2~6자로 구성되어야 합니다.");
+      return false;
+    }
+    if (!PhoneRegex.test(user.userPhone)) {
+      alert(
+        "전화번호는 01(0 or 1) 3자 or 4자 - 4자 (ex:01012345678, -제외)의 형식으로 구성되어야 합니다.",
+      );
+      return false;
+    }
     return true;
   };
 
@@ -233,13 +245,9 @@ const CreateAccount = () => {
     );
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/sign_up",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        },
-      );
+      const response = await axios.post("/api/user/sign_up", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       if (response.data.success) {
         console.log(response.data);

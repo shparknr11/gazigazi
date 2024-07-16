@@ -89,7 +89,7 @@ const Home = () => {
     console.log(partyAllList);
     const updateList = partyAllList.filter(item => item.partyAuthGb === "2");
     setFilteredPartyList(updateList);
-  }, [partyAllList]);
+  }, []);
 
   useEffect(() => {
     console.log(filteredPartyList);
