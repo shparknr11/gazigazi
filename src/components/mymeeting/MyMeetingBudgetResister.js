@@ -35,7 +35,7 @@ const MyMeetingNoticeStyle = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 1300px;
+    max-width: 1024px;
     gap: 40px;
   }
   .notice-inner {
@@ -59,7 +59,7 @@ const MyMeetingNoticeStyle = styled.div`
     width: 100%;
     justify-content: center;
     align-items: center;
-    gap: 63px;
+    gap: 45px;
   }
   /* 임시 */
   form {
@@ -95,6 +95,26 @@ const MyMeetingNoticeStyle = styled.div`
     font-size: 16px;
     font-weight: bold;
   }
+  .member-title-li {
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid gray;
+  }
+  .member-li {
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid gray;
+    span {
+      padding: 10px 0;
+      cursor: pointer;
+    }
+  }
 `;
 const TitleDivStyle = styled.div`
   width: 100%;
@@ -116,6 +136,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
   const [sendFile, setSendFile] = useState(null);
   const [previewPreImg, setPreviewPreImg] = useState(null);
   const [memberList, setMemberList] = useState([]);
+  const [memberName, setMemberName] = useState("");
+  const [memberSeq, setMemberSeq] = useState();
 
   const [isLoading, setIsLoading] = useState(false);
   const [imgFile, setImgFile] = useState(null);
@@ -125,6 +147,9 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
     setImgError(true);
   };
   useEffect(() => {}, [previewPreImg]);
+  useEffect(() => {
+    getMembers();
+  }, []);
   const handleChange = e => {
     const value = e.target.value.replace(/,/g, "");
     if (!isNaN(value) && /^[0-9]*$/.test(value)) {
@@ -179,16 +204,20 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
   };
   const handleClick = async e => {
     e.preventDefault();
+    // setIsLoading(true);
     // 1. 전송데이터 포맷 만들기
     const formData = new FormData();
     // 모임장 seq, budgetMemberSeq 2개
     const form = {
       budgetPartySeq: Number(params.meetingId),
-      budgetMemberSeq: 550,
       ...formDataFunc("formData"),
     };
+
+    delete form.memberName;
+
     form.budgetAmount = form.budgetAmount.replaceAll(",", "");
 
+    console.log(form);
     // 2. 보낼데이터 (json 형식의 문자열로 만들기)
     const infoData = JSON.stringify(form);
 
@@ -214,10 +243,14 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
       setIsLoading(false);
     }
   };
-  const a = async () => {
-    const res = await getMember(params.meetingId);
-    console.log(res);
-    setMemberList(res);
+  const getMembers = async () => {
+    try {
+      const res = await getMember(params.meetingId);
+      console.log(res);
+      setMemberList(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
   if (isLoading) {
     return <Loading></Loading>;
@@ -236,7 +269,15 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                 }}
               >
                 {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
-                <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                <div
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
                   영수증 이미지
                 </div>
                 <div
@@ -251,7 +292,6 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                     className="etc-btn"
                     onClick={() => {
                       setIsClicked(true);
-                      a();
                     }}
                   >
                     일정멤버
@@ -306,7 +346,14 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                     </div>
                   </div>
                   <div
-                    style={{ width: "40%", margin: "0 auto", height: "100%" }}
+                    style={{
+                      width: "40%",
+                      margin: "0 auto",
+                      height: "100%",
+                      padding: "0 20px",
+                      borderLeft: "1px solid gray",
+                      borderRight: "1px solid gray",
+                    }}
                   >
                     <div
                       style={{
@@ -346,6 +393,38 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                           </RadioGroup>
                         </FormControl>
                       </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          textAlign: "left",
+                        }}
+                      >
+                        <label htmlFor="memberSeq" style={{ width: "25%" }}>
+                          멤버명
+                        </label>
+                        <input
+                          id="memberName"
+                          name="memberName"
+                          type="text"
+                          value={memberName}
+                          style={{ width: "80%" }}
+                          readOnly
+                        />
+                        <input
+                          id="budgetMemberSeq"
+                          name="budgetMemberSeq"
+                          type="number"
+                          value={memberSeq}
+                          style={{
+                            width: "0px",
+                            height: "0px",
+                            border: "none",
+                          }}
+                          readOnly
+                        />
+                      </div>
+
                       <div
                         style={{
                           display: "flex",
@@ -426,14 +505,27 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                       </div>
                     </div>
                   </div>
-                  <div style={{ width: "30%" }}>
+                  <div style={{ width: "20%", height: "375px" }}>
                     <ul>
-                      <li>
+                      <li className="member-title-li">
                         <span>이름</span>
                         <span>닉네임</span>
                       </li>
                       {memberList.map(item => (
-                        <li key={item.memberSeq} onClick={() => {}}>
+                        <li
+                          className="member-li"
+                          key={item.memberSeq}
+                          onClick={() => {
+                            if (
+                              confirm(
+                                `${item.userName}을 등록하시는게 맞습니까?`,
+                              )
+                            ) {
+                              setMemberName(item.userName);
+                              setMemberSeq(item.memberSeq);
+                            }
+                          }}
+                        >
                           <span>{item.userName}</span>
                           <span>{item.userNickname}</span>
                         </li>
