@@ -57,6 +57,7 @@ const ReviewItemStyle = styled.div`
   }
   .review-mid {
     width: 100%;
+    max-width: 700px;
   }
   .review-img {
     background-color: aliceblue;
@@ -96,10 +97,6 @@ const Review = () => {
   useEffect(() => {
     getReviewData();
   }, []);
-
-  useEffect(() => {
-    console.log(reviewList);
-  }, [reviewList]);
 
   // **Pagination** 을 위한 코드처리
   // 총 목록수는 state에 저장되어 있음. (todos배열.length)

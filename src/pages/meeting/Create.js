@@ -116,11 +116,13 @@ const Create = () => {
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
 
-  useEffect(() => {
-    // console.log(localList);
-    console.log(partyMinAge);
-    console.log(partyMaxAge);
-  }, [partyMaxAge, partyMinAge]);
+  const userSeq = sessionStorage.getItem("userSeq");
+
+  // useEffect(() => {
+  //   // console.log(localList);
+  //   console.log(partyMinAge);
+  //   console.log(partyMaxAge);
+  // }, [partyMaxAge, partyMinAge]);
 
   // useEffect(() => {
   //   // console.log(localList);
@@ -230,7 +232,7 @@ const Create = () => {
     }
     const formData = new FormData();
     const infoData = JSON.stringify({
-      userSeq: 1010,
+      userSeq,
       partyName,
       partyGenre,
       partyLocation,
@@ -238,7 +240,7 @@ const Create = () => {
       partyMaxAge,
       partyGender,
       partyMaximum,
-      partyJonGb: 1,
+      partyJoinGb: 1,
       partyJoinForm,
       partyIntro,
     });

@@ -127,7 +127,6 @@ const CateGoryListStyle = styled.div`
   }
 `;
 const CategoryOthers = () => {
-  const [partyAllList, setPartyAllList] = useState([]);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const navigate = useNavigate();
   //   const { partyGenre } = useParams();
@@ -135,6 +134,17 @@ const CategoryOthers = () => {
   const partyGenre = searchParams.get("partyGenre");
   const searchKeyword = searchParams.get("search");
 
+  const filterCategory = _resultData => {
+    const updateList = _resultData.filter(
+      item =>
+        // 여기수정******************************************************
+        item.partyAuthGb === "1" &&
+        (partyGenre === "0" || item.partyGenre === partyGenre) &&
+        (!searchKeyword || item.partyName.includes(searchKeyword)),
+    );
+    console.log("uadateList", updateList);
+    setFilteredPartyList(updateList);
+  };
   useEffect(() => {
     // api함수
     const getData = async () => {
@@ -144,27 +154,15 @@ const CategoryOthers = () => {
           alert(result.resultMsg);
           return;
         }
-        setPartyAllList(result.resultData);
+        // setPartyAllList(result.resultData);
+        filterCategory(result.resultData);
         // console.log(result.resultData);
       } catch (error) {
         console.log(error);
       }
     };
     getData();
-  }, []);
-
-  // partyAuthGb 0:미확인 1:승인 2: 삭제
-  useEffect(() => {
-    const updateList = partyAllList.filter(
-      item =>
-        // 여기수정******************************************************
-        item.partyAuthGb === "1" &&
-        (partyGenre === "0" || item.partyGenre === partyGenre) &&
-        (!searchKeyword || item.partyName.includes(searchKeyword)),
-    );
-    console.log("uadateList", updateList);
-    setFilteredPartyList(updateList);
-  }, [partyAllList, partyGenre, searchKeyword]);
+  }, [partyGenre]);
 
   const handleClickDetail = _partySeq => {
     console.log(_partySeq);
