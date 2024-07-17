@@ -182,8 +182,6 @@ const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
     const res = await getSchMemberAll(meetingId);
     setAllData(res);
     const a = Number(sessionStorage.getItem("userSeq"));
-    console.log("asdasdasdasd" + a);
-    console.log("fsalkfjsdalkfjsdlk", res.userSeq);
     if (allData?.length > 0) {
       const b = allData?.filter(item => {
         return Number(item?.userSeq) === Number(a);
