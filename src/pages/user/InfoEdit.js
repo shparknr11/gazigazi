@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import mainlogo from "../../images/logo2.png";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const InfoEditStyle = styled.div`
@@ -11,7 +10,7 @@ const InfoEditStyle = styled.div`
   height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #fff;
+  background-color: transparent; /* 흰색 배경 제거 */
 `;
 
 const InfoEditWrapStyle = styled.div`
@@ -38,28 +37,14 @@ const InfoEditInnerStyle = styled.div`
     width: 125%;
     box-sizing: border-box;
   }
-  .profile-picture-container {
-    text-align: center;
-    margin-bottom: 15px;
-    position: relative;
-  }
-  .profile-picture {
-    display: block;
-    margin: 0 auto 10px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  .create-profile-picture-input {
-    display: none; /* 파일 입력 요소를 숨김 */
-  }
+
   .info-container label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 12pt;
   }
+
   .info-container input {
     width: 100%;
     padding: 10px;
@@ -69,27 +54,9 @@ const InfoEditInnerStyle = styled.div`
     box-sizing: border-box;
     font-size: 12pt;
   }
-  .info-container .input-group {
-    display: flex;
-    align-items: start;
-    margin-bottom: 0px;
-  }
-  .info-container .input-group input {
-    flex: 1;
-    margin-right: 10px;
-  }
-  .info-container .input-group button {
-    width: auto;
-    padding: 10px;
-    background-color: #ebddcc;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 12px;
-    cursor: pointer;
-  }
+
   .info-container button {
-    width: calc(50% - 80px);
+    width: 100%;
     padding: 10px;
     background-color: #ebddcc;
     border: none;
@@ -97,14 +64,11 @@ const InfoEditInnerStyle = styled.div`
     color: white;
     font-size: 12px;
     cursor: pointer;
-    margin: 5px;
+    margin: 5px 0;
   }
+
   .info-container button:hover {
     background-color: #e0b88a;
-  }
-  .info-container .button-group {
-    display: flex;
-    justify-content: space-between;
   }
 `;
 
@@ -118,8 +82,6 @@ const InfoEdit = () => {
     userIntro: sessionStorage.getItem("userIntro") || "",
     userSeq: sessionStorage.getItem("userSeq"),
   });
-
-  const originalInfo = { ...userInfo };
 
   const handleSave = async () => {
     const { userSeq } = userInfo;
@@ -147,6 +109,7 @@ const InfoEdit = () => {
         alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
         navigate(`/myprofile/${userInfo.userSeq}`);
       } else {
+        console.log(response.data);
         alert(response.data.message || "정보 수정에 실패했습니다.");
       }
     } catch (error) {
@@ -161,11 +124,6 @@ const InfoEdit = () => {
       ...prevInfo,
       [name]: value,
     }));
-  };
-
-  const handleCancel = () => {
-    setUserInfo(originalInfo);
-    navigate(`/myprofile/${userInfo.userSeq}`);
   };
 
   return (
@@ -217,22 +175,13 @@ const InfoEdit = () => {
                       value={userInfo.userIntro}
                       onChange={handleInputChange}
                     />
-                    <div className="button-group">
-                      <button
-                        type="button"
-                        className="info-s-button"
-                        onClick={handleSave}
-                      >
-                        저장
-                      </button>
-                      <button
-                        type="button"
-                        className="info-e-button"
-                        onClick={handleCancel}
-                      >
-                        취소
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      className="info-s-button"
+                      onClick={handleSave}
+                    >
+                      저장
+                    </button>
                   </form>
                 </div>
               </div>

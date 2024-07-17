@@ -36,6 +36,7 @@ import CreateAccount from "./pages/user/CreateAccount";
 import FindId from "./pages/user/FindId";
 import FindPw from "./pages/user/FindPw";
 import InfoEdit from "./pages/user/InfoEdit";
+import UserInfo from "./pages/user/UserInfo";
 import InterestList from "./pages/user/InterestList";
 
 import LogOut from "./pages/user/LogOut";
@@ -44,6 +45,8 @@ import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
 import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
 import Modify from "./pages/meeting/Modify";
+import UserReview from "./pages/UserReview";
+import UserDelete from "./pages/user/UserDelete";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -66,7 +69,6 @@ const App = () => {
           <Route path="/login/findid" element={<FindId />}></Route>
           <Route path="/findpw" element={<FindPw />}></Route>
           <Route path="/login/findpw" element={<FindPw />}></Route>
-          <Route path="/info/:userId" element={<InfoEdit />}></Route>
 
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>
@@ -80,7 +82,24 @@ const App = () => {
           ></Route> */}
           <Route path="/category" element={<CategoryOthers />}></Route>
           {/* 기타 담당자 : 모두 */}
-          <Route path="/myprofile/:userId" element={<MyPage />}></Route>
+          <Route path="/myprofile/:userId" element={<MyPage />}>
+            <Route
+              path="/myprofile/:userId/userInfo"
+              element={<UserInfo />}
+            ></Route>
+            <Route
+              path="/myprofile/:userId/infoEdit"
+              element={<InfoEdit />}
+            ></Route>
+            <Route
+              path="/myprofile/:userId/userDelite"
+              element={<UserDelete />}
+            ></Route>
+            <Route
+              path="/myprofile/:userId/myreview"
+              element={<UserReview />}
+            ></Route>
+          </Route>
           <Route
             path="/interestlist/:userId"
             element={<InterestList />}
