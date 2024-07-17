@@ -100,6 +100,7 @@ const Write = () => {
         <input
           type="file"
           id="review-pic"
+          multiple
           accept="image/jpg, image/png, image/gif"
           onChange={e => {
             handleRwFileChange(e);

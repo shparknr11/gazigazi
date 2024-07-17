@@ -101,6 +101,14 @@ const Home = () => {
     return year.toString();
   };
 
+  const filterHomeList = _resultData => {
+    const filteredList = _resultData.filter(
+      // location 부분 수정*****************************************
+      item => item.partyAuthGb === "1" && item.partyLocation1 === "서울",
+    );
+    setArroundPartyList(filteredList);
+  };
+
   // api함수
   const getData = async () => {
     try {
@@ -109,35 +117,21 @@ const Home = () => {
         alert(result.resultMsg);
         return;
       }
-      setPartyAllList(result.resultData);
+      filterHomeList(result.resultData);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(popularList);
-  // }, [popularList]);
-
-  useEffect(() => {
-    // 내주변 모임 필터
-    const filteredList = partyAllList.filter(
-      // location 부분 수정*****************************************
-      item => item.partyAuthGb === "1" && item.partyLocation1 === "서울",
-    );
-    setArroundPartyList(filteredList);
-
-    // // 마감임박 모임 필터
-    // const filterList = partyAllList.filter(
-    //   // location 부분 수정*****************************************
-    //   item =>
-    //     item.partyAuthGb === "1" && item.partyNowMem / item.partyMaximum > 0.5,
-    // );
-    // setPopularList(filterList);
-  }, [partyAllList]);
+  // 무작위 항목을 선택하는 함수
+  function getRandomItems(arr, count) {
+    const shuffled = arr.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
 
   // arroundPartyList에서 무작위로 6개 선택
   useEffect(() => {
@@ -147,12 +141,7 @@ const Home = () => {
     }
   }, [arroundPartyList]);
 
-  // 무작위 항목을 선택하는 함수
-  function getRandomItems(arr, count) {
-    const shuffled = arr.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  }
-
+  // search 클릭 시 검색
   const handleChangeSearch = e => {
     setSearchKeyword(e.target.value);
   };

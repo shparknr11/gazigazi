@@ -70,9 +70,6 @@ const MyMeetingNewMemberList = () => {
   useEffect(() => {
     getData();
   }, []);
-  useEffect(() => {
-    console.log(applicationList);
-  }, [applicationList]);
 
   const handleClickConfirm = async joinUserSeq => {
     console.log(joinUserSeq);

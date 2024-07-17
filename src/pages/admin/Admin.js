@@ -67,8 +67,10 @@ const AdminRightDivStyle = styled.div`
   }
 `;
 const Admin = () => {
-  const [partyAllList, setPartyAllList] = useState([]);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
+  const userSeq = sessionStorage.getItem("userSeq");
+
+  // api함수
   const getData = async () => {
     try {
       const result = await getPartyAll();
@@ -76,28 +78,25 @@ const Admin = () => {
         alert(result.resultMsg);
         return;
       }
-      setPartyAllList(result.resultData);
+      filterParty(result.resultData);
       // console.log(result.resultData);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    // api함수
 
+  const filterParty = _resultData => {
+    const updateList = _resultData.filter(item => item.partyAuthGb === "0");
+    setFilteredPartyList(updateList);
+  };
+
+  useEffect(() => {
     getData();
   }, []);
 
-  // partyAuthGb 0:미확인 1:승인 2: 삭제
-  useEffect(() => {
-    const updateList = partyAllList.filter(item => item.partyAuthGb === "0");
-    console.log("uadateList", updateList);
-    setFilteredPartyList(updateList);
-  }, [partyAllList]);
-
   const handleClickApproval = async _partySeq => {
     try {
-      const result = await patchApproval(_partySeq, 1010);
+      const result = await patchApproval(_partySeq, userSeq);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;

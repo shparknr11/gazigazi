@@ -138,7 +138,6 @@ const MeetItemInfo = styled.div`
 const MeetingDetail = () => {
   const [detailList, setDetailList] = useState([]);
   const [joinContent, setJoinContent] = useState("");
-
   //   const [searchParams] = useSearchParams();
   const { partySeq } = useParams();
   const userSeq = sessionStorage.getItem("userSeq");
@@ -149,7 +148,7 @@ const MeetingDetail = () => {
     openModal({
       onConfirm: async joinContent => {
         try {
-          const appliycation = { joinUserSeq: 3, joinMsg: joinContent };
+          const appliycation = { joinUserSeq: userSeq, joinMsg: joinContent };
           await postApplication(partySeq, appliycation);
           setJoinContent("");
           closeModal();
