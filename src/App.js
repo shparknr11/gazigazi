@@ -86,26 +86,11 @@ const App = () => {
           <Route path="/category" element={<CategoryOthers />}></Route>
           {/* 기타 담당자 : 모두 */}
           <Route path="/myprofile/:userId" element={<MyPage />}>
-            <Route
-              path="/myprofile/:userId/userInfo"
-              element={<UserInfo />}
-            ></Route>
-            <Route
-              path="/myprofile/:userId/infoEdit"
-              element={<InfoEdit />}
-            ></Route>
-            <Route
-              path="/myprofile/:userId/myreview"
-              element={<UserReview />}
-            ></Route>
-            <Route
-              path="/myprofile/:userId/logout"
-              element={<LogOut />}
-            ></Route>
-            <Route
-              path="/myprofile/:userId/myinterestlist"
-              element={<InterestList />}
-            ></Route>
+            <Route path="userInfo" element={<UserInfo />}></Route>
+            <Route path="infoEdit" element={<InfoEdit />}></Route>
+            <Route path="myreview" element={<UserReview />}></Route>
+            <Route path="logout" element={<LogOut />}></Route>
+            <Route path="myinterestlist" element={<InterestList />}></Route>
           </Route>
 
           <Route path="/review" element={<Review />}></Route>

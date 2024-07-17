@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 
 const MyPageStyle = styled.div`
@@ -65,7 +65,7 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.userEmail);
-  const { userId } = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -94,9 +94,11 @@ const MyPage = () => {
     fetchUserData();
   }, [navigate, userSeq]);
 
-  // useEffect(() => {
-  //   navigate(`/myprofile/:userId/userInfo`);
-  // }, [navigate, userId]);
+  useEffect(() => {
+    if (location.pathname === "/myprofile/:userId/userInfo") {
+      navigate(`/myprofile/:userId/userInfo`);
+    }
+  }, [navigate, location.pathname]);
   // 이거 적용하니까 메뉴 눌러도 페이지 랜더링이 안됨 ㅋㅋ
 
   if (loading) {

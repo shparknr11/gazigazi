@@ -25,23 +25,19 @@ const InterestInnerStyle = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   padding: 20px;
 
-  .interest-list {
-    font-size: 24pt;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
   .interest-container {
     background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 160%;
+    width: 200%;
     box-sizing: border-box;
+    margin-top: -300px;
   }
   .interest-item {
     display: flex;
@@ -127,7 +123,6 @@ const InterestList = () => {
           <div className="wrap">
             <main className="main">
               <div className="main-inner">
-                <div className="interest-list">찜 목록</div>
                 <div className="interest-container">
                   {interestItems.map((item, index) => (
                     <div className="interest-item" key={index}>

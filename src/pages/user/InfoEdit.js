@@ -10,7 +10,7 @@ const InfoEditStyle = styled.div`
   height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: transparent; /* 흰색 배경 제거 */
+  background-color: transparent;
 `;
 
 const InfoEditWrapStyle = styled.div`
@@ -24,8 +24,8 @@ const InfoEditWrapStyle = styled.div`
 const InfoEditInnerStyle = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   padding: 20px;
 
   .info-container {
@@ -34,8 +34,9 @@ const InfoEditInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 125%;
+    width: 150%;
     box-sizing: border-box;
+    margin-top: -480px;
   }
 
   .info-container label {
@@ -65,6 +66,7 @@ const InfoEditInnerStyle = styled.div`
     font-size: 12px;
     cursor: pointer;
     margin: 5px 0;
+    margin-top: 10px;
   }
 
   .info-container button:hover {
@@ -104,13 +106,16 @@ const InfoEdit = () => {
         },
       );
 
-      if (response.data.status === 1) {
+      if (response.data.code === 1) {
         console.log(response.data);
         alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
-        navigate(`/myprofile/${userInfo.userSeq}`);
-      } else {
+        navigate(`/myprofile/:userId/userInfo`);
+      } else if (response.data === 0) {
         console.log(response.data);
         alert(response.data.message || "정보 수정에 실패했습니다.");
+      } else {
+        console.log(response.data);
+        alert("예상하지 못한 응답이 반환되었습니다.");
       }
     } catch (error) {
       console.error("정보 수정 오류:", error);

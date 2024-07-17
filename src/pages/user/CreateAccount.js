@@ -249,7 +249,7 @@ const CreateAccount = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (response.data) {
+      if (response.data.code === 1) {
         console.log(response.data);
         alert("계정이 성공적으로 생성되었습니다!");
         navigate("/login");

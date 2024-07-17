@@ -20,14 +20,6 @@ const LogOut = () => {
     navigate("/login");
   };
 
-  const handleLogoutClick = () => {
-    setShowConfirm(true);
-  };
-
-  const handleCancel = () => {
-    setShowConfirm(false);
-  };
-
   const LogOutButton = styled.button`
     background-color: #ebddcc;
     color: white;
@@ -47,16 +39,7 @@ const LogOut = () => {
 
   return (
     <div>
-      <LogOutButton className="LogOutButton" onClick={handleLogoutClick}>
-        로그아웃
-      </LogOutButton>
-      {showConfirm && (
-        <div>
-          <p>로그아웃 하시겠습니까?</p>
-          <button onClick={handleLogout}>확인</button>
-          <button onClick={handleCancel}>취소</button>
-        </div>
-      )}
+      <LogOutButton onClick={handleLogout}>로그아웃</LogOutButton>
     </div>
   );
 };
