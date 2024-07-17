@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
+import UserDelete from "./UserDelete";
+import LogOut from "./LogOut";
 
 const UserInfoStyle = styled.div`
   display: flex;
@@ -40,6 +42,7 @@ const UserInfoInnerStyle = styled.div`
     height: auto;
     box-sizing: border-box;
     overflow: hidden;
+    margin-top: -50px;
   }
 
   .profile-picture-container {
@@ -77,16 +80,34 @@ const UserInfoInnerStyle = styled.div`
     background-color: #f0f0f0;
     cursor: not-allowed;
   }
+
+  .button {
+    background-color: #ebddcc;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 35%;
+    font-size: 14pt;
+    margin: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .button:hover {
+    background-color: #e0b88a;
+  }
 `;
 
-const MyPage = () => {
+const UserInfo = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [certificationCode, setCertificationCode] = useState("");
   const [isCertifying, setIsCertifying] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isEmailCompleted, setIsEmailCompleted] = useState(false);
   const navigate = useNavigate();
-  const userSeq = useSelector(state => state.userEmail);
+  const userSeq = useSelector(state => state.user.userSeq);
   const userEmail = sessionStorage.getItem("userEmail");
 
   useEffect(() => {
@@ -125,9 +146,20 @@ const MyPage = () => {
     };
 
     fetchUserData();
+
+    // 페이지가 처음 로드될 때 로딩을 종료하지 않고 계속 로딩 상태 유지
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 1초 후 로딩 종료
+
+    return () => clearTimeout(timeout);
   }, [navigate, userSeq]);
 
   const sendCertificationCode = async () => {
+    if (isEmailCompleted) {
+      alert("이미 인증된 계정입니다.");
+      return;
+    }
     try {
       await axios.post(`/mailSend`, { userEmail });
       alert("인증 코드가 이메일로 발송되었습니다.");
@@ -148,6 +180,7 @@ const MyPage = () => {
         alert("이메일 인증이 완료되었습니다.");
         setIsEmailVerified(true);
         setIsCertifying(false);
+        setIsEmailCompleted(true);
       } else {
         alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
       }
@@ -172,7 +205,7 @@ const MyPage = () => {
           <div className="mypage-container">
             <div className="profile-picture-container">
               <img
-                src={`http://localhost:3000/images/${userData.userPic}`}
+                src={`/images/${userData.userPic || "default.png"}`}
                 alt="프로필 사진"
                 id="profilePreview"
               />
@@ -188,17 +221,22 @@ const MyPage = () => {
                     onChange={e => setCertificationCode(e.target.value)}
                     placeholder="인증번호 입력"
                   />
-                  <button type="button" onClick={verifyCertificationCode}>
+                  <button
+                    className="button"
+                    type="button"
+                    onClick={verifyCertificationCode}
+                  >
                     인증하기
                   </button>
                 </>
               )}
               <button
+                className="button"
                 type="button"
                 onClick={sendCertificationCode}
                 disabled={isEmailVerified}
               >
-                {isEmailVerified ? "인증완료" : "이메일 인증"}
+                {isEmailVerified ? "인증완료" : "재전송"}
               </button>
             </label>
             <label>
@@ -223,7 +261,13 @@ const MyPage = () => {
             </label>
             <label>
               <span>생년 월일</span>
-              <input type="date" value={userData.userBirth} readOnly />
+              <input
+                type="date"
+                value={
+                  userData.userBirth ? userData.userBirth.split("T")[0] : ""
+                }
+                readOnly
+              />
             </label>
             <label>
               <span>전화번호</span>
@@ -258,6 +302,8 @@ const MyPage = () => {
               <span>자기 소개</span>
               <input type="text" value={userData.userIntro} readOnly />
             </label>
+            <LogOut className="logout-button" />
+            <UserDelete className="withdrawal-button" />
           </div>
         </UserInfoInnerStyle>
       </UserInfoWrapStyle>
@@ -265,4 +311,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default UserInfo;

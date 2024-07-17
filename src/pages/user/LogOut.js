@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "@emotion/styled";
 
 const LogOut = () => {
   const navigate = useNavigate();
@@ -27,9 +28,28 @@ const LogOut = () => {
     setShowConfirm(false);
   };
 
+  const LogOutButton = styled.button`
+    background-color: #ebddcc;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 20%;
+    font-size: 12pt;
+    margin-top: 5px;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #e0b88a;
+    }
+  `;
+
   return (
     <div>
-      <button onClick={handleLogoutClick}>로그아웃</button>
+      <LogOutButton className="LogOutButton" onClick={handleLogoutClick}>
+        로그아웃
+      </LogOutButton>
       {showConfirm && (
         <div>
           <p>로그아웃 하시겠습니까?</p>
@@ -37,7 +57,6 @@ const LogOut = () => {
           <button onClick={handleCancel}>취소</button>
         </div>
       )}
-      <div>로그인 페이지</div>
     </div>
   );
 };

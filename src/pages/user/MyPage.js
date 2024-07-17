@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import { Link, useNavigate, Outlet, useParams } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 
 const MyPageStyle = styled.div`
@@ -65,6 +65,7 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.userEmail);
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -93,6 +94,11 @@ const MyPage = () => {
     fetchUserData();
   }, [navigate, userSeq]);
 
+  // useEffect(() => {
+  //   navigate(`/myprofile/:userId/userInfo`);
+  // }, [navigate, userId]);
+  // 이거 적용하니까 메뉴 눌러도 페이지 랜더링이 안됨 ㅋㅋ
+
   if (loading) {
     return <Loading>로딩 중...</Loading>;
   }
@@ -104,7 +110,7 @@ const MyPage = () => {
           <Link to={`/myprofile/:userId/userInfo`}>사용자 정보</Link>
           <Link to={`/myprofile/:userId/myreview`}>사용자 리뷰</Link>
           <Link to={`/myprofile/:userId/infoEdit`}>정보 수정</Link>
-          <Link to={`/myprofile/:userId/userDelite`}>회원 탈퇴</Link>
+          <Link to={`/myprofile/:userId/myinterestlist`}>찜 목록</Link>
         </NavLinks>
         <MyPageInnerStyle>
           <Outlet />
