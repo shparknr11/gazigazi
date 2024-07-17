@@ -2,64 +2,48 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getApplication } from "../../apis/meeting/joinapi";
-
-const MemberListInnerStyle = styled.div`
-  width: calc(100% - 30px);
-  max-width: 1300px;
-  display: flex;
-  margin: 0 auto;
-  height: auto;
-  margin-top: 40px;
-`;
-
-const MemberListMenuStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 50px;
-  margin-top: 50px;
-
-  .memeber-list-menu {
-    display: block;
-    min-width: 200px;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    &:hover {
-      background-color: #efede5;
-    }
-    &.active {
-      /* 활성화됐을 때 스타일 */
-      background-color: #e6e2d5;
-    }
-  }
-  span {
-    font-weight: 700;
-    font-size: 18px;
-  }
-`;
+import { ActionButton, MainButton } from "../../components/button/Button";
+import {
+  MemberInfo,
+  MemberListInnerStyle,
+  MemberListMenuStyle,
+  MemberListTitle,
+  PermissionBtn,
+} from "./MyMeetingMemberList";
+import { prColor } from "../../css/color";
 
 const MemberListMainStyle = styled.div`
   width: 80%;
-  > h1 {
-    margin-bottom: 10px;
-    font-size: 28px;
-    margin-bottom: 40px;
-  }
+
   .memberlist-member-div {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
   }
+
   .membelist-member {
+    max-width: 300px;
+    height: 100px;
+    width: 100%;
     display: flex;
     border: 1px dashed rgba(0, 0, 0, 0.2);
-    width: 30%;
     padding: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
   }
+
+  .membelist-member-img {
+    background-color: ${prColor.pr01};
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+  }
+
   .member-checkbox {
     align-self: end;
   }
 `;
-
 const MyMeetingNewMemberList = () => {
   const [applicationList, setApplicationList] = useState([]);
 
@@ -76,6 +60,7 @@ const MyMeetingNewMemberList = () => {
         alert(result.resultMsg);
         return;
       }
+      console.log(result.resultData);
       setApplicationList(result.resultData);
     } catch (error) {
       console.log(error);
@@ -85,7 +70,9 @@ const MyMeetingNewMemberList = () => {
   useEffect(() => {
     getData();
   }, []);
-
+  useEffect(() => {
+    console.log(applicationList);
+  }, [applicationList]);
   return (
     <MemberListInnerStyle>
       <MemberListMenuStyle>
@@ -104,24 +91,41 @@ const MyMeetingNewMemberList = () => {
       </MemberListMenuStyle>
 
       <MemberListMainStyle>
-        <h1>회원관리</h1>
+        <MemberListTitle>
+          <h1>신청 관리</h1>
+          <div className="member-list-btn">
+            <MainButton label="버튼1" />
+            <ActionButton label="버튼2" />
+          </div>
+        </MemberListTitle>
         <div className="memberlist-member-div">
           {applicationList.map((item, index) => (
             <div key={index} className="membelist-member">
-              <div>
-                <img src="" alt="프로필" />
-              </div>
-              <div>
-                <div>남</div>
-                <div>{item.joinUserSeq}</div>
-                <div>2024세</div>
-                <div>{item.joinMsg}</div>
-              </div>
-              <div>
-                <input type="checkbox" className="member-checkbox" />
-              </div>
+              <div className="membelist-member-img" />
+              <MemberInfo>
+                <div className="member-position">직급</div>
+                <div>박성호(남)</div>
+                <div>24세</div>
+              </MemberInfo>
+              <PermissionBtn>
+                <MainButton label="승인" />
+                <ActionButton label="반려" />
+              </PermissionBtn>
             </div>
           ))}
+
+          <div className="membelist-member">
+            <div className="membelist-member-img" />
+            <MemberInfo>
+              <div className="member-position">직급</div>
+              <div>박성호(남)</div>
+              <div>24세</div>
+            </MemberInfo>
+            <PermissionBtn>
+              <MainButton label="승인" />
+              <ActionButton label="반려" />
+            </PermissionBtn>
+          </div>
         </div>
       </MemberListMainStyle>
     </MemberListInnerStyle>

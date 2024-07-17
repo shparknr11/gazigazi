@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
 import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
-import { getLocal, postParty } from "../../apis/meeting/meetingapi";
+import {
+  getLocal,
+  getPartyOne,
+  postParty,
+} from "../../apis/meeting/meetingapi";
+import { useParams } from "react-router-dom";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -14,47 +19,7 @@ const CreateInnerStyle = styled.div`
     margin-bottom: 40px;
   }
 `;
-const CreateCheckStyle = styled.div`
-  width: 100%;
-  margin-bottom: 25px;
-  padding: 15px;
-  box-shadow: 0.5px 1px 3px 0px;
-  /* background-color: #fefbf7; */
 
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
-
-  h1 {
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  .create-check-div {
-    /* width: calc(100% - 40px); */
-    width: 100%;
-
-    margin: 0 auto;
-    margin-bottom: 10px;
-  }
-  .create-check-btn-div {
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
-  }
-`;
-const CreateCheckBtn = styled.div`
-  user-select: none;
-  text-align: center;
-  /* width: calc(100% - 40px); */
-  width: 100%;
-  padding: 10px;
-  margin: 0 auto;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  background-color: ${props =>
-    props.isChecked ? "wheat" : "rgba(0,0,0,0.05)"};
-`;
 const CreateFormDivStyle = styled.div`
   width: 100%;
   padding: 15px;
@@ -95,10 +60,10 @@ const CreateBtnWrapStyle = styled.div`
 `;
 
 const Modify = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  const { partySeq } = useParams();
   // form
   const [partyName, setPartyName] = useState("");
-  const [partyGenre, setPartyGenre] = useState(null);
+  const [partyGenre, setPartyGenre] = useState("");
   const [partyLocation, setPartyLocation] = useState("");
   const [partyMinAge, setPartyMinAge] = useState(1940);
   const [partyMaxAge, setPartyMaxAge] = useState(2024);
@@ -117,11 +82,32 @@ const Modify = () => {
   const [previewImg, setPreviewImg] = useState("");
 
   useEffect(() => {
-    // console.log(localList);
-    console.log(partyMinAge);
-    console.log(partyMaxAge);
-  }, [partyMaxAge, partyMinAge]);
+    const fetchData = async () => {
+      try {
+        const result = await getPartyOne(partySeq); // API에서 기존 모임 데이터 가져오기
+        console.log("result", result);
 
+        // // 가져온 데이터를 상태 변수에 설정
+        setPartyName(result.resultData.partyName);
+        setPartyGenre(result.resultData.partyGenre);
+        // setPartyLocation(partyDetails.partyLocation);
+        setPartyMinAge(result.resultData.partyMinAge);
+        setPartyMaxAge(result.resultData.partyMaxAge);
+        // setPartyMaximum(partyDetails.partyMaximum);
+        // setPartyGender(partyDetails.partyGender);
+        // setPartyIntro(partyDetails.partyIntro);
+        // setPartyJoinForm(partyDetails.partyJoinForm);
+        // setLocalData(partyDetails.localData);
+        // setLocalDetailData(partyDetails.localDetailData);
+        // setPreviewImg(partyDetails.previewImg);
+        // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
   // useEffect(() => {
   //   // console.log(localList);
   //   // console.log(localData);
@@ -130,11 +116,6 @@ const Modify = () => {
 
   // 년도
   const years = Array.from({ length: 2009 - 1924 + 1 }, (v, i) => 1924 + i);
-
-  // 이용약관 동의
-  const handleClickCheck = () => {
-    setIsChecked(!isChecked);
-  };
 
   // 모임 명 작성
   const handleChangePartyName = e => {
@@ -261,6 +242,7 @@ const Modify = () => {
             onChange={e => {
               handleChangeGenre(e);
             }}
+            value={partyGenre}
           >
             <option value="">---카테고리를 선택해주세요---</option>
             <option value="1">스포츠</option>
@@ -354,6 +336,7 @@ const Modify = () => {
           <label htmlFor="partyminage">최소</label>
           <select
             id="partyminage"
+            value={partyMinAge}
             onChange={e => {
               console.log(e.target.value);
               handleChangeMinAge(e);
@@ -371,6 +354,7 @@ const Modify = () => {
           <label htmlFor="partymaxage">최대</label>
           <select
             id="partymaxage"
+            value={partyMaxAge}
             onChange={e => {
               handleChangeMaxAge(e);
             }}

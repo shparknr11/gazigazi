@@ -7,7 +7,7 @@ const ButtonStyle = styled.button`
   font-weight: 500;
   padding: 8px 16px;
   border-radius: 30px;
-  height: 2.7em;
+  height: 2.4em;
   transition:
     border 0.3s,
     background-color 0.3s,
@@ -24,27 +24,37 @@ const ButtonStyle = styled.button`
 `;
 
 const MainButtonStyle = styled(ButtonStyle)`
-  background-color: ${prColor.p1000};
+  background-color: ${prColor.pr01};
   color: ${prColor.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    border: 1px solid ${prColor.p700};
-    background-color: ${prColor.p700};
+    border: 1px solid ${prColor.p1000};
+    background-color: ${prColor.p1000};
   }
 `;
 
 const ActionButtonStyle = styled(ButtonStyle)`
   background-color: ${prColor.white};
   color: ${prColor.p700};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background-color: #d3dce9;
+    background-color: ${prColor.pr02};
+    color: ${prColor.white};
   }
 `;
 
 const DelectButtonStyle = styled(ButtonStyle)`
   background-color: ${prColor.error};
   color: ${prColor.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     border: 1px solid #ca2929;

@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
-import styled from "@emotion/styled";
 import logo from "../../images/logo2.png";
-import { useRef } from "react";
 
 const Header = () => {
   const userSeq = sessionStorage.getItem("userSeq");

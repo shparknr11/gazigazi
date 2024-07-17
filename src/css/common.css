@@ -17,6 +17,7 @@
   outline-style: none;
   box-sizing: border-box;
   font-family: "Pretendard-Regular", "Noto Sans KR";
+  caret-color: transparent;
 }
 a {
   text-decoration: none;
@@ -31,6 +32,10 @@ body {
   font-style: normal;
   font-weight: 400;
   font-optical-sizing: auto;
+}
+input,
+textarea {
+  caret-color: auto;
 }
 
 /* 임시 버튼  */
