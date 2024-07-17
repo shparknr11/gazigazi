@@ -51,7 +51,6 @@ import Search from "./pages/meeting/Search";
 import UserReview from "./pages/UserReview";
 import UserDelete from "./pages/user/UserDelete";
 
-
 const MainStyle = styled.div`
   padding-top: 70px;
   /* background-color: #fefbf7;
@@ -96,18 +95,18 @@ const App = () => {
               element={<InfoEdit />}
             ></Route>
             <Route
-              path="/myprofile/:userId/userDelite"
-              element={<UserDelete />}
-            ></Route>
-            <Route
               path="/myprofile/:userId/myreview"
               element={<UserReview />}
             ></Route>
+            <Route
+              path="/myprofile/:userId/logout"
+              element={<LogOut />}
+            ></Route>
+            <Route
+              path="/myprofile/:userId/myinterestlist"
+              element={<InterestList />}
+            ></Route>
           </Route>
-          <Route
-            path="/interestlist/:userId"
-            element={<InterestList />}
-          ></Route>
 
           <Route path="/review" element={<Review />}></Route>
           <Route

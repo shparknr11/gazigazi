@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -37,10 +38,37 @@ const UserDelete = () => {
     }
   };
 
+  const DeleteButton = styled.button`
+    background-color: #ebddcc;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 20%;
+    font-size: 12pt;
+    margin-top: 5px;
+    margin-left: auto;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #e0b88a;
+    }
+  `;
+
+  const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: -45px;
+  `;
+
   return (
-    <button onClick={handleDelete} className="delete-button">
-      회원 탈퇴
-    </button>
+    <ButtonContainer>
+      <DeleteButton onClick={handleDelete} className="delete-button">
+        회원 탈퇴
+      </DeleteButton>
+    </ButtonContainer>
   );
 };
 
