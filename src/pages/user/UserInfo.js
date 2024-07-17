@@ -42,7 +42,7 @@ const UserInfoInnerStyle = styled.div`
     height: auto;
     box-sizing: border-box;
     overflow: hidden;
-    margin-top: -50px;
+    margin-top: -60px;
   }
 
   .profile-picture-container {
@@ -109,6 +109,12 @@ const UserInfo = () => {
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.user.userSeq);
   const userEmail = sessionStorage.getItem("userEmail");
+
+  useEffect(() => {
+    const storedEmailVerified =
+      sessionStorage.getItem("isEmailCompleted") === "true";
+    setIsEmailCompleted(storedEmailVerified);
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -181,6 +187,7 @@ const UserInfo = () => {
         setIsEmailVerified(true);
         setIsCertifying(false);
         setIsEmailCompleted(true);
+        sessionStorage.setItem("isEmailCompleted", "true");
       } else {
         alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
       }

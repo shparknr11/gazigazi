@@ -3,10 +3,12 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteUserAccount } from "../../userSlice";
+import { useState } from "react";
 
 const UserDelete = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
   const userSeq = useSelector(state => state.user.userSeq);
 
   const handleDelete = async () => {
@@ -63,11 +65,26 @@ const UserDelete = () => {
     margin-top: -45px;
   `;
 
+  const handleLogoutClick = () => {
+    setShowConfirm(true);
+  };
+
+  const handleCancel = () => {
+    setShowConfirm(false);
+  };
+
   return (
     <ButtonContainer>
       <DeleteButton onClick={handleDelete} className="delete-button">
         회원 탈퇴
       </DeleteButton>
+      {showConfirm && (
+        <div>
+          <p>정말 회원을 그만두시겠습니까?</p>
+          <button onClick={handleLogoutClick}>확인</button>
+          <button onClick={handleCancel}>취소</button>
+        </div>
+      )}
     </ButtonContainer>
   );
 };
