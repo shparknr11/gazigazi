@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import meetingImg from "../images/meetinga.png";
 import { useEffect, useState } from "react";
 import { getPartyAll } from "../apis/meeting/meetingapi";
+import { IoIosList } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const HomeInnerStyle = styled.div`
@@ -31,7 +32,7 @@ const HomeMidInnerStyle = styled.div`
 //   align-items: center;
 //   justify-content: center;
 // `;
-const CartegoryWrapStyle = styled.div`
+export const CartegoryWrapStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,6 +41,18 @@ const CartegoryWrapStyle = styled.div`
   margin-bottom: 120px;
   padding: 0 160px;
   gap: 40px;
+  .category-item {
+    display: flex;
+    justify-content: center;
+    border: 1px solid #999;
+    width: 80px;
+    height: 80px;
+    border-radius: 55px;
+    cursor: pointer;
+    &:hover {
+      background-color: #999;
+    }
+  }
   svg {
     width: 32px;
     height: 32px;
@@ -190,6 +203,12 @@ const Home = () => {
           <div>카테고리</div>
         </ActiveCategoryStyle>
         <CartegoryWrapStyle>
+          <Link to="/category?partyGenre=0">
+            <div className="category-item">
+              <IoIosList style={{ witdh: "80px", height: "80px" }} />
+            </div>
+            <div className="mt-category-text">전체보기</div>
+          </Link>
           <Link to="/category?partyGenre=1">
             <div className="mt-category-div">
               <div className="mt-category-img"></div>
@@ -303,7 +322,7 @@ const Home = () => {
                           backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic})`,
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center",
-                          backgroundSize: "cover",
+                          backgroundSize: "contain",
                         }}
                       ></div>
                       <span style={{ fontWeight: "bold" }}>

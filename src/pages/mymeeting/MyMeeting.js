@@ -292,7 +292,9 @@ const MyMeeting = () => {
                                 style={{ width: "100px" }}
                                 onClick={() => {
                                   if (confirm("수정하시겠습니까?")) {
-                                    alert("수정페이지로 이동.");
+                                    navigate(
+                                      `/meeting/modify/${item.partySeq}`,
+                                    );
                                   }
                                 }}
                               >
