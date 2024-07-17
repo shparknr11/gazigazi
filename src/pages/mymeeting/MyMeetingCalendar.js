@@ -273,6 +273,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
                   state: {
                     planSeq: allData.planSeq,
                     partyAuthGb: location.state.partyAuthGb,
+                    partyName: location.state.partyName,
                   },
                 });
               }}

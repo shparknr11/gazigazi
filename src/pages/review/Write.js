@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Rating } from "@mui/material";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 const WriteInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -66,7 +67,8 @@ const Write = () => {
       setPreviewPic("");
     }
   };
-
+  const location = useLocation();
+  console.log(location);
   return (
     <WriteInnerStyle>
       <div className="review-write-div">
