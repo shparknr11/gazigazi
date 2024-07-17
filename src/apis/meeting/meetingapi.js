@@ -84,13 +84,22 @@ export const getLocalDetail = async _data => {
   }
 };
 
-// const handleProgressApi = async () => {
-//     const result = await patchProgressCompleteList(selectedBoardId);
-//     if (result.statusCode !== 2) {
-//       alert(result.resultMsg);
-//       return;
-//     }
-//     setSelectBoardId([]); // 선택된 항목 ID 초기화
-//     setSelectedItems([]); // 선택된 항목 초기화
-//     getApi(); // 완료 목록 갱신
-//   };
+// 찜하기
+export const getWishParty = async (_userSeq, _partySeq) => {
+  try {
+    const response = await axios.get(
+      `/api/party/wish?wishUserSeq=${_userSeq}&wishPartySeq=${_partySeq}`,
+    );
+    const status = response.status.toString().charAt(0);
+    // console.log("resopnse : ", response);
+    if (status === "2") {
+      //   console.log(response);
+      //   console.log(response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
-import { postApproval } from "../../apis/meeting/joinapi";
+import { patchApproval } from "../../apis/meeting/joinapi";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -97,7 +97,7 @@ const Admin = () => {
 
   const handleClickApproval = async _partySeq => {
     try {
-      const result = await postApproval(_partySeq, 1010);
+      const result = await patchApproval(_partySeq, 1010);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;

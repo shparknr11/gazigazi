@@ -4,7 +4,7 @@ import meetimg from "../../images/meetinga.png";
 import { AiTwotoneHeart } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getPartyOne } from "../../apis/meeting/meetingapi";
+import { getPartyOne, getWishParty } from "../../apis/meeting/meetingapi";
 import useModal from "../../hooks/useModal";
 import JoinModal from "../../components/modal/JoinModal";
 import { postApplication } from "../../apis/meeting/joinapi";
@@ -141,6 +141,7 @@ const MeetingDetail = () => {
 
   //   const [searchParams] = useSearchParams();
   const { partySeq } = useParams();
+  const userSeq = sessionStorage.getItem("userSeq");
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
 
@@ -177,6 +178,12 @@ const MeetingDetail = () => {
     getDetailData(partySeq);
   }, []);
 
+  const handleClickWish = async () => {
+    const parseUserSeq = parseInt(userSeq);
+    const parsePartySeq = parseInt(partySeq);
+    const result = await getWishParty(parseUserSeq, parsePartySeq);
+    console.log(result);
+  };
   return (
     <MeetItemStyle>
       <div className="inner">
@@ -227,7 +234,12 @@ const MeetingDetail = () => {
                 <p>자유형식</p>
               </div>
               <div className="meet-item-button-div">
-                <div className="meet-item-button">
+                <div
+                  className="meet-item-button"
+                  onClick={() => {
+                    handleClickWish();
+                  }}
+                >
                   <AiTwotoneHeart />
                   찜하기
                 </div>
