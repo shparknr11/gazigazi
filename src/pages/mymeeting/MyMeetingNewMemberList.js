@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { getApplication } from "../../apis/meeting/joinapi";
+import { getApplication, patchNewMember } from "../../apis/meeting/joinapi";
 import { ActionButton, MainButton } from "../../components/button/Button";
 import {
   MemberInfo,
@@ -73,6 +73,16 @@ const MyMeetingNewMemberList = () => {
   useEffect(() => {
     console.log(applicationList);
   }, [applicationList]);
+
+  const handleClickConfirm = async joinUserSeq => {
+    console.log(joinUserSeq);
+    const data = {
+      joinUserSeq,
+      leaderUserSeq: userSeq,
+      joinGb: 1,
+    };
+    await patchNewMember(partySeq, data);
+  };
   return (
     <MemberListInnerStyle>
       <MemberListMenuStyle>
@@ -105,10 +115,15 @@ const MyMeetingNewMemberList = () => {
               <MemberInfo>
                 <div className="member-position">직급</div>
                 <div>박성호(남)</div>
-                <div>24세</div>
+                <div>{item.joinMsg}</div>
               </MemberInfo>
               <PermissionBtn>
-                <MainButton label="승인" />
+                <MainButton
+                  label="승인"
+                  onClick={() => {
+                    handleClickConfirm(item.joinUserSeq);
+                  }}
+                />
                 <ActionButton label="반려" />
               </PermissionBtn>
             </div>
