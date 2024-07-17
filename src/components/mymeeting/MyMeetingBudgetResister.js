@@ -9,7 +9,10 @@ import {
 import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
 import { toast } from "react-toastify";
-import { postBudget } from "../../apis/mymeetingapi/budget/budgetapi";
+import {
+  getMember,
+  postBudget,
+} from "../../apis/mymeetingapi/budget/budgetapi";
 import { useParams } from "react-router-dom";
 import Loading from "../common/Loading";
 const MyMeetingNoticeStyle = styled.div`
@@ -25,14 +28,14 @@ const MyMeetingNoticeStyle = styled.div`
   .notice-wrap {
     position: absolute;
     top: 7%;
-    left: 30%;
+    left: 11%;
     width: 100%;
     height: 650px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 1024px;
+    max-width: 1300px;
     gap: 40px;
   }
   .notice-inner {
@@ -46,7 +49,7 @@ const MyMeetingNoticeStyle = styled.div`
     flex-direction: column;
     gap: 30px;
     height: 530px;
-    max-width: 900px;
+    /* max-width: 900px; */
     border: 1px solid gray;
     border-radius: 4px;
     box-shadow: 1px 1px 1px 1px gray;
@@ -112,9 +115,11 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
   const [money, setMoney] = useState(0);
   const [sendFile, setSendFile] = useState(null);
   const [previewPreImg, setPreviewPreImg] = useState(null);
+  const [memberList, setMemberList] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [imgFile, setImgFile] = useState(null);
-
+  const [IsClicked, setIsClicked] = useState();
   const params = useParams();
   const imgOnError = () => {
     setImgError(true);
@@ -209,6 +214,11 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
       setIsLoading(false);
     }
   };
+  const a = async () => {
+    const res = await getMember(params.meetingId);
+    console.log(res);
+    setMemberList(res);
+  };
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -229,10 +239,28 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                 <div style={{ fontSize: "18px", fontWeight: "bold" }}>
                   영수증 이미지
                 </div>
+                <div
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    textAlign: "end",
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="etc-btn"
+                    onClick={() => {
+                      setIsClicked(true);
+                      a();
+                    }}
+                  >
+                    일정멤버
+                  </button>
+                </div>
                 <div className="meeting-introduce">
                   <div
                     style={{
-                      width: "50%",
+                      width: "30%",
                       height: "100%",
                       display: "flex",
                       justifyContent: "center",
@@ -278,7 +306,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                     </div>
                   </div>
                   <div
-                    style={{ width: "50%", margin: "0 auto", height: "100%" }}
+                    style={{ width: "40%", margin: "0 auto", height: "100%" }}
                   >
                     <div
                       style={{
@@ -397,6 +425,20 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div style={{ width: "30%" }}>
+                    <ul>
+                      <li>
+                        <span>이름</span>
+                        <span>닉네임</span>
+                      </li>
+                      {memberList.map(item => (
+                        <li key={item.memberSeq} onClick={() => {}}>
+                          <span>{item.userName}</span>
+                          <span>{item.userNickname}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
                 <div className="noitce-form-container">

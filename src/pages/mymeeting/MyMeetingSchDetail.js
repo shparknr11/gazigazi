@@ -186,7 +186,7 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
-
+  console.log("asdlkfjasklfjasdlkj", location);
   const handleClickSchEnter = async userSeq => {
     setIsLoading(true);
     try {
@@ -256,13 +256,6 @@ const MyMeetingSchDetail = () => {
                       >
                         진행중
                       </button>
-                      <button
-                        className={"etc-btn"}
-                        style={{ backgroundColor: "gray" }}
-                        disabled
-                      >
-                        리뷰 작성
-                      </button>
                     </>
                   )}
                 </div>
@@ -286,21 +279,6 @@ const MyMeetingSchDetail = () => {
                         }}
                       >
                         참가완료
-                      </button>
-                      <button
-                        className="etc-btn"
-                        onClick={() => {
-                          navigate("/review/write", {
-                            state: {
-                              planSeq: location.state.planSeq,
-                              planMemberSeq: planMemberSeq,
-                              planTitle: planTitle,
-                              partyName: "더미",
-                            },
-                          });
-                        }}
-                      >
-                        리뷰 작성
                       </button>
                     </>
                   ) : (

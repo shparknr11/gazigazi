@@ -94,3 +94,18 @@ export const postBudget = async formData => {
     console.log(error);
   }
 };
+
+// 멤버들 정보 불러오기
+
+// 입력한 모임의 모든 멤버의 정보를 불러옵니다
+
+export const getMember = async budgetPartySeq => {
+  try {
+    const res = await axios.get(
+      `/api/budget/memberlist?memberPartySeq=${budgetPartySeq}`,
+    );
+    return res.data.resultData;
+  } catch (error) {
+    console.log(error);
+  }
+};
