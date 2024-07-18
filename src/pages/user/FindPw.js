@@ -1,5 +1,7 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import mainlogo from "../../images/logo2.png";
+import axios from "axios";
 
 const FindPwStyle = styled.div`
   display: flex;
@@ -85,6 +87,28 @@ const FindPwInnerStyle = styled.div`
 `;
 
 const FindPw = () => {
+  const [email, setEmail] = useState("");
+  const [resultMessage, setResultMessage] = useState("");
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      const response = await axios.patch("/findpw", {
+        userEmail: email,
+      });
+      if (response.data.code === 1) {
+        setResultMessage(`임시 비밀번호: ${response.data.tempPassword}`);
+      } else {
+        setResultMessage(
+          response.data.message || "임시 비밀번호 발급에 실패했습니다.",
+        );
+      }
+    } catch (error) {
+      console.error("비밀번호 찾기 오류:", error);
+      setResultMessage("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
   return (
     <FindPwStyle>
       <FindPwWrapStyle>
@@ -93,19 +117,26 @@ const FindPw = () => {
             <main className="main">
               <div className="main-inner">
                 <div className="pw-container">
-                  <form id="find-password-form">
+                  <form id="find-password-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                       <img src={mainlogo} alt="pw 찾기" className="logo" />
                       <label htmlFor="email">
                         <span className="form-group-email">이메일</span>
                       </label>
-                      <input type="email" id="email" name="email" required />
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        required
+                      />
                     </div>
                     <div className="button-container">
                       <button type="submit">비밀번호 발급</button>
                     </div>
                   </form>
-                  <p id="result"></p>
+                  <p id="result">{resultMessage}</p>
                 </div>
               </div>
             </main>
