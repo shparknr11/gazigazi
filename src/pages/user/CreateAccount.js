@@ -198,7 +198,9 @@ const CreateAccount = () => {
       return false;
     }
     if (!emailRegex.test(user.userEmail)) {
-      alert("이메일 형식이 올바르지 않습니다.");
+      alert(
+        "이메일 형식이 올바르지 않습니다. 영문 대소문자, 숫자 (6~15자리) @ 영문 소문자(3~7자리) . com, net (둘 중 하나 택)",
+      );
       return false;
     }
     if (!NameRegex.test(user.userName)) {
@@ -282,7 +284,7 @@ const CreateAccount = () => {
 
       if (response.data.resultData === 0) {
         alert(
-          `사용 가능한 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
+          `중복되지 않는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
         );
         if (type === "userEmail") {
           setIsEmailChecked(true);

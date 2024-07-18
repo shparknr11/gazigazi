@@ -66,6 +66,7 @@ const App = () => {
         <Routes>
           {/* 담당자 : 황운철 */}
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/logout" element={<LogOut />}></Route>
           <Route path="/createaccount" element={<CreateAccount />}></Route>
           <Route path="/findid" element={<FindId />}></Route>
           <Route path="/login/findid" element={<FindId />}></Route>
