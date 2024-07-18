@@ -10,6 +10,7 @@ import Loading from "../../components/common/Loading";
 import { useLocation } from "react-router";
 import { toast } from "react-toastify";
 import GuideTitle from "../../components/common/GuideTitle";
+import "./common.js";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -101,6 +102,8 @@ const TitleDivStyle = styled.div`
   padding-left: 5px;
   padding-top: 20px;
 `;
+
+let initailData = {};
 const MyMeetingSchResister = () => {
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [postData, setPostData] = useState({});
@@ -123,10 +126,35 @@ const MyMeetingSchResister = () => {
 
     return formData;
   };
+
+  const foucsElement = focusId => {
+    document.getElementById(focusId).focus();
+  };
   useEffect(() => {
     console.log(postData);
   }, []);
   const handleClick = async () => {
+    if (!formDataFunc("dataForm").planTitle) {
+      toast.warning("일정명은 필수값입니다.");
+      document.getElementById("planTitle").focus();
+      return;
+    }
+    if (!formDataFunc("dataForm").planStartTime) {
+      toast.warning("일정시간은 필수값입니다.");
+      foucsElement("planStartTime");
+      return;
+    }
+    if (!formDataFunc("dataForm").planLocation) {
+      toast.warning("일정장소는 필수값입니다.");
+      foucsElement("planLocation");
+
+      return;
+    }
+    if (!formDataFunc("dataForm").planContents) {
+      toast.warning("일정 소개는 필수값입니다.");
+      foucsElement("planContents");
+      return;
+    }
     setIsLoading(true);
     try {
       const res = await postMonthCalculateBudget({
@@ -141,6 +169,31 @@ const MyMeetingSchResister = () => {
     }
     navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
       state: { isAuth: location.state.isAuth },
+    });
+  };
+  const changedValue = () => {
+    console.log(formDataFunc("dataForm"));
+    console.log(formDataFunc("dataForm").planTitle);
+    if (
+      formDataFunc("dataForm").planTitle ||
+      formDataFunc("dataForm").planStartTime ||
+      formDataFunc("dataForm").planLocation ||
+      formDataFunc("dataForm").planContents
+    ) {
+      if (confirm("정보가 변경되었습니다. 돌아가시겠습니까?")) {
+        navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
+          state: {
+            isAuth: location.state.isAuth,
+          },
+        });
+      } else {
+        return;
+      }
+    }
+    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
+      state: {
+        isAuth: location.state.isAuth,
+      },
     });
   };
   if (isLoading) {
@@ -250,7 +303,9 @@ const MyMeetingSchResister = () => {
                             gap: "10px",
                           }}
                         >
-                          <label htmlFor="noticeid">일정명</label>
+                          <label htmlFor="noticeid">
+                            <strong style={{ color: "red" }}>*</strong>일정명
+                          </label>
                           <input
                             id="planTitle"
                             name="planTitle"
@@ -269,7 +324,9 @@ const MyMeetingSchResister = () => {
                           }}
                         >
                           {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
-                          <label htmlFor="schDateId">일정날짜</label>
+                          <label htmlFor="schDateId">
+                            <strong style={{ color: "red" }}>*</strong>일정날짜
+                          </label>
                           <input
                             type="date"
                             id="planStartDt"
@@ -290,7 +347,9 @@ const MyMeetingSchResister = () => {
                           }}
                         >
                           {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
-                          <label htmlFor="schDateId">일정시간</label>
+                          <label htmlFor="schDateId">
+                            <strong style={{ color: "red" }}>*</strong>일정시간
+                          </label>
                           <input
                             id="planStartTime"
                             name="planStartTime"
@@ -309,7 +368,9 @@ const MyMeetingSchResister = () => {
                             gap: "10px",
                           }}
                         >
-                          <label htmlFor="noticeid">장소</label>
+                          <label htmlFor="noticeid">
+                            <strong style={{ color: "red" }}>*</strong>일정장소
+                          </label>
                           <input
                             type="text"
                             id="planLocation"
@@ -321,7 +382,9 @@ const MyMeetingSchResister = () => {
                     </div>
                   </div>
                   <div className="flex-column">
-                    <label htmlFor="noticecontent">일정 소개</label>
+                    <label htmlFor="noticecontent">
+                      <strong style={{ color: "red" }}>*</strong>일정 소개
+                    </label>
                     <textarea
                       type="textarea"
                       id="planContents"
@@ -352,7 +415,13 @@ const MyMeetingSchResister = () => {
                     >
                       등록
                     </button>
-                    <button type="button" className="delete-btn">
+                    <button
+                      type="button"
+                      className="delete-btn"
+                      onClick={() => {
+                        changedValue();
+                      }}
+                    >
                       취소
                     </button>
                   </div>

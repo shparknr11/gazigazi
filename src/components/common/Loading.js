@@ -21,7 +21,7 @@ const LoadingWrapper = styled.div`
 `;
 
 const LoadingText = styled.div`
-  color: #57d7b7;
+  color: #dcd8c5;
   font-weight: 700;
   font-size: 15px;
   margin-top: 10px; /* Space between loader and text */
@@ -31,7 +31,8 @@ const Loading = () => {
   return (
     <LoadingWrapper>
       <LoadingText>
-        <PulseLoader />
+        <PulseLoader color="#dcd8c5" />
+        <div>loading...</div>
       </LoadingText>
     </LoadingWrapper>
   );

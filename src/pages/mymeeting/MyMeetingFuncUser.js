@@ -27,7 +27,7 @@ const MyMeetingFuncUserStyle = styled.div`
     font-size: 18px;
     font-weight: bold;
     border: 1px solid #f7ebd5;
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 0px 0px 0px;
     flex-direction: column;
     justify-content: start;
   }
@@ -64,7 +64,7 @@ const MyMeetingFuncUserStyle = styled.div`
     cursor: pointer;
   }
   .item-border-right {
-    border-right: 1px solid #f7ebd5;
+    /* border-right: 1px solid #f7ebd5; */
   }
   .func-main {
     width: 100%;
@@ -416,10 +416,10 @@ const MyMeetingFuncUser = () => {
                       <span>일자</span>
                       <span>삭제</span>
                     </li>
-                    {budgetList?.map(item => (
+                    {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
                         <span>
-                          {item?.budgetSeq}
+                          {index}
                           {/* <img src={`../../images/${item.budgetPic}`} /> */}
                         </span>
                         <span>{item.cdNm}</span>

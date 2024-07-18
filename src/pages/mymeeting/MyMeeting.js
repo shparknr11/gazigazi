@@ -7,6 +7,8 @@ import {
   getMyMeetMemberList,
 } from "../../apis/mymeetingapi/mymeetingapi";
 import GuideTitle from "../../components/common/GuideTitle";
+import { toast } from "react-toastify";
+import Loading from "../../components/common/Loading";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
@@ -59,6 +61,7 @@ const MyMeetingStyle = styled.div`
     padding-top: 30px;
     padding-left: 50px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
+    min-height: 553px;
   }
   .img-container {
     width: 30%;
@@ -92,7 +95,7 @@ const MyMeetingStyle = styled.div`
     z-index: 1;
 
     width: 100%;
-    max-height: 337px;
+    height: 300px;
     border-radius: 10px 10px 0 0;
   }
   .caption-img {
@@ -138,23 +141,23 @@ const MyMeetingStyle = styled.div`
   .mymeeting-div {
     display: flex;
     border: 1px solid rgb(219, 219, 219);
-    height: 27px;
+    height: 30px;
     justify-content: center;
-    gap: 10px;
+    gap: 3px;
     border-radius: 4px 4px 0px 0;
     border-bottom: none;
-    background-color: #f9f8f5;
   }
   .mymeeting-div-area {
+    color: #c2c2c2;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
   }
   .mymeeting-div-area:hover {
-    color: gray;
-    border-radius: 4px;
-    background-color: #ebebeb;
+    color: #fff;
+    transition: background-color 0.6s;
+    background: rgb(248, 235, 214);
   }
   .span-pointer {
     display: block;
@@ -174,6 +177,7 @@ const MyMeeting = () => {
   const [isAuth, setIsAuth] = useState(0);
   const [imgError, setImgError] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
 
@@ -183,20 +187,34 @@ const MyMeeting = () => {
   const handleClickEnterMeet = async () => {
     // userSeq 변경 해야하고 page, 는 나중에 수정
     // size 는
+    setIsLoading(true);
     const enterMeetObj = {
       userSeq: sessionStorage.getItem("userSeq"),
       page,
     };
-    const res = await getMyMeetMemberList(enterMeetObj);
-    setAllData(res?.list);
+    try {
+      const res = await getMyMeetMemberList(enterMeetObj);
+      setAllData(res?.list);
+      toast.success("모임이 조회되었습니다.");
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
   };
   const handleClickMakeMeet = async () => {
+    setIsLoading(true);
     const enterMeetObj = {
       userSeq: sessionStorage.getItem("userSeq"),
       page,
     };
-    const res = await getMyMeetLeaderList(enterMeetObj);
-    setAllData(res?.list);
+    try {
+      const res = await getMyMeetLeaderList(enterMeetObj);
+      setAllData(res?.list);
+      toast.success("모임이 조회되었습니다.");
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
   };
   useEffect(() => {
     document.getElementById("meetingMake").click();
@@ -204,13 +222,23 @@ const MyMeeting = () => {
   const imgOnError = () => {
     setImgError(true);
   };
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <MyMeetingStyle>
       <div className="meeting-wrap">
         <GuideTitle title={"모임리스트"} guideTitle={"내 모임"}></GuideTitle>
         <div className="meeting-inner">
           <div className="caption-area">
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                fontSize: "18px",
+                color: "#c9c2a5",
+              }}
+            >
               <div className="mymeeting-div">
                 <div className="mymeeting-div-area">
                   <span
@@ -242,132 +270,148 @@ const MyMeeting = () => {
             {/* <!-- 스와이퍼 들어올수도 있음. --> */}
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
-              {allData?.map(item => (
-                <div className="img-container" key={item?.partySeq}>
-                  <div>
-                    <div className="container">
-                      {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
-                      <img
-                        className="caption-img"
-                        src={`http://112.222.157.156:5122/pic/party/${item?.partySeq}/${item?.partyPic}`}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                        onError={imgOnError}
-                      ></img>
-                      <div className="buttons">
-                        <div className="buttons-inner">
-                          {isAuth === 1 ? (
-                            <>
-                              <button
-                                style={{ display: "none" }}
-                                className="button-style delete-btn"
-                                onClick={() => {
-                                  if (
-                                    confirm("정말 모임을 탈퇴하시겠습니까?")
-                                  ) {
-                                    alert("탈퇴 되었습니다.");
-                                  }
-                                }}
-                              >
-                                탈퇴
-                              </button>
-                              <button
-                                className="button-style etc-btn"
-                                onClick={e => {
-                                  navigate(
-                                    `/mymeeting/mymeetinguser/${item?.partySeq}`,
-                                    {
-                                      state: {
-                                        isAuth: isAuth,
-                                        partyName: item?.partyName,
+              {allData.length > 0 ? (
+                allData?.map(item => (
+                  <div className="img-container" key={item?.partySeq}>
+                    <div>
+                      <div className="container">
+                        {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
+                        <img
+                          className="caption-img"
+                          src={`http://112.222.157.156:5122/pic/party/${item?.partySeq}/${item?.partyPic}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
+                          onError={imgOnError}
+                        ></img>
+                        <div className="buttons">
+                          <div className="buttons-inner">
+                            {isAuth === 1 ? (
+                              <>
+                                <button
+                                  style={{ display: "none" }}
+                                  className="button-style delete-btn"
+                                  onClick={() => {
+                                    if (
+                                      confirm("정말 모임을 탈퇴하시겠습니까?")
+                                    ) {
+                                      alert("탈퇴 되었습니다.");
+                                    }
+                                  }}
+                                >
+                                  탈퇴
+                                </button>
+                                <button
+                                  className="button-style etc-btn"
+                                  onClick={e => {
+                                    navigate(
+                                      `/mymeeting/mymeetinguser/${item?.partySeq}`,
+                                      {
+                                        state: {
+                                          isAuth: isAuth,
+                                          partyName: item?.partyName,
+                                        },
                                       },
-                                    },
-                                  );
-                                }}
-                              >
-                                Blog
-                              </button>
+                                    );
+                                  }}
+                                >
+                                  Blog
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className="button-style etc-btn"
+                                  style={{ width: "100px" }}
+                                  onClick={() => {
+                                    if (confirm("수정하시겠습니까?")) {
+                                      navigate(
+                                        `/meeting/modify/${item?.partySeq}`,
+                                      );
+                                    }
+                                  }}
+                                >
+                                  수정
+                                </button>
+                                <button
+                                  className="button-style etc-btn"
+                                  style={{ width: "100px" }}
+                                  onClick={e => {
+                                    navigate(
+                                      `/mymeeting/mymeetingLeader/${item?.partySeq}`,
+                                      {
+                                        state: {
+                                          isAuth: isAuth,
+                                          partyName: item?.partyName,
+                                        },
+                                      },
+                                    );
+                                  }}
+                                >
+                                  Blog
+                                </button>
+                                {/* <div>{item.partyAuthGb}</div> */}
+                                <button
+                                  className="button-style etc-btn"
+                                  style={{ width: "100px" }}
+                                  onClick={e => {
+                                    navigate(
+                                      `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
+                                    );
+                                  }}
+                                >
+                                  모임 신청 관리
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="img-text-area">
+                        {/* <!-- 얘 맵돌릴때 아이콘 바꿔야함 --> */}
+
+                        <div className="cut-text">
+                          모임장 : {item.userName}
+                          {/* 🚗(아이콘으로변경)최서윤 님의 모임 */}
+                        </div>
+                        {/* <div className="cut-text">신나는 모임 어쩌구</div> */}
+                        <div className="cut-text">{item.partyIntro}</div>
+                        <div className="cut-text">
+                          모임명 : {item.partyName}
+                          {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
+                        </div>
+                        <div className="cut-text">
+                          {/* 일단 물어볼 것 */}
+                          {item.partyAuthGb !== "0" ? (
+                            <>
+                              현재 참가 인원 : {item.partyNowMem} /{" "}
+                              {item.partyMaximum}
                             </>
                           ) : (
-                            <>
-                              <button
-                                className="button-style etc-btn"
-                                style={{ width: "100px" }}
-                                onClick={() => {
-                                  if (confirm("수정하시겠습니까?")) {
-                                    navigate(
-                                      `/meeting/modify/${item?.partySeq}`,
-                                    );
-                                  }
-                                }}
-                              >
-                                수정
-                              </button>
-                              <button
-                                className="button-style etc-btn"
-                                style={{ width: "100px" }}
-                                onClick={e => {
-                                  navigate(
-                                    `/mymeeting/mymeetingLeader/${item?.partySeq}`,
-                                    {
-                                      state: {
-                                        isAuth: isAuth,
-                                        partyName: item?.partyName,
-                                      },
-                                    },
-                                  );
-                                }}
-                              >
-                                Blog
-                              </button>
-                              {/* <div>{item.partyAuthGb}</div> */}
-                              <button
-                                className="button-style etc-btn"
-                                style={{ width: "100px" }}
-                                onClick={e => {
-                                  navigate(
-                                    `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
-                                  );
-                                }}
-                              >
-                                모임 신청 관리
-                              </button>
-                            </>
+                            "모임 승인 대기중"
                           )}
+                          {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                         </div>
                       </div>
                     </div>
-                    <div className="img-text-area">
-                      {/* <!-- 얘 맵돌릴때 아이콘 바꿔야함 --> */}
-
-                      <div className="cut-text">
-                        모임장 : {item.userName}
-                        {/* 🚗(아이콘으로변경)최서윤 님의 모임 */}
-                      </div>
-                      {/* <div className="cut-text">신나는 모임 어쩌구</div> */}
-                      <div className="cut-text">{item.partyIntro}</div>
-                      <div className="cut-text">
-                        모임명 : {item.partyName}
-                        {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
-                      </div>
-                      <div className="cut-text">
-                        {/* 일단 물어볼 것 */}
-                        {item.partyAuthGb !== "0" ? (
-                          <>
-                            현재 참가 인원 : {item.partyNowMem} /{" "}
-                            {item.partyMaximum}
-                          </>
-                        ) : (
-                          "모임 승인 대기중"
-                        )}
-                        {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
-                      </div>
-                    </div>
                   </div>
+                ))
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <span style={{ fontSize: "30px" }}>
+                    조회된 모임이 없습니다.
+                  </span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>

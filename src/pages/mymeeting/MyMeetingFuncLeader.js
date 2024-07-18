@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { CiImageOff } from "react-icons/ci";
 import "./printledger.css";
 import { toast } from "react-toastify";
 import {
@@ -14,7 +13,8 @@ import {
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loading from "../../components/common/Loading";
 import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
-import GuideTitle from "../../components/common/GuideTitle";
+import "./common.js";
+
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -35,7 +35,7 @@ const MyMeetingFuncLeaderStyle = styled.div`
     font-size: 18px;
     font-weight: bold;
     border: 1px solid #f7ebd5;
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 0px 0px 0px;
     flex-direction: column;
     justify-content: start;
   }
@@ -70,8 +70,8 @@ const MyMeetingFuncLeaderStyle = styled.div`
     cursor: pointer;
   }
   .item-border {
-    border-right: 1px solid #f7ebd5;
-    border-bottom: 1px solid #f7ebd5;
+    /* border-right: 1px solid #f7ebd5;
+    border-bottom: 1px solid #f7ebd5; */
   }
   .func-main {
     width: 100%;
@@ -131,7 +131,9 @@ const LedgerStyle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     span {
+      height: 65px;
       border: 1px solid rgb(248, 235, 214);
       width: 25%;
       padding: 20px;
@@ -140,6 +142,9 @@ const LedgerStyle = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 4px !important;
   }
 `;
 
@@ -157,7 +162,7 @@ const MyMeetingFuncLeader = () => {
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
-  const [subTitle, setSubTitle] = useState("일정관리");
+  // const [subTitle, setSubTitle] = useState("일정관리");
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
@@ -186,8 +191,8 @@ const MyMeetingFuncLeader = () => {
 
       clickedItem.classList.add("divButtonStyle");
       if (titletext) {
-        titletext.innerHTML =
-          "Blog" + "(" + document.getElementById(e.target.id).innerText + ")";
+        //   titletext.innerHTML =
+        //     "Blog" + "(" + document.getElementById(e.target.id).innerText + ")";
         activeItem = clickedItem;
         // 이벤트 걸곳 axios 여기다 걸자
         switch (clickedItem.id) {
@@ -228,6 +233,11 @@ const MyMeetingFuncLeader = () => {
       const resDataMember = await getMemberBudget(budgetObj);
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
+
+      let i = res?.length ? res?.length : 0;
+      for (i; i <= 9; i++) {
+        res.push([]);
+      }
       setBudgetList(res);
       toast.success(`${budgetObj.month}월 데이터가 조회되었습니다.`);
     } catch (error) {
@@ -261,12 +271,7 @@ const MyMeetingFuncLeader = () => {
   return (
     <MyMeetingFuncLeaderStyle>
       {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}
-      <GuideTitle
-        id="titletext"
-        title={"Blog"}
-        guideTitle={"내 모임"}
-        subTitle={`(${subTitle})`}
-      ></GuideTitle>
+      <TitleDivStyle id="titletext">Blog</TitleDivStyle>
       <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
         <div className="item-wrap">
@@ -275,7 +280,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(1);
-              setSubTitle("일정관리");
+              // setSubTitle("일정관리");
             }}
           >
             일정 관리
@@ -286,7 +291,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(2);
-              setSubTitle("모임게시판");
+              // setSubTitle("모임게시판");
             }}
           >
             모임 게시판
@@ -296,7 +301,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(3);
-              setSubTitle("가계부");
+              // setSubTitle("가계부");
               handleBudgetClick();
             }}
             ref={itemRef}
@@ -410,7 +415,11 @@ const MyMeetingFuncLeader = () => {
                     <button
                       className="etc-btn"
                       onClick={() => {
-                        handlePrint();
+                        if (budgetList > 0) {
+                          handlePrint();
+                        } else {
+                          toast.warning("데이터가 없습니다.");
+                        }
                       }}
                     >
                       출력
@@ -426,12 +435,12 @@ const MyMeetingFuncLeader = () => {
                       <span>멤버명</span>
                       <span>금액</span>
                       <span>일자</span>
-                      <span>삭제</span>
+                      <span className="print-delete">삭제</span>
                     </li>
-                    {budgetList?.map(item => (
+                    {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
                         <span>
-                          {item?.budgetSeq}
+                          {index + 1}
                           {/* <img src={`../../images/${item.budgetPic}`} /> */}
                         </span>
                         <span>{item.cdNm}</span>
@@ -440,16 +449,19 @@ const MyMeetingFuncLeader = () => {
                         <span>{item.budgetAmount}</span>
                         <span>{item.budgetDt}</span>
                         <span
-                          style={{ paddingTop: "13px", paddingBottom: "13px" }}
+                          className="print-delete"
+                          style={{ paddingTop: "17px" }}
                         >
-                          <button
-                            className="delete-btn"
-                            onClick={() => {
-                              handleBudgetDelete(item.budgetSeq);
-                            }}
-                          >
-                            내역삭제
-                          </button>
+                          {item?.budgetSeq ? (
+                            <button
+                              className="delete-btn"
+                              onClick={() => {
+                                handleBudgetDelete(item.budgetSeq);
+                              }}
+                            >
+                              내역삭제
+                            </button>
+                          ) : null}
                         </span>
                       </li>
                     ))}
@@ -458,25 +470,19 @@ const MyMeetingFuncLeader = () => {
                       <span style={{ display: "inline-block", width: "100%" }}>
                         납입 내역(미납입: {depositMember?.unDepositedMember}명)
                       </span>
-                      <div style={{ width: "100%" }}>
-                        <span
-                          style={{ display: "inline-block", width: "100%" }}
-                        >
-                          {depositMember?.depositedMember}
-                          /&nbsp;
-                          {depositMember?.memberSum}명
-                        </span>
-                      </div>
-                      <div style={{ width: "100%" }}>
-                        <span
-                          style={{
-                            display: "inline-block",
-                            width: "100%",
-                          }}
-                        >
-                          {monthValue} 월 금액 내역
-                        </span>
-                      </div>
+                      <span style={{ display: "inline-block", width: "100%" }}>
+                        {depositMember?.depositedMember}
+                        /&nbsp;
+                        {depositMember?.memberSum}명
+                      </span>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: "100%",
+                        }}
+                      >
+                        {monthValue} 월 금액 내역
+                      </span>
                       <span style={{ display: "inline-block", width: "100%" }}>
                         {depositSum} 원
                       </span>
