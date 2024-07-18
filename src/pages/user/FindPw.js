@@ -96,9 +96,12 @@ const FindPw = () => {
       const response = await axios.patch("/findpw", {
         userEmail: email,
       });
+
       if (response.data.code === 1) {
+        console.log(response.data);
         setResultMessage(`임시 비밀번호: ${response.data.tempPassword}`);
       } else {
+        console.log(response.data);
         setResultMessage(
           response.data.message || "임시 비밀번호 발급에 실패했습니다.",
         );
