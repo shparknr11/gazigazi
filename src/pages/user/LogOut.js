@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 const LogOut = () => {
   const navigate = useNavigate();
-  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleLogout = () => {
     // Remove all user-related data from sessionStorage
@@ -24,11 +22,11 @@ const LogOut = () => {
     background-color: #ebddcc;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 8px;
     border-radius: 4px;
     cursor: pointer;
     width: 20%;
-    font-size: 12pt;
+    font-size: 10pt;
     margin-top: 5px;
     transition: background-color 0.3s;
 

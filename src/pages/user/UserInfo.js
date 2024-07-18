@@ -10,8 +10,8 @@ import LogOut from "./LogOut";
 const UserInfoStyle = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  height: 120vh;
+  align-items: center;
+  height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
@@ -21,14 +21,14 @@ const UserInfoWrapStyle = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 20px;
+  width: 100%;
 `;
 
 const UserInfoInnerStyle = styled.div`
-  width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   padding: 20px;
 
@@ -42,7 +42,6 @@ const UserInfoInnerStyle = styled.div`
     height: auto;
     box-sizing: border-box;
     overflow: hidden;
-    margin-top: -60px;
   }
 
   .profile-picture-container {
@@ -68,7 +67,7 @@ const UserInfoInnerStyle = styled.div`
   .mypage-container input[type="date"],
   .mypage-container input[type="password"] {
     width: 100%;
-    padding: 8px;
+    padding: 5px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -89,7 +88,7 @@ const UserInfoInnerStyle = styled.div`
     border-radius: 4px;
     cursor: pointer;
     width: 35%;
-    font-size: 14pt;
+    font-size: 12pt;
     margin: 5px;
     transition: background-color 0.3s;
   }
@@ -114,7 +113,7 @@ const UserInfo = () => {
     const storedEmailVerified =
       sessionStorage.getItem("isEmailCompleted") === "true";
     setIsEmailCompleted(storedEmailVerified);
-  });
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -153,7 +152,6 @@ const UserInfo = () => {
 
     fetchUserData();
 
-    // 페이지가 처음 로드될 때 로딩을 종료하지 않고 계속 로딩 상태 유지
     const timeout = setTimeout(() => {
       setLoading(false);
     }, 1000); // 1초 후 로딩 종료
@@ -212,7 +210,7 @@ const UserInfo = () => {
           <div className="mypage-container">
             <div className="profile-picture-container">
               <img
-                src={`/images/${userData.userPic || "default.png"}`}
+                src={`/pic/user/${userSeq}/${userData.userPic || "default.png"}`}
                 alt="프로필 사진"
                 id="profilePreview"
               />
@@ -241,9 +239,9 @@ const UserInfo = () => {
                 className="button"
                 type="button"
                 onClick={sendCertificationCode}
-                disabled={isEmailVerified}
+                disabled={isEmailCompleted}
               >
-                {isEmailVerified ? "인증완료" : "재전송"}
+                {isEmailCompleted ? "인증완료" : "인증코드 발송"}
               </button>
             </label>
             <label>

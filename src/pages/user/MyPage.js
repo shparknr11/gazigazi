@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 
 const MyPageStyle = styled.div`
@@ -65,7 +65,6 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.userEmail);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -94,12 +93,15 @@ const MyPage = () => {
     fetchUserData();
   }, [navigate, userSeq]);
 
-  useEffect(() => {
-    if (location.pathname === "/myprofile/:userId/userInfo") {
-      navigate(`/myprofile/:userId/userInfo`);
-    }
-  }, [navigate, location.pathname]);
-  // 이거 적용하니까 메뉴 눌러도 페이지 랜더링이 안됨 ㅋㅋ
+  // useEffect(() => {
+  //   const expectedPath = `/myprofile/${userSeq}/userInfo`;
+  //   if (location.pathname !== expectedPath) {
+  //     navigate(expectedPath);
+  //   }
+  // }, [navigate, location.pathname, userSeq]);
+  // 마이페이지에 들어가면 기본적으로 사용자 정보를 렌더링시키는 코드
+  // 근데 다른 메뉴 눌러도 사용자 정보 하나만 렌더링되는 문제가 있음
+  // 지금은 수정될 때까지 사용 불가
 
   if (loading) {
     return <Loading>로딩 중...</Loading>;
