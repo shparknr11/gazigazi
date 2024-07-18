@@ -14,6 +14,7 @@ import {
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loading from "../../components/common/Loading";
 import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
+import GuideTitle from "../../components/common/GuideTitle";
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -156,13 +157,15 @@ const MyMeetingFuncLeader = () => {
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
-
+  const [subTitle, setSubTitle] = useState("일정관리");
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  useEffect(() => {}, [isClicked]);
+  useEffect(() => {
+    console.log(location);
+  }, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {}, [isPopup]);
   useEffect(() => {
@@ -258,7 +261,12 @@ const MyMeetingFuncLeader = () => {
   return (
     <MyMeetingFuncLeaderStyle>
       {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}
-      <TitleDivStyle id="titletext">Blog</TitleDivStyle>
+      <GuideTitle
+        id="titletext"
+        title={"Blog"}
+        guideTitle={"내 모임"}
+        subTitle={`(${subTitle})`}
+      ></GuideTitle>
       <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
         <div className="item-wrap">
@@ -267,6 +275,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(1);
+              setSubTitle("일정관리");
             }}
           >
             일정 관리
@@ -277,6 +286,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(2);
+              setSubTitle("모임게시판");
             }}
           >
             모임 게시판
@@ -286,6 +296,7 @@ const MyMeetingFuncLeader = () => {
             className="item item-border cut-text"
             onClick={() => {
               setIsClicked(3);
+              setSubTitle("가계부");
               handleBudgetClick();
             }}
             ref={itemRef}

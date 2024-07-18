@@ -27,8 +27,8 @@ const MyMeetingNoticeStyle = styled.div`
   z-index: 999;
   .notice-wrap {
     position: absolute;
-    top: 7%;
-    left: 11%;
+    top: 11%;
+    left: 27%;
     width: 100%;
     height: 650px;
     display: flex;
@@ -48,7 +48,7 @@ const MyMeetingNoticeStyle = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 30px;
-    height: 530px;
+    height: 600px;
     /* max-width: 900px; */
     border: 1px solid gray;
     border-radius: 4px;
@@ -286,17 +286,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                     fontWeight: "bold",
                     textAlign: "end",
                   }}
-                >
-                  <button
-                    type="button"
-                    className="etc-btn"
-                    onClick={() => {
-                      setIsClicked(true);
-                    }}
-                  >
-                    일정멤버
-                  </button>
-                </div>
+                ></div>
                 <div className="meeting-introduce">
                   <div
                     style={{
@@ -369,8 +359,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                           textAlign: "left",
                         }}
                       >
-                        <label htmlFor="mettingname" style={{ width: "25%" }}>
-                          금액구분
+                        <label htmlFor="mettingname" style={{ width: "100%" }}>
+                          회비 입금 등록
                         </label>
                         <FormControl>
                           <RadioGroup
@@ -378,7 +368,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                             defaultValue="1"
                             name="budgetGb"
                           >
-                            <div>
+                            {/* 나중에 통합적으로 관리 X 현재는 입금 default */}
+                            <div hidden>
                               <FormControlLabel
                                 value="1"
                                 control={<Radio />}

@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { CiImageOff } from "react-icons/ci";
 import {
   deleteSchOne,
   getSchOne,
@@ -12,6 +11,8 @@ import { useLocation } from "react-router";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import MyMeetingSchMemberList from "./MyMeetingSchMemberList";
+import { useParams } from "react-router-dom";
+import Loading from "../../components/common/Loading";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -120,6 +121,26 @@ const MyMeetingSchDetail = () => {
   const [planMemberJoinFunc, setPlanMemberJoinFunc] = useState(() => {});
   const location = useLocation();
   const navigate = useNavigate();
+  const param = useParams();
+  console.log(param.meetingschid);
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   const getDataOne = async () => {
     console.log(location.state.planSeq);
     const res = await getSchOne(location.state.planSeq);
@@ -131,12 +152,14 @@ const MyMeetingSchDetail = () => {
     setPlanLocation(res.planLocation);
     setPlanContents(res.planContents);
     setPlanCdNm(res.cdNm);
-    setIsAuth(location.state.partyAuthGb);
-    console.log(location.state.partyAuthGb);
+    setIsAuth(location.state.isAuth);
+
+    console.log(location.state.isAuth);
   };
   useEffect(() => {
     getDataOne();
   }, []);
+  useEffect(() => {}, [planCdNm]);
   const formDataFunc = formId => {
     let formData = {};
     const form = document.getElementById(formId);
@@ -187,12 +210,12 @@ const MyMeetingSchDetail = () => {
     }
   };
   console.log("asdlkfjasklfjasdlkj", location);
-  const handleClickSchEnter = async userSeq => {
+  const handleClickSchEnter = async () => {
     setIsLoading(true);
     try {
       const res = await postSchJoin(
         location.state.planSeq,
-        (userSeq = sessionStorage.getItem("userSeq")),
+        sessionStorage.getItem("userSeq"),
       );
       console.log(res);
       toast.success("일정에 참가되었습니다!");
@@ -202,6 +225,23 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
+  console.log(param.meetingschid);
+  const handleClickSchDelete = async () => {
+    setIsLoading(true);
+    try {
+      const res = await deleteSchOne(param.meetingschid);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+    toast.success("일정이 삭제되었습니다.");
+    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+  };
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
+  console.log("asfdasjfhkajsdhflkjasfhlkjsadhfkjsldafhkj", location);
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -209,7 +249,7 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              {location.state.partyAuthGb === "1" ? (
+              {location.state.isAuth === "1" ? (
                 <div
                   style={{
                     width: "100%",
@@ -229,21 +269,6 @@ const MyMeetingSchDetail = () => {
                         }}
                       >
                         일정완료
-                      </button>
-                      <button
-                        className="etc-btn"
-                        onClick={() => {
-                          navigate("/review/write", {
-                            state: {
-                              planSeq: location.state.planSeq,
-                              planMemberSeq: planMemberSeq,
-                              planTitle: planTitle,
-                              partyName: location.state.partyName,
-                            },
-                          });
-                        }}
-                      >
-                        리뷰 작성
                       </button>
                     </>
                   ) : (
@@ -280,6 +305,13 @@ const MyMeetingSchDetail = () => {
                       >
                         참가완료
                       </button>
+                      <button
+                        className={"etc-btn"}
+                        style={{ backgroundColor: "gray" }}
+                        disabled
+                      >
+                        리뷰 작성
+                      </button>
                     </>
                   ) : (
                     <>
@@ -291,13 +323,6 @@ const MyMeetingSchDetail = () => {
                         }}
                       >
                         일정참가
-                      </button>
-                      <button
-                        className={"etc-btn"}
-                        style={{ backgroundColor: "gray" }}
-                        disabled
-                      >
-                        리뷰 작성
                       </button>
                     </>
                   )}
@@ -460,7 +485,7 @@ const MyMeetingSchDetail = () => {
                       className="delete-btn"
                       onClick={() => {
                         if (confirm("삭제하시겠습니까?")) {
-                          deleteSchOne(location.state.planSeq);
+                          handleClickSchDelete();
                         }
                       }}
                     >

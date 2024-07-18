@@ -4,10 +4,12 @@ import {
   deleteSchOne,
   postMonthCalculateBudget,
 } from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import Loading from "../../components/common/Loading";
 import { useLocation } from "react-router";
 import { toast } from "react-toastify";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -105,6 +107,7 @@ const MyMeetingSchResister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const param = useParams();
   const formDataFunc = formId => {
     let formData = {};
     const form = document.getElementById(formId);
@@ -136,7 +139,9 @@ const MyMeetingSchResister = () => {
     } finally {
       setIsLoading(false);
     }
-    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
+      state: { isAuth: location.state.isAuth },
+    });
   };
   if (isLoading) {
     return <Loading></Loading>;
@@ -145,7 +150,11 @@ const MyMeetingSchResister = () => {
     <>
       <MyMeetingNoticeStyle>
         <div className="notice-wrap">
-          <TitleDivStyle>일정 등록페이지</TitleDivStyle>
+          <GuideTitle
+            id="titletext"
+            title={"일정 등록 페이지"}
+            guideTitle={"내 모임"}
+          ></GuideTitle>
           <div className="notice-inner">
             <div className="notice-form-area">
               <form id="dataForm" name="dataForm">
