@@ -289,6 +289,7 @@ const MyMeetingFuncUser = () => {
             일정 관리
           </div>
           <div
+            style={{ display: "none" }}
             id="2"
             className="item item-border-right"
             onClick={() => {
@@ -318,7 +319,7 @@ const MyMeetingFuncUser = () => {
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
-              <div>
+              <div style={{ display: "none" }}>
                 <div>
                   <TitleDivStyle>모임 게시판</TitleDivStyle>
                   <div style={{ textAlign: "right", paddingRight: "10px" }}>
