@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Rating } from "@mui/material";
-import { useState } from "react";
+import axios from "axios";
+import { useRef, useState } from "react";
+import { ActionButton } from "../../components/button/Button";
 import { useLocation } from "react-router-dom";
 const WriteInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -40,32 +42,99 @@ const ReviewTextStyle = styled.div`
   margin-bottom: 10px;
 `;
 const Write = () => {
-  // const labels = {
-  //   0.5: "Useless",
-  //   1: "Useless+",
-  //   1.5: "Poor",
-  //   2: "Poor+",
-  //   2.5: "Ok",
-  //   3: "Ok+",
-  //   3.5: "Good",
-  //   4: "Good+",
-  //   4.5: "Excellent",
-  //   5: "Excellent+",
-  // };
-  const [rating, setRating] = useState(null);
-  const [reviewPic, setReviewPic] = useState(null);
-  const [previewPic, setPreviewPic] = useState("");
+  const [reviewRating, setReviewRating] = useState(null);
+  const [reviewContents, setReviewContents] = useState("");
+  const [reviewPic, setReviewPic] = useState([]);
+  const [previewPic, setPreviewPic] = useState([]);
+  const fileBt = useRef(null);
 
   const handleRwFileChange = e => {
-    const tempFile = e.target.files[0];
-    if (tempFile) {
-      setReviewPic(tempFile);
-      const tempUrl = URL.createObjectURL(tempFile);
-      setPreviewPic(tempUrl);
+    const filesArr = Array.from(e.target.files);
+
+    if (filesArr) {
+      setReviewPic([...reviewPic, ...filesArr]);
+      const imgUrlArr = filesArr.map(item => URL.createObjectURL(item));
+      setPreviewPic([...previewPic, ...imgUrlArr]);
     } else {
-      setReviewPic(null);
+      setReviewPic([]);
       setPreviewPic("");
     }
+  };
+  const deleteFile = _index => {
+    // console.log("삭제", _index);
+    // 미리보기 배열에서 제거 : 기준 순서(index)
+    const tempPreviewArr = previewPic.filter((item, index) => index !== _index);
+    setPreviewPic(tempPreviewArr);
+    // 전송 파일 배열에서 제거 : 기준 순서(index)
+    const tempFileArr = reviewPic.filter((item, index) => index !== _index);
+    setReviewPic(tempFileArr);
+  };
+
+  const makeThumbnail = () => {
+    return previewPic.map((item, index) => (
+      <img
+        src={item}
+        key={index}
+        style={{ width: 80 }}
+        onClick={e => {
+          deleteFile(index);
+        }}
+      />
+    ));
+  };
+
+  // submit 이벤트 핸들러
+  const handleSubmitWrite = e => {
+    // 기본 기능 막기
+    e.preventDefault();
+    // step 1. 전송 데이터 포맷 만들기
+    const formData = new FormData();
+
+    // step 2. 보낼 데이터 (json 형식의 문자열로 만들기)
+    const infoData = JSON.stringify({
+      reviewPlanSeq: 1,
+      reviewPlmemberSeq: 1,
+      reviewContents,
+      reviewRating,
+    });
+    // step 3. Blob 바이너리 데이터 만들기
+    const data = new Blob([infoData], { type: "application/json" });
+
+    // step 4. form-data에 "키명" 값으로 추가하기
+    formData.append("p", data);
+    reviewPic.forEach((item, index, arr) => {
+      // step 5. 파일 추가하기
+      formData.append("files", item);
+    });
+    // step 6. axios 로 전달
+    postReview(formData);
+  };
+
+  // 리뷰 등록하기
+  const postReview = async _formData => {
+    try {
+      const header = { headers: { "Content-Type": "multipart/form-data" } };
+      const response = await axios.post(`/api/review`, _formData, header);
+      console.log(response);
+      const status = response.status.toString().charAt(0);
+      if (status === "2") {
+        console.log("response", response.data);
+        return response.data;
+      } else {
+        alert("API 오류발생 status 확인해주세요");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // 강제로 input type="file" 을 클릭한 것처럼 js 에서 실행
+  const handleFileClick = () => {
+    // document.querySelector("#filebt_id").click();
+    fileBt.current.click();
+  };
+
+  const handleChangeContents = e => {
+    setReviewContents(e.target.value);
   };
   const location = useLocation();
   console.log(location);
@@ -77,7 +146,7 @@ const Write = () => {
       <ReviewSelectStyle>
         <label htmlFor="review-title">내가 가입한 모임</label>
         <select id="review-title">
-          <option value="1">내가 가입한 모임</option>
+          <option>내가 가입한 모임</option>
         </select>
       </ReviewSelectStyle>
       <ReviewCommentStyle>
@@ -87,17 +156,25 @@ const Write = () => {
             name="simple-controlled"
             size="large"
             precision={0.5}
-            value={rating}
+            value={reviewRating}
             onChange={(event, newValue) => {
               console.log(newValue);
-              setRating(newValue);
+              setReviewRating(newValue);
             }}
           />
         </div>
       </ReviewCommentStyle>
       <ReviewFileStyle>
         <label htmlFor="review-pic">사진</label>
+        <ActionButton
+          label="사진첨부"
+          onClick={() => {
+            handleFileClick();
+          }}
+        ></ActionButton>
         <input
+          style={{ display: "none" }}
+          ref={fileBt}
           type="file"
           id="review-pic"
           multiple
@@ -106,15 +183,26 @@ const Write = () => {
             handleRwFileChange(e);
           }}
         />
-        {previewPic ? (
-          <img style={{ width: "20%", height: "20%" }} src={previewPic} />
-        ) : null}
+        {previewPic ? <div>{makeThumbnail()}</div> : null}
       </ReviewFileStyle>
       <ReviewTextStyle>
         <label htmlFor="revew-text">솔직한 리뷰를 작성해주세요</label>
-        <input type="text" id="revew-text" />
+        <textarea
+          type="text"
+          id="revew-text"
+          value={reviewContents}
+          onChange={e => {
+            handleChangeContents(e);
+          }}
+        />
       </ReviewTextStyle>
-      <button>작성완료</button>
+      <button
+        onClick={e => {
+          handleSubmitWrite(e);
+        }}
+      >
+        작성완료
+      </button>
       <button>취소</button>
     </WriteInnerStyle>
   );

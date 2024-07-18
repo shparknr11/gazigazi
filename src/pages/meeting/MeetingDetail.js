@@ -41,6 +41,9 @@ const MeetItemTitle = styled.div`
     margin-top: 20px;
     margin-bottom: 15px;
   }
+  .meet-item-member-div {
+    display: flex;
+  }
   .meet-item-member {
     display: flex;
   }
@@ -84,10 +87,20 @@ const MeetItemCard = styled.div`
     /* padding: 25px; */
   }
   .meet-item-leader {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
     font-size: 16px;
     padding: 12px 20px;
+    img {
+      display: block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #999;
+      border-radius: 60%;
+      margin-right: 5px;
+    }
   }
   .meet-condition,
   .meet-apply-form {
@@ -112,6 +125,13 @@ const MeetItemCard = styled.div`
     padding: 10px 20px;
     border: 1px solid;
     border-radius: 25px;
+  }
+  .meet-item-button span {
+    display: flex;
+    align-items: center;
+    svg {
+      color: red;
+    }
   }
 `;
 const UnderLine = styled.div`
@@ -138,6 +158,7 @@ const MeetItemInfo = styled.div`
 const MeetingDetail = () => {
   const [detailList, setDetailList] = useState([]);
   const [joinContent, setJoinContent] = useState("");
+  const [isWished, setIsWished] = useState(false);
   //   const [searchParams] = useSearchParams();
   const { partySeq } = useParams();
   const userSeq = sessionStorage.getItem("userSeq");
@@ -181,8 +202,26 @@ const MeetingDetail = () => {
     const parseUserSeq = parseInt(userSeq);
     const parsePartySeq = parseInt(partySeq);
     const result = await getWishParty(parseUserSeq, parsePartySeq);
-    console.log(result);
+    if (result.code !== 1) {
+      alert(result.resultMsg);
+      return;
+    }
+    alert("관심목록에 추가되었습니다.");
+    setIsWished(!isWished);
   };
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
+
   return (
     <MeetItemStyle>
       <div className="inner">
@@ -194,14 +233,16 @@ const MeetingDetail = () => {
           <div className="meet-item-title">
             <span>{detailList.partyName}</span>
           </div>
-          <div className="meet-item-member">
-            <span style={{ color: "rgba(0,0,0,0.5)", marginRight: "5px" }}>
-              <IoPersonSharp />
-              참여인원
-            </span>
-            <span>
-              {detailList.partyNowMem}/{detailList.partyMaximum}
-            </span>
+          <div className="meet-item-member-div">
+            <div className="meet-item-member">
+              <span style={{ color: "rgba(0,0,0,0.5)", marginRight: "5px" }}>
+                <IoPersonSharp />
+                참여인원
+              </span>
+              <span>
+                {detailList.partyNowMem}/{detailList.partyMaximum}
+              </span>
+            </div>
           </div>
           <MeetItemCard>
             {/* style={{
@@ -221,8 +262,11 @@ const MeetingDetail = () => {
 
             <div className="meet-item-content">
               <span className="meet-item-leader">
-                <img src="" alt="프로필" />
-                최서윤 모임장
+                <img
+                  src={`/pic/party/${detailList.partySeq}/${detailList.partyPic}`}
+                  alt="프로필"
+                />
+                {detailList.userName} 모임장
               </span>
               <div className="meet-condition">
                 <span>가입 조건 </span>
@@ -239,8 +283,10 @@ const MeetingDetail = () => {
                     handleClickWish();
                   }}
                 >
-                  <AiTwotoneHeart />
-                  찜하기
+                  <span>
+                    {!isWished ? <>♡</> : <AiTwotoneHeart />}
+                    찜하기
+                  </span>
                 </div>
                 <div
                   className="meet-item-button"
@@ -261,7 +307,7 @@ const MeetingDetail = () => {
               {detailList.partyGenre === "1"
                 ? "🏈 내 취미는 스포츠"
                 : detailList.partyGenre === "2"
-                  ? "🎮 게임이 최고야"
+                  ? "🎮 게임"
                   : detailList.partyGenre === "3"
                     ? "🍨 모여서 맛집탐방"
                     : detailList.partyGenre === "4"

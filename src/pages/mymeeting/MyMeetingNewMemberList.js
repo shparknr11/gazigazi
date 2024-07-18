@@ -75,7 +75,7 @@ const MyMeetingNewMemberList = () => {
     console.log(joinUserSeq);
     const data = {
       joinUserSeq,
-      leaderUserSeq: userSeq,
+      leaderUserSeq: parseInt(userSeq),
       joinGb: 1,
     };
     await patchNewMember(partySeq, data);

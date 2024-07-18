@@ -37,7 +37,9 @@
   margin-top: 10px;
   margin-left: 250px;
 }
-
+.header-menu-mymeeting {
+  cursor: pointer;
+}
 .header-icon-list {
   display: flex;
   align-items: center;

@@ -26,7 +26,9 @@ const FooterStyle = styled.div`
   }
 
   .gazi-logo-div {
+    margin-bottom: 15px;
   }
+
   .gazi-logo {
     display: block;
     width: 100px;
@@ -38,12 +40,6 @@ const Footer = () => {
   return (
     <FooterStyle>
       <div className="footer-inner">
-        <div className="footer-description-div">
-          <div className="footer-description">
-            가까운 지역 가까운 지인, 가지가지
-          </div>
-          <div className="footer-txt">ⓒ gazigazi all rights reserved.</div>
-        </div>
         <div className="gazi-logo-div">
           <div
             className="gazi-logo"
@@ -54,6 +50,12 @@ const Footer = () => {
               backgroundSize: "cover",
             }}
           />
+        </div>
+        <div className="footer-description-div">
+          <div className="footer-description">
+            가까운 지역 가까운 지인, 가지가지
+          </div>
+          <div className="footer-txt">ⓒ gazigazi all rights reserved.</div>
         </div>
       </div>
     </FooterStyle>
