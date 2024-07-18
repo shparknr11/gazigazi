@@ -308,7 +308,7 @@ const Home = () => {
                       <div
                         className="list-box-profileimg"
                         style={{
-                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic})`,
+                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center",
                           backgroundSize: "contain",

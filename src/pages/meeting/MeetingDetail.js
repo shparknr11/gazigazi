@@ -156,7 +156,7 @@ const MeetItemInfo = styled.div`
 `;
 
 const MeetingDetail = () => {
-  const [detailList, setDetailList] = useState([]);
+  const [detailList, setDetailList] = useState(null);
   const [joinContent, setJoinContent] = useState("");
   const [isWished, setIsWished] = useState(false);
   //   const [searchParams] = useSearchParams();
@@ -195,8 +195,14 @@ const MeetingDetail = () => {
         console.log(error);
       }
     };
-    getDetailData(partySeq);
+    if (partySeq) {
+      getDetailData(partySeq);
+    }
   }, []);
+
+  if (!detailList) {
+    return null; // detailList가 로딩 중이면 아무것도 렌더링하지 않음
+  }
 
   const handleClickWish = async () => {
     const parseUserSeq = parseInt(userSeq);
