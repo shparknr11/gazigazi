@@ -117,6 +117,7 @@ const MyMeetingSchDetail = () => {
   const [planCdNm, setPlanCdNm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAuth, setIsAuth] = useState();
+  const [isCompleted, setIsCompleted] = useState();
   const [planMemberSeq, setPlanMemberSeq] = useState();
   const [planMemberJoinFunc, setPlanMemberJoinFunc] = useState(() => {});
   const location = useLocation();
@@ -141,9 +142,11 @@ const MyMeetingSchDetail = () => {
   //
   //
   //
+  useEffect(() => {}, [isAuth]);
+  useEffect(() => {}, [isCompleted]);
   const getDataOne = async () => {
     console.log(location.state.planSeq);
-    const res = await getSchOne(location.state.planSeq);
+    const res = await getSchOne(param.meetingschid);
     console.log(res);
     // setPlanObj(res);
     setPlanTitle(res.planTitle);
@@ -153,18 +156,18 @@ const MyMeetingSchDetail = () => {
     setPlanContents(res.planContents);
     setPlanCdNm(res.cdNm);
     setIsAuth(location.state.isAuth);
-
+    setIsCompleted(res.planCompleted);
     console.log(location.state.isAuth);
   };
   useEffect(() => {
     getDataOne();
   }, []);
-  useEffect(() => {}, [planCdNm]);
+  useEffect(() => {}, [isCompleted]);
   const formDataFunc = formId => {
     let formData = {};
     const form = document.getElementById(formId);
 
-    for (let i = 0; i < form.elements.length; i++) {
+    for (let i = 0; i < form?.elements.length; i++) {
       const element = form.elements[i];
       if (element.type !== "submit") {
         if (element.value !== "") {
@@ -185,11 +188,14 @@ const MyMeetingSchDetail = () => {
     });
     try {
       const res = await patchSch({
-        planSeq: location.state.planSeq,
+        planSeq: param.meetingschid,
         ...formDataFunc("dataForm"),
       });
+      console.log(param.meetingId);
       toast.success("일정이 수정되었습니다.");
-      navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+      navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
+        state: { isAuth: isAuth },
+      });
     } catch (error) {
       toast.warning(error);
     } finally {
@@ -200,7 +206,8 @@ const MyMeetingSchDetail = () => {
   const handleClickSchComp = async () => {
     setIsLoading(true);
     try {
-      const res = await patchSchComp(location.state.planSeq);
+      console.log(location.state.planSeq);
+      const res = await patchSchComp(param.meetingschid);
       console.log(res);
       toast.success("일정이 완료 되었습니다!");
     } catch (error) {
@@ -217,7 +224,6 @@ const MyMeetingSchDetail = () => {
         location.state.planSeq,
         sessionStorage.getItem("userSeq"),
       );
-      console.log(res);
       toast.success("일정에 참가되었습니다!");
     } catch (error) {
       console.log(error);
@@ -236,12 +242,15 @@ const MyMeetingSchDetail = () => {
     }
     setIsLoading(false);
     toast.success("일정이 삭제되었습니다.");
-    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`);
+    navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
+      state: {
+        isAuth: isAuth,
+      },
+    });
   };
   if (isLoading) {
     return <Loading></Loading>;
   }
-  console.log("asfdasjfhkajsdhflkjasfhlkjsadhfkjsldafhkj", location);
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -249,7 +258,7 @@ const MyMeetingSchDetail = () => {
           <TitleDivStyle>일정 상세페이지</TitleDivStyle>
           <div className="notice-inner">
             <div className="notice-form-area">
-              {location.state.isAuth === "1" ? (
+              {isAuth === 2 ? (
                 <div
                   style={{
                     width: "100%",
@@ -260,7 +269,7 @@ const MyMeetingSchDetail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {planCdNm === "완료" ? (
+                  {isCompleted === 2 ? (
                     <>
                       <button
                         className="etc-btn"
@@ -295,7 +304,7 @@ const MyMeetingSchDetail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {planCdNm === "완료" ? (
+                  {isCompleted === 2 ? (
                     <>
                       <button
                         className="etc-btn"
@@ -305,13 +314,23 @@ const MyMeetingSchDetail = () => {
                       >
                         참가완료
                       </button>
-                      <button
-                        className={"etc-btn"}
-                        style={{ backgroundColor: "gray" }}
-                        disabled
-                      >
-                        리뷰 작성
-                      </button>
+                      {isCompleted === 2 ? (
+                        <button
+                          className={"etc-btn"}
+                          onClick={() => {
+                            navigate("/review/write", {
+                              state: {
+                                planSeq: location.state.planSeq,
+                                planMemberSeq: planMemberSeq,
+                                planTitle: planTitle,
+                                partyName: location.state.partyName,
+                              },
+                            });
+                          }}
+                        >
+                          리뷰 작성
+                        </button>
+                      ) : null}
                     </>
                   ) : (
                     <>
@@ -470,31 +489,33 @@ const MyMeetingSchDetail = () => {
                       지도 API 들어올 자리
                     </div>
                   </div> */}
-                  <div className="button-wrap">
-                    <button
-                      type="button"
-                      className="resister-btn"
-                      onClick={() => {
-                        handleClick();
-                      }}
-                    >
-                      수정
-                    </button>
-                    <button
-                      type="button"
-                      className="delete-btn"
-                      onClick={() => {
-                        if (confirm("삭제하시겠습니까?")) {
-                          handleClickSchDelete();
-                        }
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </div>
+                  {isAuth === 2 ? (
+                    <div className="button-wrap">
+                      <button
+                        type="button"
+                        className="resister-btn"
+                        onClick={() => {
+                          handleClick();
+                        }}
+                      >
+                        수정
+                      </button>
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() => {
+                          if (confirm("삭제하시겠습니까?")) {
+                            handleClickSchDelete();
+                          }
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
                 <MyMeetingSchMemberList
-                  meetingId={location.state.planSeq}
+                  meetingId={param.meetingschid}
                   setPlanMemberSeq={setPlanMemberSeq}
                 ></MyMeetingSchMemberList>
               </form>

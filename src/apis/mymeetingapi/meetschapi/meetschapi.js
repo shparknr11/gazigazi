@@ -109,6 +109,14 @@ export const patchSch = async ({
   planTitle,
   planContents,
 }) => {
+  console.log({
+    planSeq,
+    planStartDt,
+    planStartTime,
+    planLocation,
+    planTitle,
+    planContents,
+  });
   try {
     const res = await axios.patch(`/api/plan`, {
       planSeq,
@@ -143,8 +151,8 @@ export const patchSchComp = async schSeq => {
 export const deleteSchJoin = async (planSeq, userSeq) => {
   try {
     const res = await axios.delete(`/api/plan/join`, {
-      plmemberPlanSeq: planSeq,
-      plmemberMemberSeq: userSeq,
+      plmemberPlanSeq: Number(planSeq),
+      plmemberMemberSeq: Number(userSeq),
     });
     return res.data.resultData;
   } catch (error) {
@@ -155,10 +163,11 @@ export const deleteSchJoin = async (planSeq, userSeq) => {
 // /api/plan/join
 // 모임 일정 참가 신청
 export const postSchJoin = async (planSeq, userSeq) => {
+  console.log(Number(planSeq), Number(userSeq));
   try {
     const res = await axios.post(`/api/plan/join`, {
-      plmemberPlanSeq: planSeq,
-      plmemberMemberSeq: userSeq,
+      plmemberPlanSeq: Number(planSeq),
+      memberSeq: Number(userSeq),
     });
     return res.data.resultData;
   } catch (error) {
