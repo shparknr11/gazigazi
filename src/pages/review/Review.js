@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { getReviewList } from "../../apis/reviewapi/reviewapi";
 import { CiSearch } from "react-icons/ci";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { toast } from "react-toastify";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1300px;
@@ -54,6 +56,7 @@ const ReviewItemStyle = styled.div`
       justify-content: end;
       width: 100%;
       height: auto;
+      margin-bottom: 10px;
       .rt-profile {
         display: flex;
         width: 100%;
@@ -73,6 +76,7 @@ const ReviewItemStyle = styled.div`
   .rm-star {
     color: orange;
     display: flex;
+    align-items: center;
   }
   .review-mid {
     width: 100%;
@@ -80,10 +84,13 @@ const ReviewItemStyle = styled.div`
   }
   .review-img {
   }
-  .review-bottom {
+  .review-bottom-div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .review-bottom {
+    display: flex;
   }
   .rb-button {
     border: 0.5px solid #000;
@@ -91,80 +98,88 @@ const ReviewItemStyle = styled.div`
     border-radius: 7px;
   }
 `;
+
+const ReviewPaginationStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 60px;
+  .prev-button,
+  .next-button {
+    display: flex;
+    align-items: center;
+    svg {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+  }
+  .review-page-div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 10px;
+    .review-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      border-radius: 60%;
+      &:hover {
+        background-color: #999;
+      }
+    }
+  }
+`;
+
 const Review = () => {
   const [reviewList, setReviewList] = useState([]);
+  const [reviewSearchText, setRevieSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
+  // **Pagination** 을 위한 코드처리
+  // 총 목록수는 state에 저장되어 있음. (todos배열.length)
+  // 한 페이지당 보여줄 목록 최대 개수
   // api함수
   const getReviewData = async () => {
     try {
-      const result = await getReviewList();
+      const result = await getReviewList(reviewSearchText, currentPage);
       if (result.code != 1) {
         alert(result.resultMsg);
         return;
       }
+      setTotalPage(result.resultData.totalPages);
       setReviewList(result.resultData.list);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getReviewData();
+    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
   }, []);
 
-  // **Pagination** 을 위한 코드처리
-  // 총 목록수는 state에 저장되어 있음. (todos배열.length)
-  // 한 페이지당 보여줄 목록 최대 개수
-  const todosPerpage = 10;
-
-  // 총 몇페이지 인가?
-  const totalPage = Math.ceil(reviewList.length / todosPerpage);
-  console.log(totalPage); // 52
-  // 실제 목록에서 원하는 부분부터 갯수만큼 배열만들기
-  // 보여줄 목록의 시작 번호
-  const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
-  }, [currentPage]);
-  // 페이지 번호를 이용한 시작인덱스 처리
-  const indexStart = (currentPage - 1) * todosPerpage;
-
-  // //   const 현재목록배열 = 원본배열.slice(시작인덱스, 끝범위 이전까지 인덱스);
-  const currentTodos = reviewList.slice(indexStart, indexStart + todosPerpage);
-
-  // 화면에 보여줄 버튼 목록
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPage; i++) {
-    pageNumbers.push(i);
-  }
-
-  // 화면에 페이지 버튼 목록을 출력하기 기능
-  // pageNumber = [1,2,3,4,5...]
-  const renderPageNumbers = pageNumbers.map((item, index) => (
-    <i
-      style={{ cursor: "pointer" }}
-      key={index}
-      onClick={() => {
-        setCurrentPage(item);
-      }}
-    >
-      {item}
-    </i>
-  ));
-
-  //---
   // 이전 페이지로 가기
   const handleClickPrev = () => {
+    setRevieSearchText("");
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
   // 다음 페이지로 가기
   const handleClickNext = () => {
+    setRevieSearchText("");
     if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
     }
   };
 
+  // 리뷰 사진
   const makeReviewPic = (_reviewSeq, _pics) => {
     return _pics.map((item, index) => (
       <img
@@ -175,6 +190,28 @@ const Review = () => {
     ));
   };
 
+  // 평점에 따른 별점 생성 함수
+  const makeStars = rating => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(<FaStar key={i} color={i < rating ? "orange" : "#ccc"} />);
+    }
+    return stars;
+  };
+
+  const handleChangeSearchText = e => {
+    setRevieSearchText(e.target.value);
+  };
+
+  const handleReviewSearchClick = () => {
+    if (!reviewSearchText) {
+      return toast.warning("검색어를 입력해주세요.");
+    }
+    getReviewData();
+    setCurrentPage(1);
+  };
+
+  console.log("sss");
   return (
     <ReviewInnerStyle>
       <ReviewTitleStyle>
@@ -187,27 +224,35 @@ const Review = () => {
                 type="text"
                 placeholder="검색어를 입력하세요."
                 className="review-search-input"
+                value={reviewSearchText}
+                onChange={e => {
+                  handleChangeSearchText(e);
+                }}
               ></input>
-              <CiSearch />
+              <CiSearch
+                onClick={() => {
+                  handleReviewSearchClick();
+                }}
+              />
             </div>
           </div>
         </div>
       </ReviewTitleStyle>
 
-      {currentTodos.map((item, index) => (
+      {reviewList.map((item, index) => (
         <ReviewItemStyle key={index}>
           <div className="review-comment">
             <div className="review-top">
               <div className="rt-profile">
-                <img src="" alt="프로필" />
+                <img
+                  src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                  alt="프로필"
+                />
                 <span>{item.userName}</span>
               </div>
               <div className="rm-star">
-                <FaStar color="orange" />
-                <FaStar color="orange" />
-                <FaStar color="orange" />
-                <FaStar color="orange" />
-                <FaStar color="orange" />
+                {makeStars(item.reviewRating)}
+                {item.reviewRating}
               </div>
             </div>
 
@@ -216,33 +261,47 @@ const Review = () => {
                 <p>{item.reviewContents}</p>
               </div>
             </div>
-            <div className="review-img">
-              {makeReviewPic(item.reviewSeq, item.pics)}
-            </div>
-            {/* {item.pics && item.pics[0] && (
-              <div
-                className="review-img"
-                style={{
-                  backgroundImage: `url(/pic/review/${item.reviewSeq}/${item.pics[0]})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                }}
-              ></div>
-            )} */}
-            <div className="review-bottom">
-              <div>
-                <h3>모임명:</h3>
+            {item.pics && item.pics[0] && (
+              <div className="review-img">
+                {makeReviewPic(item.reviewSeq, item.pics)}
+              </div>
+            )}
+            <div className="review-bottom-div">
+              <div className="review-bottom">
+                <h3>모임명 :</h3>
                 <span>{item.partyName}</span>
               </div>
               <div>
-                추천 0<div className="rb-button">도움이 됐어요</div>
+                <span>{item.inputDt.substr(0, 10)}</span>
               </div>
             </div>
           </div>
         </ReviewItemStyle>
       ))}
-      <div>{renderPageNumbers}</div>
+      <ReviewPaginationStyle>
+        <div
+          className="prev-button"
+          disabled={currentPage === 1}
+          onClick={() => {
+            handleClickPrev();
+          }}
+        >
+          <IoIosArrowBack />
+        </div>
+        <div className="review-page-div">
+          {currentPage} / {totalPage}
+        </div>
+        <div
+          className="next-button"
+          disabled={currentPage === totalPage}
+          onClick={() => {
+            handleClickNext();
+          }}
+        >
+          <IoIosArrowForward />
+        </div>
+        <div></div>
+      </ReviewPaginationStyle>
     </ReviewInnerStyle>
   );
 };

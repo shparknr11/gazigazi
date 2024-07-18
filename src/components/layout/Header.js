@@ -9,6 +9,10 @@ const Header = () => {
   const userPic = sessionStorage.getItem("userPic");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
+  }, []);
+
   const handleClickMyMeeting = () => {
     if (!userSeq) {
       navigate("/login");
@@ -23,9 +27,15 @@ const Header = () => {
       navigate(`myprofile/:userId/userInfo`);
     }
   };
-  useEffect(() => {
-    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
-  }, []);
+
+  const handleclickHeart = () => {
+    if (userSeq) {
+      navigate(`/myprofile/:userId/myinterestlist`);
+    } else {
+      navigate(`/login`);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-inner">
@@ -60,11 +70,13 @@ const Header = () => {
         <nav>
           <ul className="header-icon-list">
             <li>
-              <Link to="/">
-                <div>
-                  <PiHeartLight />
-                </div>
-              </Link>
+              <div
+                onClick={() => {
+                  handleclickHeart();
+                }}
+              >
+                <PiHeartLight />
+              </div>
             </li>
             <li>
               {!userSeq ? (
