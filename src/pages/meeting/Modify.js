@@ -65,8 +65,8 @@ const Modify = () => {
   const [partyName, setPartyName] = useState("");
   const [partyGenre, setPartyGenre] = useState("");
   const [partyLocation, setPartyLocation] = useState("");
-  const [partyMinAge, setPartyMinAge] = useState(1940);
-  const [partyMaxAge, setPartyMaxAge] = useState(2024);
+  const [partyMinAge, setPartyMinAge] = useState(1901);
+  const [partyMaxAge, setPartyMaxAge] = useState(2155);
   const [partyMaximum, setPartyMaximum] = useState("");
   const [partyGender, setPartyGender] = useState("");
   const [partyIntro, setPartyIntro] = useState("");
@@ -80,7 +80,7 @@ const Modify = () => {
   // file
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
-
+  const userSeq = sessionStorage.item("userSeq");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -208,7 +208,7 @@ const Modify = () => {
     }
     const formData = new FormData();
     const infoData = JSON.stringify({
-      userSeq: 1010,
+      userSeq,
       partyName,
       partyGenre,
       partyLocation,

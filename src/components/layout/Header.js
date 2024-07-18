@@ -2,18 +2,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import logo from "../../images/logo2.png";
+import { useEffect } from "react";
 
 const Header = () => {
   const userSeq = sessionStorage.getItem("userSeq");
   const userPic = sessionStorage.getItem("userPic");
   const navigate = useNavigate();
+
+  const handleClickMyMeeting = () => {
+    if (!userSeq) {
+      navigate("/login");
+    } else {
+      navigate(`/mymeeting`);
+    }
+  };
   const handleClickProfile = () => {
     if (!userSeq) {
       navigate("/login");
     } else {
-      navigate(`/myprofile/${userSeq}`);
+      navigate(`myprofile/:userId/userInfo`);
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
+  }, []);
   return (
     <header className="header">
       <div className="header-inner">
@@ -34,7 +46,14 @@ const Header = () => {
               <Link to="/review">커뮤니티 후기</Link>
             </li>
             <li>
-              <Link to="/mymeeting">내 모임</Link>
+              <div
+                className="header-menu-mymeeting "
+                onClick={() => {
+                  handleClickMyMeeting();
+                }}
+              >
+                내 모임
+              </div>
             </li>
           </ul>
         </nav>

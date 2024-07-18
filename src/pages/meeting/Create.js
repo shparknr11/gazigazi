@@ -100,8 +100,8 @@ const Create = () => {
   const [partyName, setPartyName] = useState("");
   const [partyGenre, setPartyGenre] = useState(null);
   const [partyLocation, setPartyLocation] = useState("");
-  const [partyMinAge, setPartyMinAge] = useState(1940);
-  const [partyMaxAge, setPartyMaxAge] = useState(2024);
+  const [partyMinAge, setPartyMinAge] = useState(1901);
+  const [partyMaxAge, setPartyMaxAge] = useState(2155);
   const [partyMaximum, setPartyMaximum] = useState("");
   const [partyGender, setPartyGender] = useState("");
   const [partyIntro, setPartyIntro] = useState("");
@@ -384,7 +384,7 @@ const Create = () => {
               handleChangeMinAge(e);
             }}
           >
-            <option value="1940">
+            <option value="1901">
               --- 최소 연령을 선택해주세요 (연령무관)---
             </option>
             {years.map((item, index) => (
@@ -400,7 +400,7 @@ const Create = () => {
               handleChangeMaxAge(e);
             }}
           >
-            <option value="2024">
+            <option value="2155">
               --- 최대 연령을 선택해주세요 (연령무관)---
             </option>
             {years.map((item, index) => (
