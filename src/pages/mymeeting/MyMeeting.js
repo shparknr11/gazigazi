@@ -6,6 +6,7 @@ import {
   getMyMeetLeaderList,
   getMyMeetMemberList,
 } from "../../apis/mymeetingapi/mymeetingapi";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
@@ -38,7 +39,6 @@ const MyMeetingStyle = styled.div`
     /* height: 1000px; */
   }
   .meeting-sidebar-inner {
-    background-color: #f8ebd6;
     width: 15%;
     display: flex;
     flex-direction: column;
@@ -47,12 +47,10 @@ const MyMeetingStyle = styled.div`
     height: 100%;
   }
   .caption-area {
-    background-color: #f8ebd6;
     width: 100%;
     height: 100%;
-    padding: 20px;
     overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
+    /* box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px; */
   }
   .img-wrap {
     display: flex;
@@ -60,6 +58,7 @@ const MyMeetingStyle = styled.div`
     flex-wrap: wrap;
     padding-top: 30px;
     padding-left: 50px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
   }
   .img-container {
     width: 30%;
@@ -75,9 +74,8 @@ const MyMeetingStyle = styled.div`
     /* css 조금 깨져있음  */
     width: 100%;
     height: 100%;
-    margin-top: -2px;
+    margin-top: -4px;
     border-radius: 0 0 10px 10px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
   }
   .font-size30 {
     font-size: 30px;
@@ -92,8 +90,9 @@ const MyMeetingStyle = styled.div`
     position: relative;
     display: inline-block;
     z-index: 1;
+
     width: 100%;
-    height: 100%;
+    max-height: 337px;
     border-radius: 10px 10px 0 0;
   }
   .caption-img {
@@ -136,11 +135,31 @@ const MyMeetingStyle = styled.div`
     flex-direction: column;
     gap: 5px;
   }
-  .span-pointer {
-    cursor: pointer;
+  .mymeeting-div {
+    display: flex;
+    border: 1px solid rgb(219, 219, 219);
+    height: 27px;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 4px 4px 0px 0;
+    border-bottom: none;
+    background-color: #f9f8f5;
   }
-  .span-pointer:hover {
-    color: #fff;
+  .mymeeting-div-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .mymeeting-div-area:hover {
+    color: gray;
+    border-radius: 4px;
+    background-color: #ebebeb;
+  }
+  .span-pointer {
+    display: block;
+    cursor: pointer;
+    height: 10px;
   }
 `;
 const TitleDivStyle = styled.div`
@@ -180,7 +199,7 @@ const MyMeeting = () => {
     setAllData(res?.list);
   };
   useEffect(() => {
-    console.log(allData);
+    document.getElementById("meetingMake").click();
   }, []);
   const imgOnError = () => {
     setImgError(true);
@@ -188,21 +207,14 @@ const MyMeeting = () => {
   return (
     <MyMeetingStyle>
       <div className="meeting-wrap">
+        <GuideTitle title={"모임리스트"} guideTitle={"내 모임"}></GuideTitle>
         <div className="meeting-inner">
           <div className="caption-area">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <TitleDivStyle>모임 리스트</TitleDivStyle>
-              <div
-                className=""
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "40px",
-                  paddingRight: "55px",
-                }}
-              >
-                <div>
+              <div className="mymeeting-div">
+                <div className="mymeeting-div-area">
                   <span
+                    id="meetingEnter"
                     className="span-pointer"
                     onClick={() => {
                       setIsAuth(1);
@@ -212,8 +224,9 @@ const MyMeeting = () => {
                     내가 속한 모임
                   </span>
                 </div>
-                <div>
+                <div className="mymeeting-div-area">
                   <span
+                    id="meetingMake"
                     className="span-pointer"
                     onClick={() => {
                       setIsAuth(2);
@@ -230,13 +243,13 @@ const MyMeeting = () => {
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
               {allData?.map(item => (
-                <div className="img-container" key={item.partySeq}>
+                <div className="img-container" key={item?.partySeq}>
                   <div>
                     <div className="container">
                       {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
                       <img
                         className="caption-img"
-                        src={`http://112.222.157.156:5122/pic/party/${item.partySeq}/${item.partyPic}`}
+                        src={`http://112.222.157.156:5122/pic/party/${item?.partySeq}/${item?.partyPic}`}
                         style={{
                           width: "100%",
                           height: "100%",
@@ -264,11 +277,11 @@ const MyMeeting = () => {
                                 className="button-style etc-btn"
                                 onClick={e => {
                                   navigate(
-                                    `/mymeeting/mymeetinguser/${item.partySeq}`,
+                                    `/mymeeting/mymeetinguser/${item?.partySeq}`,
                                     {
                                       state: {
-                                        partyAuthGb: item.partyAuthGb,
-                                        partyName: item.partyName,
+                                        isAuth: isAuth,
+                                        partyName: item?.partyName,
                                       },
                                     },
                                   );
@@ -285,7 +298,7 @@ const MyMeeting = () => {
                                 onClick={() => {
                                   if (confirm("수정하시겠습니까?")) {
                                     navigate(
-                                      `/meeting/modify/${item.partySeq}`,
+                                      `/meeting/modify/${item?.partySeq}`,
                                     );
                                   }
                                 }}
@@ -297,11 +310,11 @@ const MyMeeting = () => {
                                 style={{ width: "100px" }}
                                 onClick={e => {
                                   navigate(
-                                    `/mymeeting/mymeetingLeader/${item.partySeq}`,
+                                    `/mymeeting/mymeetingLeader/${item?.partySeq}`,
                                     {
                                       state: {
-                                        partyAuthGb: item.partyAuthGb,
-                                        partyName: item.partyName,
+                                        isAuth: isAuth,
+                                        partyName: item?.partyName,
                                       },
                                     },
                                   );

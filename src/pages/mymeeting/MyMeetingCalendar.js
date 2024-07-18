@@ -83,7 +83,7 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
+const MyMeetingCalendar = ({ isClicked }) => {
   const [calendarFilterData, setCalendarFilterData] = useState([]);
   const [userSeq, setUserSeq] = useState(null);
   const [page, setPage] = useState(1);
@@ -212,7 +212,7 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
   // if (isLoading) {
   //   return <Loading></Loading>;
   // }
-
+  console.log("asdksdjafl;ksajdfl;kasj;dlfdkl", location.state);
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -246,7 +246,11 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
               type="button"
               onClick={() => {
                 navigate(`/mymeeting/mymeetingschresister`, {
-                  state: { clickDay, planSeq: params.meetingId },
+                  state: {
+                    clickDay,
+                    planSeq: params?.meetingId,
+                    isAuth: location?.state.isAuth,
+                  },
                 });
               }}
             >
@@ -271,9 +275,9 @@ const MyMeetingCalendar = ({ isClicked, partyAuthGb }) => {
               onClick={() => {
                 navigate(`/mymeeting/mymeetingschdetail/${allData.planSeq}`, {
                   state: {
-                    planSeq: allData.planSeq,
-                    partyAuthGb: location.state.partyAuthGb,
-                    partyName: location.state.partyName,
+                    planSeq: params.meetingId,
+                    isAuth: location?.state.isAuth,
+                    partyName: location?.state.partyName,
                   },
                 });
               }}
