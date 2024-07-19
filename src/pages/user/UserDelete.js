@@ -7,9 +7,9 @@ import { useState } from "react";
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end; /* 버튼을 오른쪽으로 정렬합니다. */
+  justify-content: flex-end;
   width: 100%;
-  margin-top: -35px; /* 상황에 따라 조정이 필요할 수 있습니다. */
+  margin-top: -35px;
 `;
 
 const DeleteButton = styled.button`
@@ -29,7 +29,7 @@ const Modal = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,6 +40,8 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
 `;
 
 const Modalbutton1 = styled.div`
@@ -85,6 +87,9 @@ const UserDelete = () => {
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.user.userSeq);
   const [showModal, setShowModal] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleDelete = () => {
     if (!userSeq) {
@@ -92,13 +97,27 @@ const UserDelete = () => {
       navigate("/login");
       return;
     }
-    setShowModal(true); // 모달을 보이게 설정
+    setShowModal(true);
   };
 
   const deleteAccount = async () => {
     try {
+      // 비밀번호가 두 번 입력된 값이 일치하는지 확인합니다.
+      if (password !== confirmPassword) {
+        setPasswordError("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
+      // 회원 탈퇴 요청
       const response = await axios.patch(
         `http://localhost:3000/api/user/${userSeq}`,
+        { password }, // 비밀번호를 포함한 요청
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        },
       );
 
       console.log("회원 탈퇴 요청 결과:", response.data);
@@ -137,7 +156,21 @@ const UserDelete = () => {
       {showModal && (
         <Modal>
           <ModalContent className="modal-content">
-            <p>정말 회원을 그만두시겠습니까?</p>
+            <label>현재 비밀번호</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="현재 비밀번호 입력"
+            />
+            <label>비밀번호 확인</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="비밀번호 확인"
+            />
+            {passwordError && <p style={{ color: "red" }}>{passwordError}</p>}
             <Modalbutton1
               className="modal-button-1"
               onClick={handleConfirmDelete}

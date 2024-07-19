@@ -147,11 +147,21 @@ const InfoEdit = () => {
     token: sessionStorage.getItem("token") || "",
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
-  const [file, setFile] = useState(null); // 파일 상태 추가
+  const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setUserInfo(prevInfo => ({
+      ...prevInfo,
+      [name]: value,
+    }));
+  };
 
   const handleSave = async () => {
     const { userSeq } = userInfo;
@@ -177,7 +187,7 @@ const InfoEdit = () => {
       if (response.data.code === 1) {
         console.log(response.data);
         alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
-        navigate(`/myprofile/:userId/userInfo`);
+        navigate(`/myprofile/${userSeq}/userInfo`);
       } else if (response.data.code === 0) {
         console.log(response.data);
         alert(response.data.message || "정보 수정에 실패했습니다.");
@@ -192,7 +202,6 @@ const InfoEdit = () => {
   };
 
   const handlePasswordChange = async () => {
-    // 새로운 비밀번호와 비밀번호 확인이 일치하는지 확인
     if (newPassword !== confirmNewPassword) {
       alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
       return;
@@ -200,7 +209,6 @@ const InfoEdit = () => {
 
     const { token } = userInfo;
 
-    // JWT 토큰에서 payload 추출
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
@@ -212,13 +220,14 @@ const InfoEdit = () => {
         .join(""),
     );
     const payload = JSON.parse(jsonPayload);
-    const userSeq = payload.pk; // payload에서 pk 값 추출
+    const userSeq = payload.pk;
 
     try {
       const response = await axios.patch(
         "/api/user/update/pw",
         {
           userSeq,
+          userEmail: email,
           userPw: password,
           userNewPw: newPassword,
           userPwCheck: confirmNewPassword,
@@ -226,7 +235,7 @@ const InfoEdit = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // JWT 토큰을 Authorization 헤더에 추가
+            Authorization: `Bearer ${token}`,
             accept: "*/*",
           },
         },
@@ -235,6 +244,7 @@ const InfoEdit = () => {
       if (response.data.code === 1) {
         console.log(response.data);
         alert(response.data.message || "비밀번호가 성공적으로 변경되었습니다!");
+        setEmail("");
         setPassword("");
         setNewPassword("");
         setConfirmNewPassword("");
@@ -249,58 +259,70 @@ const InfoEdit = () => {
     }
   };
 
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setUserInfo(prevInfo => ({
-      ...prevInfo,
-      [name]: value,
-    }));
-  };
-
   const handleUpload = async () => {
     if (!file) {
       alert("프로필 사진을 선택해주세요.");
       return;
     }
 
+    setIsUploading(true);
+
     const formData = new FormData();
     formData.append("userSeq", userInfo.userSeq);
     formData.append("pic", file);
+
+    const token = sessionStorage.getItem("token");
 
     try {
       const response = await axios.patch("/api/user/pic", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      if (response.data.code === 1) {
-        console.log(response.data);
+      const { data } = response;
+      if (data.code === 1) {
+        console.log(data);
         alert("프로필 사진이 성공적으로 변경되었습니다.");
       } else {
-        console.log(response.data);
+        console.log(data);
         alert("프로필 사진 변경에 실패했습니다.");
       }
     } catch (error) {
       console.error("프로필 사진 변경 오류:", error);
-      alert("프로필 사진 변경에 실패했습니다. 다시 시도해주세요.");
+      alert(
+        `프로필 사진 변경에 실패했습니다. 다시 시도해주세요. (${error.message})`,
+      );
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleFileChange = event => {
     const selectedFile = event.target.files[0];
-    setFile(selectedFile);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewImage(reader.result);
-    };
     if (selectedFile) {
+      if (!selectedFile.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        return;
+      }
+
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        alert("파일 크기는 5MB를 초과할 수 없습니다.");
+        return;
+      }
+
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
       reader.readAsDataURL(selectedFile);
     }
   };
 
   const handleCancel = () => {
-    navigate("/myprofile/:userId/userInfo");
+    navigate(`/myprofile/${userInfo.userSeq}/userInfo`);
   };
 
   return (
@@ -317,7 +339,9 @@ const InfoEdit = () => {
                 className="image-preview"
               />
             )}
-            <button onClick={handleUpload}>프로필 사진 변경</button>
+            <button onClick={handleUpload} disabled={isUploading}>
+              {isUploading ? "업로드 중..." : "프로필 사진 변경"}
+            </button>
             <button onClick={() => setShowPasswordModal(true)}>
               비밀번호 변경
             </button>
@@ -364,7 +388,12 @@ const InfoEdit = () => {
             <ModalStyle>
               <div className="modal">
                 <div className="modal-content">
-                  <h2>비밀번호 변경</h2>
+                  <label>이메일</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
                   <label>현재 비밀번호</label>
                   <input
                     type="password"

@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
-import cate from "../../images/cate2.png";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "../../components/common/Loading";
+import cate from "../../images/cate2.png";
 
 const InterestListStyle = styled.div`
   display: flex;
@@ -83,33 +84,38 @@ const InterestInnerStyle = styled.div`
 
 const InterestList = () => {
   const [loading, setLoading] = useState(true);
-  const [interestItems, setInterestItems] = useState([
-    {
-      title: "모임 제목 1",
-      date: "2023-08-15",
-      location: "서울특별시 강남구",
-      description: "이곳에 모임 설명이 들어갑니다.",
-    },
-    {
-      title: "모임 제목 2",
-      date: "2023-09-10",
-      location: "부산광역시 해운대구",
-      description: "이곳에 모임 설명이 들어갑니다.",
-    },
-    {
-      title: "모임 제목 3",
-      date: "2023-10-05",
-      location: "인천광역시 남동구",
-      description: "이곳에 모임 설명이 들어갑니다.",
-    },
-  ]);
+  const [interestItems, setInterestItems] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000); // 1초 후에 로딩 종료
+    const fetchInterestItem = async () => {
+      try {
+        const userSeq = sessionStorage.getItem("userSeq");
 
-    return () => clearTimeout(timer);
+        if (!userSeq) {
+          setError("사용자 Email을 찾을 수 없습니다.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(`/api/party/wish/${userSeq}`);
+        const { resultData, resultMsg } = response.data;
+
+        if (response.data.code === 1) {
+          console.log(response.data);
+          setInterestItems(resultData);
+        } else {
+          setError(resultMsg);
+        }
+      } catch (error) {
+        console.error("찜한 목록을 가져오는데 실패했습니다.", error);
+        setError("데이터를 가져오는 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInterestItem();
   }, []);
 
   if (loading) {
@@ -120,37 +126,38 @@ const InterestList = () => {
     <InterestListStyle>
       <InterestWrapStyle>
         <InterestInnerStyle>
-          <div className="wrap">
-            <main className="main">
-              <div className="main-inner">
-                <div className="interest-container">
-                  {interestItems.map((item, index) => (
-                    <div className="interest-item" key={index}>
-                      <img
-                        src={cate}
-                        alt="내가 찜한 모임의 썸네일"
-                        className="cate"
-                      />
-                      <div className="interest-item-title">{item.title}</div>
-                      <div className="interest-item-date">
-                        날짜: {item.date}
-                      </div>
-                      <div className="interest-item-location">
-                        장소: {item.location}
-                      </div>
-                      <div className="interest-item-description">
-                        {item.description}
-                      </div>
-                      <button className="interest-item-delete">삭제</button>
+          <div className="interest-container">
+            {interestItems.length === 0 ? (
+              <p>죄송합니다. 찜한 모임이 없습니다.</p>
+            ) : (
+              interestItems.map((item, index) => (
+                <div className="interest-item" key={index}>
+                  <img
+                    src={cate}
+                    alt="내가 찜한 모임의 썸네일"
+                    className="cate"
+                  />
+                  <div>
+                    <div className="interest-item-title">{item.partyName}</div>
+                    <div className="interest-item-date">
+                      날짜: {item.partyLocation}
                     </div>
-                  ))}
+                    <div className="interest-item-location">
+                      장소: {item.partyLocation}
+                    </div>
+                    <div className="interest-item-description">
+                      {item.partyPresident}
+                    </div>
+                  </div>
+                  <button className="interest-item-delete">삭제</button>
                 </div>
-              </div>
-            </main>
+              ))
+            )}
           </div>
         </InterestInnerStyle>
       </InterestWrapStyle>
     </InterestListStyle>
   );
 };
+
 export default InterestList;

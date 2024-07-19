@@ -118,13 +118,8 @@ const Login = () => {
           userGender,
           userBirth,
           userName,
-          isDeleted,
+          userPhone,
         } = response.data.resultData;
-
-        if (isDeleted) {
-          alert("존재하지 않는 계정입니다.");
-          return;
-        }
 
         // Redux에 사용자 정보 저장
         dispatch({ type: "SET_USER", payload: { userSeq, userEmail: email } });
@@ -136,6 +131,7 @@ const Login = () => {
         sessionStorage.setItem("userGender", userGender);
         sessionStorage.setItem("userBirth", userBirth);
         sessionStorage.setItem("userName", userName);
+        sessionStorage.setItem("userPhone", userPhone);
 
         alert("로그인 성공!");
         navigate(`/`);
@@ -186,8 +182,7 @@ const Login = () => {
                     <button type="submit">로그인</button>
                   </form>
                   <div className="login-options">
-                    <Link to="findid">이메일 찾기</Link>
-                    <Link to="findpw">비밀번호 찾기</Link>
+                    <Link to="/login/findid:pw">이메일 / 비밀번호 찾기</Link>
                     <Link to="/createAccount">회원가입</Link>
                   </div>
                 </div>
