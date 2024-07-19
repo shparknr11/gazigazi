@@ -97,7 +97,7 @@ const Write = () => {
         src={item}
         key={index}
         style={{ width: 80 }}
-        onClick={e => {
+        onClick={() => {
           deleteFile(index);
         }}
       />

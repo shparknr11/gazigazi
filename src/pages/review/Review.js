@@ -168,7 +168,7 @@ const Review = () => {
 
   useEffect(() => {
     getReviewData();
-    window.scrollTo({
+    window.scroll({
       top: 0,
       left: 0,
       behavior: "instant",

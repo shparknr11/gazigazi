@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getPartyAll } from "../apis/meeting/meetingapi";
 import { IoIosList } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { FaRegArrowAltCircleUp } from "react-icons/fa";
 
 const HomeInnerStyle = styled.div`
   width: 100%;
@@ -85,7 +84,7 @@ const Home = () => {
 
   // 검색
   const [searchKeyword, setSearchKeyword] = useState("");
-
+  const userSeq = sessionStorage.getItem("userSeq");
   const getGenderText = genderCode => {
     switch (genderCode) {
       case 1:
@@ -127,7 +126,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    window.scrollTo({
+    window.scroll({
       top: 0,
       left: 0,
       behavior: "instant",
@@ -167,6 +166,15 @@ const Home = () => {
   const handleKeyDown = e => {
     if (e.key === "Enter") {
       handleClickSearch();
+    }
+  };
+  const handleClickCreate = () => {
+    console.log(userSeq);
+    if (userSeq) {
+      navigate(`/meeting/create`);
+      return;
+    } else {
+      navigate(`/login`);
     }
   };
 
@@ -419,7 +427,7 @@ const Home = () => {
             color: "white",
           }}
           onClick={() => {
-            navigate(`/meeting/create`);
+            handleClickCreate();
           }}
         >
           모임생성

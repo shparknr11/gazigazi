@@ -120,7 +120,7 @@ const Create = () => {
   const userSeq = sessionStorage.getItem("userSeq");
   const navigate = useNavigate();
   useEffect(() => {
-    window.scrollTo({
+    window.scroll({
       top: 0,
       left: 0,
       behavior: "instant",
@@ -216,6 +216,15 @@ const Create = () => {
   // 최대인원 선택
   const handleChangeMaximum = e => {
     // console.log(e.target.value);
+    const maximumCondition = e.target.value;
+
+    // 숫자가 아닌 경우
+    if (!/^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$/.test(maximumCondition)) {
+      e.target.value = "";
+      alert("최대인원은 숫자만 입력해주세요.");
+      return;
+    }
+
     const maximum = parseInt(e.target.value);
     setPartyMaximum(maximum);
   };
@@ -244,7 +253,7 @@ const Create = () => {
       return;
     }
     if (selectorOpen) {
-      alert("상세 지역을 선택해주세요(필수)");
+      alert("지역을 선택후 확인해주세요(필수)");
       return;
     }
     if (!partyGender) {
@@ -252,7 +261,11 @@ const Create = () => {
       return;
     }
     if (!partyMaximum) {
-      alert("허용인원 작성해주세요(필수)");
+      alert("허용인원을 작성해주세요*숫자*(필수)");
+      return;
+    }
+    if (partyMaximum < 2) {
+      alert("허용인원은 2명이상으로 작성해야합니다.*숫자*(필수)");
       return;
     }
     if (!partyPic) {
@@ -287,9 +300,33 @@ const Create = () => {
     formData.append("p", data);
     formData.append("partyPic", partyPic);
 
-    await postParty(formData);
+    // await postParty(formData);
 
-    navigate(`/admin`);
+    // navigate(`/admin`);
+    try {
+      const result = await postParty(formData);
+      console.log(result);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      setPartyName("");
+      setPartyGenre(null);
+      setPartyLocation("");
+      setPartyMinAge(1901);
+      setPartyMaxAge(2155);
+      setPartyGender("");
+      setPartyMaximum("");
+      setPartyJoinForm("");
+      setPartyIntro("");
+      setPartyPic(null);
+      setPreviewImg("");
+      setLocalData("");
+      setLocaDetaillData("");
+      navigate(`/admin`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -370,7 +407,6 @@ const Create = () => {
               setLocalList={setLocalList}
               setLocalData={setLocalData}
               setLocaDetaillData={setLocaDetaillData}
-              partyLocation={partyLocation}
               setPartyLocation={setPartyLocation}
             />
           ) : null}
