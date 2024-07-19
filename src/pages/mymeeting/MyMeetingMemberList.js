@@ -7,7 +7,7 @@ import { prColor } from "../../css/color";
 
 export const MemberListInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1300px;
+  max-width: 1280px;
   display: flex;
   margin: 0 auto;
   height: auto;

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import meetimg from "../../images/meetinga.png";
-import { AiTwotoneHeart } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPartyOne, getWishParty } from "../../apis/meeting/meetingapi";
@@ -9,6 +8,7 @@ import useModal from "../../hooks/useModal";
 import JoinModal from "../../components/modal/JoinModal";
 import { postApplication } from "../../apis/meeting/joinapi";
 import { IoPersonSharp } from "react-icons/io5";
+import { prColor } from "../../css/color";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -17,7 +17,7 @@ const MeetItemStyle = styled.div`
     margin: 0 auto;
     flex-direction: column;
     width: calc(100% - 30px);
-    max-width: 1300px;
+    max-width: 1280px;
   }
 `;
 const MeetItemTitle = styled.div`
@@ -72,8 +72,8 @@ const MeetItemCard = styled.div`
     width: 100%;
     height: 308px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-
-    /* img {
+    /* 
+    img {
       display: block;
       width: 100%;
       height: 100%;
@@ -106,7 +106,6 @@ const MeetItemCard = styled.div`
   .meet-apply-form {
     padding: 25px 20px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -123,8 +122,14 @@ const MeetItemCard = styled.div`
   .meet-item-button {
     display: flex;
     padding: 10px 20px;
-    border: 1px solid;
+    border: 1px solid #999;
+    background-color: ${prColor.white};
     border-radius: 25px;
+    color: #000;
+    &:hover {
+      border: 1px solid #000;
+      background-color: ${prColor.p000};
+    }
   }
   .meet-item-button span {
     display: flex;
@@ -264,12 +269,17 @@ const MeetingDetail = () => {
                 backgroundPosition: "center",
                 backgroundSize: "cover",
               }}
-            ></div>
+            >
+              {/* <img
+                src={`/pic/party/${detailList.partySeq}/${detailList.partyPic}`}
+                alt="모임사진"
+              /> */}
+            </div>
 
             <div className="meet-item-content">
               <span className="meet-item-leader">
                 <img
-                  src={`/pic/party/${detailList.partySeq}/${detailList.partyPic}`}
+                  src={`/pic/user/${detailList.userSeq}/${detailList.userPic}`}
                   alt="프로필"
                 />
                 {detailList.userName} 모임장
@@ -290,7 +300,7 @@ const MeetingDetail = () => {
                   }}
                 >
                   <span>
-                    {!isWished ? <>♡</> : <AiTwotoneHeart />}
+                    {!isWished ? <>🤍</> : <>🧡</>}
                     찜하기
                   </span>
                 </div>

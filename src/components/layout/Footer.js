@@ -11,20 +11,20 @@ const FooterStyle = styled.div`
     width: calc(100% - 30px);
     max-width: 1300px;
     margin: 0 auto;
-    padding-top: 40px;
     padding-bottom: 5px;
+    padding-top: 40px;
   }
-
+  /* .footer-menu-list {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+  } */
   .footer-description-div {
     /* display: flex;
     flex-direction: column; */
     margin-bottom: 10px;
   }
-
-  .footer-txt {
-    font-weight: 600;
-  }
-
   .gazi-logo-div {
     margin-bottom: 15px;
   }

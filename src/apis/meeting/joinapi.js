@@ -19,7 +19,7 @@ export const postApplication = async (_partySeq, _data) => {
 export const patchApproval = async (_partySeq, _userSeq) => {
   try {
     const response = await axios.patch(
-      `/api/party/authGb?partySeq=${_partySeq}&userSeq=${_userSeq}`,
+      `/api/party/authGb1?partySeq=${_partySeq}&userSeq=${_userSeq}`,
     );
     const status = response.status.toString().charAt(0);
     if (status === "2") {

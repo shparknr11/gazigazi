@@ -5,13 +5,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { CartegoryWrapStyle } from "../Home";
 import { IoIosList } from "react-icons/io";
-import { TiHome } from "react-icons/ti";
-import { IoIosArrowForward } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const CateInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1200px;
+  max-width: 1280px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
@@ -29,13 +28,15 @@ const CateInnerStyle = styled.div`
     .category-item {
       display: flex;
       justify-content: center;
-      border: 1px solid #999;
+      border: 2px solid #999;
       width: 80px;
       height: 80px;
       border-radius: 55px;
+      border: 2px solid white;
       cursor: pointer;
+      transition: border 1s ease;
       &:hover {
-        background-color: #999;
+        border: 2px solid #d3cdb5;
       }
     }
   }
@@ -133,7 +134,6 @@ const CategoryOthers = () => {
   const [searchParams] = useSearchParams();
   const partyGenre = searchParams.get("partyGenre");
   const searchKeyword = searchParams.get("search");
-
   const filterCategory = _resultData => {
     const updateList = _resultData.filter(
       item =>
@@ -212,19 +212,8 @@ const CategoryOthers = () => {
 
   return (
     <CateInnerStyle>
-      <div className="category-main-title">
-        <span style={{ display: "flex", justifyItems: "center" }}>
-          <TiHome
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              navigate(`/`);
-            }}
-          />
-          <IoIosArrowForward />
-          <span>카테고리</span>
-        </span>
-        <h1>나만의 모임 찾기</h1>
-      </div>
+      <GuideTitle guideTitle="카테고리" title="나만의 모임 찾기" />
+
       <div className="category-category">
         <CartegoryWrapStyle>
           <Link to="/category?partyGenre=0">
@@ -306,15 +295,9 @@ const CategoryOthers = () => {
                 handleClickDetail(item.partySeq);
               }}
             >
-              <div
-                className="list-box-img"
-                style={{
-                  backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                }}
-              ></div>
+              <div className="list-box-img">
+                <img src={`/pic/party/${item.partySeq}/${item.partyPic}`} />
+              </div>
               <div className="list-box-content">
                 <div className="list-box-title">
                   <div
@@ -325,7 +308,12 @@ const CategoryOthers = () => {
                       backgroundPosition: "center",
                       backgroundSize: "cover",
                     }}
-                  ></div>
+                  >
+                    {/* <img
+                      src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                      alt="프로필"
+                    /> */}
+                  </div>
                   <span style={{ fontWeight: "bold" }}>{item.userName}</span>
                   <span style={{ color: "#999" }}> 님의 모임</span>
                 </div>

@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1300px;
+  max-width: 1280px;
   margin: 0 auto;
   height: auto;
   margin-top: 40px;

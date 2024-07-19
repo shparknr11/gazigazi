@@ -9,10 +9,6 @@ const Header = () => {
   const userPic = sessionStorage.getItem("userPic");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
-  }, []);
-
   const handleClickMyMeeting = () => {
     if (!userSeq) {
       navigate("/login");
@@ -57,7 +53,7 @@ const Header = () => {
             </li>
             <li>
               <div
-                className="header-menu-mymeeting "
+                className="header-menu-item"
                 onClick={() => {
                   handleClickMyMeeting();
                 }}
@@ -99,7 +95,9 @@ const Header = () => {
                   onClick={() => {
                     handleClickProfile();
                   }}
-                ></div>
+                >
+                  {/* <img src={`/pic/user/${userSeq}/${userPic}`} /> */}
+                </div>
               )}
             </li>
           </ul>

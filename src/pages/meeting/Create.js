@@ -2,10 +2,11 @@ import styled from "@emotion/styled";
 import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
 import { getLocal, postParty } from "../../apis/meeting/meetingapi";
+import { useNavigate } from "react-router-dom";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1300px;
+  max-width: 1280px;
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
@@ -117,7 +118,14 @@ const Create = () => {
   const [previewImg, setPreviewImg] = useState("");
 
   const userSeq = sessionStorage.getItem("userSeq");
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
   // useEffect(() => {
   //   // console.log(localList);
   //   console.log(partyMinAge);
@@ -147,7 +155,6 @@ const Create = () => {
   const handleChangeGenre = e => {
     // console.log(e.target.value);
     const genre = parseInt(e.target.value);
-    console.log(genre);
     if (!genre) {
       alert("장르를 선택해주세요");
     }
@@ -221,15 +228,46 @@ const Create = () => {
   const handleChangeJoinForm = e => {
     setPartyJoinForm(e.target.value);
   };
-  // 모임 생성 신청
-  const handleClickCreate = () => {
-    console.log("모임생성 신청");
-  };
-  const handSubmitCreate = e => {
+
+  const handSubmitCreate = async e => {
     e.preventDefault();
-    if (selectorOpen) {
-      alert("상세 모임을 선택해주세요");
+    if (!partyGenre) {
+      alert("카테고리를 선택해주세요(필수)");
+      return;
     }
+    if (!partyName) {
+      alert("모임 제목을 작성해주세요(필수)");
+      return;
+    }
+    if (!partyLocation) {
+      alert("지역을 선택해주세요(필수)");
+      return;
+    }
+    if (selectorOpen) {
+      alert("상세 지역을 선택해주세요(필수)");
+      return;
+    }
+    if (!partyGender) {
+      alert("성별조건을 선택해주세요(필수)");
+      return;
+    }
+    if (!partyMaximum) {
+      alert("허용인원 작성해주세요(필수)");
+      return;
+    }
+    if (!partyPic) {
+      alert("사진을 선택해 주세요(필수)");
+      return;
+    }
+    if (!partyIntro) {
+      alert("상세모임소개를 작성해 주세요(필수)");
+      return;
+    }
+    if (!partyJoinForm) {
+      alert("모임 신청양식을 작성해 주세요(필수)");
+      return;
+    }
+
     const formData = new FormData();
     const infoData = JSON.stringify({
       userSeq,
@@ -249,7 +287,9 @@ const Create = () => {
     formData.append("p", data);
     formData.append("partyPic", partyPic);
 
-    postParty(formData);
+    await postParty(formData);
+
+    navigate(`/admin`);
   };
 
   return (
@@ -280,7 +320,7 @@ const Create = () => {
         <h1>모임 등록양식</h1>
 
         <div className="create-option-group">
-          <label htmlFor="partygenre">모임의 카테고리를 선정해 주세요.</label>
+          <label htmlFor="partygenre">모임의 카테고리를 선정해 주세요*</label>
           <select
             id="partygenre"
             onChange={e => {
@@ -299,7 +339,7 @@ const Create = () => {
           </select>
         </div>
         <div className="create-input-group">
-          <label htmlFor="partyname">모임의 제목을 지어주세요.</label>
+          <label htmlFor="partyname">모임의 제목을 지어주세요*</label>
           <input
             autoComplete="off"
             type="text"
@@ -312,11 +352,11 @@ const Create = () => {
         </div>
 
         <div className="create-form-group">
-          <label htmlFor="partyplace">모임지역을 선택해 주세요.</label>
+          <label htmlFor="partyplace">모임지역을 선택해 주세요*</label>
           <input
             type="text"
             id="partyplace"
-            value={`${localData}${localDetailData}`}
+            value={`✔ ${localData} ${localDetailData}`}
             onClick={() => {
               handleClickLocal();
             }}
@@ -337,7 +377,7 @@ const Create = () => {
         </div>
 
         <div className="create-radio-group">
-          <h1>모집 성별조건</h1>
+          <h1>모집 성별조건을 선택해주세요*</h1>
           <input
             type="radio"
             id="partygenderm"
@@ -374,7 +414,7 @@ const Create = () => {
 
         <div className="create-input-group">
           <div>
-            <p>연령 제한</p>
+            <p>모집 연령조건을 선택해주세요*</p>
           </div>
           <label htmlFor="partyminage">최소</label>
           <select
@@ -412,7 +452,7 @@ const Create = () => {
         </div>
 
         <div className="create-input-group">
-          <label htmlFor="partyMaximum">모임의 허용인원을 설정해 주세요</label>
+          <label htmlFor="partyMaximum">모임의 허용인원을 설정해 주세요*</label>
           <input
             autoComplete="off"
             type="number"
@@ -425,7 +465,7 @@ const Create = () => {
         </div>
 
         <div className="create-file-group">
-          <label htmlFor="partyfile">사진으로 모임을 소개해 주세요.</label>
+          <label htmlFor="partyfile">사진으로 모임을 소개해 주세요*</label>
           <input
             type="file"
             id="partyfile"
@@ -439,7 +479,7 @@ const Create = () => {
           ) : null}
         </div>
         <div className="create-textarea-group">
-          <label htmlFor="partytext">더 상세히 모임을 소개해 주세요.</label>
+          <label htmlFor="partytext">더 상세히 모임을 소개해 주세요*</label>
           <textarea
             type="textfield"
             id="partytext"
@@ -451,7 +491,9 @@ const Create = () => {
           />
         </div>
         <div className="create-textarea-group">
-          <label htmlFor="partyform">모임의 신청양식을 작성해 주세요.</label>
+          <label htmlFor="partyform">
+            모임원의 모임 신청양식을 작성해 주세요*
+          </label>
           <textarea
             type="textfield"
             id="partyform"

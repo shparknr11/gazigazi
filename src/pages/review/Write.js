@@ -2,15 +2,16 @@ import styled from "@emotion/styled";
 import { Rating } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { ActionButton } from "../../components/button/Button";
+import { MainButton } from "../../components/button/Button";
 import { useLocation } from "react-router-dom";
+import { prColor } from "../../css/color";
 const WriteInnerStyle = styled.div`
-  width: calc(100% - 30px);
-  max-width: 1300px;
-  /* maxwidth: */
-  margin: 0 auto;
-  height: auto;
-  margin-top: 25px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border: 1px solid #000;
 
   .review-write-div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -35,11 +36,31 @@ const ReviewFileStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  .review-write-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 `;
+
 const ReviewTextStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+
+  textarea {
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid ${prColor.g200};
+    border-radius: 13px;
+    resize: none;
+  }
+`;
+const ReviewButtonStyle = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: end;
 `;
 const Write = () => {
   const [reviewRating, setReviewRating] = useState(null);
@@ -155,23 +176,23 @@ const Write = () => {
           <Rating
             name="simple-controlled"
             size="large"
-            precision={0.5}
+            precision={1}
             value={reviewRating}
             onChange={(event, newValue) => {
-              console.log(newValue);
               setReviewRating(newValue);
             }}
           />
         </div>
       </ReviewCommentStyle>
       <ReviewFileStyle>
-        <label htmlFor="review-pic">사진</label>
-        <ActionButton
-          label="사진첨부"
+        <label htmlFor="review-pic"></label>
+        <button
           onClick={() => {
             handleFileClick();
           }}
-        ></ActionButton>
+        >
+          사진첨부
+        </button>
         <input
           style={{ display: "none" }}
           ref={fileBt}
@@ -183,7 +204,9 @@ const Write = () => {
             handleRwFileChange(e);
           }}
         />
-        {previewPic ? <div>{makeThumbnail()}</div> : null}
+        {previewPic ? (
+          <div className="review-write-preview">{makeThumbnail()}</div>
+        ) : null}
       </ReviewFileStyle>
       <ReviewTextStyle>
         <label htmlFor="revew-text">솔직한 리뷰를 작성해주세요</label>
@@ -196,14 +219,15 @@ const Write = () => {
           }}
         />
       </ReviewTextStyle>
-      <button
-        onClick={e => {
-          handleSubmitWrite(e);
-        }}
-      >
-        작성완료
-      </button>
-      <button>취소</button>
+      <ReviewButtonStyle>
+        <MainButton
+          onClick={e => {
+            handleSubmitWrite(e);
+          }}
+          label="작성"
+        ></MainButton>
+        <MainButton label="취소"></MainButton>
+      </ReviewButtonStyle>
     </WriteInnerStyle>
   );
 };

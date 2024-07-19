@@ -24,15 +24,16 @@ const ButtonStyle = styled.button`
 `;
 
 const MainButtonStyle = styled(ButtonStyle)`
-  background-color: ${prColor.pr01};
-  color: ${prColor.white};
+  border: 1px solid ${prColor.p100};
+  background-color: ${prColor.p200};
+  color: ${prColor.black};
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
     border: 1px solid ${prColor.p1000};
-    background-color: ${prColor.p1000};
+    background-color: ${prColor.p000};
   }
 `;
 

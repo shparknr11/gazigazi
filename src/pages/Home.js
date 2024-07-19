@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getPartyAll } from "../apis/meeting/meetingapi";
 import { IoIosList } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { FaRegArrowAltCircleUp } from "react-icons/fa";
 
 const HomeInnerStyle = styled.div`
   width: 100%;
@@ -44,13 +45,15 @@ export const CartegoryWrapStyle = styled.div`
   .category-item {
     display: flex;
     justify-content: center;
-    border: 1px solid #999;
     width: 80px;
     height: 80px;
     border-radius: 55px;
+    background-color: #efede5;
+    border: 2px solid white;
     cursor: pointer;
+    transition: border 1s ease;
     &:hover {
-      background-color: #999;
+      border: 2px solid #d3cdb5;
     }
   }
   svg {
@@ -124,6 +127,12 @@ const Home = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+
     getData();
   }, []);
 
@@ -155,6 +164,12 @@ const Home = () => {
     navigate(`/meeting/${_partySeq}`);
   };
 
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      handleClickSearch();
+    }
+  };
+
   return (
     <HomeInnerStyle>
       <div className="main-top">
@@ -167,6 +182,9 @@ const Home = () => {
             <input
               type="text"
               value={searchKeyword}
+              onKeyDown={e => {
+                handleKeyDown(e);
+              }}
               onChange={e => {
                 handleChangeSearch(e);
               }}
@@ -332,10 +350,10 @@ const Home = () => {
                       {getGenderText(item.partyGender)}
                     </span>
                     <span className="list-box-age">
-                      {getYearLastTwoDigits(item.partyMinAge) === "1940"
+                      {getYearLastTwoDigits(item.partyMinAge) === "1901"
                         ? "연령무관"
                         : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
-                      {getYearLastTwoDigits(item.partyMaxAge) === "2024"
+                      {getYearLastTwoDigits(item.partyMaxAge) === "2155"
                         ? ""
                         : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
                     </span>
@@ -389,6 +407,24 @@ const Home = () => {
           </div>
         </div>
       </HomeBtmInnerStyle> */}
+      <div>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "48px",
+            right: "48px",
+            padding: "20px",
+            backgroundColor: "black",
+            borderRadius: "15px",
+            color: "white",
+          }}
+          onClick={() => {
+            navigate(`/meeting/create`);
+          }}
+        >
+          모임생성
+        </div>
+      </div>
     </HomeInnerStyle>
   );
 };
