@@ -250,11 +250,11 @@ const UserInfo = () => {
             </label>
             <label>
               <span>비밀번호</span>
-              <input type="password" placeholder="비밀번호" readOnly />
+              <input type="password" value={userData.userPw} readOnly />
             </label>
             <label>
               <span>비밀번호 확인</span>
-              <input type="password" placeholder="비밀번호 확인" readOnly />
+              <input type="password" value={userData.userPwCheck} readOnly />
             </label>
             <label>
               <span>닉네임</span>

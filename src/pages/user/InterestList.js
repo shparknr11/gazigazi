@@ -36,9 +36,8 @@ const InterestInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 200%;
+    width: 100%;
     box-sizing: border-box;
-    margin-top: -300px;
   }
   .interest-item {
     display: flex;
@@ -102,7 +101,6 @@ const InterestList = () => {
         const { resultData, resultMsg } = response.data;
 
         if (response.data.code === 1) {
-          console.log(response.data);
           setInterestItems(resultData);
         } else {
           setError(resultMsg);
@@ -118,6 +116,46 @@ const InterestList = () => {
     fetchInterestItem();
   }, []);
 
+  const handleDelete = async partySeq => {
+    const userSeq = sessionStorage.getItem("userSeq");
+
+    if (!userSeq) {
+      alert("사용자 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      try {
+        const url = `/api/party/wish?wishUserSeq=${userSeq}&wishPartySeq=${partySeq}`;
+        console.log("요청 URL:", url);
+
+        const response = await axios.get(url);
+
+        if (response.data.code === 1) {
+          console.log(response.data);
+          if (response.data.resultData === 0) {
+            setInterestItems(prevItems =>
+              prevItems.filter(item => item.partySeq !== partySeq),
+            );
+            alert("찜하기를 취소하였습니다.");
+          } else {
+            alert("삭제 실패: 문제가 발생했습니다. 다시 시도해주세요.");
+          }
+        } else {
+          console.error("삭제 실패:", response.data.resultMsg);
+          alert(
+            `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`,
+          );
+        }
+      } catch (error) {
+        console.error("모임 삭제 실패:", error);
+        alert(
+          "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요.",
+        );
+      }
+    }
+  };
+
   if (loading) {
     return <Loading>로딩 중...</Loading>;
   }
@@ -130,8 +168,10 @@ const InterestList = () => {
             {interestItems.length === 0 ? (
               <p>죄송합니다. 찜한 모임이 없습니다.</p>
             ) : (
-              interestItems.map((item, index) => (
-                <div className="interest-item" key={index}>
+              interestItems.map(item => (
+                <div className="interest-item" key={item.partySeq}>
+                  {" "}
+                  {/* partySeq를 사용 */}
                   <img
                     src={cate}
                     alt="내가 찜한 모임의 썸네일"
@@ -140,7 +180,7 @@ const InterestList = () => {
                   <div>
                     <div className="interest-item-title">{item.partyName}</div>
                     <div className="interest-item-date">
-                      날짜: {item.partyLocation}
+                      날짜: {item.partyDate}
                     </div>
                     <div className="interest-item-location">
                       장소: {item.partyLocation}
@@ -149,7 +189,12 @@ const InterestList = () => {
                       {item.partyPresident}
                     </div>
                   </div>
-                  <button className="interest-item-delete">삭제</button>
+                  <button
+                    className="interest-item-delete"
+                    onClick={() => handleDelete(item.partySeq)} // partySeq 사용
+                  >
+                    삭제
+                  </button>
                 </div>
               ))
             )}
