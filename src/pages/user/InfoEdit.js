@@ -7,7 +7,7 @@ const InfoEditStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 75vh;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: transparent;

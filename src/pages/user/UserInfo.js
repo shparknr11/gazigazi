@@ -14,7 +14,7 @@ const UserInfoStyle = styled.div`
   height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: transparent;
 `;
 
 const UserInfoWrapStyle = styled.div`
@@ -27,9 +27,10 @@ const UserInfoWrapStyle = styled.div`
 `;
 
 const UserInfoInnerStyle = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: start;
+  align-items: start;
   padding: 20px;
 
   .mypage-container {

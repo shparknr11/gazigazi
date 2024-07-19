@@ -192,12 +192,14 @@ const CreateAccount = () => {
 
   const validateField = (name, value) => {
     const newMessages = { ...messages };
+    let isValid = true;
 
     switch (name) {
       case "userPw":
         if (!passwordRegex.test(value)) {
           newMessages.userPw =
             "비밀번호는 최소 10자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.";
+          isValid = false;
         } else {
           newMessages.userPw = "사용할 수 있는 비밀번호입니다.";
         }
@@ -205,6 +207,7 @@ const CreateAccount = () => {
       case "userPwCheck":
         if (value !== user.userPw) {
           newMessages.userPwCheck = "비밀번호가 일치하지 않습니다!";
+          isValid = false;
         } else {
           newMessages.userPwCheck = "비밀번호가 일치합니다.";
         }
@@ -212,6 +215,7 @@ const CreateAccount = () => {
       case "userEmail":
         if (!emailRegex.test(value)) {
           newMessages.userEmail = "이메일 형식이 올바르지 않습니다.";
+          isValid = false;
         } else {
           newMessages.userEmail = "사용할 수 있는 이메일입니다.";
         }
@@ -220,6 +224,7 @@ const CreateAccount = () => {
         if (!nicknameRegex.test(value)) {
           newMessages.userNickname =
             "닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.";
+          isValid = false;
         } else {
           newMessages.userNickname = "사용할 수 있는 닉네임입니다.";
         }
@@ -227,6 +232,7 @@ const CreateAccount = () => {
       case "userName":
         if (!NameRegex.test(value)) {
           newMessages.userName = "이름은 한글 2~6자로 구성되어야 합니다.";
+          isValid = false;
         } else {
           newMessages.userName = "사용할 수 있는 이름입니다.";
         }
@@ -234,6 +240,7 @@ const CreateAccount = () => {
       case "userPhone":
         if (!PhoneRegex.test(value)) {
           newMessages.userPhone = "전화번호 형식이 올바르지 않습니다.";
+          isValid = false;
         } else {
           newMessages.userPhone = "사용할 수 있는 전화번호입니다.";
         }
@@ -243,6 +250,7 @@ const CreateAccount = () => {
     }
 
     setMessages(newMessages);
+    return isValid;
   };
 
   const validateForm = () => {
@@ -258,7 +266,13 @@ const CreateAccount = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    const formValid = validateForm();
+    console.log("폼 검증 결과:", formValid);
+
+    if (!validateForm()) {
+      console.log("폼 검증 실패");
+      return;
+    }
 
     const formData = new FormData();
     if (accountPic) {
@@ -286,13 +300,14 @@ const CreateAccount = () => {
     );
 
     try {
-      const response = await axios.post("/api/user/join", formData, {
+      const response = await axios.post("/api/user/sign_up", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response.data.resultCode === 0) {
+      if (response.data.code === 1) {
+        console.log(response.data);
         alert("계정이 성공적으로 생성되었습니다!");
         navigate("/login");
       } else {

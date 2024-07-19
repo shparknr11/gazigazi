@@ -4,22 +4,20 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const MyPageStyle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  width: 100%;
+  max-width: 1280px;
   height: 120vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  margin: 0 auto;
+  margin-top: 40px;
 `;
 
 const MyPageWrapStyle = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: 20px;
 `;
 
 const MyPageInnerStyle = styled.div`
@@ -109,6 +107,7 @@ const MyPage = () => {
 
   return (
     <MyPageStyle>
+      <GuideTitle guideTitle="마이페이지" />
       <MyPageWrapStyle>
         <NavLinks>
           <Link to={`/myprofile/:userId/userInfo`}>사용자 정보</Link>
