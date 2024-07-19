@@ -159,13 +159,13 @@ const MyMeetingSchDetail = () => {
     setIsCompleted(res.planCompleted);
     const memberSeq = await schMemberSeq();
     setMemberSeq(memberSeq);
-
     console.log(location.state.isAuth);
   };
 
   useEffect(() => {
     console.log(isJoined);
     getDataOne();
+    console.log(planMemberSeq);
   }, [isCompleted]);
   const formDataFunc = formId => {
     let formData = {};
@@ -307,6 +307,21 @@ const MyMeetingSchDetail = () => {
                         일정종료
                       </button>
                       <button
+                        className={"etc-btn"}
+                        onClick={() => {
+                          navigate("/review/write", {
+                            state: {
+                              planSeq: location.state.planSeq,
+                              planMemberSeq: planMemberSeq,
+                              planTitle: planTitle,
+                              partyName: location.state.partyName,
+                            },
+                          });
+                        }}
+                      >
+                        리뷰 작성
+                      </button>
+                      <button
                         style={{ marginLeft: "5px" }}
                         type="button"
                         className="delete-btn"
@@ -358,7 +373,7 @@ const MyMeetingSchDetail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {isJoined ? (
+                  {!isJoined ? (
                     <>
                       <button
                         className="etc-btn"
@@ -369,23 +384,21 @@ const MyMeetingSchDetail = () => {
                       >
                         참가완료
                       </button>
-                      {isCompleted === 2 ? (
-                        <button
-                          className={"etc-btn"}
-                          onClick={() => {
-                            navigate("/review/write", {
-                              state: {
-                                planSeq: location.state.planSeq,
-                                planMemberSeq: planMemberSeq,
-                                planTitle: planTitle,
-                                partyName: location.state.partyName,
-                              },
-                            });
-                          }}
-                        >
-                          리뷰 작성
-                        </button>
-                      ) : null}
+                      <button
+                        className={"etc-btn"}
+                        onClick={() => {
+                          navigate("/review/write", {
+                            state: {
+                              planSeq: location.state.planSeq,
+                              planMemberSeq: planMemberSeq,
+                              planTitle: planTitle,
+                              partyName: location.state.partyName,
+                            },
+                          });
+                        }}
+                      >
+                        리뷰 작성
+                      </button>
                       <button
                         style={{ marginLeft: "5px" }}
                         type="button"
@@ -442,142 +455,266 @@ const MyMeetingSchDetail = () => {
                 style={{ display: "flex", width: "100%" }}
               >
                 <div className="noitce-form-container">
-                  <div className="flex-column">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          gap: "20px",
-                        }}
-                      >
+                  {isAuth === 2 ? (
+                    <>
+                      <div className="flex-column">
                         <div
                           style={{
-                            width: "100%",
                             display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              gap: "20px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
 
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          <label htmlFor="noticeid">일정명</label>
-                          <input
-                            id="planTitle"
-                            name="planTitle"
-                            className="input-style"
-                            value={planTitle}
-                            style={{ height: "30px", padding: "5px" }}
-                            onChange={e => {
-                              setPlanTitle(e.target.value);
-                            }}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <label htmlFor="noticeid">일정명</label>
+                              <input
+                                id="planTitle"
+                                name="planTitle"
+                                className="input-style"
+                                value={planTitle}
+                                style={{ height: "30px", padding: "5px" }}
+                                onChange={e => {
+                                  setPlanTitle(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
 
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
-                          <label htmlFor="schDateId">일정날짜</label>
-                          <input
-                            type="date"
-                            id="planStartDt"
-                            name="planStartDt"
-                            value={planStartDt}
-                            className="input-style"
-                            onChange={e => {
-                              setPlanStartDt(e.target.value);
-                            }}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
-
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
-                          <label htmlFor="schDateId">일정시간</label>
-                          <input
-                            id="planStartTime"
-                            name="planStartTime"
-                            type="time"
-                            className="input-style"
-                            style={{ height: "30px", padding: "5px" }}
-                            value={planStartTime}
-                            onChange={e => {
-                              setPlanStartTime(e.target.value);
-                            }}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          <label htmlFor="noticeid">장소</label>
-                          <input
-                            type="text"
-                            id="planLocation"
-                            name="planLocation"
-                            value={planLocation}
-                            className="input-style"
-                            onChange={e => {
-                              setPlanLocation(e.target.value);
-                            }}
-                          />
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                              <label htmlFor="schDateId">일정날짜</label>
+                              <input
+                                type="date"
+                                id="planStartDt"
+                                name="planStartDt"
+                                value={planStartDt}
+                                className="input-style"
+                                readOnly
+                                onChange={e => {
+                                  setPlanStartDt(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                              <label htmlFor="schDateId">일정시간</label>
+                              <input
+                                id="planStartTime"
+                                name="planStartTime"
+                                type="time"
+                                className="input-style"
+                                style={{ height: "30px", padding: "5px" }}
+                                value={planStartTime}
+                                onChange={e => {
+                                  setPlanStartTime(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <label htmlFor="noticeid">장소</label>
+                              <input
+                                type="text"
+                                id="planLocation"
+                                name="planLocation"
+                                value={planLocation}
+                                className="input-style"
+                                onChange={e => {
+                                  setPlanLocation(e.target.value);
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="flex-column">
-                    <label htmlFor="noticecontent">일정 소개</label>
-                    <textarea
-                      type="textarea"
-                      id="planContents"
-                      name="planContents"
-                      value={planContents}
-                      className="notice-textarea"
-                      rows="3"
-                      onChange={e => {
-                        setPlanContents(e.target.value);
-                      }}
-                    ></textarea>
-                  </div>
-                  {/* <div className="flex-column">
-                    <label htmlFor="noticecontent">모임 일정 장소</label>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "400px",
-                        border: "1px solid black",
-                      }}
-                    >
-                      지도 API 들어올 자리
-                    </div>
-                  </div> */}
+                      <div className="flex-column">
+                        <label htmlFor="noticecontent">일정 소개</label>
+                        <textarea
+                          type="textarea"
+                          id="planContents"
+                          name="planContents"
+                          value={planContents}
+                          className="notice-textarea"
+                          rows="3"
+                          onChange={e => {
+                            setPlanContents(e.target.value);
+                          }}
+                        ></textarea>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex-column">
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              gap: "20px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <label htmlFor="noticeid">일정명</label>
+                              <input
+                                id="planTitle"
+                                name="planTitle"
+                                className="input-style"
+                                readOnly
+                                value={planTitle}
+                                style={{ height: "30px", padding: "5px" }}
+                                onChange={e => {
+                                  setPlanTitle(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                              <label htmlFor="schDateId">일정날짜</label>
+                              <input
+                                type="date"
+                                id="planStartDt"
+                                name="planStartDt"
+                                readOnly
+                                value={planStartDt}
+                                className="input-style"
+                                onChange={e => {
+                                  setPlanStartDt(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              {/* 앞에서 불러오는데 이거 수정할 때 수정가능하면 데이트 피커 사용해야함 */}
+                              <label htmlFor="schDateId">일정시간</label>
+                              <input
+                                id="planStartTime"
+                                name="planStartTime"
+                                type="time"
+                                className="input-style"
+                                readOnly
+                                style={{ height: "30px", padding: "5px" }}
+                                value={planStartTime}
+                                onChange={e => {
+                                  setPlanStartTime(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <label htmlFor="noticeid">장소</label>
+                              <input
+                                type="text"
+                                id="planLocation"
+                                name="planLocation"
+                                value={planLocation}
+                                readOnly
+                                className="input-style"
+                                onChange={e => {
+                                  setPlanLocation(e.target.value);
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-column">
+                        <label htmlFor="noticecontent">일정 소개</label>
+                        <textarea
+                          type="textarea"
+                          id="planContents"
+                          readOnly
+                          name="planContents"
+                          value={planContents}
+                          className="notice-textarea"
+                          rows="3"
+                          onChange={e => {
+                            setPlanContents(e.target.value);
+                          }}
+                        ></textarea>
+                      </div>
+                    </>
+                  )}
                   {isAuth === 2 ? (
                     <div className="button-wrap">
                       <button
@@ -602,11 +739,24 @@ const MyMeetingSchDetail = () => {
                       </button>
                     </div>
                   ) : null}
+                  {/* <div className="flex-column">
+                    <label htmlFor="noticecontent">모임 일정 장소</label>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "400px",
+                        border: "1px solid black",
+                      }}
+                    >
+                      지도 API 들어올 자리
+                    </div>
+                  </div> */}
                 </div>
                 <MyMeetingSchMemberList
                   meetingId={param.meetingschid}
                   setPlanMemberSeq={setPlanMemberSeq}
                   setIsJoined={setIsJoined}
+                  setPlanMemberJoinFunc={setPlanMemberJoinFunc}
                 ></MyMeetingSchMemberList>
               </form>
             </div>
