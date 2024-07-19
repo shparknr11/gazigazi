@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AccountStyle = styled.div`
   display: flex;
@@ -125,6 +125,11 @@ const AccountInnerStyle = styled.div`
   }
 `;
 
+const Message = styled.div`
+  color: ${props => (props.success ? "green" : "red")};
+  margin-bottom: 10px;
+`;
+
 const CreateAccount = () => {
   const navigate = useNavigate();
 
@@ -134,6 +139,10 @@ const CreateAccount = () => {
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
   const NameRegex = /^[가-힣]{2,6}$/;
   const PhoneRegex = /^01[01](?:\d{3}|\d{4})\d{4}$/;
+
+  const [accountPic, setAccountPic] = useState(null);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
   const [user, setUser] = useState({
     userPic: "",
@@ -150,15 +159,22 @@ const CreateAccount = () => {
     userIntro: "",
   });
 
-  const [accountPic, setAccountPic] = useState(null);
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [messages, setMessages] = useState({
+    userPw: "",
+    userPwCheck: "",
+    userEmail: "",
+    userNickname: "",
+    userName: "",
+    userPhone: "",
+  });
 
   const handleChange = e => {
+    const { name, value } = e.target;
     setUser({
       ...user,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    validateField(name, value);
   };
 
   const handleImageChange = e => {
@@ -174,46 +190,69 @@ const CreateAccount = () => {
     }
   };
 
+  const validateField = (name, value) => {
+    const newMessages = { ...messages };
+
+    switch (name) {
+      case "userPw":
+        if (!passwordRegex.test(value)) {
+          newMessages.userPw =
+            "비밀번호는 최소 10자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.";
+        } else {
+          newMessages.userPw = "사용할 수 있는 비밀번호입니다.";
+        }
+        break;
+      case "userPwCheck":
+        if (value !== user.userPw) {
+          newMessages.userPwCheck = "비밀번호가 일치하지 않습니다!";
+        } else {
+          newMessages.userPwCheck = "비밀번호가 일치합니다.";
+        }
+        break;
+      case "userEmail":
+        if (!emailRegex.test(value)) {
+          newMessages.userEmail = "이메일 형식이 올바르지 않습니다.";
+        } else {
+          newMessages.userEmail = "사용할 수 있는 이메일입니다.";
+        }
+        break;
+      case "userNickname":
+        if (!nicknameRegex.test(value)) {
+          newMessages.userNickname =
+            "닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.";
+        } else {
+          newMessages.userNickname = "사용할 수 있는 닉네임입니다.";
+        }
+        break;
+      case "userName":
+        if (!NameRegex.test(value)) {
+          newMessages.userName = "이름은 한글 2~6자로 구성되어야 합니다.";
+        } else {
+          newMessages.userName = "사용할 수 있는 이름입니다.";
+        }
+        break;
+      case "userPhone":
+        if (!PhoneRegex.test(value)) {
+          newMessages.userPhone = "전화번호 형식이 올바르지 않습니다.";
+        } else {
+          newMessages.userPhone = "사용할 수 있는 전화번호입니다.";
+        }
+        break;
+      default:
+        break;
+    }
+
+    setMessages(newMessages);
+  };
+
   const validateForm = () => {
-    if (!passwordRegex.test(user.userPw)) {
-      alert(
-        "비밀번호는 최소 10자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.",
-      );
-      return false;
-    }
-    if (user.userPw !== user.userPwCheck) {
-      alert("비밀번호가 일치하지 않습니다!");
-      return false;
-    }
-    if (!isEmailChecked) {
-      alert("이메일 중복 확인을 해주세요.");
-      return false;
-    }
-    if (!isNicknameChecked) {
-      alert("닉네임 중복 확인을 해주세요.");
-      return false;
-    }
-    if (!nicknameRegex.test(user.userNickname)) {
-      alert("닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.");
-      return false;
-    }
-    if (!emailRegex.test(user.userEmail)) {
-      alert(
-        "이메일 형식이 올바르지 않습니다. 영문 대소문자, 숫자 (6~15자리) @ 영문 소문자(3~7자리) . com, net (둘 중 하나 택)",
-      );
-      return false;
-    }
-    if (!NameRegex.test(user.userName)) {
-      alert("이름은 한글 2~6자로 구성되어야 합니다.");
-      return false;
-    }
-    if (!PhoneRegex.test(user.userPhone)) {
-      alert(
-        "전화번호는 01(0 or 1) 3자 or 4자 - 4자 (ex:01012345678, -제외)의 형식으로 구성되어야 합니다.",
-      );
-      return false;
-    }
-    return true;
+    let valid = true;
+    Object.keys(user).forEach(key => {
+      if (!validateField(key, user[key])) {
+        valid = false;
+      }
+    });
+    return valid;
   };
 
   const handleSubmit = async e => {
@@ -247,12 +286,13 @@ const CreateAccount = () => {
     );
 
     try {
-      const response = await axios.post("/api/user/sign_up", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const response = await axios.post("/api/user/join", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      if (response.data.code === 1) {
-        console.log(response.data);
+      if (response.data.resultCode === 0) {
         alert("계정이 성공적으로 생성되었습니다!");
         navigate("/login");
       } else {
@@ -350,6 +390,9 @@ const CreateAccount = () => {
                         </button>
                       </div>
                     </label>
+                    <Message success={emailRegex.test(user.userEmail)}>
+                      {messages.userEmail}
+                    </Message>
                     <label>
                       비밀번호*
                       <input
@@ -360,6 +403,9 @@ const CreateAccount = () => {
                         required
                       />
                     </label>
+                    <Message success={passwordRegex.test(user.userPw)}>
+                      {messages.userPw}
+                    </Message>
                     <label>
                       비밀번호 확인*
                       <input
@@ -370,6 +416,9 @@ const CreateAccount = () => {
                         required
                       />
                     </label>
+                    <Message success={user.userPw === user.userPwCheck}>
+                      {messages.userPwCheck}
+                    </Message>
                     <label>
                       이름*
                       <input
@@ -380,6 +429,9 @@ const CreateAccount = () => {
                         required
                       />
                     </label>
+                    <Message success={NameRegex.test(user.userName)}>
+                      {messages.userName}
+                    </Message>
                     <label>
                       닉네임
                       <div className="create-nickname-button-group">
@@ -399,6 +451,9 @@ const CreateAccount = () => {
                         </button>
                       </div>
                     </label>
+                    <Message success={nicknameRegex.test(user.userNickname)}>
+                      {messages.userNickname}
+                    </Message>
                     <label>
                       주소
                       <input
@@ -427,6 +482,9 @@ const CreateAccount = () => {
                         onChange={handleChange}
                       />
                     </label>
+                    <Message success={PhoneRegex.test(user.userPhone)}>
+                      {messages.userPhone}
+                    </Message>
                     <label>
                       관심있는 분야
                       <input

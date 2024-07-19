@@ -102,7 +102,6 @@ const UserDelete = () => {
 
   const deleteAccount = async () => {
     try {
-      // 비밀번호가 두 번 입력된 값이 일치하는지 확인합니다.
       if (password !== confirmPassword) {
         setPasswordError("비밀번호가 일치하지 않습니다.");
         return;
@@ -111,7 +110,7 @@ const UserDelete = () => {
       // 회원 탈퇴 요청
       const response = await axios.patch(
         `http://localhost:3000/api/user/${userSeq}`,
-        { password }, // 비밀번호를 포함한 요청
+        { password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -139,11 +138,11 @@ const UserDelete = () => {
 
   const handleConfirmDelete = () => {
     deleteAccount();
-    setShowModal(false); // 모달을 닫음
+    setShowModal(false);
   };
 
   const handleCancelDelete = () => {
-    setShowModal(false); // 모달을 닫음
+    setShowModal(false);
   };
 
   return (
