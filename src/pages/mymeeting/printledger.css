@@ -21,7 +21,13 @@
   footer {
     display: none !important;
   }
+  .footer-inner {
+    display: none !important;
+  }
   .item-wrap {
+    display: none !important;
+  }
+  .print-delete {
     display: none !important;
   }
 }

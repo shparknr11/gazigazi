@@ -212,12 +212,35 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
       budgetPartySeq: Number(params.meetingId),
       ...formDataFunc("formData"),
     };
-
-    delete form.memberName;
-
-    form.budgetAmount = form.budgetAmount.replaceAll(",", "");
-
     console.log(form);
+    form.budgetAmount = form.budgetAmount.replaceAll(",", "");
+    form.budgetGb = "1";
+    if (!imgFile) {
+      toast.warning("영수증 사진은 필수값입니다.");
+      return;
+    }
+    // 3차 때 구분
+    // if(!form.budgetGb){
+    //   toast.warning("입금 구분은 필수값입니다.");
+    //   return;
+    // }
+    if (!form.budgetMemberSeq) {
+      toast.warning("등록할 멤버를 선택해주세요.");
+      document.getElementById("budgetAmount").focus();
+      return;
+    }
+    if (!form.budgetAmount) {
+      toast.warning("금액은 필수값입니다.");
+      document.getElementById("budgetAmount").focus();
+      return;
+    }
+    if (!form.budgetDt) {
+      document.getElementById("budgetDt").focus();
+
+      toast.warning("입금날짜는 필수값입니다.");
+      return;
+    }
+    delete form.memberName;
     // 2. 보낼데이터 (json 형식의 문자열로 만들기)
     const infoData = JSON.stringify(form);
 
@@ -271,14 +294,17 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                 {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
                 <div
                   style={{
+                    display: "flex",
+                    gap: "230px",
+                    marginBottom: "20px",
                     fontSize: "18px",
                     fontWeight: "bold",
-                    display: "flex",
                     width: "100%",
-                    justifyContent: "space-between",
                   }}
                 >
-                  영수증 이미지
+                  <span>영수증 이미지</span>
+                  <span>입금 내역 등록</span>
+                  <span style={{ marginLeft: "33px" }}>일정 멤버 리스트</span>
                 </div>
                 <div
                   style={{
@@ -316,11 +342,17 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                             onError={imgOnError}
                           />
                         ) : (
-                          <CiImageOff
-                            className="caption-img"
-                            size="216"
-                            style={{ textAlign: "center" }}
-                          />
+                          <>
+                            <CiImageOff
+                              className="caption-img"
+                              size="216"
+                              style={{ textAlign: "center" }}
+                            />
+                            <div>
+                              <strong style={{ color: "red" }}>*</strong>영수증
+                              이미지는 필수 값입니다.
+                            </div>
+                          </>
                         )}
                         <input
                           id="budgetPic"
@@ -354,7 +386,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                     >
                       <div
                         style={{
-                          display: "flex",
+                          display: "none",
                           alignItems: "center",
                           textAlign: "left",
                         }}
@@ -392,7 +424,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         }}
                       >
                         <label htmlFor="memberSeq" style={{ width: "25%" }}>
-                          멤버명
+                          <strong style={{ color: "red" }}>*</strong>멤버명
                         </label>
                         <input
                           id="memberName"
@@ -401,6 +433,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                           value={memberName}
                           style={{ width: "80%" }}
                           readOnly
+                          placeholder="멤버리스트에서 선택해주세요."
                         />
                         <input
                           id="budgetMemberSeq"
@@ -424,7 +457,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         }}
                       >
                         <label htmlFor="mettingdata" style={{ width: "31%" }}>
-                          금액
+                          <strong style={{ color: "red" }}>*</strong>금액
                         </label>
                         <div
                           style={{
@@ -459,7 +492,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         }}
                       >
                         <label htmlFor="budgetDt" style={{ width: "25%" }}>
-                          날짜
+                          <strong style={{ color: "red" }}>*</strong>날짜
                         </label>
                         <input
                           id="budgetDt"
@@ -496,7 +529,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                       </div>
                     </div>
                   </div>
-                  <div style={{ width: "20%", height: "375px" }}>
+                  <div style={{ width: "20%", height: "444px" }}>
                     <ul>
                       <li className="member-title-li">
                         <span>이름</span>
@@ -509,7 +542,7 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                           onClick={() => {
                             if (
                               confirm(
-                                `${item.userName}을 등록하시는게 맞습니까?`,
+                                `${item.userName}님을 등록하시는게 맞습니까?`,
                               )
                             ) {
                               setMemberName(item.userName);
