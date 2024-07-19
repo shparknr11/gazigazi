@@ -13,6 +13,7 @@ const LogOut = () => {
     sessionStorage.removeItem("userGender");
     sessionStorage.removeItem("userBirth");
     sessionStorage.removeItem("userName");
+    sessionStorage.removeItem("userPhone");
 
     alert("로그아웃 되었습니다.");
     navigate("/login");

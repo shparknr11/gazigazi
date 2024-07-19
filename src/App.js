@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
-import "./App.css";
-import "./css/reset.css";
 import "./css/common.css";
 import "./css/footer.css";
 import "./css/header.css";
 import "./css/main.css";
+import "./css/reset.css";
 import Home from "./pages/Home";
 
 import Create from "./pages/meeting/Create";
@@ -28,28 +28,24 @@ import Admin from "./pages/admin/Admin";
 
 import MyMeetingSchMemberList from "./pages/mymeeting/MyMeetingSchMemberList";
 
-import MyPage from "./pages/user/MyPage";
 import MyMeetingMemberList from "./pages/mymeeting/MyMeetingMemberList";
+import MyPage from "./pages/user/MyPage";
 
-import Login from "./pages/user/Login";
 import CreateAccount from "./pages/user/CreateAccount";
-import FindId from "./pages/user/FindId";
-import FindPw from "./pages/user/FindPw";
 import InfoEdit from "./pages/user/InfoEdit";
-import UserInfo from "./pages/user/UserInfo";
 import InterestList from "./pages/user/InterestList";
+import Login from "./pages/user/Login";
+import UserInfo from "./pages/user/UserInfo";
 
 import LogOut from "./pages/user/LogOut";
 
-import MeetingDetail from "./pages/meeting/MeetingDetail";
 import CategoryOthers from "./pages/meeting/CategoryOthers";
-import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
+import MeetingDetail from "./pages/meeting/MeetingDetail";
 import Modify from "./pages/meeting/Modify";
-
-import Search from "./pages/meeting/Search";
-
+import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
 import UserReview from "./pages/UserReview";
-import UserDelete from "./pages/user/UserDelete";
+
+import FindIdPw from "./pages/user/FindIdPw";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -66,12 +62,8 @@ const App = () => {
         <Routes>
           {/* 담당자 : 황운철 */}
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/logout" element={<LogOut />}></Route>
           <Route path="/createaccount" element={<CreateAccount />}></Route>
-          <Route path="/findid" element={<FindId />}></Route>
-          <Route path="/login/findid" element={<FindId />}></Route>
-          <Route path="/findpw" element={<FindPw />}></Route>
-          <Route path="/login/findpw" element={<FindPw />}></Route>
+          <Route path="/login/findid:pw" element={<FindIdPw />}></Route>
 
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>

@@ -19,16 +19,8 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_USER": {
-      const {
-        userSeq,
-        userPic,
-        userGender,
-        userName,
-        userBirth,
-        userEmail,
-        userPhone,
-        isDeleted,
-      } = action.payload;
+      const { userSeq, userPic, userGender, userName, userBirth, userEmail } =
+        action.payload;
 
       sessionStorage.setItem("userSeq", userSeq);
       sessionStorage.setItem("userPic", userPic);
@@ -36,8 +28,6 @@ const userReducer = (state = initialState, action) => {
       sessionStorage.setItem("userName", userName);
       sessionStorage.setItem("userBirth", userBirth);
       sessionStorage.setItem("userEmail", userEmail);
-      sessionStorage.setItem("userPhone", userPhone);
-      sessionStorage.setItem("isDeleted", isDeleted);
 
       return {
         ...state,
