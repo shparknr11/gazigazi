@@ -74,6 +74,7 @@ const LocalSelect = ({
       alert(result.resultMsg);
       return;
     }
+    console.log(result.resultData);
     setLocalDetailList(result.resultData);
   };
 
@@ -97,6 +98,7 @@ const LocalSelect = ({
     const locationForInt = `${item.cdSub}${item.cdGb}`;
     // console.log(locationForInt);
     const cdInt = parseInt(locationForInt);
+    console.log();
     // console.log(cdInt);
     setPartyLocation(cdInt);
     setLocaDetaillData(item.cdGbNm);
