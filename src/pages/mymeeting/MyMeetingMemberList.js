@@ -158,14 +158,14 @@ const MyMeetingMemberList = () => {
           <span>모임 신청관리</span>
         </Link>
       </MemberListMenuStyle>
-      {/* 여기서부터 삭제 */}
+
       <MemberListMainStyle>
         <MemberListTitle>
           <h1>회원관리</h1>
-          <div className="member-list-btn">
+          {/* <div className="member-list-btn">
             <MainButton label="버튼1" />
             <ActionButton label="버튼2" />
-          </div>
+          </div> */}
         </MemberListTitle>
         <div className="memberlist-member-div">
           {memberList.map((item, index) => (
@@ -175,123 +175,22 @@ const MyMeetingMemberList = () => {
                 <div className="member-position">직급</div>
                 <div>박성호(남)</div>
                 <div>24세</div>
-                {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
               </MemberInfo>
-              <PermissionBtn>
-                <MainButton label="승인" />
-                <ActionButton label="반려" />
-                {/* <input type="checkbox" className="member-checkbox" /> */}
-              </PermissionBtn>
             </div>
           ))}
 
-          {/* 여기서부터 삭제 */}
-          <div className="membelist-member">
+          {/* <div className="membelist-member">
             <div className="membelist-member-img" />
             <MemberInfo>
               <div className="member-position">직급</div>
               <div>박성호(남)</div>
               <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
             </MemberInfo>
             <PermissionBtn>
               <MainButton label="승인" />
               <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
             </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
-          <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-              {/* <div>memberSeq:{item.memberSeq}</div>
-                <div>memberSeq:{item.memberUserSeq}</div> */}
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-              {/* <input type="checkbox" className="member-checkbox" /> */}
-            </PermissionBtn>
-          </div>
+          </div> */}
         </div>
       </MemberListMainStyle>
     </MemberListInnerStyle>

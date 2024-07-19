@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getPartyAll } from "../apis/meeting/meetingapi";
 import { IoIosList } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { prColor } from "../css/color";
 
 const HomeInnerStyle = styled.div`
   width: 100%;
@@ -74,7 +75,21 @@ const ActiveCategoryStyle = styled.div`
     width: 25%;
   }
 `;
-
+const HomeCreateMeetingBtnStyle = styled.div`
+  .home-createbt {
+    position: fixed;
+    bottom: 48px;
+    right: 48px;
+    padding: 20px;
+    background-color: ${prColor.g900};
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: ${prColor.g800};
+    }
+  }
+`;
 const Home = () => {
   const navigate = useNavigate();
   const [partyAllList, setPartyAllList] = useState([]);
@@ -415,24 +430,16 @@ const Home = () => {
           </div>
         </div>
       </HomeBtmInnerStyle> */}
-      <div>
+      <HomeCreateMeetingBtnStyle>
         <div
-          style={{
-            position: "fixed",
-            bottom: "48px",
-            right: "48px",
-            padding: "20px",
-            backgroundColor: "black",
-            borderRadius: "15px",
-            color: "white",
-          }}
+          className="home-createbt"
           onClick={() => {
             handleClickCreate();
           }}
         >
           모임생성
         </div>
-      </div>
+      </HomeCreateMeetingBtnStyle>
     </HomeInnerStyle>
   );
 };
