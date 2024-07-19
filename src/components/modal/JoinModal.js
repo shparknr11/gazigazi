@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
 import { prColor } from "../../css/color";
-import { MainButton } from "../button/Button";
+import { MainButton, SubButton } from "../button/Button";
 
 const JoinModalStyle = styled.div`
   position: fixed;
@@ -13,15 +12,15 @@ const JoinModalStyle = styled.div`
 const JoinTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   color: ${prColor.black};
 `;
 
 const JoinBoxStyle = styled.div`
-  border: 1px solid ${prColor.black};
+  border: 1px solid ${prColor.p1000};
   padding: 25px 40px 10px 40px;
   z-index: 99;
-  background-color: rgb(255, 255, 255);
+  background-color: ${prColor.p000};
 `;
 
 const JoinInputStyle = styled.div`
@@ -92,11 +91,8 @@ const JoinModal = ({
               onChange={e => handleChangeContent(e)}
             />
             <div className="join-btn">
-              <MainButton label="신청하기" type="submit"></MainButton>
-              <MainButton
-                label="취소하기"
-                onClick={() => onClose()}
-              ></MainButton>
+              <MainButton label="신청" type="submit"></MainButton>
+              <MainButton label="취소" onClick={() => onClose()}></MainButton>
             </div>
           </JoinInputStyle>
         </form>

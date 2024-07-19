@@ -22,18 +22,32 @@ const ButtonStyle = styled.button`
     color: ${props => props.hoverColor};
   }
 `;
-
 const MainButtonStyle = styled(ButtonStyle)`
+  background-color: ${prColor.p800};
+  color: ${prColor.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${prColor.p800};
+
+  &:hover {
+    border: 1px solid ${prColor.p1000};
+    background-color: ${prColor.p1000};
+  }
+`;
+
+const SubButtonStyle = styled(ButtonStyle)`
   border: 1px solid ${prColor.p100};
-  background-color: ${prColor.p200};
-  color: ${prColor.black};
+  background-color: ${prColor.g800};
+  color: ${prColor.g100};
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    border: 1px solid ${prColor.p1000};
+    border: 1px solid ${prColor.black};
     background-color: ${prColor.p000};
+    color: ${prColor.black};
   }
 `;
 
@@ -67,6 +81,9 @@ const DelectButtonStyle = styled(ButtonStyle)`
 const MainButton = ({ label = "버튼", onClick }) => {
   return <MainButtonStyle onClick={onClick}>{label}</MainButtonStyle>;
 };
+const SubButton = ({ label = "버튼", onClick }) => {
+  return <SubButtonStyle onClick={onClick}>{label}</SubButtonStyle>;
+};
 
 const ActionButton = ({ label = "버튼", onClick }) => {
   return <ActionButtonStyle onClick={onClick}>{label}</ActionButtonStyle>;
@@ -76,4 +93,4 @@ const DelectButton = ({ label = "버튼", onClick }) => {
   return <DelectButtonStyle onClick={onClick}>{label}</DelectButtonStyle>;
 };
 
-export { MainButton, ActionButton, DelectButton };
+export { MainButton, SubButton, ActionButton, DelectButton };

@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
+import "./css/reset.css";
+import "./App.css";
 import "./css/common.css";
 import "./css/footer.css";
 import "./css/header.css";
 import "./css/main.css";
-import "./css/reset.css";
+
 import Home from "./pages/Home";
 
 import Create from "./pages/meeting/Create";

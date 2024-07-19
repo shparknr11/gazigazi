@@ -54,7 +54,6 @@ const LocalSelect = ({
   setLocalList,
   setLocalData,
   setLocaDetaillData,
-  partyLocation,
   setPartyLocation,
 }) => {
   const [localDetailOpen, setLocalDetailOpen] = useState(false);
