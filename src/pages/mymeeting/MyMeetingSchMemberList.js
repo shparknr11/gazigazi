@@ -134,57 +134,34 @@ const CalendarListLiStyle = styled.div`
     text-align: center;
   }
 `;
-const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
+const MyMeetingSchMemberList = ({
+  meetingId,
+  setPlanMemberSeq,
+  setIsJoined,
+  setPlanMemberJoinFunc,
+}) => {
   const [allData, setAllData] = useState([]);
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
   const location = useLocation();
   useEffect(() => {
-    a();
+    setPlanMemberJoinFunc(a);
   }, []);
+
   useEffect(() => {}, []);
 
-  const b = async () => {
-    const res = await getSchMemberAll(params.meetingMemberlistid);
-    setAllData(res);
-    console.log(res);
-  };
-  let activeItem = null;
-  // todo : 정리 중 관리 페이지 식으로 갈지 ...
-  window.addEventListener("click", e => {
-    // 내부 css background 먹일 시 활용할 것
-    // const a = document.querySelector("");
-    if (e.target.classList.contains("item")) {
-      const clickedItem = e.target;
-      if (activeItem) {
-        activeItem.classList.remove("divButtonStyle");
-      }
-
-      clickedItem.classList.add("divButtonStyle");
-      activeItem = clickedItem;
-      // 이벤트 걸곳 axios 여기다 걸자
-      switch (clickedItem.id) {
-        case "1":
-          // a.style.backgroundColor = "#f8ebd6";
-
-          break;
-        case "2":
-          // a.style.backgroundColor = "#f8ebd6";
-          break;
-        default:
-          break;
-      }
-    }
-  });
   const a = async () => {
     const res = await getSchMemberAll(meetingId);
-
     setAllData(res);
+    const a = Number(sessionStorage.getItem("userSeq"));
     if (allData?.length > 0) {
       const b = allData?.filter(item => {
         return Number(item?.userSeq) === Number(a);
       });
+      console.log(b);
       setPlanMemberSeq(b[0]?.plmemberSeq);
+      console.log(b[0]?.plmemberSeq);
+      alert(b[0]?.plmemberSeq);
     }
   };
   return (
@@ -228,11 +205,12 @@ const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
               {isClicked === 1 ? (
                 allData.length > 0 ? (
                   allData.map((item, index) => (
-                    <CalendarListLiStyle key={item.pk}>
+                    <CalendarListLiStyle key={item.userSeq}>
                       {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                       <li>
                         <span>{index + 1}</span>
                         <span>{item?.userName}</span>
+                        <input value={item.userSeq} readOnly></input>
                         {/* <span>{item.managementDate}</span> */}
                         {/* <span
                           style={{
@@ -276,6 +254,11 @@ const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
                     <li>
                       <span>{index + 1}</span>
                       <span>{item.userName}</span>
+                      <input
+                        style={{ width: "0", height: "0", border: "none" }}
+                        value={item.userSeq}
+                        readOnly
+                      ></input>
                     </li>
                   </CalendarListLiStyle>
                 ))
