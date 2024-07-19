@@ -4,12 +4,13 @@ import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { patchApproval } from "../../apis/meeting/joinapi";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1300px;
+  max-width: 1280px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
   display: flex;
+  height: 1000px;
 `;
 const AdminLeftDivStyle = styled.div`
   nav {
@@ -69,8 +70,6 @@ const AdminRightDivStyle = styled.div`
 const Admin = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const userSeq = sessionStorage.getItem("userSeq");
-
-  // api함수
   const getData = async () => {
     try {
       const result = await getPartyAll();
@@ -85,14 +84,20 @@ const Admin = () => {
     }
   };
 
+  useEffect(() => {
+    getData();
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
+  // api함수
+
   const filterParty = _resultData => {
     const updateList = _resultData.filter(item => item.partyAuthGb === "0");
     setFilteredPartyList(updateList);
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleClickApproval = async _partySeq => {
     try {
@@ -112,23 +117,24 @@ const Admin = () => {
       <AdminLeftDivStyle>
         <nav>
           <ul className="admin-list">
-            <li className="admin-list-item">
+            {/* <li className="admin-list-item">
               <span>메인</span>
-            </li>
+            </li> */}
             <li className="admin-list-item">
               <span>모임 신청 관리</span>
             </li>
-            <li className="admin-list-item">
+            {/* <li className="admin-list-item">
               <span>...</span>
             </li>
             <li className="admin-list-item">
               <span>설정</span>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </AdminLeftDivStyle>
       <AdminRightDivStyle>
         <h1>모임 신청 리스트</h1>
+        <span></span>
         <div className="admin-application-div">
           {filteredPartyList.map((item, index) => (
             <div key={index}>

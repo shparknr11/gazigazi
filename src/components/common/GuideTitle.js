@@ -5,6 +5,10 @@ import styled from "@emotion/styled";
 
 const CategoryMainTitle = styled.div`
   width: 100%;
+  .guidetitle-style {
+    display: flex;
+    align-content: center;
+  }
   h1 {
     font-size: 25px;
     margin-top: 25px;
@@ -17,7 +21,7 @@ const GuideTitle = ({ title, guideTitle, subTitle }) => {
   const navigate = useNavigate();
   return (
     <CategoryMainTitle>
-      <span style={{ display: "flex", justifyItems: "center" }}>
+      <span className="guidetitle-style">
         <TiHome
           style={{ cursor: "pointer" }}
           onClick={() => {

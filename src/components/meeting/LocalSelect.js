@@ -103,9 +103,9 @@ const LocalSelect = ({
     setLocalRadioChecked(item.cdGbNm);
   };
 
-  useEffect(() => {
-    console.log("partyLocation", partyLocation);
-  }, [partyLocation]);
+  // useEffect(() => {
+  //   console.log("partyLocation", partyLocation);
+  // }, [partyLocation]);
   return (
     <LocalSelectWrapStyle>
       <div className="local-select-box">

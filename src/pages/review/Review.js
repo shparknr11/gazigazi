@@ -4,19 +4,16 @@ import { FaStar } from "react-icons/fa";
 import { getReviewList } from "../../apis/reviewapi/reviewapi";
 import { CiSearch } from "react-icons/ci";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { toast } from "react-toastify";
+import GuideTitle from "../../components/common/GuideTitle";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1300px;
+  max-width: 1280px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
   margin-bottom: 10px;
-  * {
-    font-size: 14px;
-    line-height: 1.5;
-  }
+
   .review-search-div {
     display: flex;
     align-items: center;
@@ -71,6 +68,10 @@ const ReviewItemStyle = styled.div`
         align-items: center;
         margin-left: 5px;
       }
+    }
+    * {
+      font-size: 14px;
+      line-height: 1.5;
     }
   }
   .rm-star {
@@ -134,6 +135,12 @@ const ReviewPaginationStyle = styled.div`
     }
   }
 `;
+const NoReviewStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+`;
 
 const Review = () => {
   const [reviewList, setReviewList] = useState([]);
@@ -161,8 +168,12 @@ const Review = () => {
 
   useEffect(() => {
     getReviewData();
-    window.scrollTo(0, 0); // 컴포넌트가 렌더링될 때 페이지의 맨 위로 스크롤 이동
-  }, []);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, [currentPage]);
 
   // 이전 페이지로 가기
   const handleClickPrev = () => {
@@ -204,18 +215,20 @@ const Review = () => {
   };
 
   const handleReviewSearchClick = () => {
-    if (!reviewSearchText) {
-      return toast.warning("검색어를 입력해주세요.");
-    }
     getReviewData();
     setCurrentPage(1);
   };
 
-  console.log("sss");
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      handleReviewSearchClick();
+    }
+  };
+
   return (
     <ReviewInnerStyle>
       <ReviewTitleStyle>
-        <h1>가지가지 모임 후기</h1>
+        <GuideTitle guideTitle="커뮤니티 후기" title="📝맴버들의 모임 후기" />
         <div>
           <p>가까운 지역 가까운 지인을 만난 맴버들이 남긴 후기들</p>
           <div className="review-search-div">
@@ -225,11 +238,15 @@ const Review = () => {
                 placeholder="검색어를 입력하세요."
                 className="review-search-input"
                 value={reviewSearchText}
+                onKeyDown={e => {
+                  handleKeyDown(e);
+                }}
                 onChange={e => {
                   handleChangeSearchText(e);
                 }}
               ></input>
               <CiSearch
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   handleReviewSearchClick();
                 }}
@@ -238,46 +255,49 @@ const Review = () => {
           </div>
         </div>
       </ReviewTitleStyle>
+      {reviewList.length ? (
+        reviewList.map((item, index) => (
+          <ReviewItemStyle key={index}>
+            <div className="review-comment">
+              <div className="review-top">
+                <div className="rt-profile">
+                  <img
+                    src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                    alt="프로필"
+                  />
+                  <span>{item.userName}</span>
+                </div>
+                <div className="rm-star">
+                  {makeStars(item.reviewRating)}
+                  {item.reviewRating}
+                </div>
+              </div>
 
-      {reviewList.map((item, index) => (
-        <ReviewItemStyle key={index}>
-          <div className="review-comment">
-            <div className="review-top">
-              <div className="rt-profile">
-                <img
-                  src={`/pic/user/${item.userSeq}/${item.userPic}`}
-                  alt="프로필"
-                />
-                <span>{item.userName}</span>
+              <div className="review-mid">
+                <div className="rb-text">
+                  <p>{item.reviewContents}</p>
+                </div>
               </div>
-              <div className="rm-star">
-                {makeStars(item.reviewRating)}
-                {item.reviewRating}
-              </div>
-            </div>
-
-            <div className="review-mid">
-              <div className="rb-text">
-                <p>{item.reviewContents}</p>
+              {item.pics && item.pics[0] && (
+                <div className="review-img">
+                  {makeReviewPic(item.reviewSeq, item.pics)}
+                </div>
+              )}
+              <div className="review-bottom-div">
+                <div className="review-bottom">
+                  <h3>모임명 :</h3>
+                  <span>{item.partyName}</span>
+                </div>
+                <div>
+                  <span>{item.inputDt.substr(0, 10)}</span>
+                </div>
               </div>
             </div>
-            {item.pics && item.pics[0] && (
-              <div className="review-img">
-                {makeReviewPic(item.reviewSeq, item.pics)}
-              </div>
-            )}
-            <div className="review-bottom-div">
-              <div className="review-bottom">
-                <h3>모임명 :</h3>
-                <span>{item.partyName}</span>
-              </div>
-              <div>
-                <span>{item.inputDt.substr(0, 10)}</span>
-              </div>
-            </div>
-          </div>
-        </ReviewItemStyle>
-      ))}
+          </ReviewItemStyle>
+        ))
+      ) : (
+        <NoReviewStyle>작성된 후기가 없습니다.</NoReviewStyle>
+      )}
       <ReviewPaginationStyle>
         <div
           className="prev-button"

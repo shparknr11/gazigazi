@@ -11,23 +11,16 @@ const JoinModalStyle = styled.div`
 `;
 
 const JoinTitle = styled.div`
-  color: ${prColor.g800};
-  text-align: center;
-  width: 120px;
-  height: 36px;
-  border: 2px solid ${prColor.pr02};
-  border-bottom: 0px;
-  padding: 10px;
-  z-index: 1000;
-  border-radius: 13px 13px 0 0;
-  background-color: ${prColor.white};
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: ${prColor.black};
 `;
 
 const JoinBoxStyle = styled.div`
-  border: 2px solid ${prColor.pr02};
-  padding: 30px;
-  z-index: 1000;
-  border-radius: 0 13px 13px 13px;
+  border: 1px solid ${prColor.black};
+  padding: 25px 40px 10px 40px;
+  z-index: 99;
   background-color: rgb(255, 255, 255);
 `;
 
@@ -82,15 +75,13 @@ const JoinModal = ({
   };
   return (
     <JoinModalStyle>
-      <JoinTitle>
-        <h2>모임신청</h2>
-      </JoinTitle>
       <JoinBoxStyle>
         <form
           onSubmit={e => {
             handleSubmit(e);
           }}
         >
+          <JoinTitle>모임신청</JoinTitle>
           <JoinInputStyle>
             <textarea
               id="jointext"

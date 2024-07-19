@@ -37,7 +37,7 @@
   margin-top: 10px;
   margin-left: 250px;
 }
-.header-menu-mymeeting {
+.header-menu-item {
   cursor: pointer;
 }
 .header-icon-list {
@@ -55,11 +55,21 @@
 }
 
 .header-profileicon {
+  width: 33px;
+  height: 33px;
+  border: 2px solid #fff;
+  transition: border 0.5 ease; /* border 속성 변화를 0.5초 동안 부드럽게 처리 */
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* .header-profileicon img {
   width: 29px;
   height: 29px;
   border: 1px solid #999;
   border-radius: 60%;
   cursor: pointer;
-}
+} */
 .header-profileicon:hover {
+  border: 2px solid #d3cdb5;
 }
