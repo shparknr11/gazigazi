@@ -82,16 +82,24 @@ const ReviewItemStyle = styled.div`
   .review-mid {
     width: 100%;
     max-width: 700px;
+    .review-mid-text {
+      margin-bottom: 20px;
+    }
   }
   .review-img {
   }
-  .review-bottom-div {
+  /* .review-bottom-div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  } */
+  .review-partyname {
+    display: flex;
   }
   .review-bottom {
     display: flex;
+    align-items: end;
+    justify-content: space-between;
   }
   .rb-button {
     border: 0.5px solid #000;
@@ -274,7 +282,7 @@ const Review = () => {
               </div>
 
               <div className="review-mid">
-                <div className="rb-text">
+                <div className="review-mid-text">
                   <p>{item.reviewContents}</p>
                 </div>
               </div>
@@ -283,13 +291,19 @@ const Review = () => {
                   {makeReviewPic(item.reviewSeq, item.pics)}
                 </div>
               )}
-              <div className="review-bottom-div">
-                <div className="review-bottom">
-                  <h3>모임명 :</h3>
-                  <span>{item.partyName}</span>
+
+              <div className="review-bottom">
+                <div>
+                  <div className="review-partyname">
+                    <h3>모임명:</h3>
+                    <span>{item.partyName}</span>
+                  </div>
+                  <span style={{ fontSize: "12px" }}>
+                    {item.inputDt.substr(0, 10)}
+                  </span>
                 </div>
                 <div>
-                  <span>{item.inputDt.substr(0, 10)}</span>
+                  추천 0<div className="rb-button">도움이 됐어요</div>
                 </div>
               </div>
             </div>
@@ -320,7 +334,6 @@ const Review = () => {
         >
           <IoIosArrowForward />
         </div>
-        <div></div>
       </ReviewPaginationStyle>
     </ReviewInnerStyle>
   );

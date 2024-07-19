@@ -100,18 +100,14 @@ const MyMeetingNewMemberList = () => {
       <MemberListMainStyle>
         <MemberListTitle>
           <h1>신청 관리</h1>
-          <div className="member-list-btn">
-            <MainButton label="버튼1" />
-            <ActionButton label="버튼2" />
-          </div>
         </MemberListTitle>
         <div className="memberlist-member-div">
           {applicationList.map((item, index) => (
             <div key={index} className="membelist-member">
               <div className="membelist-member-img" />
               <MemberInfo>
-                <div className="member-position">직급</div>
-                <div>박성호(남)</div>
+                <div className="member-position"></div>
+                <div>{item.joinUserSeq}</div>
                 <div>{item.joinMsg}</div>
               </MemberInfo>
               <PermissionBtn>
@@ -125,7 +121,7 @@ const MyMeetingNewMemberList = () => {
               </PermissionBtn>
             </div>
           ))}
-
+          {/* 
           <div className="membelist-member">
             <div className="membelist-member-img" />
             <MemberInfo>
@@ -137,7 +133,7 @@ const MyMeetingNewMemberList = () => {
               <MainButton label="승인" />
               <ActionButton label="반려" />
             </PermissionBtn>
-          </div>
+          </div> */}
         </div>
       </MemberListMainStyle>
     </MemberListInnerStyle>

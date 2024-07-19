@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import meetimg from "../../images/meetinga.png";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPartyOne, getWishParty } from "../../apis/meeting/meetingapi";
 import useModal from "../../hooks/useModal";
@@ -166,11 +166,16 @@ const MeetingDetail = () => {
   const [isWished, setIsWished] = useState(false);
   //   const [searchParams] = useSearchParams();
   const { partySeq } = useParams();
+  const navigate = useNavigate();
   const userSeq = sessionStorage.getItem("userSeq");
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
 
   const handleJoinModal = () => {
+    if (!userSeq) {
+      navigate(`/login`);
+      return;
+    }
     openModal({
       onConfirm: async joinContent => {
         try {
@@ -210,6 +215,10 @@ const MeetingDetail = () => {
   }
 
   const handleClickWish = async () => {
+    if (!userSeq) {
+      navigate(`/login`);
+      return;
+    }
     const parseUserSeq = parseInt(userSeq);
     const parsePartySeq = parseInt(partySeq);
     const result = await getWishParty(parseUserSeq, parsePartySeq);
