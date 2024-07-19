@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import {
   deleteSchOne,
+  getSchMemberSeq,
   getSchOne,
   patchSch,
   patchSchComp,
@@ -122,11 +123,20 @@ const MyMeetingSchDetail = () => {
   const [planMemberSeq, setPlanMemberSeq] = useState();
   const [planMemberJoinFunc, setPlanMemberJoinFunc] = useState(() => {});
   const [isChangedVal, setIsChangedVal] = useState(false);
+  const [isJoined, setIsJoined] = useState(false);
+  const [memberSeq, setMemberSeq] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const param = useParams();
 
   useEffect(() => {}, [isAuth]);
+  const schMemberSeq = async () => {
+    const seq = await getSchMemberSeq(
+      location.state.planSeq,
+      sessionStorage.getItem("userSeq"),
+    );
+    return seq.memberSeq;
+  };
 
   const getDataOne = async () => {
     console.log(location.state.planSeq);
@@ -147,10 +157,14 @@ const MyMeetingSchDetail = () => {
     setPlanCdNm(res.cdNm);
     setIsAuth(location.state.isAuth);
     setIsCompleted(res.planCompleted);
+    const memberSeq = await schMemberSeq();
+    setMemberSeq(memberSeq);
 
     console.log(location.state.isAuth);
   };
+
   useEffect(() => {
+    console.log(isJoined);
     getDataOne();
   }, [isCompleted]);
   const formDataFunc = formId => {
@@ -168,7 +182,7 @@ const MyMeetingSchDetail = () => {
 
     return formData;
   };
-  useEffect(() => {}, []);
+
   const handleClick = async () => {
     console.log(location.state.planSeq);
     setIsLoading(true);
@@ -207,14 +221,11 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
-  console.log("asdlkfjasklfjasdlkj", location);
+
   const handleClickSchEnter = async () => {
     setIsLoading(true);
     try {
-      const res = await postSchJoin(
-        location.state.planSeq,
-        sessionStorage.getItem("userSeq"),
-      );
+      const res = await postSchJoin(param.meetingschid, memberSeq);
       toast.success("일정에 참가되었습니다!");
       getDataOne();
     } catch (error) {
@@ -347,7 +358,7 @@ const MyMeetingSchDetail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {isCompleted === 2 ? (
+                  {isJoined ? (
                     <>
                       <button
                         className="etc-btn"
@@ -595,6 +606,7 @@ const MyMeetingSchDetail = () => {
                 <MyMeetingSchMemberList
                   meetingId={param.meetingschid}
                   setPlanMemberSeq={setPlanMemberSeq}
+                  setIsJoined={setIsJoined}
                 ></MyMeetingSchMemberList>
               </form>
             </div>

@@ -163,12 +163,27 @@ export const deleteSchJoin = async (planSeq, userSeq) => {
 // /api/plan/join
 // 모임 일정 참가 신청
 export const postSchJoin = async (planSeq, userSeq) => {
-  console.log(Number(planSeq), Number(userSeq));
   try {
     const res = await axios.post(`/api/plan/join`, {
       plmemberPlanSeq: Number(planSeq),
       memberSeq: Number(userSeq),
     });
+    return res.data.resultData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 멤버 한명 정보 불러오기
+// 입력한 모임의 지정한 멤버의 정보를 불러옵니다
+// memberPartySeq : 모임 PK (long)
+// memberUserSeq : 멤버 PK (long)
+// /api/member/detail/{partySeq}
+export const getSchMemberSeq = async (memberPartySeq, memberUserSeq) => {
+  try {
+    const res = await axios.get(
+      `/api/member/detail/${memberPartySeq}?memberUserSeq=${memberUserSeq}`,
+    );
     return res.data.resultData;
   } catch (error) {
     console.log(error);

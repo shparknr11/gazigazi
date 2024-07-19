@@ -139,7 +139,6 @@ const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
   const location = useLocation();
-  console.log(params);
   useEffect(() => {
     a();
   }, []);
@@ -178,10 +177,9 @@ const MyMeetingSchMemberList = ({ meetingId, setPlanMemberSeq }) => {
     }
   });
   const a = async () => {
-    console.log("sdfaskjfalsjhflkasjhdkjsdf", location);
     const res = await getSchMemberAll(meetingId);
+
     setAllData(res);
-    const a = Number(sessionStorage.getItem("userSeq"));
     if (allData?.length > 0) {
       const b = allData?.filter(item => {
         return Number(item?.userSeq) === Number(a);
