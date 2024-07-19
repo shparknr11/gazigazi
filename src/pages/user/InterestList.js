@@ -10,8 +10,6 @@ const InterestListStyle = styled.div`
   align-items: center;
   height: 100vh;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
 `;
 
 const InterestWrapStyle = styled.div`
