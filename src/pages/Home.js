@@ -85,8 +85,17 @@ const HomeCreateMeetingBtnStyle = styled.div`
     border-radius: 15px;
     color: white;
     cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    box-shadow:
+      rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
+      rgba(0, 0, 0, 0.3) 0px 3px 3px,
+      rgba(0, 0, 0, 0.25) 0px 3px 5px;
     &:hover {
       background-color: ${prColor.g800};
+      box-shadow:
+        rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
+        rgba(0, 0, 0, 0.3) 0px 3px 7px,
+        rgba(0, 0, 0, 0.25) 0px 3px 10px;
     }
   }
 `;
