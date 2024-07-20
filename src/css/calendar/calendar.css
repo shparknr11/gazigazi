@@ -172,6 +172,9 @@
 .sun {
   background: orange !important;
 }
+.end-day-style {
+  background: #dbdbdb !important;
+}
 .react-calendar__month-view__days {
   height: 600px;
 }
