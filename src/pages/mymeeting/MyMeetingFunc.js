@@ -32,9 +32,7 @@ const MyMeetingFuncStyle = styled.div`
 `;
 const MyMeetingFunc = () => {
   const [isClicked, setIsClicked] = useState();
-  useEffect(() => {
-    console.log(isClicked);
-  }, [isClicked]);
+  useEffect(() => {}, [isClicked]);
   // 버튼 2개로 움직일 거임
   // 그 전에 태그를 담아 두는거
   let activeItem = null;

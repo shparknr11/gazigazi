@@ -123,7 +123,6 @@ const MyMeetingMemberList = () => {
   const [memberList, setMemberList] = useState([]);
 
   const { partySeq } = useParams();
-  console.log(partySeq);
   // api함수
   const getData = async () => {
     try {

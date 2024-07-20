@@ -19,7 +19,6 @@ export const getMonthBudget = async ({ budgetPartySeq, month }) => {
 // 월 별 정산 내역 출력
 // /api/budget/month?budgetPartySeq=1&month=1
 export const getMonthCalculateBudget = async ({ budgetPartySeq, month }) => {
-  console.log(budgetPartySeq, month);
   try {
     const res = await axios.get(
       `/api/budget/month?budgetPartySeq=${budgetPartySeq}&month=${month}`,
@@ -57,7 +56,6 @@ export const getBudgetPhoto = async ({ budgetSeq }) => {
 // /api/budget/member
 // 멤버 별 회비 입금 내역 조회
 export const getMemberBudget = async ({ budgetPartySeq, month }) => {
-  console.log(budgetPartySeq, month);
   try {
     const res = await axios.get(
       `/api/budget/member?budgetPartySeq=${budgetPartySeq}&month=${month}`,
@@ -73,7 +71,6 @@ export const getMemberBudget = async ({ budgetPartySeq, month }) => {
 // 회계 내역 수정
 export const patchBudget = async formData => {
   try {
-    console.log(formData);
     const header = { headers: { "Content-Type": "multipart/form-data" } };
     const res = await axios.patch("/api/budget", formData, header);
     return res.data.resultData;
@@ -86,7 +83,6 @@ export const patchBudget = async formData => {
 // 회계 내역 등록
 export const postBudget = async formData => {
   try {
-    console.log(formData);
     const header = { headers: { "Content-Type": "multipart/form-data" } };
     const res = await axios.post("/api/budget", formData, header);
     return res.data.resultData;

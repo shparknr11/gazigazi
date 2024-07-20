@@ -130,9 +130,7 @@ const MyMeetingSchResister = () => {
   const foucsElement = focusId => {
     document.getElementById(focusId).focus();
   };
-  useEffect(() => {
-    console.log(postData);
-  }, []);
+  useEffect(() => {}, []);
   const handleClick = async () => {
     if (!formDataFunc("dataForm").planTitle) {
       toast.warning("일정명은 필수값입니다.");
@@ -172,8 +170,6 @@ const MyMeetingSchResister = () => {
     });
   };
   const changedValue = () => {
-    console.log(formDataFunc("dataForm"));
-    console.log(formDataFunc("dataForm").planTitle);
     if (
       formDataFunc("dataForm").planTitle ||
       formDataFunc("dataForm").planStartTime ||

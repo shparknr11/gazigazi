@@ -255,7 +255,6 @@ const MyMeetingSchDetail = () => {
   const navigate = useNavigate();
   const param = useParams();
   const planSeqForReview = param.meetingschid;
-  console.log(planSeqForReview);
 
   useEffect(() => {}, [isAuth]);
   const schMemberSeq = async () => {
@@ -267,9 +266,7 @@ const MyMeetingSchDetail = () => {
   };
 
   const getDataOne = async () => {
-    console.log(location.state.planSeq);
     const res = await getSchOne(param.meetingschid);
-    console.log(res);
     initailData = {
       planTitle: res.planTitle,
       planStartTime: res.planStartTime,
@@ -288,13 +285,10 @@ const MyMeetingSchDetail = () => {
     const memberSeq = await schMemberSeq();
     setMemberSeq(memberSeq);
     getPlMemberSeq();
-    console.log(location.state.isAuth);
   };
 
   useEffect(() => {
-    console.log(isJoined);
     getDataOne();
-    console.log(planMemberSeq);
   }, [isCompleted]);
   const formDataFunc = formId => {
     let formData = {};
@@ -313,18 +307,12 @@ const MyMeetingSchDetail = () => {
   };
 
   const handleClick = async () => {
-    console.log(location.state.planSeq);
     setIsLoading(true);
-    console.log({
-      planPartySeq: location.state.planSeq,
-      ...formDataFunc("dataForm"),
-    });
     try {
       const res = await patchSch({
         planSeq: param.meetingschid,
         ...formDataFunc("dataForm"),
       });
-      console.log(param.meetingId);
       toast.success("일정이 수정되었습니다.");
       navigate(`/mymeeting/mymeetingLeader/${location.state.planSeq}`, {
         state: { isAuth: isAuth },
@@ -339,9 +327,7 @@ const MyMeetingSchDetail = () => {
   const handleClickSchComp = async () => {
     setIsLoading(true);
     try {
-      console.log(location.state.planSeq);
       const res = await patchSchComp(param.meetingschid);
-      console.log(res);
       toast.success("일정이 종료 처리되었습니다!");
       getDataOne();
     } catch (error) {
@@ -363,12 +349,10 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
-  console.log(param.meetingschid);
   const handleClickSchDelete = async () => {
     setIsLoading(true);
     try {
       const res = await deleteSchOne(param.meetingschid);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
