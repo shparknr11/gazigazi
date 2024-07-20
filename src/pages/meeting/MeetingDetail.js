@@ -230,6 +230,7 @@ const MeetingDetail = () => {
     alert("관심목록에 추가되었습니다.");
     setIsWished(!isWished);
   };
+
   const getGenderText = genderCode => {
     switch (genderCode) {
       case 1:

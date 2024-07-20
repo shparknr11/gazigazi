@@ -183,7 +183,7 @@ const Home = () => {
 
   // 클릭시 상페 페이지로
   const handleClickDetail = _partySeq => {
-    console.log(_partySeq);
+    // console.log(_partySeq);
     navigate(`/meeting/${_partySeq}`);
   };
 
@@ -193,7 +193,7 @@ const Home = () => {
     }
   };
   const handleClickCreate = () => {
-    console.log(userSeq);
+    // console.log(userSeq);
     if (userSeq) {
       navigate(`/meeting/create`);
       return;

@@ -86,7 +86,7 @@ const Modify = () => {
     const fetchData = async () => {
       try {
         const result = await getPartyOne(partySeq); // API에서 기존 모임 데이터 가져오기
-        console.log("result", result);
+        // console.log("result", result);
 
         // // 가져온 데이터를 상태 변수에 설정
         setPartyName(result.resultData.partyName);
@@ -127,7 +127,7 @@ const Modify = () => {
   const handleChangeGenre = e => {
     // console.log(e.target.value);
     const genre = parseInt(e.target.value);
-    console.log(genre);
+    // console.log(genre);
     if (!genre) {
       alert("장르를 선택해주세요");
     }
@@ -144,8 +144,8 @@ const Modify = () => {
       alert(result.resultMsg);
       return;
     }
-    console.log("result", result);
-    console.log("resultData", result.resultData);
+    // console.log("result", result);
+    // console.log("resultData", result.resultData);
     setLocalList(result.resultData);
   };
   // 성별 선택
@@ -155,7 +155,7 @@ const Modify = () => {
   };
   // 연령제한 선택
   const handleChangeMinAge = e => {
-    console.log("min", e.target.value);
+    // console.log("min", e.target.value);
     const minAge = parseInt(e.target.value);
     setPartyMinAge(minAge);
     if (minAge > partyMaxAge) {
@@ -163,7 +163,7 @@ const Modify = () => {
     }
   };
   const handleChangeMaxAge = e => {
-    console.log("max", e.target.value);
+    // console.log("max", e.target.value);
     const maxAge = parseInt(e.target.value);
     setPartyMaxAge(maxAge);
     if (partyMinAge > maxAge) {
@@ -174,7 +174,7 @@ const Modify = () => {
   // 파일 선택
   const handleFileChange = e => {
     const tempFile = e.target.files[0];
-    console.log(e.target.files[0]);
+    // console.log(e.target.files[0]);
 
     if (tempFile) {
       setPartyPic(tempFile);
@@ -221,7 +221,7 @@ const Modify = () => {
       partyJoinForm,
       partyIntro,
     });
-    console.log("infoData", infoData);
+    // console.log("infoData", infoData);
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
     formData.append("partyPic", partyPic);

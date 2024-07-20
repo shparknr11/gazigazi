@@ -144,7 +144,7 @@ const CategoryOthers = () => {
         (partyGenre === "0" || item.partyGenre === partyGenre) &&
         (!searchKeyword || item.partyName.includes(searchKeyword)),
     );
-    console.log("uadateList", updateList);
+    // console.log("uadateList", updateList);
     setFilteredPartyList(updateList);
   };
 
@@ -169,7 +169,7 @@ const CategoryOthers = () => {
   }, [partyGenre]);
 
   const handleClickDetail = _partySeq => {
-    console.log(_partySeq);
+    // console.log(_partySeq);
     navigate(`/meeting/${_partySeq}`);
   };
 

@@ -171,8 +171,8 @@ const Create = () => {
       alert(result.resultMsg);
       return;
     }
-    console.log("result", result);
-    console.log("resultData", result.resultData);
+    // console.log("result", result);
+    // console.log("resultData", result.resultData);
     setLocalList(result.resultData);
   };
   // 성별 선택
@@ -182,7 +182,7 @@ const Create = () => {
   };
   // 연령제한 선택
   const handleChangeMinAge = e => {
-    console.log("min", e.target.value);
+    // console.log("min", e.target.value);
     const minAge = parseInt(e.target.value);
     setPartyMinAge(minAge);
     if (minAge > partyMaxAge) {
@@ -190,7 +190,7 @@ const Create = () => {
     }
   };
   const handleChangeMaxAge = e => {
-    console.log("max", e.target.value);
+    // console.log("max", e.target.value);
     const maxAge = parseInt(e.target.value);
     setPartyMaxAge(maxAge);
     if (partyMinAge > maxAge) {
@@ -201,7 +201,7 @@ const Create = () => {
   // 파일 선택
   const handleFileChange = e => {
     const tempFile = e.target.files[0];
-    console.log(e.target.files[0]);
+    // console.log(e.target.files[0]);
 
     if (tempFile) {
       setPartyPic(tempFile);
@@ -295,7 +295,7 @@ const Create = () => {
       partyJoinForm,
       partyIntro,
     });
-    console.log("infoData", infoData);
+    // console.log("infoData", infoData);
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
     formData.append("partyPic", partyPic);
@@ -305,7 +305,7 @@ const Create = () => {
     // navigate(`/admin`);
     try {
       const result = await postParty(formData);
-      console.log(result);
+      // console.log(result);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;
@@ -456,7 +456,7 @@ const Create = () => {
           <select
             id="partyminage"
             onChange={e => {
-              console.log(e.target.value);
+              // console.log(e.target.value);
               handleChangeMinAge(e);
             }}
           >

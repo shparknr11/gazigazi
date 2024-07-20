@@ -69,7 +69,7 @@ const Write = () => {
   const [previewPic, setPreviewPic] = useState([]);
   const fileBt = useRef(null);
   const location = useLocation();
-  console.log(location.state);
+  // console.log(location.state);
   const handleRwFileChange = e => {
     const filesArr = Array.from(e.target.files);
 
@@ -134,7 +134,7 @@ const Write = () => {
 
     try {
       const result = await postReview(formData);
-      console.log(result);
+      // console.log(result);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;
@@ -149,10 +149,10 @@ const Write = () => {
     try {
       const header = { headers: { "Content-Type": "multipart/form-data" } };
       const response = await axios.post(`/api/review`, _formData, header);
-      console.log(response);
+      // console.log(response);
       const status = response.status.toString().charAt(0);
       if (status === "2") {
-        console.log("response", response.data);
+        // console.log("response", response.data);
         return response.data;
       } else {
         alert("API 오류발생 status 확인해주세요");

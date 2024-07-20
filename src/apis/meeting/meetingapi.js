@@ -20,7 +20,7 @@ export const getPartyOne = async _partySeq => {
     const response = await axios.get(`/api/party/detail?partySeq=${_partySeq}`);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
-      console.log("response", response.data);
+      // console.log("response", response.data);
       return response.data;
     } else {
       alert("API 오류발생 status 확인해주세요");
@@ -35,7 +35,7 @@ export const postParty = async _data => {
   try {
     const header = { headers: { "Content-Type": "multipart/form-data" } };
     const response = await axios.post(`/api/party`, _data, header);
-    console.log(response);
+    // console.log(response);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       return response.data;
