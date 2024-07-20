@@ -185,18 +185,14 @@ const InfoEdit = () => {
       );
 
       if (response.data.code === 1) {
-        console.log(response.data);
         alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
         navigate(`/myprofile/${userSeq}/userInfo`);
       } else if (response.data.code === 0) {
-        console.log(response.data);
         alert(response.data.message || "정보 수정에 실패했습니다.");
       } else {
-        console.log(response.data);
         alert("예상하지 못한 응답이 반환되었습니다.");
       }
     } catch (error) {
-      console.error("정보 수정 오류:", error);
       alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
@@ -206,28 +202,13 @@ const InfoEdit = () => {
       alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-
+  
     const { token } = userInfo;
-
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join(""),
-    );
-    const payload = JSON.parse(jsonPayload);
-    const userSeq = payload.pk;
-
+  
     try {
       const response = await axios.patch(
         "/api/user/update/pw",
         {
-          userSeq,
-          userEmail: email,
           userPw: password,
           userNewPw: newPassword,
           userPwCheck: confirmNewPassword,
@@ -240,21 +221,17 @@ const InfoEdit = () => {
           },
         },
       );
-
+  
       if (response.data.code === 1) {
-        console.log(response.data);
         alert(response.data.message || "비밀번호가 성공적으로 변경되었습니다!");
-        setEmail("");
         setPassword("");
         setNewPassword("");
         setConfirmNewPassword("");
         setShowPasswordModal(false);
       } else {
-        console.log(response.data);
         alert(response.data.message || "비밀번호 변경에 실패했습니다.");
       }
     } catch (error) {
-      console.error("비밀번호 변경 오류:", error);
       alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
@@ -283,14 +260,11 @@ const InfoEdit = () => {
 
       const { data } = response;
       if (data.code === 1) {
-        console.log(data);
         alert("프로필 사진이 성공적으로 변경되었습니다.");
       } else {
-        console.log(data);
         alert("프로필 사진 변경에 실패했습니다.");
       }
     } catch (error) {
-      console.error("프로필 사진 변경 오류:", error);
       alert(
         `프로필 사진 변경에 실패했습니다. 다시 시도해주세요. (${error.message})`,
       );
@@ -388,12 +362,6 @@ const InfoEdit = () => {
             <ModalStyle>
               <div className="modal">
                 <div className="modal-content">
-                  <label>이메일</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
                   <label>현재 비밀번호</label>
                   <input
                     type="password"

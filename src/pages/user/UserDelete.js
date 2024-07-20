@@ -109,7 +109,7 @@ const UserDelete = () => {
 
       // 회원 탈퇴 요청
       const response = await axios.patch(
-        `http://localhost:3000/api/user/${userSeq}`,
+        `/api/user/${userSeq}`,
         { password },
         {
           headers: {
@@ -118,8 +118,6 @@ const UserDelete = () => {
           },
         },
       );
-
-      console.log("회원 탈퇴 요청 결과:", response.data);
 
       if (response.data.code === 1) {
         dispatch(deleteUserAccount());
@@ -131,7 +129,6 @@ const UserDelete = () => {
         alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      console.error("회원 탈퇴 오류:", error);
       alert("회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

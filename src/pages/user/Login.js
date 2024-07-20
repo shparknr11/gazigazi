@@ -124,7 +124,6 @@ const Login = () => {
         // Redux에 사용자 정보 저장
         dispatch({ type: "SET_USER", payload: { userSeq, userEmail: email } });
 
-        console.log(response.data);
         sessionStorage.setItem("userSeq", userSeq);
         sessionStorage.setItem("token", accessToken);
         sessionStorage.setItem("userPic", userPic);
@@ -139,7 +138,6 @@ const Login = () => {
         alert(response.data.resultMsg || "로그인에 실패했습니다.");
       }
     } catch (error) {
-      console.error("로그인 오류:", error.response?.data || error);
       alert(
         error.response?.data?.message ||
           "오류가 발생했습니다. 다시 시도해주세요.",

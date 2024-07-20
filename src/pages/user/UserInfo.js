@@ -134,14 +134,13 @@ const UserInfo = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/user/${userSeq}`,
+          `/api/user/${userSeq}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
         setUserData(response.data.resultData);
       } catch (error) {
-        console.error("유저 정보 가져오기 오류:", error);
         if (error.response && error.response.status === 401) {
           alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
           navigate("/login");
@@ -170,7 +169,6 @@ const UserInfo = () => {
       alert("인증 코드가 이메일로 발송되었습니다.");
       setIsCertifying(true);
     } catch (error) {
-      console.error("인증 코드 발송 오류:", error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해주세요.");
     }
   };
@@ -191,7 +189,6 @@ const UserInfo = () => {
         alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      console.error("인증 코드 검증 오류:", error);
       alert("인증 코드 검증에 실패했습니다. 다시 시도해주세요.");
     }
   };

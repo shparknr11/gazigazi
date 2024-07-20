@@ -76,11 +76,10 @@ const MyPage = () => {
       }
 
       try {
-        await axios.get(`http://localhost:3000/api/user/${userSeq}`, {
+        await axios.get(`/api/user/${userSeq}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
-        console.error("유저 정보 가져오기 오류:", error);
         alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
         navigate("/login");
       } finally {
