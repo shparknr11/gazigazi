@@ -114,7 +114,7 @@ const InterestList = () => {
 
   const handleDelete = async partySeq => {
     const userSeq = sessionStorage.getItem("userSeq");
-
+    localStorage.removeItem(userSeq);
     if (!userSeq) {
       alert("사용자 정보를 찾을 수 없습니다.");
       return;
@@ -123,7 +123,7 @@ const InterestList = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       try {
         const url = `/api/party/wish?wishUserSeq=${userSeq}&wishPartySeq=${partySeq}`;
-       
+
         const response = await axios.get(url);
 
         if (response.data.code === 1) {

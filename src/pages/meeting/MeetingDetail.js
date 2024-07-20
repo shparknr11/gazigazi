@@ -168,6 +168,7 @@ const MeetingDetail = () => {
   const { partySeq } = useParams();
   const navigate = useNavigate();
   const userSeq = sessionStorage.getItem("userSeq");
+  const currentWish = localStorage.getItem(userSeq);
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
 
@@ -228,7 +229,14 @@ const MeetingDetail = () => {
       return;
     }
     alert("관심목록에 추가되었습니다.");
-    setIsWished(!isWished);
+
+    if (currentWish && parseInt(currentWish) === parseInt(partySeq)) {
+      localStorage.removeItem(userSeq);
+      setIsWished(false);
+    } else {
+      localStorage.setItem(userSeq, partySeq);
+      setIsWished(true);
+    }
   };
 
   const getGenderText = genderCode => {
@@ -311,7 +319,7 @@ const MeetingDetail = () => {
                   }}
                 >
                   <span>
-                    {!isWished ? <>🤍</> : <>🧡</>}
+                    {!currentWish ? <>🤍</> : <>🧡</>}
                     찜하기
                   </span>
                 </div>
