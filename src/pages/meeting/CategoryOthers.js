@@ -129,11 +129,13 @@ const CateGoryListStyle = styled.div`
 `;
 const CategoryOthers = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
+
   const navigate = useNavigate();
   //   const { partyGenre } = useParams();
   const [searchParams] = useSearchParams();
   const partyGenre = searchParams.get("partyGenre");
   const searchKeyword = searchParams.get("search");
+
   const filterCategory = _resultData => {
     const updateList = _resultData.filter(
       item =>
@@ -145,22 +147,24 @@ const CategoryOthers = () => {
     console.log("uadateList", updateList);
     setFilteredPartyList(updateList);
   };
+
+  const getData = async () => {
+    try {
+      const result = await getPartyAll();
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      // setPartyAllList(result.resultData);
+      filterCategory(result.resultData);
+      // console.log(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     // api함수
-    const getData = async () => {
-      try {
-        const result = await getPartyAll();
-        if (result.code !== 1) {
-          alert(result.resultMsg);
-          return;
-        }
-        // setPartyAllList(result.resultData);
-        filterCategory(result.resultData);
-        // console.log(result.resultData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getData();
   }, [partyGenre]);
 

@@ -44,9 +44,9 @@ import CategoryOthers from "./pages/meeting/CategoryOthers";
 import MeetingDetail from "./pages/meeting/MeetingDetail";
 import Modify from "./pages/meeting/Modify";
 import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
-import UserReview from "./pages/UserReview";
 
 import FindIdPw from "./pages/user/FindIdPw";
+import UserReview from "./pages/user/UserReview";
 
 const MainStyle = styled.div`
   padding-top: 70px;

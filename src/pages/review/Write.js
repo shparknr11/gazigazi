@@ -68,7 +68,8 @@ const Write = () => {
   const [reviewPic, setReviewPic] = useState([]);
   const [previewPic, setPreviewPic] = useState([]);
   const fileBt = useRef(null);
-
+  const location = useLocation();
+  console.log(location.state);
   const handleRwFileChange = e => {
     const filesArr = Array.from(e.target.files);
 
@@ -105,7 +106,7 @@ const Write = () => {
   };
 
   // submit 이벤트 핸들러
-  const handleSubmitWrite = e => {
+  const handleSubmitWrite = async e => {
     // 기본 기능 막기
     e.preventDefault();
     // step 1. 전송 데이터 포맷 만들기
@@ -113,8 +114,8 @@ const Write = () => {
 
     // step 2. 보낼 데이터 (json 형식의 문자열로 만들기)
     const infoData = JSON.stringify({
-      reviewPlanSeq: 1,
-      reviewPlmemberSeq: 1,
+      reviewPlanSeq: parseInt(location.state.planSeq),
+      reviewPlmemberSeq: parseInt(location.state.planMemberSeq),
       reviewContents,
       reviewRating,
     });
@@ -125,10 +126,22 @@ const Write = () => {
     formData.append("p", data);
     reviewPic.forEach((item, index, arr) => {
       // step 5. 파일 추가하기
-      formData.append("files", item);
+      // console.log(item);
+      formData.append("pics", item);
     });
+
     // step 6. axios 로 전달
-    postReview(formData);
+
+    try {
+      const result = await postReview(formData);
+      console.log(result);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 리뷰 등록하기
@@ -157,8 +170,7 @@ const Write = () => {
   const handleChangeContents = e => {
     setReviewContents(e.target.value);
   };
-  const location = useLocation();
-  console.log(location);
+
   return (
     <WriteInnerStyle>
       <div className="review-write-div">
@@ -167,7 +179,7 @@ const Write = () => {
       <ReviewSelectStyle>
         <label htmlFor="review-title">내가 가입한 모임</label>
         <select id="review-title">
-          <option>내가 가입한 모임</option>
+          <option>{location.state.partyName}</option>
         </select>
       </ReviewSelectStyle>
       <ReviewCommentStyle>

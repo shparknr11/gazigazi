@@ -80,7 +80,8 @@ const Modify = () => {
   // file
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
-  const userSeq = sessionStorage.item("userSeq");
+  const userSeq = sessionStorage.getItem("userSeq");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
