@@ -254,6 +254,8 @@ const MyMeetingSchDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const param = useParams();
+  const planSeqForReview = param.meetingschid;
+  console.log(planSeqForReview);
 
   useEffect(() => {}, [isAuth]);
   const schMemberSeq = async () => {
@@ -450,7 +452,7 @@ const MyMeetingSchDetail = () => {
                           onClick={() => {
                             navigate("/review/write", {
                               state: {
-                                planSeq: location.state.planSeq,
+                                planSeq: planSeqForReview,
                                 planMemberSeq: planMemberSeq,
                                 planTitle: planTitle,
                                 partyName: location.state.partyName,
@@ -530,7 +532,7 @@ const MyMeetingSchDetail = () => {
                           onClick={() => {
                             navigate("/review/write", {
                               state: {
-                                planSeq: location.state.planSeq,
+                                planSeq: planSeqForReview,
                                 planMemberSeq: planMemberSeq,
                                 planTitle: planTitle,
                                 partyName: location.state.partyName,

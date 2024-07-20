@@ -310,19 +310,19 @@ const Create = () => {
         alert(result.resultMsg);
         return;
       }
-      setPartyName("");
-      setPartyGenre(null);
-      setPartyLocation("");
-      setPartyMinAge(1901);
-      setPartyMaxAge(2155);
-      setPartyGender("");
-      setPartyMaximum("");
-      setPartyJoinForm("");
-      setPartyIntro("");
-      setPartyPic(null);
-      setPreviewImg("");
-      setLocalData("");
-      setLocaDetaillData("");
+      // setPartyName("");
+      // setPartyGenre(null);
+      // setPartyLocation("");
+      // setPartyMinAge(1901);
+      // setPartyMaxAge(2155);
+      // setPartyGender("");
+      // setPartyMaximum("");
+      // setPartyJoinForm("");
+      // setPartyIntro("");
+      // setPartyPic(null);
+      // setPreviewImg("");
+      // setLocalData("");
+      // setLocaDetaillData("");
       navigate(`/admin`);
     } catch (error) {
       console.log(error);

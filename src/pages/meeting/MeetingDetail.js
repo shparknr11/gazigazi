@@ -205,6 +205,7 @@ const MeetingDetail = () => {
         console.log(error);
       }
     };
+
     if (partySeq) {
       getDetailData(partySeq);
     }

@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { getReviewList } from "../../apis/reviewapi/reviewapi";
+import { getRecommend, getReviewList } from "../../apis/reviewapi/reviewapi";
 import { CiSearch } from "react-icons/ci";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import GuideTitle from "../../components/common/GuideTitle";
+import { useNavigate } from "react-router-dom";
+import { prColor } from "../../css/color";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -57,11 +59,13 @@ const ReviewItemStyle = styled.div`
       .rt-profile {
         display: flex;
         width: 100%;
+        font-weight: bold;
       }
       img {
         display: block;
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
       }
       span {
         display: flex;
@@ -95,6 +99,12 @@ const ReviewItemStyle = styled.div`
   } */
   .review-partyname {
     display: flex;
+    .review-partyname-click {
+      border-bottom: 1px solid transparent;
+    }
+    .review-partyname-click:hover {
+      border-bottom: 1px solid;
+    }
   }
   .review-bottom {
     display: flex;
@@ -102,9 +112,14 @@ const ReviewItemStyle = styled.div`
     justify-content: space-between;
   }
   .rb-button {
-    border: 0.5px solid #000;
+    background-color: ${prColor.p100};
+    border: 1px solid ${prColor.p100};
     cursor: pointer;
     border-radius: 7px;
+    &:hover {
+      background-color: ${prColor.p200};
+      border: 1px solid ${prColor.p200};
+    }
   }
 `;
 
@@ -156,6 +171,8 @@ const Review = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
+  const navigate = useNavigate();
+  const userSeq = sessionStorage.getItem("userSeq");
   // **Pagination** 을 위한 코드처리
   // 총 목록수는 state에 저장되어 있음. (todos배열.length)
   // 한 페이지당 보여줄 목록 최대 개수
@@ -233,6 +250,23 @@ const Review = () => {
     }
   };
 
+  const handleClickDetailPage = _partySeq => {
+    navigate(`/meeting/${_partySeq}`);
+  };
+
+  const handleClickRecommend = async _reviewSeq => {
+    try {
+      const result = await getRecommend(userSeq, _reviewSeq);
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      await getReviewData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ReviewInnerStyle>
       <ReviewTitleStyle>
@@ -296,14 +330,30 @@ const Review = () => {
                 <div>
                   <div className="review-partyname">
                     <h3>모임명:</h3>
-                    <span>{item.partyName}</span>
+                    <span
+                      className="review-partyname-click"
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      onClick={() => {
+                        handleClickDetailPage(item.partySeq);
+                      }}
+                    >
+                      {item.partyName}
+                    </span>
                   </div>
                   <span style={{ fontSize: "12px" }}>
                     {item.inputDt.substr(0, 10)}
                   </span>
                 </div>
                 <div>
-                  추천 0<div className="rb-button">도움이 됐어요</div>
+                  추천 {item.favCnt}
+                  <div
+                    className="rb-button"
+                    onClick={() => {
+                      handleClickRecommend(item.reviewSeq);
+                    }}
+                  >
+                    도움이 됐어요
+                  </div>
                 </div>
               </div>
             </div>
