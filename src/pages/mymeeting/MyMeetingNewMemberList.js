@@ -50,8 +50,8 @@ const MyMeetingNewMemberList = () => {
   const { partySeq } = useParams();
   const location = useLocation();
   const userSeq = sessionStorage.getItem("userSeq");
-  console.log(partySeq);
-  console.log(userSeq);
+  // console.log(partySeq);
+  // console.log(userSeq);
   // api함수
   const getData = async () => {
     try {
@@ -60,7 +60,7 @@ const MyMeetingNewMemberList = () => {
         alert(result.resultMsg);
         return;
       }
-      console.log(result.resultData);
+      // console.log(result.resultData);
       setApplicationList(result.resultData);
     } catch (error) {
       console.log(error);
@@ -72,7 +72,7 @@ const MyMeetingNewMemberList = () => {
   }, []);
 
   const handleClickConfirm = async joinUserSeq => {
-    console.log(joinUserSeq);
+    // console.log(joinUserSeq);
     const data = {
       joinUserSeq,
       leaderUserSeq: parseInt(userSeq),
