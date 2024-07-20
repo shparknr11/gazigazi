@@ -168,9 +168,7 @@ const MyMeetingFuncLeader = () => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  useEffect(() => {
-    console.log(location);
-  }, [isClicked]);
+  useEffect(() => {}, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {}, [isPopup]);
   useEffect(() => {
@@ -267,7 +265,6 @@ const MyMeetingFuncLeader = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
-  console.log(location);
   return (
     <MyMeetingFuncLeaderStyle>
       {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}

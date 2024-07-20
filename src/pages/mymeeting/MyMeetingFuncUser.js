@@ -153,7 +153,6 @@ const MyMeetingFuncUser = () => {
   const params = useParams();
   const funcRef = useRef();
   const itemRef = useRef();
-  console.log(params);
   useEffect(() => {}, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {

@@ -97,7 +97,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  console.log("sadfkjsalf[jas;ldkfjsdlk", location);
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -140,11 +139,9 @@ const MyMeetingCalendar = ({ isClicked }) => {
     const dayResultArr = [];
     if (dayResult) {
       dayResultArr.push(dayResult);
-      console.log("dayResult", dayResultArr);
     }
     //const filteredDay = ;
     // map으로 객체 1,2,3,4 값에 해당 되는 아이콘 빼기.
-    // console.log(dayResult);
     // todo : ** 이거 들어갔을 때 바로 불러오는거 해놔야함.
     if (dayResultArr) {
       return (
@@ -192,7 +189,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
       // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
       const dayResult = monthData?.find(item => checkDay === item.planStartDt);
       setAllData(dayResult);
-      console.log(dayResult);
     } catch (error) {
       console.log(error);
     } finally {
@@ -201,18 +197,15 @@ const MyMeetingCalendar = ({ isClicked }) => {
   };
   // getOneData
   // useEffect(() => {
-  // console.log("wwwww", allData.planStartDt, clickDay);
   // const dayFilterData = allData?.filter(
   //   item => item.planStartDt.toString() === clickDay.toString(),
   // );
-  // console.log("asdasdadasd", dayFilterData);
   // setCalendarFilterData(dayFilterData);
   // }, []);
   // ************************* 데이터 변경 ********************************* //
   // if (isLoading) {
   //   return <Loading></Loading>;
   // }
-  console.log("asdksdjafl;ksajdfl;kasj;dlfdkl", location.state);
   if (isLoading) {
     return <Loading></Loading>;
   }

@@ -160,7 +160,6 @@ const MyMeetingSchMemberList = ({
       });
       console.log(b);
       setPlanMemberSeq(b[0]?.plmemberSeq);
-      console.log(b[0]?.plmemberSeq);
       alert(b[0]?.plmemberSeq);
     }
   };

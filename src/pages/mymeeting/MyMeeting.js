@@ -278,7 +278,7 @@ const MyMeeting = () => {
                         {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
                         <img
                           className="caption-img"
-                          src={`http://112.222.157.156:5122/pic/party/${item?.partySeq}/${item?.partyPic}`}
+                          src={`/pic/party/${item?.partySeq}/${item?.partyPic}`}
                           style={{
                             width: "100%",
                             height: "100%",

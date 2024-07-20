@@ -109,14 +109,6 @@ export const patchSch = async ({
   planTitle,
   planContents,
 }) => {
-  console.log({
-    planSeq,
-    planStartDt,
-    planStartTime,
-    planLocation,
-    planTitle,
-    planContents,
-  });
   try {
     const res = await axios.patch(`/api/plan`, {
       planSeq,

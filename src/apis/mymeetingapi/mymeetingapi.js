@@ -7,7 +7,6 @@ export const getMyMeetLeaderList = async ({ userSeq, page, size }) => {
     const res = await axios.get(
       `/api/party/leader?userSeq=${userSeq}&page=${page}&size=9`,
     );
-    console.log(res.data.resultData);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -19,7 +18,6 @@ export const getMyMeetMemberList = async ({ userSeq, page, size }) => {
     const res = await axios.get(
       `/api/party/mine?userSeq=${userSeq}&page=${page}&size=9`,
     );
-    console.log(res.data.resultData);
     return res.data.resultData;
   } catch (error) {
     console.log(error);

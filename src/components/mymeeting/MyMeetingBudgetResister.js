@@ -194,12 +194,10 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
     if (tempFile) {
       const tempUrl = URL?.createObjectURL(tempFile);
 
-      console.log(tempUrl);
       setPreviewPreImg(tempUrl);
 
       // 전송할 파일 변경(주의합니다. 파일을 넣어주세요.)
       setImgFile(tempFile);
-      console.log(tempUrl);
     }
   };
   const handleClick = async e => {
@@ -212,7 +210,6 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
       budgetPartySeq: Number(params.meetingId),
       ...formDataFunc("formData"),
     };
-    console.log(form);
     form.budgetAmount = form.budgetAmount.replaceAll(",", "");
     form.budgetGb = "1";
     if (!imgFile) {
@@ -269,7 +266,6 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
   const getMembers = async () => {
     try {
       const res = await getMember(params.meetingId);
-      console.log(res);
       setMemberList(res);
     } catch (error) {
       console.log(error);
