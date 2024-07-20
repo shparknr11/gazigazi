@@ -97,6 +97,8 @@ const MyMeetingCalendar = ({ isClicked }) => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
+  const currentDay = new moment(Date()).format("yyyy-MM-DD");
+  console.log();
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -108,7 +110,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
     // const monthData = clickDay.replaceAll("-", "");
     getMonthCalendars();
   }, []);
-  const getMonthCalendars = async clickDay => {
+  const getMonthCalendars = async () => {
     // const result = await getMonthCalendar(userSeq, clickDay);
     // const result = setMonthData([
     //   { pk: 1, title: "모임명", planStartDt: "2024-07-04" },
@@ -143,6 +145,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
     //const filteredDay = ;
     // map으로 객체 1,2,3,4 값에 해당 되는 아이콘 빼기.
     // todo : ** 이거 들어갔을 때 바로 불러오는거 해놔야함.
+
     if (dayResultArr) {
       return (
         <div>
@@ -167,19 +170,23 @@ const MyMeetingCalendar = ({ isClicked }) => {
   };
 
   // 날짜 css 꾸미기
-  // const tileClassName = ({ date }) => {
-  // MM : 2자리 월
-  // DD : 2자리 일
+  const tileClassName = ({ date }) => {
+    // MM : 2자리 월
+    // DD : 2자리 일
 
-  // const checkDay = moment(date).format("yyyy-MM-DD");
-  // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
-  // const dayResult = allData?.find(item => checkDay === item.day);
-  // if (dayResult) {
-  //   return "sun";
-  // }
-  // };
+    const checkDay = moment(date).format("yyyy-MM-DD");
+
+    // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
+    let classNames = "";
+    console.log(checkDay < currentDay);
+    if (checkDay < currentDay) {
+      classNames += "end-day-style";
+    }
+    return classNames;
+  };
 
   const formatDay = (locale, date) => moment(date).format("D");
+
   // 날짜 선택 시 처리
   const onClickDay = async (value, event) => {
     setIsLoading(true);
@@ -189,6 +196,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
       // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
       const dayResult = monthData?.find(item => checkDay === item.planStartDt);
       setAllData(dayResult);
+      console.log(dayResult);
     } catch (error) {
       console.log(error);
     } finally {
@@ -223,6 +231,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
           calendarType={"gregory"}
           formatShortWeekday={formatShortWeekday}
           tileContent={tileContent}
+          tileClassName={tileClassName}
           formatDay={formatDay}
           onClickDay={onClickDay}
           value={clickDay}
@@ -234,21 +243,32 @@ const MyMeetingCalendar = ({ isClicked }) => {
         {isClicked === 1 ? (
           <div style={{ textAlign: "right", padding: "10px" }}>
             {/* TODO : 중요 _ 일정 명 넘길 것 / 그리고 일정 날짜도 넘길 것 */}
-            <button
-              className="resister-btn"
-              type="button"
-              onClick={() => {
-                navigate(`/mymeeting/mymeetingschresister`, {
-                  state: {
-                    clickDay,
-                    planSeq: params?.meetingId,
-                    isAuth: location?.state.isAuth,
-                  },
-                });
-              }}
-            >
-              등록
-            </button>
+            {clickDay >= currentDay ? (
+              <button
+                className="resister-btn"
+                type="button"
+                onClick={() => {
+                  if (allData) {
+                    toast.warning("해당 날짜에는 일정이 있습니다.");
+                    return;
+                  }
+
+                  navigate(`/mymeeting/mymeetingschresister`, {
+                    state: {
+                      clickDay,
+                      planSeq: params?.meetingId,
+                      isAuth: location?.state.isAuth,
+                    },
+                  });
+                }}
+              >
+                등록
+              </button>
+            ) : (
+              <span style={{ color: "red" }}>
+                <strong>*</strong>현재 날짜는 일정을 생성 할 수 없습니다.
+              </span>
+            )}
           </div>
         ) : null}
       </div>
@@ -276,16 +296,16 @@ const MyMeetingCalendar = ({ isClicked }) => {
               }}
             >
               <li>
-                <span>{allData.planTitle}</span>
+                <span>{allData?.planTitle}</span>
                 {/* <span>{allData.meetPlace}</span> */}
-                <span>{allData.planLocation}</span>
+                <span>{allData?.planLocation}</span>
                 <span style={{ fontSize: "16px" }}>
-                  {allData.planStartDt}
+                  {allData?.planStartDt}
                   <br />
-                  {allData.planStartTime}
+                  {allData?.planStartTime}
                 </span>
                 <span>
-                  {allData.planCompleted === 2 ? "일정종료" : "진행중"}
+                  {allData?.planCompleted === 2 ? "일정종료" : "진행중"}
                 </span>
               </li>
             </li>

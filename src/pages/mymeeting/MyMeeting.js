@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,6 +9,7 @@ import {
 import GuideTitle from "../../components/common/GuideTitle";
 import { toast } from "react-toastify";
 import Loading from "../../components/common/Loading";
+import { Button } from "@mui/material";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
@@ -56,16 +57,20 @@ const MyMeetingStyle = styled.div`
   }
   .img-wrap {
     display: flex;
+    border: 1px solid #8f8f8f;
     gap: 30px;
     flex-wrap: wrap;
     padding-top: 30px;
     padding-left: 50px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 25px 0px;
     min-height: 553px;
   }
   .img-container {
     width: 30%;
     margin-bottom: 25px;
+  }
+  .img-container-inner {
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 0px;
   }
   .caption-img {
     display: block;
@@ -101,22 +106,19 @@ const MyMeetingStyle = styled.div`
   .caption-img {
     display: block;
     width: 100%;
-    transition: filter 0.3s;
     border-radius: 10px 10px 0 0;
   }
   .caption-img.blur {
-    filter: blur(3px);
   }
   .buttons {
     position: absolute;
-    top: 50%;
+    bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
     display: none;
     gap: 10px;
   }
   .container:hover .caption-img {
-    filter: blur(5px);
   }
   .container:hover .buttons {
     display: flex;
@@ -134,8 +136,7 @@ const MyMeetingStyle = styled.div`
   .buttons-inner {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    align-items: flex-end;
     gap: 5px;
   }
   .mymeeting-div {
@@ -143,12 +144,13 @@ const MyMeetingStyle = styled.div`
     border: 1px solid rgb(219, 219, 219);
     height: 30px;
     justify-content: center;
-    gap: 3px;
     border-radius: 4px 4px 0px 0;
     border-bottom: none;
   }
   .mymeeting-div-area {
-    color: #c2c2c2;
+    width: 200px;
+    color: #8f8f8f;
+    border-right: #8f8f8f;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -156,13 +158,16 @@ const MyMeetingStyle = styled.div`
   }
   .mymeeting-div-area:hover {
     color: #fff;
-    transition: background-color 0.6s;
-    background: rgb(248, 235, 214);
+    background: #c9c2a5;
   }
   .span-pointer {
     display: block;
     cursor: pointer;
-    height: 10px;
+    height: 16px;
+  }
+  .divButtonStyle {
+    color: #fff;
+    background-color: #dcd8c5;
   }
 `;
 const TitleDivStyle = styled.div`
@@ -180,7 +185,8 @@ const MyMeeting = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
-
+  const meetingEnter = useRef();
+  const meetingMake = useRef();
   const navigate = useNavigate();
   // 나중에 axios 들어오면 이거 그냥 필요없음
   // 권한에 따라 쏘고 받고만 하면됨
@@ -240,10 +246,12 @@ const MyMeeting = () => {
               }}
             >
               <div className="mymeeting-div">
-                <div className="mymeeting-div-area">
+                <div
+                  className={`mymeeting-div-area ${isAuth === 1 ? "divButtonStyle" : ""}`}
+                >
                   <span
                     id="meetingEnter"
-                    className="span-pointer"
+                    className={`span-pointer`}
                     onClick={() => {
                       setIsAuth(1);
                       handleClickEnterMeet();
@@ -252,10 +260,13 @@ const MyMeeting = () => {
                     내가 속한 모임
                   </span>
                 </div>
-                <div className="mymeeting-div-area">
+                <div
+                  className={`mymeeting-div-area ${isAuth === 2 ? "divButtonStyle" : ""}`}
+                >
                   <span
                     id="meetingMake"
-                    className="span-pointer"
+                    className={`span-pointer`}
+                    ref={meetingEnter}
                     onClick={() => {
                       setIsAuth(2);
                       handleClickMakeMeet();
@@ -273,7 +284,7 @@ const MyMeeting = () => {
               {allData.length > 0 ? (
                 allData?.map(item => (
                   <div className="img-container" key={item?.partySeq}>
-                    <div>
+                    <div className="img-container-inner">
                       <div className="container">
                         {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
                         <img
@@ -289,7 +300,8 @@ const MyMeeting = () => {
                           <div className="buttons-inner">
                             {isAuth === 1 ? (
                               <>
-                                <button
+                                <Button
+                                  variant="contained"
                                   style={{ display: "none" }}
                                   className="button-style delete-btn"
                                   onClick={() => {
@@ -301,8 +313,9 @@ const MyMeeting = () => {
                                   }}
                                 >
                                   탈퇴
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                  variant="contained"
                                   className="button-style etc-btn"
                                   onClick={e => {
                                     navigate(
@@ -317,13 +330,16 @@ const MyMeeting = () => {
                                   }}
                                 >
                                   Blog
-                                </button>
+                                </Button>
                               </>
                             ) : (
                               <>
-                                <button
-                                  className="button-style etc-btn"
-                                  style={{ width: "100px" }}
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    width: "100px",
+                                    backgroundColor: "#c9c2a5",
+                                  }}
                                   onClick={() => {
                                     if (confirm("수정하시겠습니까?")) {
                                       navigate(
@@ -333,10 +349,13 @@ const MyMeeting = () => {
                                   }}
                                 >
                                   수정
-                                </button>
-                                <button
-                                  className="button-style etc-btn"
-                                  style={{ width: "100px" }}
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    width: "100px",
+                                    backgroundColor: "#c9c2a5",
+                                  }}
                                   onClick={e => {
                                     navigate(
                                       `/mymeeting/mymeetingLeader/${item?.partySeq}`,
@@ -350,19 +369,22 @@ const MyMeeting = () => {
                                   }}
                                 >
                                   Blog
-                                </button>
+                                </Button>
                                 {/* <div>{item.partyAuthGb}</div> */}
-                                <button
-                                  className="button-style etc-btn"
-                                  style={{ width: "100px" }}
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    width: "100px",
+                                    backgroundColor: "#c9c2a5",
+                                  }}
                                   onClick={e => {
                                     navigate(
                                       `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
                                     );
                                   }}
                                 >
-                                  모임 신청 관리
-                                </button>
+                                  신청관리
+                                </Button>
                               </>
                             )}
                           </div>
