@@ -27,7 +27,6 @@ const MyPageInnerStyle = styled.div`
   padding: 20px;
 
   .mypage-container {
-    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
