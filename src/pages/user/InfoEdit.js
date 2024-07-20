@@ -201,9 +201,9 @@ const InfoEdit = () => {
       alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-  
+
     const { token } = userInfo;
-  
+
     try {
       const response = await axios.patch(
         "/api/user/update/pw",
@@ -220,7 +220,7 @@ const InfoEdit = () => {
           },
         },
       );
-  
+
       if (response.data.code === 1) {
         alert(response.data.message || "비밀번호가 성공적으로 변경되었습니다!");
         setPassword("");
@@ -260,6 +260,8 @@ const InfoEdit = () => {
       const { data } = response;
       if (data.code === 1) {
         alert("프로필 사진이 성공적으로 변경되었습니다.");
+        sessionStorage.setItem("userPic", data.resultData);
+        window.location.reload();
       } else {
         alert("프로필 사진 변경에 실패했습니다.");
       }
