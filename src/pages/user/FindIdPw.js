@@ -119,7 +119,6 @@ const FindId = () => {
         userBirth: birthDate,
       });
       if (response.data.code === 1) {
-        console.log(response.data);
         setResultMessage(`이메일: ${response.data.resultData}`);
       } else {
         setResultMessage(
@@ -188,7 +187,6 @@ const FindPw = () => {
         userEmail: email,
       });
       if (response.data.code === 1) {
-        console.log(response.data);
         setResultMessage(`임시 비밀번호: ${response.data.resultData}`);
       } else {
         setResultMessage(
@@ -196,7 +194,6 @@ const FindPw = () => {
         );
       }
     } catch (error) {
-      console.error("비밀번호 찾기 오류:", error);
       setResultMessage("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

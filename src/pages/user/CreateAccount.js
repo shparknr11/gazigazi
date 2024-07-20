@@ -267,10 +267,8 @@ const CreateAccount = () => {
     e.preventDefault();
 
     const formValid = validateForm();
-    console.log("폼 검증 결과:", formValid);
 
     if (!validateForm()) {
-      console.log("폼 검증 실패");
       return;
     }
 
@@ -307,15 +305,12 @@ const CreateAccount = () => {
       });
 
       if (response.data.code === 1) {
-        console.log(response.data);
         alert("계정이 성공적으로 생성되었습니다!");
         navigate("/login");
       } else {
-        console.log(response.data);
         alert(response.data.message || "계정 생성에 실패했습니다.");
       }
     } catch (error) {
-      console.error("계정 생성 오류:", error.response?.data || error);
       alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
@@ -330,12 +325,9 @@ const CreateAccount = () => {
 
     try {
       const num = type === "userEmail" ? 1 : 2;
-      console.log(`중복 체크 API 요청: ${type} - ${value}`); // 요청 로그 추가
       const response = await axios.get(`/api/user/duplicated`, {
         params: { str: value, num },
       });
-
-      console.log(`API 응답: ${response.data}`); // API 응답 로그 확인
 
       if (response.data.resultData === 0) {
         alert(
@@ -345,7 +337,6 @@ const CreateAccount = () => {
           setIsEmailChecked(true);
         } else {
           setIsNicknameChecked(true);
-          console.log("닉네임 중복 체크 상태:", true);
         }
       } else {
         alert(
@@ -355,14 +346,9 @@ const CreateAccount = () => {
           setIsEmailChecked(false);
         } else {
           setIsNicknameChecked(false);
-          console.log("닉네임 중복 체크 상태:", false);
         }
       }
     } catch (error) {
-      console.error(
-        `${type === "userEmail" ? "이메일" : "닉네임"} 중복 확인 오류:`,
-        error,
-      );
       alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

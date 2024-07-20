@@ -103,7 +103,6 @@ const InterestList = () => {
           setError(resultMsg);
         }
       } catch (error) {
-        console.error("찜한 목록을 가져오는데 실패했습니다.", error);
         setError("데이터를 가져오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -124,12 +123,10 @@ const InterestList = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       try {
         const url = `/api/party/wish?wishUserSeq=${userSeq}&wishPartySeq=${partySeq}`;
-        console.log("요청 URL:", url);
-
+       
         const response = await axios.get(url);
 
         if (response.data.code === 1) {
-          console.log(response.data);
           if (response.data.resultData === 0) {
             setInterestItems(prevItems =>
               prevItems.filter(item => item.partySeq !== partySeq),
@@ -139,13 +136,11 @@ const InterestList = () => {
             alert("삭제 실패: 문제가 발생했습니다. 다시 시도해주세요.");
           }
         } else {
-          console.error("삭제 실패:", response.data.resultMsg);
           alert(
             `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`,
           );
         }
       } catch (error) {
-        console.error("모임 삭제 실패:", error);
         alert(
           "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요.",
         );
