@@ -29,7 +29,6 @@ const AccountInnerStyle = styled.div`
   padding: 20px;
 
   .signup-container {
-    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -123,7 +122,14 @@ const AccountInnerStyle = styled.div`
   .create-gender-group .create-gender-item {
     flex: 1;
   }
+
+  /* Custom styles for asterisk */
+  .main-create-detail label .required-asterisk {
+    color: red; /* Change color to red for asterisk */
+  }
 `;
+
+
 
 const Message = styled.div`
   color: ${props => (props.success ? "green" : "red")};
@@ -154,7 +160,7 @@ const CreateAccount = () => {
     userNickname: "",
     userFav: "",
     userBirth: "",
-    userGender: "", // 초기값을 빈 문자열로 설정
+    userGender: "",
     userPhone: "",
     userIntro: "",
   });
@@ -166,6 +172,8 @@ const CreateAccount = () => {
     userNickname: "",
     userName: "",
     userPhone: "",
+    userAddr: "",
+    form: "", // For general form-level messages
   });
 
   const handleChange = e => {
@@ -193,7 +201,7 @@ const CreateAccount = () => {
   const validateField = (name, value) => {
     const newMessages = { ...messages };
     let isValid = true;
-
+  
     switch (name) {
       case "userPw":
         if (!passwordRegex.test(value)) {
@@ -221,7 +229,10 @@ const CreateAccount = () => {
         }
         break;
       case "userNickname":
-        if (!nicknameRegex.test(value)) {
+        if (!value) {
+          newMessages.userNickname = "닉네임을 입력해주세요.";
+          isValid = false;
+        } else if (!nicknameRegex.test(value)) {
           newMessages.userNickname =
             "닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.";
           isValid = false;
@@ -230,7 +241,10 @@ const CreateAccount = () => {
         }
         break;
       case "userName":
-        if (!NameRegex.test(value)) {
+        if (!value) {
+          newMessages.userName = "이름을 입력해주세요.";
+          isValid = false;
+        } else if (!NameRegex.test(value)) {
           newMessages.userName = "이름은 한글 2~6자로 구성되어야 합니다.";
           isValid = false;
         } else {
@@ -238,28 +252,78 @@ const CreateAccount = () => {
         }
         break;
       case "userPhone":
-        if (!PhoneRegex.test(value)) {
+        if (!value) {
+          newMessages.userPhone = "전화번호를 입력해주세요.";
+          isValid = false;
+        } else if (!PhoneRegex.test(value)) {
           newMessages.userPhone = "전화번호 형식이 올바르지 않습니다.";
           isValid = false;
         } else {
           newMessages.userPhone = "사용할 수 있는 전화번호입니다.";
         }
         break;
+      case "userAddr":
+        if (!value) {
+          newMessages.userAddr = "주소를 입력해주세요.";
+          isValid = false;
+        } else {
+          newMessages.userAddr = "";
+        }
+        break;
       default:
         break;
     }
-
+  
     setMessages(newMessages);
     return isValid;
   };
+  
 
   const validateForm = () => {
     let valid = true;
-    Object.keys(user).forEach(key => {
-      if (!validateField(key, user[key])) {
-        valid = false;
-      }
-    });
+    let newMessages = { ...messages };
+    
+    // Validate each required field
+    if (!user.userEmail) {
+      newMessages.form = "이메일을 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userPw) {
+      newMessages.form = "비밀번호를 입력해주세요.";
+      valid = false;
+    }
+    if (user.userPw !== user.userPwCheck) {
+      newMessages.form = "비밀번호 확인이 일치하지 않습니다.";
+      valid = false;
+    }
+    if (!user.userName) {
+      newMessages.form = "이름을 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userNickname) {
+      newMessages.form = "닉네임을 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userAddr) {
+      newMessages.form = "주소를 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userBirth) {
+      newMessages.form = "생년월일을 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userPhone) {
+      newMessages.form = "전화번호를 입력해주세요.";
+      valid = false;
+    }
+    if (!user.userGender) {
+      newMessages.form = "성별을 선택해주세요.";
+      valid = false;
+    }
+    if (!user.userPic) {
+      newMessages.form = "프로필 사진을 선택해주세요."
+    }
+    setMessages(newMessages);
     return valid;
   };
 
@@ -268,7 +332,7 @@ const CreateAccount = () => {
 
     const formValid = validateForm();
 
-    if (!validateForm()) {
+    if (!formValid) {
       return;
     }
 
@@ -372,7 +436,7 @@ const CreateAccount = () => {
                       />
                     </div>
                     <label htmlFor="userEmail">
-                      <small>이메일*</small>
+                      이메일<span className="required-asterisk">*</span>
                       <input
                         type="email"
                         name="userEmail"
@@ -395,7 +459,7 @@ const CreateAccount = () => {
                       {messages.userEmail}
                     </Message>
                     <label>
-                      비밀번호*
+                      비밀번호<span className="required-asterisk">*</span>
                       <input
                         type="password"
                         name="userPw"
@@ -408,7 +472,7 @@ const CreateAccount = () => {
                       {messages.userPw}
                     </Message>
                     <label>
-                      비밀번호 확인*
+                      비밀번호 확인<span className="required-asterisk">*</span>
                       <input
                         type="password"
                         name="userPwCheck"
@@ -421,7 +485,7 @@ const CreateAccount = () => {
                       {messages.userPwCheck}
                     </Message>
                     <label>
-                      이름*
+                      이름<span className="required-asterisk">*</span>
                       <input
                         type="text"
                         name="userName"
@@ -434,7 +498,7 @@ const CreateAccount = () => {
                       {messages.userName}
                     </Message>
                     <label>
-                      닉네임
+                      닉네임<span className="required-asterisk">*</span>
                       <div className="create-nickname-button-group">
                         <input
                           type="text"
@@ -456,7 +520,7 @@ const CreateAccount = () => {
                       {messages.userNickname}
                     </Message>
                     <label>
-                      주소
+                      주소<span className="required-asterisk">*</span>
                       <input
                         type="text"
                         name="userAddr"
@@ -464,8 +528,11 @@ const CreateAccount = () => {
                         onChange={handleChange}
                       />
                     </label>
+                    <Message success={user.userAddr ? true : false}>
+                      {messages.userAddr}
+                    </Message>
                     <label>
-                      생년 월일*
+                      생년 월일<span className="required-asterisk">*</span>
                       <input
                         type="date"
                         name="userBirth"
@@ -475,7 +542,7 @@ const CreateAccount = () => {
                       />
                     </label>
                     <label>
-                      전화번호
+                      전화번호<span className="required-asterisk">*</span>
                       <input
                         type="text"
                         name="userPhone"
@@ -487,33 +554,26 @@ const CreateAccount = () => {
                       {messages.userPhone}
                     </Message>
                     <label>
-                      관심있는 분야
-                      <input
-                        type="text"
-                        name="userFav"
-                        value={user.userFav}
-                        onChange={handleChange}
-                      />
-                    </label>
-                    <label className="create-gender-group">
-                      성별*
-                      <div className="create-gender-item">
-                        <input
-                          type="radio"
-                          name="userGender"
-                          value="1"
-                          onChange={handleChange}
-                        />
-                        남
-                      </div>
-                      <div className="create-gender-item">
-                        <input
-                          type="radio"
-                          name="userGender"
-                          value="2"
-                          onChange={handleChange}
-                        />
-                        여
+                      성별<span className="required-asterisk">*</span>
+                      <div className="create-gender-group">
+                        <div className="create-gender-item">
+                          <input
+                            type="radio"
+                            name="userGender"
+                            value="1"
+                            onChange={handleChange}
+                          />
+                          남
+                        </div>
+                        <div className="create-gender-item">
+                          <input
+                            type="radio"
+                            name="userGender"
+                            value="2"
+                            onChange={handleChange}
+                          />
+                          여
+                        </div>
                       </div>
                     </label>
                     <label>
@@ -525,6 +585,9 @@ const CreateAccount = () => {
                         onChange={handleChange}
                       />
                     </label>
+                    <Message success={messages.form === ""}>
+                      {messages.form}
+                    </Message>
                     <button
                       type="submit"
                       disabled={!isEmailChecked || !isNicknameChecked}

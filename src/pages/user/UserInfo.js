@@ -34,7 +34,6 @@ const UserInfoInnerStyle = styled.div`
   padding: 20px;
 
   .mypage-container {
-    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -88,7 +87,7 @@ const UserInfoInnerStyle = styled.div`
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
-    width: 35%;
+    width: 30%;
     font-size: 12pt;
     margin: 5px;
     transition: background-color 0.3s;

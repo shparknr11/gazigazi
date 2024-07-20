@@ -27,7 +27,7 @@ const LogOut = () => {
     border-radius: 4px;
     cursor: pointer;
     width: 20%;
-    font-size: 10pt;
+    font-size: 12pt;
     margin-top: 5px;
     transition: background-color 0.3s;
 

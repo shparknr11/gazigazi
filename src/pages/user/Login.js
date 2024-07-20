@@ -31,7 +31,6 @@ const LoginInnerStyle = styled.div`
   padding: 20px;
 
   .login-container {
-    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 50px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -80,7 +79,6 @@ const LoginInnerStyle = styled.div`
   }
   .login-options a {
     text-decoration: none;
-    color: #ebddcc;
   }
   .login-options a:hover {
     text-decoration: underline;

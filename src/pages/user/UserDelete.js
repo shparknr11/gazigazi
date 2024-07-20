@@ -19,7 +19,8 @@ const DeleteButton = styled.button`
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 10pt;
+  width: 20%;
+  font-size: 12pt;
   transition: background-color 0.3s;
 `;
 
