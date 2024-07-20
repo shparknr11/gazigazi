@@ -2,11 +2,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import logo from "../../images/logo2.png";
+import { useEffect } from "react";
 
 const Header = () => {
   const userSeq = sessionStorage.getItem("userSeq");
   const userPic = sessionStorage.getItem("userPic");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      // Handle changes in sessionStorage, if necessary
+      console.log("userPic변경");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleClickMyMeeting = () => {
     if (!userSeq) {
