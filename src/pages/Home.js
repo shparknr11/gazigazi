@@ -23,6 +23,10 @@ const HomeMidInnerStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  h1 {
+    font-weight: bold;
+    font-size: 22px;
+  }
 `;
 // const HomeBtmInnerStyle = styled.div`
 //   width: 100%;
@@ -101,10 +105,14 @@ const HomeCreateMeetingBtnStyle = styled.div`
 `;
 const Home = () => {
   const navigate = useNavigate();
-  const [partyAllList, setPartyAllList] = useState([]);
+  const [newList, setNewList] = useState([]);
+  const [randomNewParties, setRandomNewParties] = useState([]);
+
   const [arroundPartyList, setArroundPartyList] = useState([]);
-  const [popularList, setPopularList] = useState([]);
   const [randomParties, setRandomParties] = useState([]);
+
+  const [popularList, setPopularList] = useState([]);
+  const [randomPupularParties, setRandomPopularParties] = useState([]);
 
   // 검색
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -135,6 +143,47 @@ const Home = () => {
     setArroundPartyList(filteredList);
   };
 
+  const popularHomeList = _resultData => {
+    const filteredList = _resultData.filter(
+      // location 부분 수정*****************************************
+      item =>
+        item.partyAuthGb === "1" && item.partyMaximum - item.partyNowMem < 5,
+    );
+    setPopularList(filteredList);
+  };
+
+  // const newHomeList = _resultData => {
+  //   const filteredList = _resultData.filter(
+  //     // location 부분 수정*****************************************
+  //     item => item.partyAuthGb === "1" && item.inputDt,
+  //   );
+  //   setNewList(filteredList);
+  // };
+
+  const newHomeList = _resultData => {
+    const currentDate = new Date(); // 현재 날짜와 시간을 가져옵니다
+
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 한 달 전 날짜를 계산합니다
+
+    const filteredList = _resultData.filter(item => {
+      // inputDt가 ISO 8601 형식을 준수하도록 가정
+      const inputDate = new Date(item.inputDt);
+      // console.log(inputDate);
+      // inputDate가 oneMonthAgo 이상이고, partyAuthGb가 1인 경우만 필터링
+      return inputDate >= oneMonthAgo && item.partyAuthGb === "1";
+    });
+
+    // 만약 filteredList에 데이터가 없다면, partyAuthGb가 1인 데이터만 필터링
+    if (filteredList.length === 0) {
+      const onlyPartyAuthGbList = _resultData.filter(
+        item => item.partyAuthGb === "1",
+      );
+      setNewList(onlyPartyAuthGbList);
+    } else {
+      setNewList(filteredList);
+    }
+  };
   // api함수
   const getData = async () => {
     try {
@@ -144,6 +193,8 @@ const Home = () => {
         return;
       }
       filterHomeList(result.resultData);
+      popularHomeList(result.resultData);
+      newHomeList(result.resultData);
     } catch (error) {
       console.log(error);
     }
@@ -171,7 +222,15 @@ const Home = () => {
       const randomItems = getRandomItems(arroundPartyList, 5);
       setRandomParties(randomItems);
     }
-  }, [arroundPartyList]);
+    if (popularList.length > 0) {
+      const randomItems = getRandomItems(popularList, 5);
+      setRandomPopularParties(randomItems);
+    }
+    if (newList.length > 0) {
+      const randomItems = getRandomItems(newList, 5);
+      setRandomNewParties(randomItems);
+    }
+  }, [arroundPartyList, popularList, newList]);
 
   // search 클릭 시 검색
   const handleChangeSearch = e => {
@@ -306,28 +365,62 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div className="list-box">
-                <div className="list-box-img">
-                  <img src={meetingImg} alt="모임이미지" />
-                </div>
-                <div className="list-box-content">
-                  <div className="list-box-title">
-                    <img alt="프로필" />
-                    <span>OOO 님의 모임</span>
+              {randomNewParties.map((item, index) => (
+                <div
+                  key={index}
+                  className="list-box"
+                  onClick={() => {
+                    handleClickDetail(item.partySeq);
+                  }}
+                >
+                  <div
+                    className="list-box-img"
+                    style={{
+                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                    }}
+                  ></div>
+                  <div className="list-box-content">
+                    <div className="list-box-title">
+                      <div
+                        className="list-box-profileimg"
+                        style={{
+                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center",
+                          backgroundSize: "contain",
+                        }}
+                      ></div>
+                      <span style={{ fontWeight: "bold" }}>
+                        {item.userName}
+                      </span>
+                      <span style={{ color: "#999" }}> 님의 모임</span>
+                    </div>
+                    <h3
+                      className="list-box-text"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      {item.partyName}
+                    </h3>
+                    <p className="list-box-local" style={{ fontSize: "13px" }}>
+                      {item.partyLocation1} {item.partyLocation2}
+                    </p>
+                    <span className="list-box-gender">
+                      {getGenderText(item.partyGender)}
+                    </span>
+                    <span className="list-box-age">
+                      {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                        ? "연령무관"
+                        : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                      {getYearLastTwoDigits(item.partyMaxAge) === "2155"
+                        ? ""
+                        : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                    </span>
                   </div>
-                  <h3 className="list-box-text">
-                    여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
-                    사람? (with 제이팝) 🙌
-                  </h3>
-                  <p className="list-box-local">서울 강남구</p>
-                  <span className="list-box-gender">성별 무관</span>
-                  <span className="list-box-age">90~98년생</span>
                 </div>
-              </div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
-              <div className="list-box"></div>
+              ))}
             </div>
           </div>
           <div className="mm-meeting-around">
@@ -401,21 +494,62 @@ const Home = () => {
               <div>더보기</div>
             </div>
             <div className="mm-meeting-list">
-              <div className="list-box">
-                <div className="list-box-img"></div>
-                <div className="list-box-title">
-                  <img alt="프로필" />
-                  <span>OOO 님의 모임</span>
+              {randomPupularParties.map((item, index) => (
+                <div
+                  key={index}
+                  className="list-box"
+                  onClick={() => {
+                    handleClickDetail(item.partySeq);
+                  }}
+                >
+                  <div
+                    className="list-box-img"
+                    style={{
+                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                    }}
+                  ></div>
+                  <div className="list-box-content">
+                    <div className="list-box-title">
+                      <div
+                        className="list-box-profileimg"
+                        style={{
+                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center",
+                          backgroundSize: "contain",
+                        }}
+                      ></div>
+                      <span style={{ fontWeight: "bold" }}>
+                        {item.userName}
+                      </span>
+                      <span style={{ color: "#999" }}> 님의 모임</span>
+                    </div>
+                    <h3
+                      className="list-box-text"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      {item.partyName}
+                    </h3>
+                    <p className="list-box-local" style={{ fontSize: "13px" }}>
+                      {item.partyLocation1} {item.partyLocation2}
+                    </p>
+                    <span className="list-box-gender">
+                      {getGenderText(item.partyGender)}
+                    </span>
+                    <span className="list-box-age">
+                      {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                        ? "연령무관"
+                        : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                      {getYearLastTwoDigits(item.partyMaxAge) === "2155"
+                        ? ""
+                        : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="list-box-text">
-                  여전히 일드를 보는 사람들 - 일본문화를 좋아하는 나는 어떤
-                  사람? (with 제이팝) 🙌
-                </h3>
-                <p className="list-box-local">서울 강남구</p>
-                <span className="list-box-gender">성별 무관</span>
-                <span className="list-box-age">90~98년생</span>
-              </div>
-              <div className="list-box"></div>
+              ))}
             </div>
             {/* <div className="more-bt-icon">
             <TfiArrowCircleRight />

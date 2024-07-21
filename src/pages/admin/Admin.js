@@ -2,6 +2,9 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { patchApproval } from "../../apis/meeting/joinapi";
+import { useNavigate } from "react-router-dom";
+import { MainButton } from "../../components/button/Button";
+import zIndex from "@mui/material/styles/zIndex";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -69,6 +72,8 @@ const AdminRightDivStyle = styled.div`
 `;
 const Admin = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
+  const navigate = useNavigate();
+
   const userSeq = sessionStorage.getItem("userSeq");
   const getData = async () => {
     try {
@@ -111,7 +116,29 @@ const Admin = () => {
       console.error("Approval error:", error);
     }
   };
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
 
+  const getYearLastTwoDigits = year => {
+    // return year.toString().slice(-2);
+    return year.toString();
+  };
+
+  // 클릭시 상페 페이지로
+  const handleClickDetail = _partySeq => {
+    // console.log(_partySeq);
+    navigate(`/meeting/${_partySeq}`);
+  };
   return (
     <AdminInnerStyle>
       <AdminLeftDivStyle>
@@ -137,17 +164,64 @@ const Admin = () => {
         <span></span>
         <div className="admin-application-div">
           {filteredPartyList.map((item, index) => (
-            <div key={index}>
-              <div className="admin-application">{item.partyName}</div>
-              <div className="admin-application-btn">
-                <button
+            <div key={index} className="list-box">
+              <div
+                className="list-box-img"
+                style={{
+                  backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                }}
+              ></div>
+              <div className="list-box-content">
+                <div className="list-box-title">
+                  <div
+                    className="list-box-profileimg"
+                    style={{
+                      backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "contain",
+                    }}
+                  ></div>
+                  <span style={{ fontWeight: "bold" }}>{item.userName}</span>
+                  <span style={{ color: "#999" }}> 님의 모임</span>
+                </div>
+                <h3 className="list-box-text" style={{ fontWeight: "bold" }}>
+                  {item.partyName}
+                </h3>
+                <p className="list-box-local" style={{ fontSize: "13px" }}>
+                  {item.partyLocation1} {item.partyLocation2}
+                </p>
+                <span className="list-box-gender">
+                  {getGenderText(item.partyGender)}
+                </span>
+                <span className="list-box-age">
+                  {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                    ? "연령무관"
+                    : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                  {getYearLastTwoDigits(item.partyMaxAge) === "2155"
+                    ? ""
+                    : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                </span>
+              </div>
+              <div
+                style={{ display: "flex", gap: "15px", justifyContent: "end" }}
+              >
+                <MainButton
+                  label="상세보기"
+                  onClick={() => {
+                    handleClickDetail(item.partySeq);
+                  }}
+                ></MainButton>
+
+                <MainButton
+                  label="승인"
                   onClick={() => {
                     handleClickApproval(item.partySeq);
                   }}
-                >
-                  승인
-                </button>
-                <button>반려</button>
+                ></MainButton>
               </div>
             </div>
           ))}
