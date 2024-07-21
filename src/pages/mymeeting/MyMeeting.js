@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
-
+  margin-bottom: 40px;
   .meeting-wrap {
     width: calc(100% - 30px);
     max-width: 1200px;

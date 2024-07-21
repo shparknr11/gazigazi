@@ -19,6 +19,7 @@ const MyMeetingFuncUserStyle = styled.div`
   height: auto;
   margin-top: 25px;
   transition: width 0.3s;
+  margin-bottom: 40px;
   .item-wrap {
     display: flex;
     width: 20%;
@@ -147,6 +148,7 @@ const MyMeetingFuncUser = () => {
   const [monthValue, setMonthValue] = useState("01");
   const [isDisplayNone, setIsDisplayNone] = useState(0);
   const [budgetList, setBudgetList] = useState([]);
+  const [budgetListLength, setBudgetListLength] = useState(0);
   const [depositSum, setDepositSum] = useState(0);
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -211,58 +213,41 @@ const MyMeetingFuncUser = () => {
   //   console.log(currentPage);
   //   console.log(currentTodos);
   // };
-  const handleBudgetClick = async e => {
+  const handleBudgetClick = async _monthValue => {
     setIsLoading(true);
     const budgetObj = {
       budgetPartySeq: params?.meetingId,
-      month: e?.target.value === undefined ? "01" : e?.target.value,
+      month: _monthValue === undefined ? "01" : _monthValue,
     };
     try {
       const res = await getMonthBudget(budgetObj);
-      // window.addEventListener("scroll", () => {
-      //   // 스크롤 값 구해서 내릴 때 마다 + 하면서 위로 쏘면됨.
-      //   let WscrollY = 100 * currentPage;
-      //   const totalPages = Math.ceil(res.length / todosPerPage);
-      //   const indexStart = (currentPage - 1) * todosPerPage;
-      //   const currentTodos = res.slice(indexStart, indexStart + todosPerPage);
-      //   console.log(window.scrollY >= WscrollY);
-      //   if (window.scrollY <= WscrollY) return;
-      //   currentPage = currentPage + 1;
-      //   if (currentTodos.length > 0) {
-      //     // TODO: 중요 사항 : ...currentTodos로 뜯어서 넣을 경우 넣는 데이터가 2배로 들어감 이거만 해결하면 끝
-      //     console.log(currentTodos);
-      //     const daats = [...currentTodos, ...currentTodos];
-      //     setBudgetList(daats);
-      //     console.log(budgetList);
-      //   }
-      //   // else {
-      //   //   alert("더이상 정보가 없어요.");
-      //   // }
-      // });
       const resData = await getMonthCalculateBudget(budgetObj);
       const resDataMember = await getMemberBudget(budgetObj);
-      setBudgetList(res);
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
+      let i = res?.length ? res?.length : 0;
+      for (i; i <= 9; i++) {
+        res.push([]);
+      }
+
+      setBudgetList(res);
       toast.success(`${budgetObj.month}월 데이터가 조회되었습니다.`);
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
-    // 일반 js가 시점을 못잡음
     setTimeout(() => {
       funcRef.current.style.backgroundColor = "#f8ebd6";
       itemRef.current.classList.add("divButtonStyle");
       activeItem = itemRef.current;
     }, 100);
-
-    // funcRef.current.style.backgroundColor = "#f8ebd6";
   };
+
   const handleBudgetDelete = async budgetSeq => {
     if (confirm("삭제하시겠습니까?")) {
       try {
         await deleteBudget(budgetSeq);
-        handleBudgetClick();
+        handleBudgetClick(monthValue);
       } catch (error) {
         console.log(error);
       }
@@ -376,7 +361,7 @@ const MyMeetingFuncUser = () => {
                             setMonthValue(prevCount => {
                               return e.target.value;
                             });
-                            handleBudgetClick(e);
+                            handleBudgetClick(e.target.value);
                           }}
                         >
                           <MenuItem value={"01"}>1월</MenuItem>
@@ -410,24 +395,32 @@ const MyMeetingFuncUser = () => {
                       <span>순서</span>
                       <span>회계 구분</span>
                       {/* 일단 해둠 */}
-                      <span>멤버명</span>
+                      <span>상세내역</span>
                       <span>금액</span>
                       <span>일자</span>
-                      <span>삭제</span>
+                      <span style={{ display: "none" }}>삭제</span>
                     </li>
                     {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
                         <span>
-                          {index}
+                          {index + 1}
                           {/* <img src={`../../images/${item.budgetPic}`} /> */}
                         </span>
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
                         <span>{item.budgetText}</span>
-                        <span>{item.budgetAmount.toLocaleString()}</span>
+                        <span>
+                          {item?.budgetAmount !== undefined
+                            ? Number(item.budgetAmount).toLocaleString()
+                            : null}
+                        </span>
                         <span>{item.budgetDt}</span>
                         <span
-                          style={{ paddingTop: "13px", paddingBottom: "13px" }}
+                          style={{
+                            display: "none",
+                            paddingTop: "13px",
+                            paddingBottom: "13px",
+                          }}
                         >
                           <button
                             className="delete-btn"
@@ -443,15 +436,17 @@ const MyMeetingFuncUser = () => {
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        납입 내역(미납입: {depositMember?.unDepositedMember}명)
+                        납입 내역
                       </span>
+                      {/* (미납입: {depositMember?.unDepositedMember}명) */}
                       <div style={{ width: "100%" }}>
                         <span
                           style={{ display: "inline-block", width: "100%" }}
                         >
-                          {depositMember?.depositedMember}
+                          {budgetListLength} 건
+                          {/* {depositMember?.depositedMember}
                           /&nbsp;
-                          {depositMember?.memberSum}명
+                          {depositMember?.memberSum}명 */}
                         </span>
                       </div>
                       <div style={{ width: "100%" }}>
@@ -465,7 +460,7 @@ const MyMeetingFuncUser = () => {
                         </span>
                       </div>
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        {depositSum.toLocaleString()} 원
+                        {depositSum} 원
                       </span>
                     </li>
                     <li className="ledger-li"></li>
