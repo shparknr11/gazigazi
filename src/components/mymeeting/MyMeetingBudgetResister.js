@@ -126,7 +126,11 @@ const TitleDivStyle = styled.div`
   padding-left: 5px;
   padding-top: 20px;
 `;
-const MyMeetingBudgetResister = ({ setIsPopup }) => {
+const MyMeetingBudgetResister = ({
+  setIsPopup,
+  handleBudgetClick,
+  monthValue,
+}) => {
   // todo : 가계부 등록 창
   const [imgUrl, setImgUrl] = useState("");
   const [textAreaVal, setTextAreaVal] = useState("");
@@ -142,6 +146,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imgFile, setImgFile] = useState(null);
   const [IsClicked, setIsClicked] = useState();
+  const dateYear = new Date().getFullYear();
+  const lastDay = new Date(dateYear, monthValue, 0).getDate();
   const params = useParams();
   const imgOnError = () => {
     setImgError(true);
@@ -261,6 +267,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
     } finally {
       toast.success("회계 정보가 저장되었습니다.");
       setIsLoading(false);
+      setIsPopup(false);
+      handleBudgetClick(monthValue);
     }
   };
   const getMembers = async () => {
@@ -420,7 +428,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         }}
                       >
                         <label htmlFor="memberSeq" style={{ width: "25%" }}>
-                          <strong style={{ color: "red" }}>*</strong>멤버명
+                          <strong style={{ color: "red" }}>*</strong>
+                          멤버명
                         </label>
                         <input
                           id="memberName"
@@ -493,6 +502,8 @@ const MyMeetingBudgetResister = ({ setIsPopup }) => {
                         <input
                           id="budgetDt"
                           name="budgetDt"
+                          min={`${dateYear}-${monthValue}-01`}
+                          max={`${dateYear}-${monthValue}-${lastDay}`}
                           type="date"
                           style={{ width: "80%" }}
                         />
