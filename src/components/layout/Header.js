@@ -59,7 +59,7 @@ const Header = () => {
               <Link to="/">홈</Link>
             </li>
             <li>
-              <Link to="/">소개</Link>
+              <Link to="/admin">관리자(모임승인)</Link>
             </li>
             <li>
               <Link to="/review">커뮤니티 후기</Link>

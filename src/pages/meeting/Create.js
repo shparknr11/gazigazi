@@ -3,6 +3,7 @@ import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
 import { getLocal, postParty } from "../../apis/meeting/meetingapi";
 import { useNavigate } from "react-router-dom";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -53,8 +54,9 @@ const CreateCheckBtn = styled.div`
   margin: 0 auto;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 15px;
+  color: ${props => (props.isChecked ? "#f9f8f5" : "#999")};
   background-color: ${props =>
-    props.isChecked ? "wheat" : "rgba(0,0,0,0.05)"};
+    props.isChecked ? "#c9c2a5" : "rgba(0,0,0,0.05)"};
 `;
 const CreateFormDivStyle = styled.div`
   width: 100%;
@@ -87,10 +89,13 @@ const CreateBtnWrapStyle = styled.div`
   gap: 25px;
   .create-button {
     padding: 10px 20px;
-    border: 1px solid;
+    border: 1px solid #999;
+    color: #999;
     border-radius: 25px;
+    margin-bottom: 40px;
     &:hover {
-      background-color: wheat;
+      background-color: #c9c2a5;
+      color: #f9f8f5;
     }
   }
 `;
@@ -240,6 +245,10 @@ const Create = () => {
 
   const handSubmitCreate = async e => {
     e.preventDefault();
+    if (!isChecked) {
+      alert("숙지사항을 확인해주세요(필수)");
+      return;
+    }
     if (!partyGenre) {
       alert("카테고리를 선택해주세요(필수)");
       return;
@@ -331,7 +340,7 @@ const Create = () => {
 
   return (
     <CreateInnerStyle>
-      <h1>모임 등록신청</h1>
+      <GuideTitle guideTitle="모임 등록" subTitle="모임 등록신청" />
       <CreateCheckStyle>
         <div className="create-check-div">
           <h1>📝모임등록 전 숙지사항</h1>

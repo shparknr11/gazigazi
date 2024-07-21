@@ -114,7 +114,7 @@ const InterestList = () => {
 
   const handleDelete = async partySeq => {
     const userSeq = sessionStorage.getItem("userSeq");
-    localStorage.removeItem(userSeq);
+    localStorage.removeItem(partySeq);
     if (!userSeq) {
       alert("사용자 정보를 찾을 수 없습니다.");
       return;

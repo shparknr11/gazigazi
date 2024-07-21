@@ -168,15 +168,40 @@ const MeetingDetail = () => {
   const { partySeq } = useParams();
   const navigate = useNavigate();
   const userSeq = sessionStorage.getItem("userSeq");
-  const currentWish = localStorage.getItem(userSeq);
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
+  const currentWish = localStorage.getItem(partySeq);
+  const telNumber = sessionStorage.getItem("userPhone");
+  const forUserBirth = sessionStorage.getItem("userBirth");
+  const userGender = parseInt(sessionStorage.getItem("userGender"));
+  const userBirth = parseInt(forUserBirth.substring(0, 4));
 
   const handleJoinModal = () => {
+    const partyMaximum = parseInt(detailList.partyMaximum);
+    const partyNowMem = parseInt(detailList.partyNowMem);
+    const partMinAge = parseInt(detailList.partMinAge);
+    const partyMaxAge = parseInt(detailList.partyMaxAge);
+    const partyGender = parseInt(detailList.partyGender);
+
     if (!userSeq) {
       navigate(`/login`);
       return;
     }
+
+    if (partyMaximum / partyNowMem === 1) {
+      alert("인원 모집이 마감되었습니다.(인원초과)");
+      return;
+    }
+
+    if (partMinAge > userBirth || partyMaxAge < userBirth) {
+      alert("연령제한이 있습니다.");
+      return;
+    }
+    if (partyGender !== userGender && partyGender !== 3) {
+      alert("성별 제한이 있습니다.");
+      return;
+    }
+
     openModal({
       onConfirm: async joinContent => {
         try {
@@ -223,19 +248,24 @@ const MeetingDetail = () => {
     }
     const parseUserSeq = parseInt(userSeq);
     const parsePartySeq = parseInt(partySeq);
+    const parsePhoneNumber = parseInt(telNumber);
     const result = await getWishParty(parseUserSeq, parsePartySeq);
     if (result.code !== 1) {
       alert(result.resultMsg);
       return;
     }
-    alert("관심목록에 추가되었습니다.");
 
-    if (currentWish && parseInt(currentWish) === parseInt(partySeq)) {
-      localStorage.removeItem(userSeq);
+    if (currentWish) {
+      localStorage.removeItem(partySeq);
       setIsWished(false);
+      alert("관심목록에서 삭제되었습니다.");
     } else {
-      localStorage.setItem(userSeq, partySeq);
+      localStorage.setItem(
+        partySeq,
+        parseUserSeq + parsePartySeq + parsePhoneNumber,
+      );
       setIsWished(true);
+      alert("관심목록에 추가되었습니다.");
     }
   };
 
@@ -319,7 +349,7 @@ const MeetingDetail = () => {
                   }}
                 >
                   <span>
-                    {!currentWish ? <>🤍</> : <>🧡</>}
+                    {currentWish ? <>🧡</> : <>🤍</>}
                     찜하기
                   </span>
                 </div>
@@ -340,20 +370,20 @@ const MeetingDetail = () => {
           <div>
             <h2>
               {detailList.partyGenre === "1"
-                ? "🏈 내 취미는 스포츠"
+                ? "🏈 운동은 삶의 활력소, 같이 즐겨요!"
                 : detailList.partyGenre === "2"
-                  ? "🎮 게임"
+                  ? "🎮 새로운 친구들과 함께 GAME!"
                   : detailList.partyGenre === "3"
                     ? "🍨 모여서 맛집탐방"
                     : detailList.partyGenre === "4"
-                      ? "🛍 내가 패션왕"
+                      ? "🛍 트렌디한 패션 이야기를 함께 나눠요!"
                       : detailList.partyGenre === "5"
-                        ? "📔 자기개발 끝판왕"
+                        ? "📔 함께 공부하며 성장해요!"
                         : detailList.partyGenre === "6"
-                          ? "✨ 문화 / 예술 즐기기"
+                          ? "✨ 전시, 공연, 영화, 문화생활을 함께 즐겨요!"
                           : detailList.partyGenre === "7"
                             ? "🍷 분위기 있게 한잔"
-                            : "💬 기타"}
+                            : "💬 기타 취미, 새로운 친구들과 함께 즐겨요!"}
             </h2>
             <p>{detailList.partyIntro}</p>
           </div>
@@ -362,6 +392,38 @@ const MeetingDetail = () => {
         <UnderLine />
         <div></div>
       </div>
+      {detailList.partyAuthGb === "0" ? (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.2)",
+          }}
+        >
+          <h1
+            style={{
+              position: "fixed",
+              top: "35%",
+              left: "50%",
+              fontSize: "50px",
+              display: "flex",
+              color: "#FF5858",
+              fontWeight: "bold",
+              letterSpacing: "11px",
+              justifyContent: "center",
+              alignContent: "center",
+              border: "3px solid #FF5858",
+              transform: "rotate(-30deg)",
+              padding: "80px 60px",
+            }}
+          >
+            승인대기
+          </h1>
+        </div>
+      ) : null}
       {/* 모달 */}
       <JoinModal
         isOpen={isModalOpen}
