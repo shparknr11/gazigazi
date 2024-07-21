@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import {
+  deleteSchJoin,
   deleteSchOne,
   getSchMemberAll,
   getSchMemberSeq,
@@ -21,6 +22,7 @@ const MyMeetingNoticeStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 40px;
   .notice-wrap {
     width: 100%;
     display: flex;
@@ -349,6 +351,16 @@ const MyMeetingSchDetail = () => {
       setIsLoading(false);
     }
   };
+  const handleJoinDelete = async budgetSeq => {
+    if (confirm("일정참가를 취소하시겠습니까?")) {
+      try {
+        await deleteSchJoin(param.meetingschid, memberSeq);
+      } catch (error) {
+        console.log(error);
+      }
+      toast.success("참가된 일정이 취소되었습니다!");
+    }
+  };
   const handleClickSchDelete = async () => {
     setIsLoading(true);
     try {
@@ -504,7 +516,8 @@ const MyMeetingSchDetail = () => {
                       <button
                         className="etc-btn"
                         onClick={() => {
-                          toast.warning("일정이 완료된 일정입니다.");
+                          toast.warning("참가완료된 일정입니다.");
+                          // handleJoinDelete();
                         }}
                       >
                         참가완료

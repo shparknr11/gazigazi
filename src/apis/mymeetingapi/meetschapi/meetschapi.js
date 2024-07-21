@@ -140,11 +140,11 @@ export const patchSchComp = async schSeq => {
 // DELETE
 // /api/plan/join
 // 모임 일정 참가 신청 취소
-export const deleteSchJoin = async (planSeq, userSeq) => {
+export const deleteSchJoin = async (plmemberPlanSeq, userSeq) => {
   try {
     const res = await axios.delete(`/api/plan/join`, {
-      plmemberPlanSeq: Number(planSeq),
-      plmemberMemberSeq: Number(userSeq),
+      plmemberPlanSeq: Number(plmemberPlanSeq),
+      memberSeq: Number(userSeq),
     });
     return res.data.resultData;
   } catch (error) {

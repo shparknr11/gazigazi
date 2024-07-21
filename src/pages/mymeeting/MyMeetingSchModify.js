@@ -5,6 +5,7 @@ const MyMeetingNoticeStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 40px;
   .notice-wrap {
     width: 100%;
     display: flex;

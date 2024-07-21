@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import MyMeetingCalendar from "./MyMeetingCalendar";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import "./printledger.css";
 import { toast } from "react-toastify";
 import {
   deleteBudget,
@@ -10,10 +9,11 @@ import {
   getMonthBudget,
   getMonthCalculateBudget,
 } from "../../apis/mymeetingapi/budget/budgetapi";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loading from "../../components/common/Loading";
 import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
 import "./common.js";
+import MyMeetingCalendar from "./MyMeetingCalendar";
+import "./printledger.css";
 
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
@@ -21,6 +21,7 @@ const MyMeetingFuncLeaderStyle = styled.div`
   height: auto;
   margin-top: 25px;
   transition: width 0.3s;
+  margin-bottom: 40px;
   .meeting-wrap {
     display: flex;
     width: 100%;
@@ -159,6 +160,7 @@ const MyMeetingFuncLeader = () => {
   const [monthValue, setMonthValue] = useState("01");
   const [budgetList, setBudgetList] = useState([]);
   const [depositSum, setDepositSum] = useState(0);
+  const [budgetListLength, setBudgetListLength] = useState(0);
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
@@ -232,7 +234,7 @@ const MyMeetingFuncLeader = () => {
       const resDataMember = await getMemberBudget(budgetObj);
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
-
+      setBudgetListLength(res.length);
       let i = res?.length ? res?.length : 0;
       for (i; i <= 9; i++) {
         res.push([]);
@@ -420,11 +422,7 @@ const MyMeetingFuncLeader = () => {
                     <button
                       className="etc-btn"
                       onClick={() => {
-                        if (budgetList > 0) {
-                          handlePrint();
-                        } else {
-                          toast.warning("데이터가 없습니다.");
-                        }
+                        handlePrint();
                       }}
                     >
                       출력
@@ -437,7 +435,7 @@ const MyMeetingFuncLeader = () => {
                       <span>순서</span>
                       <span>회계 구분</span>
                       {/* 일단 해둠 */}
-                      <span>입출금 상세 내역</span>
+                      <span>상세내역</span>
                       <span>금액</span>
                       <span>일자</span>
                       <span className="print-delete">삭제</span>
@@ -477,12 +475,14 @@ const MyMeetingFuncLeader = () => {
                     <li className="ledger-li">
                       {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        납입 내역(미납입: {depositMember?.unDepositedMember}명)
+                        납입 내역
                       </span>
+                      {/* (미납입: {depositMember?.unDepositedMember}명) */}
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        {depositMember?.depositedMember}
+                        {budgetListLength} 건
+                        {/* {depositMember?.depositedMember}
                         /&nbsp;
-                        {depositMember?.memberSum}명
+                        {depositMember?.memberSum}명 */}
                       </span>
                       <span
                         style={{
