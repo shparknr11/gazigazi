@@ -131,7 +131,7 @@ const Login = () => {
         sessionStorage.setItem("userPhone", userPhone);
 
         alert("로그인 성공!");
-        navigate(`/`);
+        navigate(-1);
       } else {
         alert(response.data.resultMsg || "로그인에 실패했습니다.");
       }

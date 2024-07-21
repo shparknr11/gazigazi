@@ -174,7 +174,7 @@ const MeetingDetail = () => {
   const telNumber = sessionStorage.getItem("userPhone");
   const forUserBirth = sessionStorage.getItem("userBirth");
   const userGender = parseInt(sessionStorage.getItem("userGender"));
-  const userBirth = parseInt(forUserBirth.substring(0, 4));
+  const userBirth = parseInt(forUserBirth?.substring(0, 4));
 
   const handleJoinModal = () => {
     const partyMaximum = parseInt(detailList.partyMaximum);
