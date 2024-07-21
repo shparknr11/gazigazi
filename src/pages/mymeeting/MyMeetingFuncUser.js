@@ -424,7 +424,7 @@ const MyMeetingFuncUser = () => {
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
                         <span>{item.budgetText}</span>
-                        <span>{item.budgetAmount}</span>
+                        <span>{item.budgetAmount.toLocaleString()}</span>
                         <span>{item.budgetDt}</span>
                         <span
                           style={{ paddingTop: "13px", paddingBottom: "13px" }}
@@ -465,7 +465,7 @@ const MyMeetingFuncUser = () => {
                         </span>
                       </div>
                       <span style={{ display: "inline-block", width: "100%" }}>
-                        {depositSum} 원
+                        {depositSum.toLocaleString()} 원
                       </span>
                     </li>
                     <li className="ledger-li"></li>

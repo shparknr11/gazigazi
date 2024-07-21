@@ -219,11 +219,12 @@ const MyMeetingFuncLeader = () => {
   // window.onbeforeprint = b();
   // window.print();
   // window.onafterprint = document.body.innerHTML = resetHtml;
-  const handleBudgetClick = async e => {
+  useEffect(() => {}, [isPopup]);
+  const handleBudgetClick = async _monthValue => {
     setIsLoading(true);
     const budgetObj = {
       budgetPartySeq: params?.meetingId,
-      month: e?.target.value === undefined ? "01" : e?.target.value,
+      month: _monthValue === undefined ? "01" : _monthValue,
     };
     try {
       const res = await getMonthBudget(budgetObj);
@@ -236,6 +237,7 @@ const MyMeetingFuncLeader = () => {
       for (i; i <= 9; i++) {
         res.push([]);
       }
+
       setBudgetList(res);
       toast.success(`${budgetObj.month}월 데이터가 조회되었습니다.`);
     } catch (error) {
@@ -252,11 +254,11 @@ const MyMeetingFuncLeader = () => {
     if (confirm("삭제하시겠습니까?")) {
       try {
         await deleteBudget(budgetSeq);
-        handleBudgetClick();
       } catch (error) {
         console.log(error);
       }
       toast.success("회계내역이 삭제되었습니다.");
+      handleBudgetClick(monthValue);
     }
   };
   const handlePrint = () => {
@@ -267,7 +269,13 @@ const MyMeetingFuncLeader = () => {
   }
   return (
     <MyMeetingFuncLeaderStyle>
-      {isPopup ? <MyMeetingBudgetResister setIsPopup={setIsPopup} /> : null}
+      {isPopup ? (
+        <MyMeetingBudgetResister
+          setIsPopup={setIsPopup}
+          handleBudgetClick={handleBudgetClick}
+          monthValue={monthValue}
+        />
+      ) : null}
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
       <div className="meeting-wrap">
         {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
@@ -382,7 +390,7 @@ const MyMeetingFuncLeader = () => {
                             setMonthValue(prevCount => {
                               return e.target.value;
                             });
-                            handleBudgetClick(e);
+                            handleBudgetClick(e.target.value);
                           }}
                         >
                           <MenuItem value={"01"}>1월</MenuItem>
@@ -429,7 +437,7 @@ const MyMeetingFuncLeader = () => {
                       <span>순서</span>
                       <span>회계 구분</span>
                       {/* 일단 해둠 */}
-                      <span>멤버명</span>
+                      <span>입출금 상세 내역</span>
                       <span>금액</span>
                       <span>일자</span>
                       <span className="print-delete">삭제</span>
@@ -443,7 +451,11 @@ const MyMeetingFuncLeader = () => {
                         <span>{item.cdNm}</span>
                         {/* 일단 해둠 */}
                         <span>{item.budgetText}</span>
-                        <span>{item.budgetAmount}</span>
+                        <span>
+                          {item?.budgetAmount !== undefined
+                            ? Number(item.budgetAmount).toLocaleString()
+                            : null}
+                        </span>
                         <span>{item.budgetDt}</span>
                         <span
                           className="print-delete"

@@ -98,7 +98,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
   const params = useParams();
   const location = useLocation();
   const currentDay = new moment(Date()).format("yyyy-MM-DD");
-  console.log();
   // 날짜 요일 출력
   // 캘린더의 날짜 출력을 US 달력으로 변경하기
   const weekName = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -178,7 +177,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
 
     // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
     let classNames = "";
-    console.log(checkDay < currentDay);
     if (checkDay < currentDay) {
       classNames += "end-day-style";
     }
@@ -196,7 +194,6 @@ const MyMeetingCalendar = ({ isClicked }) => {
       // 아래 구문은 api 데이터의 날짜와 현재 체크 날짜를 비교한다.
       const dayResult = monthData?.find(item => checkDay === item.planStartDt);
       setAllData(dayResult);
-      console.log(dayResult);
     } catch (error) {
       console.log(error);
     } finally {
@@ -285,6 +282,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
           <CalendarListLiStyle>
             {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
             <li
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 navigate(`/mymeeting/mymeetingschdetail/${allData.planSeq}`, {
                   state: {

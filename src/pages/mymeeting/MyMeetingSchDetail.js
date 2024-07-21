@@ -506,7 +506,6 @@ const MyMeetingSchDetail = () => {
                         onClick={() => {
                           toast.warning("일정이 완료된 일정입니다.");
                         }}
-                        disabled
                       >
                         참가완료
                       </button>
