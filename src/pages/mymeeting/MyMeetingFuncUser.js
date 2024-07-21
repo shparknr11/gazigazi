@@ -225,6 +225,7 @@ const MyMeetingFuncUser = () => {
       const resDataMember = await getMemberBudget(budgetObj);
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
+      setBudgetListLength(res.length);
       let i = res?.length ? res?.length : 0;
       for (i; i <= 9; i++) {
         res.push([]);
