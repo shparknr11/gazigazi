@@ -12,7 +12,7 @@ const LoginStyle = styled.div`
   height: 80vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
 `;
 
 const LoginWrapStyle = styled.div`
@@ -95,7 +95,7 @@ const Login = () => {
     const token = sessionStorage.getItem("token");
     if (token) {
       alert("이미 로그인된 상태입니다.");
-      navigate("/"); // 로그인 후 메인 페이지로 리다이렉트
+      navigate("/");
     }
   }, [navigate]);
 
@@ -117,6 +117,8 @@ const Login = () => {
           userBirth,
           userName,
           userPhone,
+          userAddr,
+          userNickname,
         } = response.data.resultData;
 
         // Redux에 사용자 정보 저장
@@ -129,9 +131,11 @@ const Login = () => {
         sessionStorage.setItem("userBirth", userBirth);
         sessionStorage.setItem("userName", userName);
         sessionStorage.setItem("userPhone", userPhone);
+        sessionStorage.setItem("userAddr", userAddr);
+        sessionStorage.setItem("userNickname", userNickname);
 
         alert("로그인 성공!");
-        navigate(-1);
+        navigate("/");
       } else {
         alert(response.data.resultMsg || "로그인에 실패했습니다.");
       }

@@ -46,7 +46,7 @@ const UserInfoInnerStyle = styled.div`
 
   .profile-picture-container {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* 변경: 프로필 사진 컨테이너의 하단 여백 추가 */
   }
 
   .profile-picture-container img {
@@ -60,6 +60,7 @@ const UserInfoInnerStyle = styled.div`
     margin-bottom: 8px;
     font-weight: bold;
     font-size: 12pt;
+    margin-bottom: 10px; /* 변경: 각 레이블의 하단 여백 추가 */
   }
 
   .mypage-container input[type="email"],
@@ -153,7 +154,7 @@ const UserInfo = () => {
 
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 1000); // 1초 후 로딩 종료
+    }, 1000); 
 
     return () => clearTimeout(timeout);
   }, [navigate, userSeq]);
