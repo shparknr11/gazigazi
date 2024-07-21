@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
-import cate from "../../images/cate2.png";
+import cate from "../../images/cate2.png"; // 기본 이미지 URL
 
 const InterestListStyle = styled.div`
   display: flex;
@@ -28,7 +29,6 @@ const InterestInnerStyle = styled.div`
   padding: 20px;
 
   .interest-container {
-    background: linear-gradient(#ebddcc, #e0b88a, #c5965e);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -43,6 +43,7 @@ const InterestInnerStyle = styled.div`
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    cursor: pointer;
   }
   .interest-item:last-child {
     border-bottom: none;
@@ -56,7 +57,7 @@ const InterestInnerStyle = styled.div`
   .interest-item-location,
   .interest-item-description {
     font-size: 12pt;
-    color: #fff;
+    color: #000000;
     margin-bottom: 5px;
   }
   .interest-item button {
@@ -75,6 +76,7 @@ const InterestInnerStyle = styled.div`
   .cate {
     width: 80px;
     height: 50px;
+    object-fit: cover; // 이미지를 잘라서 맞추는 속성
   }
 `;
 
@@ -82,6 +84,7 @@ const InterestList = () => {
   const [loading, setLoading] = useState(true);
   const [interestItems, setInterestItems] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInterestItem = async () => {
@@ -95,9 +98,19 @@ const InterestList = () => {
         }
 
         const response = await axios.get(`/api/party/wish/${userSeq}`);
-        const { resultData, resultMsg } = response.data;
+        const { resultData, resultMsg, code } = response.data;
 
-        if (response.data.code === 1) {
+        // 응답된 데이터와 partyPic의 타입 및 값을 콘솔에 로그로 출력
+        console.log("API Response Data:", resultData);
+        
+        if (resultData && Array.isArray(resultData)) {
+          resultData.forEach(item => {
+            console.log("partyPic value:", item.partyPic);
+            console.log("Type of partyPic value:", typeof item.partyPic);
+          });
+        }
+
+        if (code === 1) {  // API에서 반환된 상태 코드가 1일 때 성공으로 처리
           setInterestItems(resultData);
         } else {
           setError(resultMsg);
@@ -112,7 +125,7 @@ const InterestList = () => {
     fetchInterestItem();
   }, []);
 
-  const handleDelete = async partySeq => {
+  const handleDelete = async (partySeq) => {
     const userSeq = sessionStorage.getItem("userSeq");
     localStorage.removeItem(userSeq);
     if (!userSeq) {
@@ -128,8 +141,8 @@ const InterestList = () => {
 
         if (response.data.code === 1) {
           if (response.data.resultData === 0) {
-            setInterestItems(prevItems =>
-              prevItems.filter(item => item.partySeq !== partySeq),
+            setInterestItems((prevItems) =>
+              prevItems.filter((item) => item.partySeq !== partySeq)
             );
             alert("찜하기를 취소하였습니다.");
           } else {
@@ -137,15 +150,19 @@ const InterestList = () => {
           }
         } else {
           alert(
-            `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`,
+            `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`
           );
         }
       } catch (error) {
         alert(
-          "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요.",
+          "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요."
         );
       }
     }
+  };
+
+  const handleItemClick = (partySeq) => {
+    navigate(`/meeting/${partySeq}`);
   };
 
   if (loading) {
@@ -160,14 +177,17 @@ const InterestList = () => {
             {interestItems.length === 0 ? (
               <p>죄송합니다. 찜한 모임이 없습니다.</p>
             ) : (
-              interestItems.map(item => (
-                <div className="interest-item" key={item.partySeq}>
-                  {" "}
-                  {/* partySeq를 사용 */}
+              interestItems.map((item) => (
+                <div
+                  className="interest-item"
+                  key={item.partySeq}
+                  onClick={() => handleItemClick(item.partySeq)}
+                >
                   <img
-                    src={cate}
+                    src={item.partyPic ? `/path/to/images/${item.partyPic}` : cate}  // 이미지 URL 생성
                     alt="내가 찜한 모임의 썸네일"
                     className="cate"
+                    onError={(e) => e.target.src = cate} // 로드 실패 시 기본 이미지로 대체
                   />
                   <div>
                     <div className="interest-item-title">{item.partyName}</div>
@@ -175,7 +195,7 @@ const InterestList = () => {
                       날짜: {item.partyDate}
                     </div>
                     <div className="interest-item-location">
-                      장소: {item.partyLocation}
+                      장소: {item.partyLocation1} {item.partyLocation2}
                     </div>
                     <div className="interest-item-description">
                       {item.partyPresident}
@@ -183,7 +203,10 @@ const InterestList = () => {
                   </div>
                   <button
                     className="interest-item-delete"
-                    onClick={() => handleDelete(item.partySeq)} // partySeq 사용
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(item.partySeq);
+                    }}
                   >
                     삭제
                   </button>
