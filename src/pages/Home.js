@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import meetingImg from "../images/meetinga.png";
 import { useEffect, useState } from "react";
 import { getPartyAll } from "../apis/meeting/meetingapi";
 import { IoIosList } from "react-icons/io";
@@ -136,16 +135,25 @@ const Home = () => {
   };
 
   const filterHomeList = _resultData => {
-    const filteredList = _resultData.filter(
-      // location 부분 수정*****************************************
-      item => item.partyAuthGb === "1" && item.partyLocation1 === "서울",
-    );
-    setArroundPartyList(filteredList);
+    const userLocation = sessionStorage.getItem("userAddr");
+    if (!userLocation) {
+      const filteredListOne = _resultData.filter(
+        item => item.partyAuthGb === "1" && item.partyLocation1 === "대구",
+      );
+      setArroundPartyList(filteredListOne);
+    } else {
+      const filteredList = _resultData.filter(
+        item =>
+          item.partyAuthGb === "1" &&
+          item.partyLocation1 === userLocation.slice(0, 2),
+      );
+
+      setArroundPartyList(filteredList);
+    }
   };
 
   const popularHomeList = _resultData => {
     const filteredList = _resultData.filter(
-      // location 부분 수정*****************************************
       item =>
         item.partyAuthGb === "1" && item.partyMaximum - item.partyNowMem < 5,
     );

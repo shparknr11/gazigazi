@@ -14,7 +14,7 @@ const ReviewInnerStyle = styled.div`
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 90px;
 
   .review-search-div {
     display: flex;

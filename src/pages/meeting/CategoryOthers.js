@@ -105,7 +105,7 @@ const CateGoryListStyle = styled.div`
     justify-content: space-between;
     margin-bottom: 15px;
   }
-  h3 {
+  .mm-meeting-dl-name {
     display: flex;
     align-items: center;
   }

@@ -2,8 +2,6 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getMemberList } from "../../apis/meeting/joinapi";
-import { ActionButton, MainButton } from "../../components/button/Button";
-import { prColor } from "../../css/color";
 
 export const MemberListInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -13,7 +11,7 @@ export const MemberListInnerStyle = styled.div`
   /* height: auto; */
   margin-top: 40px;
   margin-bottom: 150px;
-  height: 800px;
+  height: 540px;
 `;
 
 export const MemberListMenuStyle = styled.div`

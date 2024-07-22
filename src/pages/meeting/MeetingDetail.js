@@ -13,9 +13,12 @@ import JoinModal from "../../components/modal/JoinModal";
 import { postApplication } from "../../apis/meeting/joinapi";
 import { IoPersonSharp } from "react-icons/io5";
 import { prColor } from "../../css/color";
+import { toast } from "react-toastify";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
+  margin-bottom: 40px;
+
   .inner {
     display: flex;
     margin: 0 auto;
@@ -134,6 +137,7 @@ const MeetItemCard = styled.div`
   .meet-item-button-div {
     display: flex;
     justify-content: space-around;
+    gap: 10px;
   }
   .meet-item-button {
     display: flex;
@@ -142,6 +146,7 @@ const MeetItemCard = styled.div`
     background-color: ${prColor.white};
     border-radius: 25px;
     color: #000;
+    cursor: pointer;
     &:hover {
       border: 1px solid #000;
       background-color: ${prColor.p000};
@@ -190,7 +195,7 @@ const MeetingDetail = () => {
   const currentWish = localStorage.getItem(
     parseInt(partySeq) + parseInt(userSeq),
   );
-  console.log(currentWish);
+  // console.log(currentWish);
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
   const telNumber = sessionStorage.getItem("userPhone");
@@ -231,8 +236,13 @@ const MeetingDetail = () => {
       onConfirm: async joinContent => {
         try {
           const appliycation = { joinUserSeq: userSeq, joinMsg: joinContent };
-          await postApplication(partySeq, appliycation);
+          const result = await postApplication(partySeq, appliycation);
+          if (result.code != 1) {
+            toast.warning(result.resultMsg);
+            return;
+          }
           setJoinContent("");
+          toast.success("모임신청이 완료되었습니다.");
           closeModal();
         } catch (error) {
           console.log(error);
