@@ -153,7 +153,7 @@ const UnderLine = styled.div`
 `;
 
 const MeetItemInfo = styled.div`
-  margin-top: 20px;
+  margin-top: 40px;
 
   h2 {
     font-size: 1.5rem;
@@ -305,6 +305,12 @@ const MeetingDetail = () => {
     }
   };
   const heartIcon = isWished ? <BsFillHeartFill color="red" /> : <BsHeart />;
+
+  const getYearLastTwoDigits = year => {
+    // return year.toString().slice(-2);
+    return year.toString();
+  };
+
   return (
     <MeetItemStyle>
       <div className="inner">
@@ -349,7 +355,17 @@ const MeetingDetail = () => {
               </span>
               <div className="meet-condition">
                 <span>가입 조건 </span>
-                <p> 남여 무관, 98년생~00년생</p>
+                <p style={{ padding: "10px" }}>
+                  {getYearLastTwoDigits(detailList.partyMinAge) === "1901"
+                    ? "연령무관"
+                    : `${getYearLastTwoDigits(detailList.partyMinAge)} ~`}
+                  {getYearLastTwoDigits(detailList.partyMaxAge) === "2155"
+                    ? ""
+                    : `${getYearLastTwoDigits(detailList.partyMaxAge)}년생`}
+                </p>
+                <p style={{ padding: "10px" }}>
+                  & {getGenderText(detailList.partyGender)}
+                </p>
               </div>
               <div className="meet-apply-form">
                 <span>신청서 양식</span>

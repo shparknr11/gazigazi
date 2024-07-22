@@ -30,6 +30,7 @@ const CreateFormDivStyle = styled.div`
   margin-bottom: 25px;
   > h1 {
     font-size: 18px;
+    font-weight: bold;
     margin-bottom: 10px;
   }
   .create-option-group,
