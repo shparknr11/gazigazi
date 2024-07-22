@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
-import cate from "../../images/cate2.png"; 
+import cate from "../../images/cate2.png";
 
 const InterestListStyle = styled.div`
   display: flex;
@@ -106,9 +106,7 @@ const InterestList = () => {
         const response = await axios.get(`/api/party/wish/${userSeq}`);
         const { resultData, resultMsg, code } = response.data;
 
-
         if (code === 1) {
-
           setInterestItems(resultData);
         } else {
           setError(resultMsg);
@@ -182,7 +180,11 @@ const InterestList = () => {
                   onClick={() => handleItemClick(item.partySeq)}
                 >
                   <img
-                    src={item.partyPic ? `/pic/party/${item.partySeq}/${item.partyPic}` : cate} 
+                    src={
+                      item.partyPic
+                        ? `/pic/party/${item.partySeq}/${item.partyPic}`
+                        : cate
+                    }
                     alt="내가 찜한 모임의 썸네일"
                     className="cate"
                     onError={e => (e.target.src = cate)} // 로드 실패 시 기본 이미지로 대체
@@ -190,7 +192,7 @@ const InterestList = () => {
                   <div className="interest-item-content">
                     <div className="interest-item-title">{item.partyName}</div>
                     <div className="interest-item-date">
-                      날짜: {item.partyDate}
+                      {/* 날짜: {item.partyDate} */}
                     </div>
                     <div className="interest-item-location">
                       장소: {item.partyLocation1} {item.partyLocation2}
