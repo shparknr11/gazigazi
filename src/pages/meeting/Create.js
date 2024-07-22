@@ -271,7 +271,7 @@ const Create = () => {
   const handleChangeMinAge = e => {
     // console.log("min", e.target.value);
     const minAge = parseInt(e.target.value);
-    setPartyMaxAge(minAge);
+    setPartyMinAge(minAge);
     if (minAge > partyMaxAge) {
       alert("최대년도보다 낮게 설정해 주세요.");
     }
@@ -553,7 +553,7 @@ const Create = () => {
           <select
             id="partyminage"
             onChange={e => {
-              // console.log(e.target.value);
+              console.log(e.target.value);
               handleChangeMinAge(e);
             }}
           >
