@@ -129,8 +129,6 @@ const AccountInnerStyle = styled.div`
   }
 `;
 
-
-
 const Message = styled.div`
   color: ${props => (props.success ? "green" : "red")};
   margin-bottom: 10px;
@@ -173,7 +171,7 @@ const CreateAccount = () => {
     userName: "",
     userPhone: "",
     userAddr: "",
-    form: "", // For general form-level messages
+    form: "", 
   });
 
   const handleChange = e => {
@@ -280,52 +278,80 @@ const CreateAccount = () => {
   
 
   const validateForm = () => {
+    const newMessages = { ...messages };
     let valid = true;
-    let newMessages = { ...messages };
-    
-    // Validate each required field
+
+    // 기본 유효성 검사
     if (!user.userEmail) {
-      newMessages.form = "이메일을 입력해주세요.";
-      valid = false;
+        newMessages.userEmail = "이메일을 입력해주세요.";
+        valid = false;
+    } else if (!emailRegex.test(user.userEmail)) {
+        newMessages.userEmail = "유효하지 않은 이메일입니다.";
+        valid = false;
     }
+
     if (!user.userPw) {
-      newMessages.form = "비밀번호를 입력해주세요.";
-      valid = false;
+        newMessages.userPw = "비밀번호를 입력해주세요.";
+        valid = false;
+    } else if (!passwordRegex.test(user.userPw)) {
+        newMessages.userPw = "비밀번호는 6자리 이상이어야 합니다.";
+        valid = false;
     }
+
     if (user.userPw !== user.userPwCheck) {
-      newMessages.form = "비밀번호 확인이 일치하지 않습니다.";
-      valid = false;
+        newMessages.userPwCheck = "비밀번호 확인이 일치하지 않습니다.";
+        valid = false;
     }
+
     if (!user.userName) {
-      newMessages.form = "이름을 입력해주세요.";
-      valid = false;
+        newMessages.userName = "이름을 입력해주세요.";
+        valid = false;
+    } else if (!NameRegex.test(user.userName)) {
+        newMessages.userName = "유효하지 않은 이름입니다.";
+        valid = false;
     }
+
     if (!user.userNickname) {
-      newMessages.form = "닉네임을 입력해주세요.";
-      valid = false;
+        newMessages.userNickname = "닉네임을 입력해주세요.";
+        valid = false;
+    } else if (!nicknameRegex.test(user.userNickname)) {
+        newMessages.userNickname = "유효하지 않은 닉네임입니다.";
+        valid = false;
     }
+
     if (!user.userAddr) {
-      newMessages.form = "주소를 입력해주세요.";
-      valid = false;
+        newMessages.userAddr = "주소를 입력해주세요.";
+        valid = false;
     }
+
     if (!user.userBirth) {
-      newMessages.form = "생년월일을 입력해주세요.";
-      valid = false;
+        newMessages.userBirth = "생년월일을 입력해주세요.";
+        valid = false;
     }
+
     if (!user.userPhone) {
-      newMessages.form = "전화번호를 입력해주세요.";
-      valid = false;
+        newMessages.userPhone = "전화번호를 입력해주세요.";
+        valid = false;
+    } else if (!PhoneRegex.test(user.userPhone)) {
+        newMessages.userPhone = "유효하지 않은 전화번호입니다.";
+        valid = false;
     }
+
     if (!user.userGender) {
-      newMessages.form = "성별을 선택해주세요.";
-      valid = false;
+        newMessages.userGender = "성별을 선택해주세요.";
+        valid = false;
     }
-    if (!user.userPic) {
-      newMessages.form = "프로필 사진을 선택해주세요."
+
+    if (!accountPic) {
+        newMessages.form = "프로필 사진을 선택해주세요.";
+        valid = false;
+    } else {
+        newMessages.form = ""; 
     }
+
     setMessages(newMessages);
     return valid;
-  };
+};
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -429,7 +455,7 @@ const CreateAccount = () => {
                     <div className="profile-picture-container">
                       <input
                         type="file"
-                        accept="image/jpg, image/png, image/gif"
+                        accept="image/jpeg, image/png, image/gif"
                         id="profilePicture"
                         name="userPic"
                         onChange={handleImageChange}

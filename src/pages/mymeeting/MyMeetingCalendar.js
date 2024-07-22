@@ -284,11 +284,14 @@ const MyMeetingCalendar = ({ isClicked }) => {
             <li
               style={{ cursor: "pointer" }}
               onClick={() => {
+                const isDateEnd = clickDay >= currentDay;
+                console.log(isDateEnd);
                 navigate(`/mymeeting/mymeetingschdetail/${allData.planSeq}`, {
                   state: {
                     planSeq: params.meetingId,
                     isAuth: location?.state.isAuth,
                     partyName: location?.state.partyName,
+                    isDateEnd: isDateEnd,
                   },
                 });
               }}

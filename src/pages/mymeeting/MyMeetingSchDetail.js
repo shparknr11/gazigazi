@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   deleteSchJoin,
   deleteSchOne,
@@ -10,11 +13,6 @@ import {
   patchSchComp,
   postSchJoin,
 } from "../../apis/mymeetingapi/meetschapi/meetschapi";
-import { useLocation } from "react-router";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import MyMeetingSchMemberList from "./MyMeetingSchMemberList";
-import { useParams } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 
 const MyMeetingNoticeStyle = styled.div`
@@ -257,7 +255,7 @@ const MyMeetingSchDetail = () => {
   const navigate = useNavigate();
   const param = useParams();
   const planSeqForReview = param.meetingschid;
-
+  console.log(location);
   useEffect(() => {}, [isAuth]);
   const schMemberSeq = async () => {
     const seq = await getSchMemberSeq(
@@ -268,25 +266,32 @@ const MyMeetingSchDetail = () => {
   };
 
   const getDataOne = async () => {
-    const res = await getSchOne(param.meetingschid);
-    initailData = {
-      planTitle: res.planTitle,
-      planStartTime: res.planStartTime,
-      planLocation: res.planLocation,
-      planContents: res.planContents,
-    };
-    // setPlanObj(res);
-    setPlanTitle(res.planTitle);
-    setPlanStartDt(res.planStartDt);
-    setPlanStartTime(res.planStartTime);
-    setPlanLocation(res.planLocation);
-    setPlanContents(res.planContents);
-    setPlanCdNm(res.cdNm);
-    setIsAuth(location.state.isAuth);
-    setIsCompleted(res.planCompleted);
-    const memberSeq = await schMemberSeq();
-    setMemberSeq(memberSeq);
-    getPlMemberSeq();
+    setIsLoading(true);
+    try {
+      const res = await getSchOne(param.meetingschid);
+      initailData = {
+        planTitle: res.planTitle,
+        planStartTime: res.planStartTime,
+        planLocation: res.planLocation,
+        planContents: res.planContents,
+      };
+      // setPlanObj(res);
+      setPlanTitle(res.planTitle);
+      setPlanStartDt(res.planStartDt);
+      setPlanStartTime(res.planStartTime);
+      setPlanLocation(res.planLocation);
+      setPlanContents(res.planContents);
+      setPlanCdNm(res.cdNm);
+      setIsAuth(location.state.isAuth);
+      setIsCompleted(res.planCompleted);
+      const memberSeq = await schMemberSeq();
+      setMemberSeq(memberSeq);
+      getPlMemberSeq();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -362,6 +367,10 @@ const MyMeetingSchDetail = () => {
     }
   };
   const handleClickSchDelete = async () => {
+    if (allData.length > 0) {
+      toast.warning("일정에 가입된 멤버가 있습니다!");
+      return;
+    }
     setIsLoading(true);
     try {
       const res = await deleteSchOne(param.meetingschid);
@@ -524,6 +533,7 @@ const MyMeetingSchDetail = () => {
                       </button>
                       {isCompleted === 2 ? (
                         <button
+                          style={{ marginLeft: "5px" }}
                           className={"etc-btn"}
                           onClick={() => {
                             navigate("/review/write", {
@@ -545,7 +555,7 @@ const MyMeetingSchDetail = () => {
                         className="delete-btn"
                         onClick={() => {
                           navigate(
-                            `/mymeeting/mymeetingLeader/${location.state.planSeq}`,
+                            `/mymeeting/mymeetinguser/${location.state.planSeq}`,
                             {
                               state: {
                                 isAuth: isAuth,
@@ -559,22 +569,25 @@ const MyMeetingSchDetail = () => {
                     </>
                   ) : (
                     <>
-                      <button
-                        className="etc-btn"
-                        onClick={() => {
-                          handleClickSchEnter();
-                          // handleClickSchEnter();
-                        }}
-                      >
-                        일정참가
-                      </button>
+                      {location.state.isDateEnd && isCompleted === 1 ? (
+                        <button
+                          className="etc-btn"
+                          onClick={() => {
+                            handleClickSchEnter();
+                            // handleClickSchEnter();
+                          }}
+                        >
+                          일정참가
+                        </button>
+                      ) : null}
+
                       <button
                         style={{ marginLeft: "5px" }}
                         type="button"
                         className="delete-btn"
                         onClick={() => {
                           navigate(
-                            `/mymeeting/mymeetingLeader/${location.state.planSeq}`,
+                            `/mymeeting/mymeetinguser/${location.state.planSeq}`,
                             {
                               state: {
                                 isAuth: isAuth,
@@ -914,7 +927,7 @@ const MyMeetingSchDetail = () => {
                             )
                           ) : allData.length > 0 ? (
                             allData.map((item, index) => (
-                              <CalendarListLiStyle key={item.pk}>
+                              <CalendarListLiStyle key={item.userSeq}>
                                 {/* 컴포넌트로 뺄꺼임 일단 테스트 */}
                                 <li>
                                   <span>{index + 1}</span>
@@ -932,7 +945,7 @@ const MyMeetingSchDetail = () => {
                               </CalendarListLiStyle>
                             ))
                           ) : (
-                            <div className="none-sch-div" style={{}}>
+                            <div className="none-sch-div">
                               일정 신청한 멤버가 없습니다.
                             </div>
                           )}
