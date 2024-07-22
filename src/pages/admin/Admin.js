@@ -205,6 +205,7 @@ const Admin = () => {
                   gap: "15px",
                   padding: "10px 0px",
                   justifyContent: "end",
+                  paddingRight: "10px",
                 }}
               >
                 <MainButton

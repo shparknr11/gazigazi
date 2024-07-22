@@ -341,14 +341,14 @@ const MyMeeting = () => {
                                     backgroundColor: "#c9c2a5",
                                   }}
                                   onClick={() => {
-                                    // if (confirm("수정하시겠습니까?")) {
-                                    //   navigate(
-                                    //     `/meeting/modify/${item?.partySeq}`,
-                                    //   );
-                                    // }
-                                    toast.warning(
-                                      "3차에 기능 구현 예정입니다.",
-                                    );
+                                    if (confirm("수정하시겠습니까?")) {
+                                      navigate(
+                                        `/meeting/modify/${item?.partySeq}`,
+                                      );
+                                    }
+                                    // toast.warning(
+                                    //   "3차에 기능 구현 예정입니다.",
+                                    // );
                                   }}
                                 >
                                   수정

@@ -256,11 +256,16 @@
 }
 .list-box-content {
   margin-bottom: 5px;
+  padding-top: 7px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 12px;
 }
 .list-box-title {
   display: flex;
   align-items: center;
   padding: 5px;
+  /* margin-bottom: 5px; */
   font-size: 14px;
 }
 .list-box-profileimg {

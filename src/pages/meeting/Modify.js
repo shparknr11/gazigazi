@@ -7,7 +7,9 @@ import {
   patchParty,
   postParty,
 } from "../../apis/meeting/meetingapi";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import GuideTitle from "../../components/common/GuideTitle";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -18,6 +20,23 @@ const CreateInnerStyle = styled.div`
   > h1 {
     font-size: 28px;
     margin-bottom: 40px;
+  }
+  .create-del-button-div {
+    display: flex;
+    justify-content: end;
+  }
+  .create-del-button {
+    padding: 10px 20px;
+    border: 1px solid #999;
+    color: #999;
+    background-color: #c9c2a5;
+    color: #f9f8f5;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    &:hover {
+      border: 1px solid #999;
+      color: #999;
+    }
   }
 `;
 
@@ -53,10 +72,13 @@ const CreateBtnWrapStyle = styled.div`
   gap: 25px;
   .create-button {
     padding: 10px 20px;
-    border: 1px solid;
+    border: 1px solid #999;
+    color: #999;
     border-radius: 25px;
+    margin-bottom: 40px;
     &:hover {
-      background-color: wheat;
+      background-color: #c9c2a5;
+      color: #f9f8f5;
     }
   }
 `;
@@ -74,6 +96,8 @@ const Modify = () => {
   const [partyIntro, setPartyIntro] = useState("");
   const [partyJoinForm, setPartyJoinForm] = useState("");
 
+  const [partyPrevLocation, setpartPrevLocation] = useState("");
+
   // local
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [localList, setLocalList] = useState([]);
@@ -82,7 +106,8 @@ const Modify = () => {
   // file
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
-  const userSeq = sessionStorage.getItem("userSeq");
+  const navigate = useNavigate();
+  const userSeq = parseInt(sessionStorage.getItem("userSeq"));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,7 +126,9 @@ const Modify = () => {
         setPartyIntro(result.resultData.partyIntro);
         setPartyJoinForm(result.resultData.partyJoinForm);
         setLocalData(result.resultData.setPartyPic);
-        // setLocalDetailData(partyDetails.localDetailData);
+        setpartPrevLocation(
+          result.resultData.partyLocation1 + result.resultData.partyLocation2,
+        );
         // setPreviewImg(partyDetails.previewImg);
         // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
       } catch (error) {
@@ -204,7 +231,7 @@ const Modify = () => {
     setPartyJoinForm(e.target.value);
   };
 
-  const handSubmitCreate = e => {
+  const handSubmitCreate = async e => {
     e.preventDefault();
     if (selectorOpen) {
       alert("상세 모임을 선택해주세요");
@@ -212,6 +239,7 @@ const Modify = () => {
     const formData = new FormData();
     const infoData = JSON.stringify({
       userSeq,
+      partySeq: parseInt(partySeq),
       partyName,
       partyGenre,
       partyLocation,
@@ -228,13 +256,28 @@ const Modify = () => {
     formData.append("p", data);
     formData.append("partyPic", partyPic);
 
-    patchParty(formData);
+    const result = await patchParty(formData);
+    if (result.code != 1) {
+      toast.warning(result.resultMsg);
+      return;
+    }
+
+    toast.success("수정이 완료되었습니다.");
+
+    navigate(-1);
   };
 
+  // 모임 지역 설정 value값
+  const inputValue =
+    localData && localDetailData
+      ? `${localData}${localDetailData}`
+      : partyPrevLocation;
   return (
     <CreateInnerStyle>
-      <h1>내 모임 수정</h1>
-
+      <GuideTitle guideTitle="모임 수정" subTitle="모임 수정/삭제" />
+      <div className="create-del-button-div">
+        <button className="create-del-button">삭제</button>
+      </div>
       <CreateFormDivStyle>
         <h1>모임 등록양식</h1>
 
@@ -276,7 +319,7 @@ const Modify = () => {
           <input
             type="text"
             id="partyplace"
-            value={`${localData}${localDetailData}`}
+            value={inputValue}
             onClick={() => {
               handleClickLocal();
             }}
@@ -395,7 +438,7 @@ const Modify = () => {
           <input
             type="file"
             id="partyfile"
-            accept="image/jpg, image/png, image/gif"
+            accept="image/jpeg, image/png, image/gif"
             onChange={e => {
               handleFileChange(e);
             }}
@@ -438,7 +481,14 @@ const Modify = () => {
         </div> */}
       </CreateFormDivStyle>
       <CreateBtnWrapStyle>
-        <div className="create-button">취소</div>
+        <div
+          className="create-button"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          취소
+        </div>
         <div
           className="create-button"
           onClick={e => {

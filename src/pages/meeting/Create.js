@@ -607,7 +607,7 @@ const Create = () => {
           <input
             type="file"
             id="partyfile"
-            accept="image/jpg, image/png, image/gif"
+            accept="image/jpeg, image/png, image/gif"
             onChange={e => {
               handleFileChange(e);
             }}
