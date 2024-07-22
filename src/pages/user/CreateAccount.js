@@ -580,6 +580,15 @@ const CreateAccount = () => {
                       {messages.userPhone}
                     </Message>
                     <label>
+                    관심 분야
+                    <input
+                type="text"
+                name="userIntro"
+                value={user.userIntro}
+                onChange={handleChange}
+              />
+                    </label>
+                    <label>
                       성별<span className="required-asterisk">*</span>
                       <div className="create-gender-group">
                         <div className="create-gender-item">
