@@ -3,13 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
-import cate from "../../images/cate2.png"; // 기본 이미지 URL
+import cate from "../../images/cate2.png"; 
 
 const InterestListStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 60vh;
 `;
 
 const InterestWrapStyle = styled.div`
@@ -38,8 +38,8 @@ const InterestInnerStyle = styled.div`
   }
   .interest-item {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #ccc;
@@ -76,7 +76,13 @@ const InterestInnerStyle = styled.div`
   .cate {
     width: 80px;
     height: 50px;
-    object-fit: cover; // 이미지를 잘라서 맞추는 속성
+    object-fit: cover;
+    margin-right: 10px;
+  }
+  .interest-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -100,17 +106,7 @@ const InterestList = () => {
         const response = await axios.get(`/api/party/wish/${userSeq}`);
         const { resultData, resultMsg, code } = response.data;
 
-        // 응답된 데이터와 partyPic의 타입 및 값을 콘솔에 로그로 출력
-        console.log("API Response Data:", resultData);
-        
-        if (resultData && Array.isArray(resultData)) {
-          resultData.forEach(item => {
-            console.log("partyPic value:", item.partyPic);
-            console.log("Type of partyPic value:", typeof item.partyPic);
-          });
-        }
-
-        if (code === 1) {  // API에서 반환된 상태 코드가 1일 때 성공으로 처리
+        if (code === 1) {
           setInterestItems(resultData);
         } else {
           setError(resultMsg);
@@ -184,12 +180,12 @@ const InterestList = () => {
                   onClick={() => handleItemClick(item.partySeq)}
                 >
                   <img
-                    src={item.partyPic ? `/path/to/images/${item.partyPic}` : cate}  // 이미지 URL 생성
+                    src={item.partyPic ? `/pic/party/${item.partySeq}/${item.partyPic}` : cate} 
                     alt="내가 찜한 모임의 썸네일"
                     className="cate"
                     onError={(e) => e.target.src = cate} // 로드 실패 시 기본 이미지로 대체
                   />
-                  <div>
+                  <div className="interest-item-content">
                     <div className="interest-item-title">{item.partyName}</div>
                     <div className="interest-item-date">
                       날짜: {item.partyDate}

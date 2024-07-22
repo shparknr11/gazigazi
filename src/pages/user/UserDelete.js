@@ -107,8 +107,6 @@ const UserDelete = () => {
         setPasswordError("비밀번호가 일치하지 않습니다.");
         return;
       }
-
-      // 회원 탈퇴 요청
       const response = await axios.patch(
         `/api/user/${userSeq}`,
         { password },

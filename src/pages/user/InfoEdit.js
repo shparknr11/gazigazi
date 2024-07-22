@@ -146,7 +146,6 @@ const InfoEdit = () => {
     token: sessionStorage.getItem("token") || "",
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
