@@ -14,6 +14,7 @@ import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetR
 import "./common.js";
 import MyMeetingCalendar from "./MyMeetingCalendar";
 import "./printledger.css";
+import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
@@ -164,13 +165,17 @@ const MyMeetingFuncLeader = () => {
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
+  const [noticeList, setNoticeList] = useState([]);
   // const [subTitle, setSubTitle] = useState("일정관리");
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  useEffect(() => {}, [isClicked]);
+
+  useEffect(() => {
+    console.log(isClicked);
+  }, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {}, [isPopup]);
   useEffect(() => {
@@ -234,10 +239,10 @@ const MyMeetingFuncLeader = () => {
       const resDataMember = await getMemberBudget(budgetObj);
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
-      setBudgetListLength(res.length);
+      setBudgetListLength(res?.length);
       let i = res?.length ? res?.length : 0;
       for (i; i <= 9; i++) {
-        res.push([]);
+        res?.push([]);
       }
 
       setBudgetList(res);
@@ -263,6 +268,15 @@ const MyMeetingFuncLeader = () => {
       handleBudgetClick(monthValue);
     }
   };
+
+  const handleNoticeList = async (pages = 1) => {
+    try {
+      const res = await getNoticeAll(params?.meetingId, pages);
+      setNoticeList(res.list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handlePrint = () => {
     window.print();
   };
@@ -284,7 +298,7 @@ const MyMeetingFuncLeader = () => {
         <div className="item-wrap">
           <div
             id="1"
-            className="item item-border cut-text"
+            className={`item item-border cut-text ${isClicked === 1 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(1);
               // setSubTitle("일정관리");
@@ -294,22 +308,22 @@ const MyMeetingFuncLeader = () => {
           </div>
           <div
             id="2"
-            style={{ display: "none" }}
-            className="item item-border cut-text"
+            className={`item item-border cut-text ${isClicked === 2 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(2);
               // setSubTitle("모임게시판");
+              handleNoticeList();
             }}
           >
             모임 게시판
           </div>
           <div
             id="3"
-            className="item item-border cut-text"
+            className={`item item-border cut-text ${isClicked === 3 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(3);
               // setSubTitle("가계부");
-              handleBudgetClick();
+              handleBudgetClick(params?.meetingId);
             }}
             ref={itemRef}
           >
@@ -325,16 +339,19 @@ const MyMeetingFuncLeader = () => {
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
-              <div style={{ display: "none" }}>
+              <div>
                 <div>
                   <TitleDivStyle>모임 게시판</TitleDivStyle>
                   <div style={{ textAlign: "right", paddingRight: "10px" }}>
                     <button
                       className="resister-btn"
                       onClick={() => {
-                        navigate(
-                          "/mymeeting/mymeetingnotice/:mymeetingnoticeid",
-                        );
+                        navigate(`/mymeeting/mymeetingnoticeresister`, {
+                          state: {
+                            boardPartySeq: params?.meetingId,
+                            boardMemberSeq: sessionStorage.getItem("userSeq"),
+                          },
+                        });
                       }}
                     >
                       등록
@@ -344,19 +361,37 @@ const MyMeetingFuncLeader = () => {
                 <div>
                   <ul className="main-notice-ul">
                     <li className="main-notice-li">
-                      <div>글쓴이</div>
-                      <div>제목</div>
-                      <div>내용</div>
-                      <div>날짜</div>
+                      <div style={{ width: "20%" }}>순번</div>
+                      <div style={{ width: "20%" }}>글쓴이</div>
+                      <div style={{ width: "20%" }}>제목</div>
+                      <div style={{ width: "20%" }}>내용</div>
+                      <div style={{ width: "20%" }}>날짜</div>
                     </li>
-                    <Link to={"/mymeeting/mymeetingnotice/${pk}"}>
-                      <li className="main-notice-li">
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
+                    {noticeList?.map((item, index) => (
+                      <li
+                        key={item.boardSeq}
+                        className="main-notice-li"
+                        onClick={() => {
+                          navigate(
+                            `/mymeeting/mymeetingnotice/${item.boardSeq}`,
+                            {
+                              state: {
+                                boardMemberSeq: item.boardMemberSeq,
+                                boardPartySeq: item.boardPartySeq,
+                              },
+                            },
+                          );
+                        }}
+                      >
+                        <span style={{ width: "20%" }}>{index + 1}</span>
+                        <span style={{ width: "20%" }}>글쓴이</span>
+                        <span style={{ width: "20%" }}>{item.boardTitle}</span>
+                        <span style={{ width: "20%" }}>
+                          {item.boardContents}
+                        </span>
+                        <span style={{ width: "20%" }}>{item.inputDt}</span>
                       </li>
-                    </Link>
+                    ))}
                   </ul>
                 </div>
               </div>

@@ -49,6 +49,7 @@ import FindIdPw from "./pages/user/FindIdPw";
 import UserReview from "./pages/user/UserReview";
 import NotFoundPage from "./pages/NotFoundPage";
 import EventPage from "./pages/meeting/EventPage";
+import MyMeetingNoticeResister from "./pages/mymeeting/MyMeetingNoticeResister";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -115,6 +116,10 @@ const App = () => {
           <Route
             path="/mymeeting/mymeetingnotice/:meetingnoticeId"
             element={<MyMeetingNotice />}
+          ></Route>
+          <Route
+            path="/mymeeting/mymeetingnoticeresister"
+            element={<MyMeetingNoticeResister />}
           ></Route>
           <Route
             path="/mymeeting/mymeetingmemberlist/:partySeq"

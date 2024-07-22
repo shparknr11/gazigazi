@@ -13,6 +13,7 @@ import {
 import Loading from "../../components/common/Loading";
 import MyMeetingCalendar from "./MyMeetingCalendar";
 import "./printledger.css";
+import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 const MyMeetingFuncUserStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -152,6 +153,7 @@ const MyMeetingFuncUser = () => {
   const [depositSum, setDepositSum] = useState(0);
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [noticeList, setNoticeList] = useState([]);
   const params = useParams();
   const funcRef = useRef();
   const itemRef = useRef();
@@ -255,6 +257,15 @@ const MyMeetingFuncUser = () => {
       toast.success("회계내역이 삭제되었습니다.");
     }
   };
+
+  const handleNoticeList = async (pages = 1) => {
+    try {
+      const res = await getNoticeAll(params?.meetingId, pages);
+      setNoticeList(res.list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -274,11 +285,11 @@ const MyMeetingFuncUser = () => {
             일정 관리
           </div>
           <div
-            style={{ display: "none" }}
             id="2"
             className="item item-border-right"
             onClick={() => {
               setIsClicked(2);
+              handleNoticeList(params?.meetingId);
             }}
           >
             모임 게시판
@@ -288,7 +299,7 @@ const MyMeetingFuncUser = () => {
             className="item item-border-right"
             onClick={() => {
               setIsClicked(3);
-              handleBudgetClick();
+              handleBudgetClick(params?.meetingId);
             }}
             ref={itemRef}
           >
