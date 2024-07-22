@@ -10,9 +10,10 @@ export const MemberListInnerStyle = styled.div`
   max-width: 1280px;
   display: flex;
   margin: 0 auto;
-  height: auto;
+  /* height: auto; */
   margin-top: 40px;
   margin-bottom: 150px;
+  height: 800px;
 `;
 
 export const MemberListMenuStyle = styled.div`
@@ -69,7 +70,7 @@ const MemberListMainStyle = styled.div`
     height: 100px;
     width: 100%;
     display: flex;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     padding: 10px;
     position: relative;
     display: flex;
@@ -77,10 +78,12 @@ const MemberListMainStyle = styled.div`
   }
 
   .membelist-member-img {
-    background-color: ${prColor.pr01};
-    width: 60px;
-    height: 60px;
-    border-radius: 100px;
+    img {
+      display: block;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
   }
 
   .member-checkbox {
@@ -105,18 +108,12 @@ export const MemberInfo = styled.div`
 
 export const PermissionBtn = styled.div`
   position: absolute;
-  right: 20px;
-  top: 50%;
+  right: 10px;
+  top: 25px;
   transform: translate(0, -50%);
   display: flex;
   flex-direction: column;
   gap: 5px;
-
-  button {
-    width: 53px;
-    height: 27px;
-    font-size: 0.65rem;
-  }
 `;
 
 const MyMeetingMemberList = () => {
@@ -144,6 +141,28 @@ const MyMeetingMemberList = () => {
     getData();
   }, []);
 
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
+  const getRoleText = roleCode => {
+    switch (roleCode) {
+      case "1":
+        return "모임장";
+      case "2":
+        return "모임원";
+      default:
+        return "";
+    }
+  };
   return (
     <MemberListInnerStyle>
       <MemberListMenuStyle>
@@ -172,11 +191,19 @@ const MyMeetingMemberList = () => {
         <div className="memberlist-member-div">
           {memberList.map((item, index) => (
             <div key={index} className="membelist-member">
-              <div className="membelist-member-img" />
+              <div className="membelist-member-img">
+                <img
+                  src={`/pic/user/${item.memberUserSeq}/${item.userPic}`}
+                  alt="프로필"
+                />
+              </div>
               <MemberInfo>
-                <div className="member-position">직급</div>
-                <div>박성호(남)</div>
-                <div>24세</div>
+                <div className="member-position">
+                  {getRoleText(item.memberRole)}
+                </div>
+                <div>
+                  {item.userName}({getGenderText(item.userGender)})
+                </div>
               </MemberInfo>
             </div>
           ))}

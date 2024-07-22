@@ -102,7 +102,7 @@ const InterestList = () => {
 
         // 응답된 데이터와 partyPic의 타입 및 값을 콘솔에 로그로 출력
         console.log("API Response Data:", resultData);
-        
+
         if (resultData && Array.isArray(resultData)) {
           resultData.forEach(item => {
             console.log("partyPic value:", item.partyPic);
@@ -110,7 +110,8 @@ const InterestList = () => {
           });
         }
 
-        if (code === 1) {  // API에서 반환된 상태 코드가 1일 때 성공으로 처리
+        if (code === 1) {
+          // API에서 반환된 상태 코드가 1일 때 성공으로 처리
           setInterestItems(resultData);
         } else {
           setError(resultMsg);
@@ -125,9 +126,9 @@ const InterestList = () => {
     fetchInterestItem();
   }, []);
 
-  const handleDelete = async (partySeq) => {
+  const handleDelete = async partySeq => {
     const userSeq = sessionStorage.getItem("userSeq");
-    localStorage.removeItem(partySeq);
+    localStorage.removeItem(parseInt(partySeq) + parseInt(userSeq));
     if (!userSeq) {
       alert("사용자 정보를 찾을 수 없습니다.");
       return;
@@ -141,8 +142,8 @@ const InterestList = () => {
 
         if (response.data.code === 1) {
           if (response.data.resultData === 0) {
-            setInterestItems((prevItems) =>
-              prevItems.filter((item) => item.partySeq !== partySeq)
+            setInterestItems(prevItems =>
+              prevItems.filter(item => item.partySeq !== partySeq),
             );
             alert("찜하기를 취소하였습니다.");
           } else {
@@ -150,18 +151,18 @@ const InterestList = () => {
           }
         } else {
           alert(
-            `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`
+            `삭제 실패: ${response.data.resultMsg || "문제가 발생했습니다. 다시 시도해주세요."}`,
           );
         }
       } catch (error) {
         alert(
-          "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요."
+          "삭제에 실패했습니다. 네트워크 문제나 서버 오류일 수 있습니다. 다시 시도해주세요.",
         );
       }
     }
   };
 
-  const handleItemClick = (partySeq) => {
+  const handleItemClick = partySeq => {
     navigate(`/meeting/${partySeq}`);
   };
 
@@ -177,17 +178,19 @@ const InterestList = () => {
             {interestItems.length === 0 ? (
               <p>죄송합니다. 찜한 모임이 없습니다.</p>
             ) : (
-              interestItems.map((item) => (
+              interestItems.map(item => (
                 <div
                   className="interest-item"
                   key={item.partySeq}
                   onClick={() => handleItemClick(item.partySeq)}
                 >
                   <img
-                    src={item.partyPic ? `/path/to/images/${item.partyPic}` : cate}  // 이미지 URL 생성
+                    src={
+                      item.partyPic ? `/path/to/images/${item.partyPic}` : cate
+                    } // 이미지 URL 생성
                     alt="내가 찜한 모임의 썸네일"
                     className="cate"
-                    onError={(e) => e.target.src = cate} // 로드 실패 시 기본 이미지로 대체
+                    onError={e => (e.target.src = cate)} // 로드 실패 시 기본 이미지로 대체
                   />
                   <div>
                     <div className="interest-item-title">{item.partyName}</div>
@@ -203,7 +206,7 @@ const InterestList = () => {
                   </div>
                   <button
                     className="interest-item-delete"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleDelete(item.partySeq);
                     }}

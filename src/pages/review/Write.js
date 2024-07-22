@@ -3,16 +3,22 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { MainButton } from "../../components/button/Button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { prColor } from "../../css/color";
 const WriteInnerStyle = styled.div`
-  position: fixed;
+  /* position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
   padding: 20px;
   border: 1px solid #000;
-
+  width: 100%;
+  max-width: 350px;
+  /* maxwidth: */
+  margin: 0 auto;
+  height: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
   .review-write-div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
@@ -63,13 +69,14 @@ const ReviewButtonStyle = styled.div`
   justify-content: end;
 `;
 const Write = () => {
+  const navigate = useNavigate();
   const [reviewRating, setReviewRating] = useState(null);
   const [reviewContents, setReviewContents] = useState("");
   const [reviewPic, setReviewPic] = useState([]);
   const [previewPic, setPreviewPic] = useState([]);
   const fileBt = useRef(null);
   const location = useLocation();
-  // console.log(location.state);
+  console.log(location.state);
   const handleRwFileChange = e => {
     const filesArr = Array.from(e.target.files);
 
@@ -109,6 +116,10 @@ const Write = () => {
   const handleSubmitWrite = async e => {
     // 기본 기능 막기
     e.preventDefault();
+    if (!setReviewContents) {
+      alert("후기를 작성해주세요");
+      return;
+    }
     // step 1. 전송 데이터 포맷 만들기
     const formData = new FormData();
 
@@ -142,6 +153,8 @@ const Write = () => {
     } catch (error) {
       console.log(error);
     }
+
+    navigate(`/review`);
   };
 
   // 리뷰 등록하기
@@ -238,7 +251,12 @@ const Write = () => {
           }}
           label="작성"
         ></MainButton>
-        <MainButton label="취소"></MainButton>
+        <MainButton
+          label="취소"
+          onClick={() => {
+            navigate(-1);
+          }}
+        ></MainButton>
       </ReviewButtonStyle>
     </WriteInnerStyle>
   );

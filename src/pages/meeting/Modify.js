@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   getLocal,
   getPartyOne,
+  patchParty,
   postParty,
 } from "../../apis/meeting/meetingapi";
 import { useParams } from "react-router-dom";
@@ -90,15 +91,15 @@ const Modify = () => {
 
         // // 가져온 데이터를 상태 변수에 설정
         setPartyName(result.resultData.partyName);
-        setPartyGenre(result.resultData.partyGenre);
-        // setPartyLocation(partyDetails.partyLocation);
-        setPartyMinAge(result.resultData.partyMinAge);
-        setPartyMaxAge(result.resultData.partyMaxAge);
-        // setPartyMaximum(partyDetails.partyMaximum);
-        // setPartyGender(partyDetails.partyGender);
-        // setPartyIntro(partyDetails.partyIntro);
-        // setPartyJoinForm(partyDetails.partyJoinForm);
-        // setLocalData(partyDetails.localData);
+        setPartyGenre(parseInt(result.resultData.partyGenre));
+        setPartyLocation(parseInt(result.resultData.partyLocation));
+        setPartyMinAge(parseInt(result.resultData.partyMinAge));
+        setPartyMaxAge(parseInt(result.resultData.partyMaxAge));
+        setPartyMaximum(parseInt(result.resultData.partyMaximum));
+        setPartyGender(parseInt(result.resultData.partyGender));
+        setPartyIntro(result.resultData.partyIntro);
+        setPartyJoinForm(result.resultData.partyJoinForm);
+        setLocalData(result.resultData.setPartyPic);
         // setLocalDetailData(partyDetails.localDetailData);
         // setPreviewImg(partyDetails.previewImg);
         // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
@@ -226,7 +227,7 @@ const Modify = () => {
     formData.append("p", data);
     formData.append("partyPic", partyPic);
 
-    postParty(formData);
+    patchParty(formData);
   };
 
   return (
@@ -301,6 +302,7 @@ const Modify = () => {
             id="partygenderm"
             name="gender-select"
             value="1"
+            checked={partyGender === 1}
             onChange={e => {
               handleChangeGender(e);
             }}
@@ -312,6 +314,7 @@ const Modify = () => {
             id="partygenderw"
             name="gender-select"
             value="2"
+            checked={partyGender === 2}
             onChange={e => {
               handleChangeGender(e);
             }}
@@ -323,6 +326,7 @@ const Modify = () => {
             id="partygendero"
             name="gender-select"
             value="3"
+            checked={partyGender === 3}
             onChange={e => {
               handleChangeGender(e);
             }}
@@ -377,6 +381,7 @@ const Modify = () => {
             autoComplete="off"
             type="number"
             id="partyMaximum"
+            value={partyMaximum}
             onChange={e => {
               handleChangeMaximum(e);
             }}
