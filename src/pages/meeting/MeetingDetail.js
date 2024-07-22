@@ -108,9 +108,19 @@ const MeetItemCard = styled.div`
       margin-right: 5px;
     }
   }
-  .meet-condition,
+  .meet-condition {
+    padding: 15px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    span {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+  }
   .meet-apply-form {
-    padding: 25px 20px;
+    padding: 15px 20px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -163,6 +173,9 @@ const MeetItemInfo = styled.div`
   p {
     margin-top: 30px;
     line-height: 1.7rem;
+  }
+  .meet-item-partyinfo {
+    word-break: keep-all;
   }
 `;
 
@@ -367,7 +380,7 @@ const MeetingDetail = () => {
                     ? "연령무관"
                     : `${getYearLastTwoDigits(detailList.partyMinAge)} ~ ${getYearLastTwoDigits(detailList.partyMaxAge)}년생`}
                 </p>
-                <p style={{ padding: "10px" }}>
+                <p style={{ padding: "10px", textAlign: "end" }}>
                   & {getGenderText(detailList.partyGender)}
                 </p>
               </div>
@@ -419,7 +432,7 @@ const MeetingDetail = () => {
                             ? "🍷 분위기 있게 한잔"
                             : "💬 기타 취미, 새로운 친구들과 함께 즐겨요!"}
             </h2>
-            <p>{detailList.partyIntro}</p>
+            <p className="meet-item-partyinfo">{detailList.partyIntro}</p>
           </div>
           <div className="meet-item-imgs"></div>
         </MeetItemInfo>
