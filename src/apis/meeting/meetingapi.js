@@ -46,6 +46,39 @@ export const postParty = async _data => {
     console.log(error);
   }
 };
+// 모임 수정하기
+export const patchParty = async _data => {
+  try {
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const response = await axios.patch(`/api/party`, _data, header);
+    // console.log(response);
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 모임 삭제하기
+export const DeleteParty = async _data => {
+  try {
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const response = await axios.delete(`/api/party`, _data, header);
+    // console.log(response);
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // 지역 불러오기 api
 export const getLocal = async _data => {

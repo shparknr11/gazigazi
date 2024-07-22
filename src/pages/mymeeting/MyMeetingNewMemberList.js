@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getApplication, patchNewMember } from "../../apis/meeting/joinapi";
-import { ActionButton, MainButton } from "../../components/button/Button";
+import { MainButton } from "../../components/button/Button";
 import {
   MemberInfo,
   MemberListInnerStyle,
@@ -10,7 +10,6 @@ import {
   MemberListTitle,
   PermissionBtn,
 } from "./MyMeetingMemberList";
-import { prColor } from "../../css/color";
 
 const MemberListMainStyle = styled.div`
   width: 80%;
@@ -26,7 +25,7 @@ const MemberListMainStyle = styled.div`
     height: 100px;
     width: 100%;
     display: flex;
-    border: 1px dashed rgba(0, 0, 0, 0.2);
+    border: 2px dashed rgba(0, 0, 0, 0.2);
     padding: 10px;
     position: relative;
     display: flex;
@@ -34,10 +33,12 @@ const MemberListMainStyle = styled.div`
   }
 
   .membelist-member-img {
-    background-color: ${prColor.pr01};
-    width: 60px;
-    height: 60px;
-    border-radius: 100px;
+    img {
+      display: block;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
   }
 
   .member-checkbox {
@@ -60,11 +61,15 @@ const MyMeetingNewMemberList = () => {
         alert(result.resultMsg);
         return;
       }
-      // console.log(result.resultData);
-      setApplicationList(result.resultData);
+      console.log(result.resultData);
+      popularHomeList(result.resultData);
     } catch (error) {
       console.log(error);
     }
+  };
+  const popularHomeList = _resultData => {
+    const filteredList = _resultData.filter(item => item.joinGb !== 1);
+    setApplicationList(filteredList);
   };
 
   useEffect(() => {
@@ -79,6 +84,31 @@ const MyMeetingNewMemberList = () => {
       joinGb: 1,
     };
     await patchNewMember(partySeq, data);
+
+    await getData();
+  };
+
+  const getGenderText = genderCode => {
+    switch (genderCode) {
+      case 1:
+        return "남성";
+      case 2:
+        return "여성";
+      case 3:
+        return "성별무관";
+      default:
+        return "";
+    }
+  };
+  const getRoleText = roleCode => {
+    switch (roleCode) {
+      case "1":
+        return "모임장";
+      case "2":
+        return "모임원";
+      default:
+        return "";
+    }
   };
   return (
     <MemberListInnerStyle>
@@ -102,25 +132,36 @@ const MyMeetingNewMemberList = () => {
           <h1>신청 관리</h1>
         </MemberListTitle>
         <div className="memberlist-member-div">
-          {applicationList.map((item, index) => (
-            <div key={index} className="membelist-member">
-              <div className="membelist-member-img" />
-              <MemberInfo>
-                <div className="member-position"></div>
-                <div>{item.joinUserSeq}</div>
-                <div>{item.joinMsg}</div>
-              </MemberInfo>
-              <PermissionBtn>
-                <MainButton
-                  label="승인"
-                  onClick={() => {
-                    handleClickConfirm(item.joinUserSeq);
-                  }}
-                />
-                <ActionButton label="반려" />
-              </PermissionBtn>
-            </div>
-          ))}
+          {applicationList.length ? (
+            <>
+              {applicationList.map((item, index) => (
+                <div key={index} className="membelist-member">
+                  <div className="membelist-member-img">
+                    <img
+                      src={`/pic/user/${item.joinUserSeq}/${item.userPic}`}
+                      alt="프로필"
+                    />
+                  </div>
+                  <MemberInfo>
+                    <div className="member-position"></div>
+                    <div>이름 : {item.userName}</div>
+                    <div>내용 : {item.joinMsg}</div>
+                  </MemberInfo>
+                  <PermissionBtn>
+                    <MainButton
+                      label="승인"
+                      onClick={() => {
+                        handleClickConfirm(item.joinUserSeq);
+                      }}
+                    />
+                  </PermissionBtn>
+                </div>
+              ))}
+            </>
+          ) : (
+            <h2>신청한 유저가 없습니다.</h2>
+          )}
+
           {/* 
           <div className="membelist-member">
             <div className="membelist-member-img" />

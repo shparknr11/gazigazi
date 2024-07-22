@@ -15,6 +15,22 @@ const CreateInnerStyle = styled.div`
     font-size: 28px;
     margin-bottom: 40px;
   }
+
+  label {
+    margin-bottom: 20px;
+  }
+
+  select {
+    height: 35px;
+    width: 50%;
+    font-size: 0.8rem;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 10px;
+  }
 `;
 const CreateCheckStyle = styled.div`
   width: 100%;
@@ -31,13 +47,17 @@ const CreateCheckStyle = styled.div`
   h1 {
     margin-bottom: 10px;
     font-size: 18px;
+    font-weight: 600;
   }
   .create-check-div {
     /* width: calc(100% - 40px); */
     width: 100%;
-
     margin: 0 auto;
     margin-bottom: 10px;
+
+    p {
+      line-height: 1.5rem;
+    }
   }
   .create-check-btn-div {
     /* display: flex;
@@ -68,6 +88,11 @@ const CreateFormDivStyle = styled.div`
   > h1 {
     font-size: 18px;
     margin-bottom: 10px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    border-bottom: 2px solid black;
+    width: fit-content;
+    padding-bottom: 5px;
   }
   .create-option-group,
   .create-input-group,
@@ -77,9 +102,66 @@ const CreateFormDivStyle = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 40px;
+
+    textarea {
+      width: 50%;
+      height: 100px;
+    }
   }
   .create-radio-group {
     margin-bottom: 40px;
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    input {
+      margin-right: 5px;
+    }
+
+    label {
+      margin-right: 10px;
+    }
+  }
+
+  .create-form-group {
+    > input {
+      height: 35px;
+      width: 50%;
+    }
+  }
+
+  .create-input-group {
+    input {
+      height: 35px;
+      width: 50%;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .party-Maximum {
+      width: 10%;
+    }
+
+    .party-Maximum-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .minage-label {
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .maxage-label {
+      font-size: 0.85rem;
+      margin: 10px 0 5px 0;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -144,7 +226,7 @@ const Create = () => {
   // }, [localList, localData, localDetailData]);
 
   // 년도
-  const years = Array.from({ length: 2009 - 1924 + 1 }, (v, i) => 1924 + i);
+  const years = Array.from({ length: 2009 - 1970 + 1 }, (v, i) => 1970 + i);
 
   // 이용약관 동의
   const handleClickCheck = () => {
@@ -161,7 +243,7 @@ const Create = () => {
     // console.log(e.target.value);
     const genre = parseInt(e.target.value);
     if (!genre) {
-      alert("장르를 선택해주세요");
+      alert("장르를 선택해 주세요");
     }
     setPartyGenre(genre);
   };
@@ -189,9 +271,8 @@ const Create = () => {
   const handleChangeMinAge = e => {
     // console.log("min", e.target.value);
     const minAge = parseInt(e.target.value);
-    setPartyMinAge(minAge);
     if (minAge > partyMaxAge) {
-      alert("최대년도보다 낮게 설정해주세요.");
+      alert("최대년도보다 낮게 설정해 주세요.");
     }
   };
   const handleChangeMaxAge = e => {
@@ -199,7 +280,7 @@ const Create = () => {
     const maxAge = parseInt(e.target.value);
     setPartyMaxAge(maxAge);
     if (partyMinAge > maxAge) {
-      alert("최소년도보다 높게 설정해주세요.");
+      alert("최소년도보다 높게 설정해 주세요.");
     }
   };
 
@@ -226,7 +307,7 @@ const Create = () => {
     // 숫자가 아닌 경우
     if (!/^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$/.test(maximumCondition)) {
       e.target.value = "";
-      alert("최대인원은 숫자만 입력해주세요.");
+      alert("최대인원은 숫자만 입력해 주세요.");
       return;
     }
 
@@ -246,35 +327,39 @@ const Create = () => {
   const handSubmitCreate = async e => {
     e.preventDefault();
     if (!isChecked) {
-      alert("숙지사항을 확인해주세요(필수)");
+      alert("숙지사항을 확인해 주세요(필수)");
       return;
     }
     if (!partyGenre) {
-      alert("카테고리를 선택해주세요(필수)");
+      alert("카테고리를 선택해 주세요(필수)");
       return;
     }
     if (!partyName) {
-      alert("모임 제목을 작성해주세요(필수)");
+      alert("모임 제목을 작성해 주세요(필수)");
       return;
     }
     if (!partyLocation) {
-      alert("지역을 선택해주세요(필수)");
+      alert("지역을 선택해 주세요(필수)");
       return;
     }
     if (selectorOpen) {
-      alert("지역을 선택후 확인해주세요(필수)");
+      alert("지역을 선택후 확인해 주세요(필수)");
       return;
     }
     if (!partyGender) {
-      alert("성별조건을 선택해주세요(필수)");
+      alert("성별조건을 선택해 주세요(필수)");
+      return;
+    }
+    if (partyMinAge > partyMaxAge) {
+      alert("모집 연령조건 다시확인해 주세요.");
       return;
     }
     if (!partyMaximum) {
-      alert("허용인원을 작성해주세요*숫자*(필수)");
+      alert("허용인원을 작성해 *숫자*(필수)");
       return;
     }
     if (partyMaximum < 2) {
-      alert("허용인원은 2명이상으로 작성해야합니다.*숫자*(필수)");
+      alert("허용인원은 2명이상으로 작성하셔야 합니다.*숫자*(필수)");
       return;
     }
     if (!partyPic) {
@@ -373,7 +458,7 @@ const Create = () => {
               handleChangeGenre(e);
             }}
           >
-            <option value="">---카테고리를 선택해주세요---</option>
+            <option value="">---카테고리를 선택해 주세요---</option>
             <option value="1">스포츠</option>
             <option value="2">게임</option>
             <option value="3">맛집</option>
@@ -385,7 +470,7 @@ const Create = () => {
           </select>
         </div>
         <div className="create-input-group">
-          <label htmlFor="partyname">모임의 제목을 지어주세요*</label>
+          <label htmlFor="partyname">모임의 제목을 지어 주세요*</label>
           <input
             autoComplete="off"
             type="text"
@@ -398,7 +483,7 @@ const Create = () => {
         </div>
 
         <div className="create-form-group">
-          <label htmlFor="partyplace">모임지역을 선택해 주세요*</label>
+          <label htmlFor="partyplace">모임 지역을 선택해 주세요*</label>
           <input
             type="text"
             id="partyplace"
@@ -422,7 +507,7 @@ const Create = () => {
         </div>
 
         <div className="create-radio-group">
-          <h1>모집 성별조건을 선택해주세요*</h1>
+          <p>모집 성별조건을 선택해 주세요*</p>
           <input
             type="radio"
             id="partygenderm"
@@ -459,9 +544,11 @@ const Create = () => {
 
         <div className="create-input-group">
           <div>
-            <p>모집 연령조건을 선택해주세요*</p>
+            <p>모집 연령조건을 선택해 주세요*</p>
           </div>
-          <label htmlFor="partyminage">최소</label>
+          <label className="minage-label" htmlFor="partyminage">
+            최소
+          </label>
           <select
             id="partyminage"
             onChange={e => {
@@ -470,7 +557,7 @@ const Create = () => {
             }}
           >
             <option value="1901">
-              --- 최소 연령을 선택해주세요 (연령무관)---
+              --- 최소 연령을 선택해 주세요 (연령무관)---
             </option>
             {years.map((item, index) => (
               <option key={index} value={item}>
@@ -478,7 +565,9 @@ const Create = () => {
               </option>
             ))}
           </select>
-          <label htmlFor="partymaxage">최대</label>
+          <label className="maxage-label" htmlFor="partymaxage">
+            최대
+          </label>
           <select
             id="partymaxage"
             onChange={e => {
@@ -486,7 +575,7 @@ const Create = () => {
             }}
           >
             <option value="2155">
-              --- 최대 연령을 선택해주세요 (연령무관)---
+              --- 최대 연령을 선택해 주세요 (연령무관)---
             </option>
             {years.map((item, index) => (
               <option key={index} value={item}>
@@ -498,15 +587,18 @@ const Create = () => {
 
         <div className="create-input-group">
           <label htmlFor="partyMaximum">모임의 허용인원을 설정해 주세요*</label>
-          <input
-            autoComplete="off"
-            type="number"
-            id="partyMaximum"
-            onChange={e => {
-              handleChangeMaximum(e);
-            }}
-          />
-          명
+          <div className="party-Maximum-group">
+            <input
+              className="party-Maximum"
+              autoComplete="off"
+              type="number"
+              id="partyMaximum"
+              onChange={e => {
+                handleChangeMaximum(e);
+              }}
+            />
+            <span>명</span>
+          </div>
         </div>
 
         <div className="create-file-group">

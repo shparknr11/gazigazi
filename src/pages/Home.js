@@ -152,16 +152,8 @@ const Home = () => {
     setPopularList(filteredList);
   };
 
-  // const newHomeList = _resultData => {
-  //   const filteredList = _resultData.filter(
-  //     // location 부분 수정*****************************************
-  //     item => item.partyAuthGb === "1" && item.inputDt,
-  //   );
-  //   setNewList(filteredList);
-  // };
-
   const newHomeList = _resultData => {
-    const currentDate = new Date(); // 현재 날짜와 시간을 가져옵니다
+    // const currentDate = new Date(); // 현재 날짜와 시간을 가져옵니다
 
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // 한 달 전 날짜를 계산합니다
@@ -184,6 +176,7 @@ const Home = () => {
       setNewList(filteredList);
     }
   };
+
   // api함수
   const getData = async () => {
     try {
@@ -362,7 +355,7 @@ const Home = () => {
           <div className="mm-meeting-picks">
             <div className="mm-meeting-title">
               <h1>신규, 방금전 개설된 모임🔔</h1>
-              <div>더보기</div>
+              {/* <div className="mm-meeting-picks-more">더보기</div> */}
             </div>
             <div className="mm-meeting-list">
               {randomNewParties.map((item, index) => (
@@ -373,26 +366,20 @@ const Home = () => {
                     handleClickDetail(item.partySeq);
                   }}
                 >
-                  <div
-                    className="list-box-img"
-                    style={{
-                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
+                  <div className="list-box-img">
+                    <img
+                      src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                      alt="모임이미지"
+                    />
+                  </div>
                   <div className="list-box-content">
                     <div className="list-box-title">
-                      <div
-                        className="list-box-profileimg"
-                        style={{
-                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center",
-                          backgroundSize: "contain",
-                        }}
-                      ></div>
+                      <div className="list-box-profileimg">
+                        <img
+                          src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                          alt="프로필이미지"
+                        />
+                      </div>
                       <span style={{ fontWeight: "bold" }}>
                         {item.userName}
                       </span>
@@ -426,7 +413,7 @@ const Home = () => {
           <div className="mm-meeting-around">
             <div className="mm-meeting-title">
               <h1>내 주변에 있는 모임🟢🟠🔴</h1>
-              <div>더보기</div>
+              {/* <div className="mm-meeting-picks-more">더보기</div> */}
             </div>
             <div className="mm-meeting-list">
               {randomParties.map((item, index) => (
@@ -437,26 +424,20 @@ const Home = () => {
                     handleClickDetail(item.partySeq);
                   }}
                 >
-                  <div
-                    className="list-box-img"
-                    style={{
-                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
+                  <div className="list-box-img">
+                    <img
+                      src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                      alt="모임이미지"
+                    />
+                  </div>
                   <div className="list-box-content">
                     <div className="list-box-title">
-                      <div
-                        className="list-box-profileimg"
-                        style={{
-                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center",
-                          backgroundSize: "contain",
-                        }}
-                      ></div>
+                      <div className="list-box-profileimg">
+                        <img
+                          src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                          alt="프로필이미지"
+                        />
+                      </div>
                       <span style={{ fontWeight: "bold" }}>
                         {item.userName}
                       </span>
@@ -491,7 +472,7 @@ const Home = () => {
           <div className="mm-meeting-deadline">
             <div className="mm-meeting-title">
               <h1>실시간 인기있는, 곧 마감되는 모임🕛</h1>
-              <div>더보기</div>
+              {/* <div className="mm-meeting-picks-more">더보기</div> */}
             </div>
             <div className="mm-meeting-list">
               {randomPupularParties.map((item, index) => (
@@ -502,26 +483,20 @@ const Home = () => {
                     handleClickDetail(item.partySeq);
                   }}
                 >
-                  <div
-                    className="list-box-img"
-                    style={{
-                      backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
+                  <div className="list-box-img">
+                    <img
+                      src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                      alt="모임이미지"
+                    />
+                  </div>
                   <div className="list-box-content">
                     <div className="list-box-title">
-                      <div
-                        className="list-box-profileimg"
-                        style={{
-                          backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center",
-                          backgroundSize: "contain",
-                        }}
-                      ></div>
+                      <div className="list-box-profileimg">
+                        <img
+                          src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                          alt="프로필이미지"
+                        />
+                      </div>
                       <span style={{ fontWeight: "bold" }}>
                         {item.userName}
                       </span>

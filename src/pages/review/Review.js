@@ -71,6 +71,7 @@ const ReviewItemStyle = styled.div`
         display: flex;
         align-items: center;
         margin-left: 5px;
+        font-size: 16px;
       }
     }
     * {
@@ -87,10 +88,34 @@ const ReviewItemStyle = styled.div`
     width: 100%;
     max-width: 700px;
     .review-mid-text {
-      margin-bottom: 20px;
     }
   }
+  /* .review-img {
+  }
+  .review-img-pic {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    height: 73.33vw;
+    max-height: 330px;
+
+    margin-bottom: 10px;
+  } */
   .review-img {
+    display: flex;
+    gap: 10px;
+    height: 210px;
+    min-height: 210px;
+    margin-right: 4px;
+    border-radius: 12px 0px 0px 12px;
+  }
+
+  .review-img-pic {
+    margin: 0px;
+    min-width: 0px;
+    max-width: 100%;
+    height: 100%;
+    width: auto;
   }
   /* .review-bottom-div {
     display: flex;
@@ -99,6 +124,9 @@ const ReviewItemStyle = styled.div`
   } */
   .review-partyname {
     display: flex;
+    h3 {
+      margin-right: 5px;
+    }
     .review-partyname-click {
       border-bottom: 1px solid transparent;
     }
@@ -112,6 +140,7 @@ const ReviewItemStyle = styled.div`
     justify-content: space-between;
   }
   .rb-button {
+    padding: 5px 10px;
     background-color: ${prColor.p100};
     border: 1px solid ${prColor.p100};
     cursor: pointer;
@@ -219,9 +248,9 @@ const Review = () => {
   const makeReviewPic = (_reviewSeq, _pics) => {
     return _pics.map((item, index) => (
       <img
+        className="review-img-pic"
         src={`/pic/review/${_reviewSeq}/${item}`}
         key={index}
-        style={{ width: 80 }}
       />
     ));
   };
@@ -329,7 +358,7 @@ const Review = () => {
               <div className="review-bottom">
                 <div>
                   <div className="review-partyname">
-                    <h3>모임명:</h3>
+                    <h3>모임(일정) :</h3>
                     <span
                       className="review-partyname-click"
                       style={{ fontWeight: "bold", cursor: "pointer" }}

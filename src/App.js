@@ -47,6 +47,8 @@ import MyMeetingNewMemberList from "./pages/mymeeting/MyMeetingNewMemberList";
 
 import FindIdPw from "./pages/user/FindIdPw";
 import UserReview from "./pages/user/UserReview";
+import NotFoundPage from "./pages/NotFoundPage";
+import EventPage from "./pages/meeting/EventPage";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -71,7 +73,7 @@ const App = () => {
           <Route path="/meeting/create" element={<Create />}></Route>
           <Route path="/meeting/:partySeq" element={<MeetingDetail />}></Route>
           <Route path="/meeting/modify/:partySeq" element={<Modify />}></Route>
-          {/* <Route path="/search" element={<Search />}></Route> */}
+          <Route path="/event/:eventId" element={<EventPage />}></Route>
           {/* <Route
             path="/category/:partyGenre"
             element={<CategoryOthers />}
@@ -140,7 +142,7 @@ const App = () => {
             element={<MyMeetingSchMemberList />}
           ></Route>
 
-          <Route path="*" element={<h1>404 잘못된 경로입니다.</h1>}></Route>
+          <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </MainStyle>
 

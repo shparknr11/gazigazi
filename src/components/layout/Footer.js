@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 import gazilogo from "../../images/logo2.png";
+import { prColor } from "../../css/color";
 
 const FooterStyle = styled.div`
-  background-color: #f9f8f5;
+  background-color: ${prColor.p100};
+  border-top: 1px solid ${prColor.p300};
 
   .footer-inner {
     display: flex;

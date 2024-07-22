@@ -27,18 +27,32 @@ const LocalSelectWrapStyle = styled.div`
   .local-select-detail-box {
     width: 500px;
     border: 1px solid #000;
+    position: relative;
+
+    h1 {
+      margin: 10px 0 0 10px;
+      color: #777;
+    }
   }
   .local-select-detail-list {
     display: flex;
     flex-wrap: wrap;
+    margin: 10px 0 80px 10px;
   }
   .local-select-detail-list li {
     width: 33.33%;
+    margin-bottom: 10px;
   }
 
   .local-select-detail-list label {
   }
   .local-select-btn {
+    position: absolute;
+    transform: translate(-50%, 0%);
+    left: 80%;
+    bottom: 5%;
+    text-align: center;
+    width: 80px;
     padding: 10px 15px;
     border: 1px solid #000;
     border-radius: 25px;

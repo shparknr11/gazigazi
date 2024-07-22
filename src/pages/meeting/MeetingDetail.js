@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
-import { BsFillTicketPerforatedFill } from "react-icons/bs";
+import {
+  BsFillHeartFill,
+  BsFillTicketPerforatedFill,
+  BsHeart,
+} from "react-icons/bs";
 import meetimg from "../../images/meetinga.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -62,7 +66,7 @@ const MeetItemCard = styled.div`
   display: flex;
   gap: 30px;
   margin-top: 30px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   .meet-item-img {
     /* background: url(${meetimg}) no-repeat center;
@@ -71,13 +75,15 @@ const MeetItemCard = styled.div`
     max-width: 500px;
     width: 100%;
     height: 308px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    /* 
+    background-color: ${prColor.p000};
+
     img {
       display: block;
       width: 100%;
       height: 100%;
-    } */
+      object-fit: contain;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
   }
 
   .meet-item-content {
@@ -147,7 +153,7 @@ const UnderLine = styled.div`
 `;
 
 const MeetItemInfo = styled.div`
-  margin-top: 50px;
+  margin-top: 20px;
 
   h2 {
     font-size: 1.5rem;
@@ -168,9 +174,12 @@ const MeetingDetail = () => {
   const { partySeq } = useParams();
   const navigate = useNavigate();
   const userSeq = sessionStorage.getItem("userSeq");
+  const currentWish = localStorage.getItem(
+    parseInt(partySeq) + parseInt(userSeq),
+  );
+  console.log(currentWish);
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
-  const currentWish = localStorage.getItem(partySeq);
   const telNumber = sessionStorage.getItem("userPhone");
   const forUserBirth = sessionStorage.getItem("userBirth");
   const userGender = parseInt(sessionStorage.getItem("userGender"));
@@ -201,7 +210,10 @@ const MeetingDetail = () => {
       alert("성별 제한이 있습니다.");
       return;
     }
-
+    if (detailList.userSeq == userSeq) {
+      alert("본인의 모임입니다.");
+      return;
+    }
     openModal({
       onConfirm: async joinContent => {
         try {
@@ -215,27 +227,38 @@ const MeetingDetail = () => {
       },
     });
   };
+  // api함수
+  const getDetailData = async _partySeq => {
+    try {
+      const result = await getPartyOne(_partySeq);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      console.log(result.resultData);
+      setDetailList(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDetailData(partySeq);
+  }, []);
 
   useEffect(() => {
-    // api함수
-    const getDetailData = async _partySeq => {
-      try {
-        const result = await getPartyOne(_partySeq);
-        if (result.code !== 1) {
-          alert(result.resultMsg);
-          return;
-        }
-        // console.log(result.resultData);
-        setDetailList(result.resultData);
-      } catch (error) {
-        console.log(error);
-      }
+    const checkWishStatus = () => {
+      const current = localStorage.getItem(
+        parseInt(partySeq) + parseInt(userSeq),
+      );
+      setIsWished(!!current);
     };
 
-    if (partySeq) {
-      getDetailData(partySeq);
+    if (!detailList) {
+      return;
     }
-  }, []);
+
+    checkWishStatus();
+  }, [partySeq, userSeq, detailList]);
 
   if (!detailList) {
     return null; // detailList가 로딩 중이면 아무것도 렌더링하지 않음
@@ -255,17 +278,17 @@ const MeetingDetail = () => {
       return;
     }
 
-    if (currentWish) {
-      localStorage.removeItem(partySeq);
-      setIsWished(false);
-      alert("관심목록에서 삭제되었습니다.");
-    } else {
+    if (!currentWish) {
       localStorage.setItem(
-        partySeq,
+        parsePartySeq + parseUserSeq,
         parseUserSeq + parsePartySeq + parsePhoneNumber,
       );
       setIsWished(true);
       alert("관심목록에 추가되었습니다.");
+    } else {
+      localStorage.removeItem(parsePartySeq + parseUserSeq);
+      setIsWished(false);
+      alert("관심목록에서 삭제되었습니다.");
     }
   };
 
@@ -281,7 +304,7 @@ const MeetingDetail = () => {
         return "";
     }
   };
-
+  const heartIcon = isWished ? <BsFillHeartFill color="red" /> : <BsHeart />;
   return (
     <MeetItemStyle>
       <div className="inner">
@@ -309,20 +332,11 @@ const MeetingDetail = () => {
                 background: `url(${detailList.partyPic}) no-repeat center`,
                 backgroundSize: "cover",
               }} */}
-            <div
-              className="meet-item-img"
-              style={{
-                // 임시
-                backgroundImage: `url(/pic/party/${detailList.partySeq}/${detailList.partyPic})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-              }}
-            >
-              {/* <img
+            <div className="meet-item-img">
+              <img
                 src={`/pic/party/${detailList.partySeq}/${detailList.partyPic}`}
                 alt="모임사진"
-              /> */}
+              />
             </div>
 
             <div className="meet-item-content">
@@ -349,7 +363,7 @@ const MeetingDetail = () => {
                   }}
                 >
                   <span>
-                    {currentWish ? <>🧡</> : <>🤍</>}
+                    {heartIcon}
                     찜하기
                   </span>
                 </div>

@@ -4,7 +4,6 @@ import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { patchApproval } from "../../apis/meeting/joinapi";
 import { useNavigate } from "react-router-dom";
 import { MainButton } from "../../components/button/Button";
-import zIndex from "@mui/material/styles/zIndex";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -165,26 +164,20 @@ const Admin = () => {
         <div className="admin-application-div">
           {filteredPartyList.map((item, index) => (
             <div key={index} className="list-box">
-              <div
-                className="list-box-img"
-                style={{
-                  backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                }}
-              ></div>
+              <div className="list-box-img">
+                <img
+                  src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                  alt="파티이미지"
+                />
+              </div>
               <div className="list-box-content">
                 <div className="list-box-title">
-                  <div
-                    className="list-box-profileimg"
-                    style={{
-                      backgroundImage: `url(/pic/user/${item.userSeq}/${item.userPic} )`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "contain",
-                    }}
-                  ></div>
+                  <div className="list-box-profileimg">
+                    <img
+                      src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                      alt="프로필이미지"
+                    />
+                  </div>
                   <span style={{ fontWeight: "bold" }}>{item.userName}</span>
                   <span style={{ color: "#999" }}> 님의 모임</span>
                 </div>
@@ -207,7 +200,12 @@ const Admin = () => {
                 </span>
               </div>
               <div
-                style={{ display: "flex", gap: "15px", justifyContent: "end" }}
+                style={{
+                  display: "flex",
+                  gap: "15px",
+                  padding: "10px 0px",
+                  justifyContent: "end",
+                }}
               >
                 <MainButton
                   label="상세보기"
