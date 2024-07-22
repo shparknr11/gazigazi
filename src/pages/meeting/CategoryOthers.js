@@ -331,12 +331,10 @@ const CategoryOthers = () => {
                   {getGenderText(item.partyGender)}
                 </span>
                 <span className="list-box-age">
-                  {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                  {getYearLastTwoDigits(item.partyMinAge) === "1901" &&
+                  getYearLastTwoDigits(item.partyMaxAge) === "2155"
                     ? "연령무관"
-                    : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
-                  {getYearLastTwoDigits(item.partyMaxAge) === "2155"
-                    ? ""
-                    : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                    : `${getYearLastTwoDigits(item.partyMinAge)} ~ ${getYearLastTwoDigits(item.partyMaxAge)}년생`}
                 </span>
               </div>
             </div>

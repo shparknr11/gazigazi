@@ -356,12 +356,16 @@ const MeetingDetail = () => {
               <div className="meet-condition">
                 <span>가입 조건 </span>
                 <p style={{ padding: "10px" }}>
-                  {getYearLastTwoDigits(detailList.partyMinAge) === "1901"
+                  {/* {getYearLastTwoDigits(detailList.partyMinAge) === "1901"
                     ? "연령무관"
                     : `${getYearLastTwoDigits(detailList.partyMinAge)} ~`}
                   {getYearLastTwoDigits(detailList.partyMaxAge) === "2155"
                     ? ""
-                    : `${getYearLastTwoDigits(detailList.partyMaxAge)}년생`}
+                    : `${getYearLastTwoDigits(detailList.partyMaxAge)}년생`} */}
+                  {getYearLastTwoDigits(detailList.partyMinAge) === "1901" &&
+                  getYearLastTwoDigits(detailList.partyMaxAge) === "2155"
+                    ? "연령무관"
+                    : `${getYearLastTwoDigits(detailList.partyMinAge)} ~ ${getYearLastTwoDigits(detailList.partyMaxAge)}년생`}
                 </p>
                 <p style={{ padding: "10px" }}>
                   & {getGenderText(detailList.partyGender)}
