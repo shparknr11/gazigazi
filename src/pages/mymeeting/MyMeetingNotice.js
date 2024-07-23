@@ -14,8 +14,8 @@ const MyMeetingNoticeStyle = styled.div`
   justify-content: center;
   align-items: center;
   .notice-wrap {
-    margin-bottom: 75px;
     width: 100%;
+    margin-bottom: 75px;
     height: 650px;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,6 @@ const MyMeetingNoticeStyle = styled.div`
   }
   .notice-form-area {
     display: flex;
-    padding-top: 30px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -40,6 +39,7 @@ const MyMeetingNoticeStyle = styled.div`
     box-shadow: 1px 1px 1px 1px gray;
   }
   .meeting-introduce {
+    margin-top: 30px;
     display: flex;
     width: 100%;
     height: 205px;
@@ -94,6 +94,8 @@ const MyMeetingNotice = () => {
   const [textAreaLength, setTextAreaLength] = useState(0);
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [imgFile, setImgFile] = useState();
+  const [previewPreImg, setPreviewPreImg] = useState();
   const location = useLocation();
   const param = useParams();
   const navigate = useNavigate();
@@ -119,6 +121,26 @@ const MyMeetingNotice = () => {
     getData();
     console.log(data);
   }, []);
+  const handleFileChange = e => {
+    // file 이라서 e.target.value 를 활용하지 않는다.
+    // e.taret.files 는 배열이다.
+    // e.target.files = [];
+
+    const tempFile = e?.target.files[0];
+    // 사용자가 이미지를 선택하면
+    // 웹브라우저는 이미지를 캐시에 보관함.
+    // 임시 공간에 저장한 이미지를 우리는 경로를 알아내야 한다.
+    // 그때 웹브라우저 상의 임시 URL 을 알아내는 기능 제공한다.
+    console.log(tempFile);
+    if (tempFile) {
+      const tempUrl = URL?.createObjectURL(tempFile);
+
+      setPreviewPreImg(tempUrl);
+
+      // 전송할 파일 변경(주의합니다. 파일을 넣어주세요.)
+      setImgFile(tempFile);
+    }
+  };
   const handleDeleteClick = async () => {
     try {
       const objData = {
@@ -136,6 +158,7 @@ const MyMeetingNotice = () => {
     toast.success("게시글이 삭제되었습니다.");
     navigate(`/mymeeting/mymeetingLeader/${location.state.boardPartySeq}`);
   };
+
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -158,29 +181,34 @@ const MyMeetingNotice = () => {
                       alignItems: "center",
                     }}
                   >
-                    {data?.pics.length > 0 ? (
-                      <img
-                        style={{ cursor: "pointer" }}
-                        src="경로애매/data.pics"
-                      />
-                    ) : (
-                      <label htmlFor="fileId">
+                    {/* data?.pics.length > 0 */}
+                    <label htmlFor="fileId">
+                      {previewPreImg ? (
+                        // 나중에 pics 로 조건 쳐야함.
+                        <img
+                          style={{
+                            cursor: "pointer",
+                            width: "200px",
+                            height: "200px",
+                          }}
+                          src={previewPreImg}
+                        />
+                      ) : (
                         <CiImageOff
                           style={{ cursor: "pointer", textAlign: "center" }}
                           className="caption-img"
                           size="200"
                         />
-                        <div>
-                          <strong style={{ color: "red" }}>*</strong>이미지를
-                          등록해주세요.
-                        </div>
-                        <input
-                          style={{ width: "0", height: "0" }}
-                          type="file"
-                          id="fileId"
-                        ></input>
-                      </label>
-                    )}
+                      )}
+                      <input
+                        style={{ width: "0", height: "0" }}
+                        type="file"
+                        id="fileId"
+                        onChange={e => {
+                          handleFileChange(e);
+                        }}
+                      ></input>
+                    </label>
                   </div>
                   <div style={{ width: "50%" }}>
                     <div
@@ -205,7 +233,6 @@ const MyMeetingNotice = () => {
                           id="mettingname"
                           value={data?.boardTitle}
                           style={{ width: "73%" }}
-                          readOnly
                         />
                       </div>
                       <div
@@ -259,7 +286,6 @@ const MyMeetingNotice = () => {
                       id="noticecontent"
                       className="notice-textarea"
                       rows="10"
-                      readOnly
                       value={data?.boardContents}
                       maxLength={300}
                       onChange={e => {

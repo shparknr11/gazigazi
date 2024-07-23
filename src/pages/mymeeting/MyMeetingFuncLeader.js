@@ -104,6 +104,8 @@ const MyMeetingFuncLeaderStyle = styled.div`
     align-items: center;
     border-bottom: 1px solid #f8ebd6;
     padding: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     font-size: 18px;
     font-weight: bold;
   }
@@ -147,6 +149,12 @@ const LedgerStyle = styled.div`
   }
   .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
     padding: 4px !important;
+  }
+  .cut-text {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -231,7 +239,8 @@ const MyMeetingFuncLeader = () => {
     setIsLoading(true);
     const budgetObj = {
       budgetPartySeq: params?.meetingId,
-      month: _monthValue === undefined ? "01" : _monthValue,
+      month:
+        _monthValue === undefined && _monthValue == "22" ? "01" : _monthValue,
     };
     try {
       const res = await getMonthBudget(budgetObj);
@@ -270,12 +279,139 @@ const MyMeetingFuncLeader = () => {
   };
 
   const handleNoticeList = async (pages = 1) => {
+    setIsLoading(true);
     try {
       const res = await getNoticeAll(params?.meetingId, pages);
-      setNoticeList(res.list);
+      setNoticeList([
+        {
+          boardSeq: 1,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "김영록",
+          boardTitle: "오늘 모임 너무 재밌었어요!",
+          boardContents: "오늘 모임 너무 재밌었던거 같아요!!!",
+          boardHit: 2,
+          inputDt: "2024-07-22",
+          updateDt: "2024-07-22",
+          pics: ["../../images/dummy1.jpg"],
+        },
+        {
+          boardSeq: 2,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "박성호",
+          boardTitle: "회식 너무 재밌었어요!",
+          boardContents: "회식 너무 재밌었던거 같아요!!!",
+          boardHit: 3,
+          inputDt: "2024-07-23",
+          updateDt: "2024-07-23",
+          pics: ["../../images/dummy2.jpg"],
+        },
+        {
+          boardSeq: 3,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "윤성환",
+          boardTitle: "고양이가 너무 귀여웠어요!",
+          boardContents: "고양이가 너무 귀여웠어요!",
+          boardHit: 4,
+          inputDt: "2024-07-24",
+          updateDt: "2024-07-24",
+          pics: ["../../images/dummy3.jpg"],
+        },
+        {
+          boardSeq: 4,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "황운철",
+          boardTitle: "피곤했는데 참여하고 나니 너무 재밌었어요!",
+          boardContents: "피곤했는데 참여하고 나니 너무 재밌었어요!",
+          boardHit: 5,
+          inputDt: "2024-07-25",
+          updateDt: "2024-07-25",
+          pics: ["../../images/dummy4.jpg"],
+        },
+        {
+          boardSeq: 5,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "하주원",
+          boardTitle: "피곤했는데 참여하고 나니 너무 재밌었어요!",
+          boardContents: "피곤했는데 참여하고 나니 너무 재밌었어요!",
+          boardHit: 6,
+          inputDt: "2024-07-26",
+          updateDt: "2024-07-26",
+          pics: ["../../images/dummy5.jpg"],
+        },
+        {
+          boardSeq: 6,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "이재문",
+          boardTitle: "아 ~ 밥먹고 싶다!",
+          boardContents: "점심 추천 부탁!",
+          boardHit: 7,
+          inputDt: "2024-07-27",
+          updateDt: "2024-07-27",
+          pics: ["../../images/dummy6.jpg"],
+        },
+        {
+          boardSeq: 7,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "송예림",
+          boardTitle: "모임장님 일정 한번 잡아야 할거 같은디...",
+          boardContents: "이번주 토요일 어때요!",
+          boardHit: 8,
+          inputDt: "2024-07-28",
+          updateDt: "2024-07-28",
+          pics: ["../../images/dummy7.jpg"],
+        },
+        {
+          boardSeq: 8,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "김범준",
+          boardTitle: "내일 점심 같이드실분!!!",
+          boardContents: "내일 점심 같이 드실분!",
+          boardHit: 9,
+          inputDt: "2024-07-29",
+          updateDt: "2024-07-29",
+          pics: ["../../images/dummy8.jpg"],
+        },
+        {
+          boardSeq: 9,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "임재범",
+          boardTitle: "영화가 너무 재밌었는데 추천드릴께요!",
+          boardContents: "가오갤 3 너무 재밌었어요!",
+          boardHit: 10,
+          inputDt: "2024-07-30",
+          updateDt: "2024-07-30",
+          pics: ["../../images/dummy9.jpg"],
+        },
+        {
+          boardSeq: 10,
+          boardPartySeq: 22,
+          boardMemberSeq: 26,
+          userName: "릭",
+          boardTitle: "요즘 미드에 빠져 사는거 같아요",
+          boardContents: "워킹데드를 보는데 네간이 너무 멋있어요!",
+          boardHit: 11,
+          inputDt: "2024-07-31",
+          updateDt: "2024-07-31",
+          pics: ["../../images/dummy10.jpg"],
+        },
+      ]);
     } catch (error) {
       console.log(error);
     }
+    toast.success("게시글이 조회되었습니다.");
+    setIsLoading(false);
+    setTimeout(() => {
+      funcRef.current.style.backgroundColor = "#f8ebd6";
+    }, 100);
   };
   const handlePrint = () => {
     window.print();
@@ -323,7 +459,7 @@ const MyMeetingFuncLeader = () => {
             onClick={() => {
               setIsClicked(3);
               // setSubTitle("가계부");
-              handleBudgetClick(params?.meetingId);
+              handleBudgetClick(monthValue);
             }}
             ref={itemRef}
           >
@@ -361,11 +497,11 @@ const MyMeetingFuncLeader = () => {
                 <div>
                   <ul className="main-notice-ul">
                     <li className="main-notice-li">
-                      <div style={{ width: "20%" }}>순번</div>
-                      <div style={{ width: "20%" }}>글쓴이</div>
-                      <div style={{ width: "20%" }}>제목</div>
-                      <div style={{ width: "20%" }}>내용</div>
-                      <div style={{ width: "20%" }}>날짜</div>
+                      <div style={{ width: "10%" }}>순번</div>
+                      <div style={{ width: "10%" }}>글쓴이</div>
+                      <div style={{ width: "40%" }}>제목</div>
+                      {/* <div style={{ width: "20%" }}>내용</div> */}
+                      <div style={{ width: "20%" }}>등록일자</div>
                     </li>
                     {noticeList?.map((item, index) => (
                       <li
@@ -383,12 +519,14 @@ const MyMeetingFuncLeader = () => {
                           );
                         }}
                       >
-                        <span style={{ width: "20%" }}>{index + 1}</span>
-                        <span style={{ width: "20%" }}>글쓴이</span>
-                        <span style={{ width: "20%" }}>{item.boardTitle}</span>
-                        <span style={{ width: "20%" }}>
-                          {item.boardContents}
+                        <span style={{ width: "10%" }}>{index + 1}</span>
+                        <span style={{ width: "10%" }}>{item.userName}</span>
+                        <span className={"cut-text"} style={{ width: "40%" }}>
+                          {item.boardTitle}
                         </span>
+                        {/* <span style={{ width: "20%" }}>
+                          {item.boardContents}
+                        </span> */}
                         <span style={{ width: "20%" }}>{item.inputDt}</span>
                       </li>
                     ))}
@@ -424,9 +562,7 @@ const MyMeetingFuncLeader = () => {
                           value={monthValue}
                           label="Age"
                           onChange={e => {
-                            setMonthValue(prevCount => {
-                              return e.target.value;
-                            });
+                            setMonthValue(e.target.value);
                             handleBudgetClick(e.target.value);
                           }}
                         >

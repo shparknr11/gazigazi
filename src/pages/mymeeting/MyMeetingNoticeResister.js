@@ -35,6 +35,7 @@ const MyMeetingNoticeStyle = styled.div`
     box-shadow: 1px 1px 1px 1px gray;
   }
   .meeting-introduce {
+    margin-top: 30px;
     display: flex;
     width: 100%;
     height: 205px;
@@ -94,6 +95,7 @@ const MyMeetingNoticeResister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   console.log(location);
+  useEffect(() => {}, [previewPreImg]);
   const formDataFunc = formId => {
     const a = 1;
     if (a === 1) return;
@@ -118,8 +120,6 @@ const MyMeetingNoticeResister = () => {
     formDataFunc("dataForm");
   }, []);
   const handleFileChange = e => {
-    const a = 1;
-    if (a === 1) return;
     // file 이라서 e.target.value 를 활용하지 않는다.
     // e.taret.files 는 배열이다.
     // e.target.files = [];
@@ -217,34 +217,32 @@ const MyMeetingNoticeResister = () => {
               >
                 {/* <!-- 굳이 해당 모임 타고 들어왔는데 보여줄 필요가 있나 싶어서 뺌 --> */}
                 <div className="meeting-introduce">
-                  <div style={{ width: "50%", height: "150px" }}>
-                    {/* {imgUrl ? (
+                  <div style={{ width: "50%", height: "200px" }}>
+                    <label htmlFor="fileId" style={{ cursor: "pointer" }}>
                       <div
                         style={{
-                          width: "50%",
-                          height: "150px",
+                          width: "100%",
+                          height: "200px",
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
                         }}
                       >
-                        <img
-                          src={previewPreImg}
-                          style={{ width: "250px", height: "170px" }}
-                        />
+                        {previewPreImg ? (
+                          <img src={previewPreImg} style={{}} />
+                        ) : (
+                          <CiImageOff
+                            className="caption-img"
+                            size="200"
+                            style={{ textAlign: "center" }}
+                          />
+                        )}
                       </div>
-                    ) : null} */}
-                    <label htmlFor="fileId">
-                      <CiImageOff
-                        className="caption-img"
-                        size="200"
-                        style={{ textAlign: "center" }}
-                      />
                       <input
                         type="file"
                         style={{ width: 0, height: 0 }}
                         id="fileId"
-                        onClick={e => {
+                        onChange={e => {
                           handleFileChange(e);
                         }}
                       />
@@ -258,21 +256,23 @@ const MyMeetingNoticeResister = () => {
                         gap: "30px",
                       }}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          textAlign: "left",
-                        }}
-                      >
-                        <label htmlFor="boardTitle" style={{ width: "25%" }}>
+                      <div>
+                        <label
+                          htmlFor="boardTitle"
+                          style={{ fontSize: "20px", fontWeight: "bold" }}
+                        >
                           제목
                         </label>
+                      </div>
+                      <div style={{ fontSize: "16px" }}>
                         <input
                           id="boardTitle"
                           name="boardTitle"
-                          style={{ width: "73%" }}
+                          style={{
+                            width: "100%",
+                            height: "30px",
+                            paddingLeft: "5px",
+                          }}
                         />
                       </div>
                     </div>
@@ -282,7 +282,12 @@ const MyMeetingNoticeResister = () => {
                   <div className="flex-column">
                     <label
                       htmlFor="boardContents"
-                      style={{ paddingBottom: "30px", display: "block" }}
+                      style={{
+                        paddingBottom: "30px",
+                        display: "block",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                      }}
                     >
                       내용
                     </label>
