@@ -459,6 +459,7 @@ const CreateAccount = () => {
                         id="profilePicture"
                         name="userPic"
                         onChange={handleImageChange}
+                        autoComplete="off"
                       />
                     </div>
                     <label htmlFor="userEmail">
@@ -469,6 +470,7 @@ const CreateAccount = () => {
                         value={user.userEmail}
                         onChange={handleChange}
                         required
+                        autoComplete="off"
                       />
                       <div className="create-button-group">
                         <button
@@ -492,6 +494,7 @@ const CreateAccount = () => {
                         value={user.userPw}
                         onChange={handleChange}
                         required
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={passwordRegex.test(user.userPw)}>
@@ -505,6 +508,7 @@ const CreateAccount = () => {
                         value={user.userPwCheck}
                         onChange={handleChange}
                         required
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={user.userPw === user.userPwCheck}>
@@ -518,6 +522,7 @@ const CreateAccount = () => {
                         value={user.userName}
                         onChange={handleChange}
                         required
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={NameRegex.test(user.userName)}>
@@ -531,6 +536,7 @@ const CreateAccount = () => {
                           name="userNickname"
                           value={user.userNickname}
                           onChange={handleChange}
+                          autoComplete="off"
                         />
                         <button
                           type="button"
@@ -552,6 +558,7 @@ const CreateAccount = () => {
                         name="userAddr"
                         value={user.userAddr}
                         onChange={handleChange}
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={user.userAddr ? true : false}>
@@ -565,6 +572,7 @@ const CreateAccount = () => {
                         value={user.userBirth}
                         onChange={handleChange}
                         required
+                        autoComplete="off"
                       />
                     </label>
                     <label>
@@ -574,20 +582,22 @@ const CreateAccount = () => {
                         name="userPhone"
                         value={user.userPhone}
                         onChange={handleChange}
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={PhoneRegex.test(user.userPhone)}>
                       {messages.userPhone}
                     </Message>
                     <label>
-                    관심 분야
-                    <input
-                type="text"
-                name="userIntro"
-                value={user.userIntro}
-                onChange={handleChange}
-              />
-              </label>
+                      관심 분야
+                      <input
+                        type="text"
+                        name="userFav"
+                        value={user.userFav}
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                    </label>
                     <label>
                       성별<span className="required-asterisk">*</span>
                       <div className="create-gender-group">
@@ -618,6 +628,7 @@ const CreateAccount = () => {
                         name="userIntro"
                         value={user.userIntro}
                         onChange={handleChange}
+                        autoComplete="off"
                       />
                     </label>
                     <Message success={messages.form === ""}>
