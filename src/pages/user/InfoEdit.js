@@ -325,6 +325,7 @@ const InfoEdit = () => {
               name="userNickname"
               value={userInfo.userNickname}
               onChange={handleInputChange}
+              autoComplete="off"
             />
             <label>주소</label>
             <input
@@ -332,6 +333,7 @@ const InfoEdit = () => {
               name="userAddr"
               value={userInfo.userAddr}
               onChange={handleInputChange}
+              autoComplete="off"
             />
             <label>관심 분야</label>
             <input
@@ -339,6 +341,7 @@ const InfoEdit = () => {
               name="userFav"
               value={userInfo.userFav}
               onChange={handleInputChange}
+              autoComplete="off"
             />
             <label>전화번호</label>
             <input
@@ -346,6 +349,7 @@ const InfoEdit = () => {
               name="userPhone"
               value={userInfo.userPhone}
               onChange={handleInputChange}
+              autoComplete="off"
             />
             <label>소개</label>
             <input
@@ -353,6 +357,7 @@ const InfoEdit = () => {
               name="userIntro"
               value={userInfo.userIntro}
               onChange={handleInputChange}
+              autoComplete="off"
             />
             <button onClick={handleSave}>저장</button>
             <button onClick={handleCancel}>취소</button>

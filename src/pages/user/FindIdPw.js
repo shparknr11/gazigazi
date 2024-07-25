@@ -143,6 +143,7 @@ const FindId = () => {
               value={name}
               onChange={e => setName(e.target.value)}
               required
+              autoComplete="off"
             />
           </FindGroup>
           <FindGroup>
@@ -153,6 +154,7 @@ const FindId = () => {
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.target.value)}
               required
+              autoComplete="off"
             />
           </FindGroup>
           <FindGroup>
@@ -163,6 +165,7 @@ const FindId = () => {
               value={birthDate}
               onChange={e => setBirthDate(e.target.value)}
               required
+              autoComplete="off"
             />
           </FindGroup>
           <ButtonContainer>
@@ -210,6 +213,7 @@ const FindPw = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
+              autoComplete="off"
             />
           </FindGroup>
           <ButtonContainer>

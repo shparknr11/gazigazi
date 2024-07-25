@@ -167,6 +167,7 @@ const Login = () => {
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
+                      autoComplete="off"
                     />
 
                     <label htmlFor="password">비밀번호</label>
@@ -177,6 +178,7 @@ const Login = () => {
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       required
+                      autoComplete="off"
                     />
 
                     <button type="submit">로그인</button>
