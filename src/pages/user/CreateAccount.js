@@ -145,6 +145,7 @@ const CreateAccount = () => {
   const PhoneRegex = /^01[01](?:\d{3}|\d{4})\d{4}$/;
 
   const [accountPic, setAccountPic] = useState(null);
+  const [previewPic, setPreviewPic] = useState(null);
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
@@ -174,6 +175,28 @@ const CreateAccount = () => {
     form: "",
   });
 
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(file.type) || file.size > 100 * 1024 * 1024) {
+        alert("유효한 이미지 파일을 업로드해주세요. (100MB 이하)");
+        setAccountPic(null);
+        setPreviewPic(null); // 미리보기 이미지 초기화
+        return;
+      }
+
+      // 미리보기 이미지 생성
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewPic(reader.result);
+      };
+      reader.readAsDataURL(file);
+
+      setAccountPic(file);
+    }
+  };
+
   const handleChange = e => {
     const { name, value } = e.target;
     setUser({
@@ -183,29 +206,16 @@ const CreateAccount = () => {
     validateField(name, value);
   };
 
-  const handleImageChange = e => {
-    const file = e.target.files[0];
-    if (file) {
-      const allowedTypes = ["image/jpg", "image/png", "image/gif"];
-      if (!allowedTypes.includes(file.type) || file.size > 2 * 1024 * 1024) {
-        alert("유효한 이미지 파일을 업로드해주세요. (2MB 이하)");
-        setAccountPic(null);
-        return;
-      }
-      setAccountPic(file);
-    }
-  };
-
   const validateField = (name, value) => {
     const newMessages = { ...messages };
-    let isValid = true;
+    let Valid = true;
 
     switch (name) {
       case "userPw":
         if (!passwordRegex.test(value)) {
           newMessages.userPw =
             "비밀번호는 최소 10자 이상, 대문자, 숫자, 특수문자를 포함해야 합니다.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userPw = "사용할 수 있는 비밀번호입니다.";
         }
@@ -213,7 +223,7 @@ const CreateAccount = () => {
       case "userPwCheck":
         if (value !== user.userPw) {
           newMessages.userPwCheck = "비밀번호가 일치하지 않습니다!";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userPwCheck = "비밀번호가 일치합니다.";
         }
@@ -221,7 +231,7 @@ const CreateAccount = () => {
       case "userEmail":
         if (!emailRegex.test(value)) {
           newMessages.userEmail = "이메일 형식이 올바르지 않습니다.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userEmail = "사용할 수 있는 이메일입니다.";
         }
@@ -229,11 +239,11 @@ const CreateAccount = () => {
       case "userNickname":
         if (!value) {
           newMessages.userNickname = "닉네임을 입력해주세요.";
-          isValid = false;
+          Valid = false;
         } else if (!nicknameRegex.test(value)) {
           newMessages.userNickname =
             "닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userNickname = "사용할 수 있는 닉네임입니다.";
         }
@@ -241,10 +251,10 @@ const CreateAccount = () => {
       case "userName":
         if (!value) {
           newMessages.userName = "이름을 입력해주세요.";
-          isValid = false;
+          Valid = false;
         } else if (!NameRegex.test(value)) {
           newMessages.userName = "이름은 한글 2~6자로 구성되어야 합니다.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userName = "사용할 수 있는 이름입니다.";
         }
@@ -252,10 +262,10 @@ const CreateAccount = () => {
       case "userPhone":
         if (!value) {
           newMessages.userPhone = "전화번호를 입력해주세요.";
-          isValid = false;
+          Valid = false;
         } else if (!PhoneRegex.test(value)) {
           newMessages.userPhone = "전화번호 형식이 올바르지 않습니다.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userPhone = "사용할 수 있는 전화번호입니다.";
         }
@@ -263,9 +273,33 @@ const CreateAccount = () => {
       case "userAddr":
         if (!value) {
           newMessages.userAddr = "주소를 입력해주세요.";
-          isValid = false;
+          Valid = false;
         } else {
           newMessages.userAddr = "";
+        }
+        break;
+      case "userBirth":
+        if (!value) {
+          newMessages.userBirth = "생년월일을 입력해주세요.";
+          Valid = false;
+        } else {
+          const birthDate = new Date(value);
+          const today = new Date();
+
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ) {
+            age -= 1;
+          }
+          if (age < 15) {
+            newMessages.userBirth = "만 15세 이상만 가입 가능합니다.";
+            Valid = false;
+          } else {
+            newMessages.userBirth = "유효한 생년월일입니다.";
+          }
         }
         break;
       default:
@@ -273,7 +307,7 @@ const CreateAccount = () => {
     }
 
     setMessages(newMessages);
-    return isValid;
+    return Valid;
   };
 
   const validateForm = () => {
@@ -293,7 +327,8 @@ const CreateAccount = () => {
       newMessages.userPw = "비밀번호를 입력해주세요.";
       valid = false;
     } else if (!passwordRegex.test(user.userPw)) {
-      newMessages.userPw = "비밀번호는 6자리 이상이어야 합니다.";
+      newMessages.userPw =
+        "비밀번호는 10자 이상이어야 하며, 대문자, 숫자, 특수문자를 포함해야 합니다.";
       valid = false;
     }
 
@@ -461,6 +496,13 @@ const CreateAccount = () => {
                         onChange={handleImageChange}
                         autoComplete="off"
                       />
+                      {previewPic && (
+                        <img
+                          src={previewPic}
+                          alt="Profile Preview"
+                          className="profile-picture"
+                        />
+                      )}
                     </div>
                     <label htmlFor="userEmail">
                       이메일<span className="required-asterisk">*</span>
@@ -573,6 +615,8 @@ const CreateAccount = () => {
                         onChange={handleChange}
                         required
                         autoComplete="off"
+                        min="1900-01-01"
+                        max={new Date().toISOString().split("T")[0]}
                       />
                     </label>
                     <label>

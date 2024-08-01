@@ -61,13 +61,11 @@ const NavLinks = styled.div`
 const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const userSeq = useSelector(state => state.userEmail);
+  const userSeq = useSelector(state => state.user.userSeq);
+  const token = useSelector(state => state.user.token);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userSeq = sessionStorage.getItem("userSeq");
-      const token = sessionStorage.getItem("token");
-
       if (!userSeq || !token) {
         alert("로그인 상태를 확인하세요.");
         navigate("/login");
@@ -87,18 +85,7 @@ const MyPage = () => {
     };
 
     fetchUserData();
-  }, [navigate, userSeq]);
-
-  // useEffect(() => {
-  //   const expectedPath = `/myprofile/${userSeq}/userInfo`;
-  //   if (location.pathname !== expectedPath) {
-  //     navigate(expectedPath);
-  //   }
-  // }, [navigate, location.pathname, userSeq]);
-  // 마이페이지에 들어가면 기본적으로 사용자 정보를 렌더링시키는 코드
-  // 근데 다른 메뉴 눌러도 사용자 정보 하나만 렌더링되는 문제가 있음
-  // 지금은 수정될 때까지 사용 불가
-  // 3차 때 다시 도전!
+  }, [navigate, userSeq, token]);
 
   if (loading) {
     return <Loading>로딩 중...</Loading>;
