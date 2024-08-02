@@ -22,7 +22,7 @@ export const postNotice = async formData => {
     const res = await axios.post(`/api/board`, formData, header);
     return res.data.resultData;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 // GET
@@ -59,9 +59,10 @@ export const getNoticeOne = async (boardSeq, boardPartySeq, boardMemberSeq) => {
 // PATCH
 // /api/board
 // 게시글 수정 3차 예정
-export const patchNotice = async schSeq => {
+export const patchNotice = async formData => {
   try {
-    const res = await axios.patch(`/api/plan/member?planSeq=${schSeq}`);
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const res = await axios.patch(`/api/board`, formData, header);
     return res.data.resultData;
   } catch (error) {
     console.log(error);

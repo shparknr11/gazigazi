@@ -18,7 +18,6 @@ const MyMeetingNoticeStyle = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
-  margin-top: 40px;
   .notice-wrap {
     width: 100%;
     display: flex;
@@ -26,6 +25,7 @@ const MyMeetingNoticeStyle = styled.div`
     justify-content: center;
     align-items: center;
     max-width: 1024px;
+    gap: 40px;
   }
   .notice-inner {
     width: 100%;
