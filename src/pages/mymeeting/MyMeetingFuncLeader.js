@@ -16,7 +16,7 @@ import MyMeetingCalendar from "./MyMeetingCalendar";
 import "./printledger.css";
 import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 import { useSelector } from "react-redux";
-
+import MyMeetingBoard from "./jfs/MyMeetingBoard.js";
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -184,7 +184,11 @@ const MyMeetingFuncLeader = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(isClicked);
+    //console.log(noticeList);
+  }, [noticeList]);
+
+  useEffect(() => {
+    console.log("isClicked : ", isClicked);
   }, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {}, [isPopup]);
@@ -356,64 +360,7 @@ const MyMeetingFuncLeader = () => {
             ) : isClicked === 2 ? (
               // li map 돌릴거임
               // 컴포넌트로 빠질애들임
-              <div>
-                <div>
-                  <TitleDivStyle>모임 게시판</TitleDivStyle>
-                  <div style={{ textAlign: "right", paddingRight: "10px" }}>
-                    <button
-                      className="resister-btn"
-                      onClick={() => {
-                        navigate(`/mymeeting/mymeetingnoticeresister`, {
-                          state: {
-                            boardPartySeq: params?.meetingId,
-                            boardMemberSeq: user.userSeq,
-                          },
-                        });
-                      }}
-                    >
-                      등록
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <ul className="main-notice-ul">
-                    <li className="main-notice-li">
-                      <div style={{ width: "10%" }}>순번</div>
-                      <div style={{ width: "10%" }}>글쓴이</div>
-                      <div style={{ width: "40%" }}>제목</div>
-                      {/* <div style={{ width: "20%" }}>내용</div> */}
-                      <div style={{ width: "20%" }}>등록일자</div>
-                    </li>
-                    {noticeList?.map((item, index) => (
-                      <li
-                        key={item.boardSeq}
-                        className="main-notice-li"
-                        onClick={() => {
-                          navigate(
-                            `/mymeeting/mymeetingnotice/${item.boardSeq}`,
-                            {
-                              state: {
-                                boardMemberSeq: item.boardMemberSeq,
-                                boardPartySeq: item.boardPartySeq,
-                              },
-                            },
-                          );
-                        }}
-                      >
-                        <span style={{ width: "10%" }}>{index + 1}</span>
-                        <span style={{ width: "10%" }}>{item.userName}</span>
-                        <span className={"cut-text"} style={{ width: "40%" }}>
-                          {item.boardTitle}
-                        </span>
-                        {/* <span style={{ width: "20%" }}>
-                          {item.boardContents}
-                        </span> */}
-                        <span style={{ width: "20%" }}>{item.inputDt}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <MyMeetingBoard noticeList={noticeList} />
             ) : isClicked === 3 ? (
               // 가계부가 추가되서 여기다가 해야될듯
               <div id="printTagId">

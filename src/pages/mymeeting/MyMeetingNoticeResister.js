@@ -85,8 +85,10 @@ const TitleDivStyle = styled.div`
   padding-top: 20px;
 `;
 const MyMeetingNoticeResister = () => {
+  const [isAuth, setIsAuth] = useState();
   const [imgUrl, setImgUrl] = useState("meetinga.png");
-  const [textAreaVal, setTextAreaVal] = useState("");
+  const [boardTitle, setBoardTitle] = useState("");
+  const [boardContents, setBoardContents] = useState("");
   const [textAreaLength, setTextAreaLength] = useState(0);
   const [imgFile, setImgFile] = useState();
   const [previewPreImg, setPreviewPreImg] = useState();
@@ -94,7 +96,11 @@ const MyMeetingNoticeResister = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  console.log(location);
+  // console.log(location);
+
+  useEffect(() => {
+    setIsAuth(location.state.boardPartySeq);
+  }, []);
   useEffect(() => {}, [previewPreImg]);
   const formDataFunc = formId => {
     const a = 1;
@@ -102,7 +108,7 @@ const MyMeetingNoticeResister = () => {
     let formData = {};
 
     const form = document.getElementById(formId);
-    console.log(form);
+    // console.log(form);
     // 파일까지 처리하면 너무 복잡해질거 같아서 파일은 따로뺌
     for (let i = 0; i < form.elements.length; i++) {
       const element = form.elements[i];
@@ -129,7 +135,7 @@ const MyMeetingNoticeResister = () => {
     // 웹브라우저는 이미지를 캐시에 보관함.
     // 임시 공간에 저장한 이미지를 우리는 경로를 알아내야 한다.
     // 그때 웹브라우저 상의 임시 URL 을 알아내는 기능 제공한다.
-    console.log(tempFile);
+    // console.log(tempFile);
     if (tempFile) {
       const tempUrl = URL?.createObjectURL(tempFile);
 
@@ -140,6 +146,49 @@ const MyMeetingNoticeResister = () => {
     }
   };
   const handlePostSubmit = async e => {
+    e.preventDefault();
+    // console.log("boardTitle : ", boardTitle);
+    // console.log("boardContents : ", boardContents);
+    if (!boardTitle) {
+      toast.success("제목을 입력하세요.");
+      return false;
+    }
+    if (!boardContents) {
+      toast.success("내용을 입력하세요.");
+      return false;
+    }
+    if (!imgFile) {
+      toast.success("이미지를 선택하세요.");
+      return false;
+    }
+    // 1. 전송데이터 포맷 만들기
+    const formData = new FormData();
+    // 모임장 seq, budgetMemberSeq 2개
+    const form = {
+      boardPartySeq: location?.state.boardPartySeq,
+      boardMemberSeq: location?.state.boardMemberSeq,
+      boardTitle: boardTitle,
+      boardContents: boardContents,
+    };
+    console.log("form : ", form);
+    const infoData = JSON.stringify(form);
+    const dto = new Blob([infoData], { type: "application/json" });
+    formData.append("p", dto);
+    formData.append("pics", imgFile);
+    try {
+      await postNotice(formData);
+      toast.success("게시글이 저장되었습니다.");
+      navigate(`/mymeeting/mymeetingLeader/${isAuth}`, {
+        state: { isAuth: isAuth },
+      });
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePostSubmit_ = async e => {
     const a = 1;
     if (a === 1) return;
     e.preventDefault();
@@ -226,17 +275,33 @@ const MyMeetingNoticeResister = () => {
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
+                          overflow: "hidden",
                         }}
                       >
-                        {previewPreImg ? (
-                          <img src={previewPreImg} style={{}} />
-                        ) : (
-                          <CiImageOff
-                            className="caption-img"
-                            size="200"
-                            style={{ textAlign: "center" }}
-                          />
-                        )}
+                        <div
+                          style={{
+                            width: "200px",
+                            height: "200px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            overflow: "hidden",
+                            borderRadius: 10,
+                          }}
+                        >
+                          {previewPreImg ? (
+                            <img
+                              src={previewPreImg}
+                              style={{ width: "100%" }}
+                            />
+                          ) : (
+                            <CiImageOff
+                              className="caption-img"
+                              size="200"
+                              style={{ textAlign: "center" }}
+                            />
+                          )}
+                        </div>
                       </div>
                       <input
                         type="file"
@@ -268,6 +333,8 @@ const MyMeetingNoticeResister = () => {
                         <input
                           id="boardTitle"
                           name="boardTitle"
+                          value={boardTitle}
+                          onChange={e => setBoardTitle(e.target.value)}
                           style={{
                             width: "100%",
                             height: "30px",
@@ -296,10 +363,10 @@ const MyMeetingNoticeResister = () => {
                       name="boardContents"
                       className="notice-textarea"
                       rows="10"
-                      value={textAreaVal}
+                      value={boardContents}
                       maxLength={300}
                       onChange={e => {
-                        setTextAreaVal(e.target.value);
+                        setBoardContents(e.target.value);
                         setTextAreaLength(e.target.value.length);
                       }}
                     ></textarea>
@@ -312,12 +379,13 @@ const MyMeetingNoticeResister = () => {
                   </div>
                   <div className="button-wrap">
                     <button
-                      type="button"
+                      type="submit"
                       className="resister-btn"
                       onClick={() => {
-                        toast.warning("3차때 구현 예정입니다.");
-                        const a = 1;
-                        if (a === 1) return;
+                        // toast.warning("3차때 구현 예정입니다.");
+                        // const a = 1;
+                        // if (a === 1) return;
+                        // handleClickPost();
                       }}
                     >
                       등록

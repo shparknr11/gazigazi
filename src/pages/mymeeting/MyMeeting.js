@@ -284,7 +284,7 @@ const MyMeeting = () => {
             {/* <!-- 스와이퍼 들어올수도 있음. --> */}
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
-              {allData.length > 0 ? (
+              {allData?.length > 0 ? (
                 allData?.map(item => (
                   <div className="img-container" key={item?.partySeq}>
                     <div className="img-container-inner">
