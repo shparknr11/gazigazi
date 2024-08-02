@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { CartegoryWrapStyle } from "../Home";
 import { IoIosList } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
 import GuideTitle from "../../components/common/GuideTitle";
@@ -21,24 +20,6 @@ const CateInnerStyle = styled.div`
     margin-top: 25px;
     margin-bottom: 60px;
     font-weight: bold;
-  }
-  .category-category {
-    display: flex;
-    gap: 10px;
-    .category-item {
-      display: flex;
-      justify-content: center;
-      border: 2px solid #999;
-      width: 80px;
-      height: 80px;
-      border-radius: 55px;
-      border: 2px solid white;
-      cursor: pointer;
-      transition: border 1s ease;
-      &:hover {
-        border: 2px solid #d3cdb5;
-      }
-    }
   }
 
   .mm-meeting-cate {
@@ -94,6 +75,67 @@ const CateInnerStyle = styled.div`
   .cate-box-age {
     font-size: 12px;
     padding: 5px;
+  }
+`;
+const CartegoryWrapStyle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1062px;
+  margin: 0 auto;
+  gap: 40px;
+  margin-bottom: 120px;
+  /* .categoryslide {
+    display: flex;
+    width: 100%;
+    max-width: 1062px;
+    margin: 0 auto;
+  }
+  .swiper-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    gap: 40px;
+    margin-bottom: 120px;
+  }
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px !important;
+  } */
+  .category-item {
+    display: flex;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 55px;
+    background-color: #efede5;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: border 1s ease;
+    &:hover {
+      border: 2px solid #d3cdb5;
+    }
+  }
+  svg {
+    width: 32px;
+    height: 32px;
+    /* 색상 변경 예정 */
+  }
+  p {
+    font-size: 12px;
+  }
+  @media all and (max-width: 1072px) {
+    .categoryslide {
+      width: 100%;
+      max-width: 100%;
+    }
+    .swiper-wrapper {
+    }
   }
 `;
 const CateGoryListStyle = styled.div`
