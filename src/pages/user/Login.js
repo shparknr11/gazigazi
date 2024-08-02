@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import mainlogo from "../../images/logo2.png";
+import { setUser } from "../../redux/UserRedux/Actions/userActions";
 
 const LoginStyle = styled.div`
   display: flex;
@@ -90,14 +91,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
+    if (user.token) {
       alert("이미 로그인된 상태입니다.");
       navigate("/");
     }
-  }, [navigate]);
+  }, [user.token, navigate]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -111,30 +112,57 @@ const Login = () => {
       if (response.data.code === 1) {
         const {
           userSeq,
+          userEmail,
           accessToken,
           userPic,
-          userGender,
-          userBirth,
           userName,
-          userPhone,
-          userAddr,
+          userPw,
+          userPwCheck,
           userNickname,
+          userFav,
+          userBirth,
+          userPhone,
+          userGender,
+          userIntro,
         } = response.data.resultData;
 
         // Redux에 사용자 정보 저장
-        dispatch({ type: "SET_USER", payload: { userSeq, userEmail: email } });
+        dispatch(
+          setUser({
+            userSeq,
+            token: accessToken,
+            userPic,
+            userEmail,
+            userName,
+            userPw,
+            userPwCheck,
+            userNickname,
+            userFav,
+            userBirth,
+            userPhone,
+            userGender,
+            userIntro,
+          }),
+        );
 
-        sessionStorage.setItem("userSeq", userSeq);
-        sessionStorage.setItem("token", accessToken);
-        sessionStorage.setItem("userPic", userPic);
-        sessionStorage.setItem("userGender", userGender);
-        sessionStorage.setItem("userBirth", userBirth);
-        sessionStorage.setItem("userName", userName);
-        sessionStorage.setItem("userPhone", userPhone);
-        sessionStorage.setItem("userAddr", userAddr);
-        sessionStorage.setItem("userNickname", userNickname);
+        console.log("디스패치 후 상태:", {
+          userSeq,
+          token: accessToken,
+          userPic,
+          userEmail,
+          userName,
+          userPw,
+          userPwCheck,
+          userNickname,
+          userFav,
+          userBirth,
+          userPhone,
+          userGender,
+          userIntro,
+        });
 
         alert("로그인 성공!");
+        console.log(response.data);
         navigate("/");
       } else {
         alert(response.data.resultMsg || "로그인에 실패했습니다.");
@@ -147,7 +175,9 @@ const Login = () => {
     }
   };
 
-  if (sessionStorage.getItem("token")) return null;
+  if (user.token) {
+    return null;
+  }
 
   return (
     <LoginStyle>

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteUserAccount } from "../../userSlice";
+import { clearUser } from "../../redux/UserRedux/Actions/userActions";
 import { useState } from "react";
 
 const ButtonContainer = styled.div`
@@ -45,7 +45,7 @@ const ModalContent = styled.div`
   max-width: 400px;
 `;
 
-const Modalbutton1 = styled.div`
+const Modalbutton1 = styled.button`
   background-color: #ebddcc;
   color: white;
   border: none;
@@ -64,7 +64,7 @@ const Modalbutton1 = styled.div`
   }
 `;
 
-const Modalbutton2 = styled.div`
+const Modalbutton2 = styled.button`
   background-color: #ebddcc;
   color: white;
   border: none;
@@ -113,17 +113,15 @@ const UserDelete = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${useSelector(state => state.user.token)}`,
           },
         },
       );
 
       if (response.data.code === 1) {
-        dispatch(deleteUserAccount());
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userSeq");
+        dispatch(clearUser());
         alert("회원 탈퇴가 완료되었습니다.");
-        navigate("/");
+        navigate("/login");
       } else {
         alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
       }

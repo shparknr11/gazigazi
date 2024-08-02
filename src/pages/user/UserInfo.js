@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import UserDelete from "./UserDelete";
 import LogOut from "./LogOut";
+import { setUser, clearUser } from "../../redux/UserRedux/Actions/userActions";
 
 const UserInfoStyle = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const UserInfoInnerStyle = styled.div`
 
   .profile-picture-container {
     text-align: center;
-    margin-bottom: 10px; /* 변경: 프로필 사진 컨테이너의 하단 여백 추가 */
+    margin-bottom: 10px;
   }
 
   .profile-picture-container img {
@@ -60,7 +61,6 @@ const UserInfoInnerStyle = styled.div`
     margin-bottom: 8px;
     font-weight: bold;
     font-size: 12pt;
-    margin-bottom: 10px; /* 변경: 각 레이블의 하단 여백 추가 */
   }
 
   .mypage-container input[type="email"],
@@ -100,29 +100,28 @@ const UserInfoInnerStyle = styled.div`
 `;
 
 const UserInfo = () => {
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [certificationCode, setCertificationCode] = useState("");
   const [isCertifying, setIsCertifying] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isEmailCompleted, setIsEmailCompleted] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux 스토어에서 사용자 정보 가져옴
   const userSeq = useSelector(state => state.user.userSeq);
-  const userEmail = sessionStorage.getItem("userEmail");
+  const userEmail = useSelector(state => state.user.userEmail);
+  const token = useSelector(state => state.user.token);
+  const userData = useSelector(state => state.user);
 
   useEffect(() => {
-    const storedEmailVerified =
-      sessionStorage.getItem("isEmailCompleted") === "true";
-    setIsEmailCompleted(storedEmailVerified);
-  }, []);
+    setIsEmailCompleted(userData.isEmailCompleted);
+  }, [userData]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userSeq = sessionStorage.getItem("userSeq");
-      const token = sessionStorage.getItem("token");
-
       if (!userSeq) {
-        alert("유저 Email을 찾을 수 없습니다. 로그인 상태를 확인하세요.");
+        alert("유저 정보가 없습니다. 로그인 상태를 확인하세요.");
         navigate("/login");
         return;
       }
@@ -133,16 +132,14 @@ const UserInfo = () => {
       }
 
       try {
-        const response = await axios.get(
-          `/api/user/${userSeq}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-        setUserData(response.data.resultData);
+        const response = await axios.get(`/api/user/${userSeq}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        dispatch(setUser(response.data.resultData));
       } catch (error) {
         if (error.response && error.response.status === 401) {
           alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
+          dispatch(clearUser());
           navigate("/login");
         }
       } finally {
@@ -154,10 +151,10 @@ const UserInfo = () => {
 
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 1000); 
+    }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [navigate, userSeq]);
+  }, [navigate, userSeq, token, dispatch]);
 
   const sendCertificationCode = async () => {
     if (isEmailCompleted) {
@@ -184,7 +181,7 @@ const UserInfo = () => {
         setIsEmailVerified(true);
         setIsCertifying(false);
         setIsEmailCompleted(true);
-        sessionStorage.setItem("isEmailCompleted", "true");
+        dispatch(setUser({ isEmailCompleted: true })); // Redux 상태 업데이트
       } else {
         alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
       }
@@ -197,7 +194,7 @@ const UserInfo = () => {
     return <Loading>로딩 중...</Loading>;
   }
 
-  if (!userData) {
+  if (!userSeq) {
     return <div>사용자 정보를 찾을 수 없습니다.</div>;
   }
 
@@ -215,7 +212,7 @@ const UserInfo = () => {
             </div>
             <label>
               <span>이메일</span>
-              <input type="email" value={userData.userEmail} readOnly />
+              <input type="email" value={userEmail} readOnly />
               {isCertifying && (
                 <>
                   <input

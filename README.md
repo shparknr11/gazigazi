@@ -16,10 +16,7 @@
   <br/>
 - 현재는 기본적인 기능만 구현되어 있으며, 3차 프로젝트 이후 추가 기능 및 디자인 개선이 예정되어 있습니다.
 
-
 https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
-
-
 
 ### 사용 언어 및 라이브러리
 
@@ -71,6 +68,7 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
 <img src="./src/images/useLang.png">
 
 ### 사용 라이브러리
+
 - axios
 - react-router-dom
 - emotion
@@ -79,6 +77,8 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
 - react-calendar
 - moment
 - react-toastify
+- react-redux
+- redux-persist
 
 ### 주요 기능
 
@@ -96,7 +96,7 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
       - 회원탈퇴
       - 프로필 변경
       - 찜목록
-      <br/>
+        <br/>
 
 - **담당자 : 윤성환**
   - **내모임 페이지**
@@ -115,8 +115,9 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
     - 가계부 등록 삭제
     - 가계부 내용 출력
   - **게시판 (3차)**
-    - 게시판 조회 / 수정 /삭제 
-    
+
+    - 게시판 조회 / 수정 /삭제
+
     <br/>
 - **담당자 : 박성호(팀장)**
   - **홈페이지**
@@ -127,7 +128,7 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
     - 모임 찜
     - 모임 신청하기
   - **내모임 페이지**
-    - 내 모임 수정&삭제 
+    - 내 모임 수정&삭제
     - 모임원 관리
     - 모임 신청서 관리
   - **관리자 페이지(3차)**
@@ -135,4 +136,3 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
   - **커뮤니티 후기**
     - 후기 추천하기
   - **후기작성**
-  
