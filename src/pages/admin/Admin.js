@@ -4,6 +4,7 @@ import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { patchApproval } from "../../apis/meeting/joinapi";
 import { useNavigate } from "react-router-dom";
 import { MainButton } from "../../components/button/Button";
+import { useSelector } from "react-redux";
 const AdminInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -73,7 +74,10 @@ const Admin = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const navigate = useNavigate();
 
-  const userSeq = sessionStorage.getItem("userSeq");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const getData = async () => {
     try {
       const result = await getPartyAll();

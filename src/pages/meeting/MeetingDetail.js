@@ -14,6 +14,7 @@ import { postApplication } from "../../apis/meeting/joinapi";
 import { IoPersonSharp } from "react-icons/io5";
 import { prColor } from "../../css/color";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -191,16 +192,22 @@ const MeetingDetail = () => {
   //   const [searchParams] = useSearchParams();
   const { partySeq } = useParams();
   const navigate = useNavigate();
-  const userSeq = sessionStorage.getItem("userSeq");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const currentWish = localStorage.getItem(
     parseInt(partySeq) + parseInt(userSeq),
   );
   // console.log(currentWish);
   // console.log("partySeq", partySeq);
   const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
-  const telNumber = sessionStorage.getItem("userPhone");
-  const forUserBirth = sessionStorage.getItem("userBirth");
-  const userGender = parseInt(sessionStorage.getItem("userGender"));
+  // const telNumber = sessionStorage.getItem("userPhone");
+  const telNumber = user.userPhone;
+  // const forUserBirth = sessionStorage.getItem("userBirth");
+  const forUserBirth = user.userBirth;
+  // const userGender = parseInt(sessionStorage.getItem("userGender"));
+  const userGender = parseInt(user.userGender);
   const userBirth = parseInt(forUserBirth?.substring(0, 4));
 
   const handleJoinModal = () => {

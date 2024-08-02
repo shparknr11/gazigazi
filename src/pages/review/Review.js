@@ -7,6 +7,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import GuideTitle from "../../components/common/GuideTitle";
 import { useNavigate } from "react-router-dom";
 import { prColor } from "../../css/color";
+import { useSelector } from "react-redux";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -201,7 +202,10 @@ const Review = () => {
   const [totalPage, setTotalPage] = useState(1);
 
   const navigate = useNavigate();
-  const userSeq = sessionStorage.getItem("userSeq");
+
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
   // **Pagination** 을 위한 코드처리
   // 총 목록수는 state에 저장되어 있음. (todos배열.length)
   // 한 페이지당 보여줄 목록 최대 개수

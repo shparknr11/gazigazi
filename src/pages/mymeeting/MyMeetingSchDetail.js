@@ -14,6 +14,7 @@ import {
   postSchJoin,
 } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 import Loading from "../../components/common/Loading";
+import { useSelector } from "react-redux";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -234,6 +235,9 @@ const CalendarListLiStyle = styled.div`
 `;
 let initailData = {};
 const MyMeetingSchDetail = () => {
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [planTitle, setPlanTitle] = useState("");
   const [planStartDt, setPlanStartDt] = useState("");
@@ -258,10 +262,7 @@ const MyMeetingSchDetail = () => {
   console.log(location);
   useEffect(() => {}, [isAuth]);
   const schMemberSeq = async () => {
-    const seq = await getSchMemberSeq(
-      location.state.planSeq,
-      sessionStorage.getItem("userSeq"),
-    );
+    const seq = await getSchMemberSeq(location.state.planSeq, userSeq);
     return seq.memberSeq;
   };
 
@@ -391,7 +392,7 @@ const MyMeetingSchDetail = () => {
   const getPlMemberSeq = async () => {
     const res = await getSchMemberAll(param.meetingschid);
     setAllData(res);
-    const a = Number(sessionStorage.getItem("userSeq"));
+    const a = Number(user.userSeq);
     const b = res?.filter(item => {
       return Number(item?.userSeq) === Number(a);
     });

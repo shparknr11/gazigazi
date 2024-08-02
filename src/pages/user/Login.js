@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import mainlogo from "../../images/logo2.png";
-import { setUser } from "../../redux/UserRedux/Actions/userActions";
+// import { setUser } from "../../redux/UserRedux/Actions/userActions";
+import { setUser } from "../../slices/userSlice";
 
 const LoginStyle = styled.div`
   display: flex;
@@ -92,13 +93,14 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  // console.log("user ", user);
 
-  useEffect(() => {
-    if (user.token) {
-      alert("이미 로그인된 상태입니다.");
-      navigate("/");
-    }
-  }, [user.token, navigate]);
+  // useEffect(() => {
+  //   if (user.token) {
+  //     alert("이미 로그인된 상태입니다.");
+  //     navigate("/");
+  //   }
+  // }, [user.token]);
 
   const handleSubmit = async e => {
     e.preventDefault();

@@ -23,7 +23,6 @@ const HomeMainPopular = ({ popularList }) => {
         {/* <div className="mm-meeting-picks-more">더보기</div> */}
       </div>
       <Swiper
-        Swiper
         slidesPerView={5}
         slidesPerGroup={5}
         spaceBetween={20}
