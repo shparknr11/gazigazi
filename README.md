@@ -124,8 +124,9 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
 - moment
 - react-toastify
 - swiper
+- react-redux
+- redux-persist
 
-## 2차 그린 프로젝트 : 2024-06-19 ~ 2024-07-23
 
 ### 2차 주요 기능
 

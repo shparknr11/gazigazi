@@ -1,23 +1,14 @@
 import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { clearUser } from "../../redux/UserRedux/Actions/userActions";
 
 const LogOut = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // Remove all user-related data from sessionStorage
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userSeq");
-    sessionStorage.removeItem("userEmail");
-    sessionStorage.removeItem("userPic");
-    sessionStorage.removeItem("userGender");
-    sessionStorage.removeItem("userBirth");
-    sessionStorage.removeItem("userName");
-    sessionStorage.removeItem("userPhone");
-    sessionStorage.removeItem("userAddr");
-    sessionStorage.removeItem("userNickname");
-    sessionStorage.removeItem("userFav");
-    sessionStorage.removeItem("userIntro");
+    dispatch(clearUser());
 
     alert("로그아웃 되었습니다.");
     navigate("/login");

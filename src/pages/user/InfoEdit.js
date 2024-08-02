@@ -1,7 +1,9 @@
-import React, { useState } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setUser } from "../../redux/UserRedux/Actions/userActions";
 
 const InfoEditStyle = styled.div`
   display: flex;
@@ -136,15 +138,8 @@ const ModalStyle = styled.div`
 
 const InfoEdit = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({
-    userNickname: sessionStorage.getItem("userNickname") || "",
-    userAddr: sessionStorage.getItem("userAddr") || "",
-    userFav: sessionStorage.getItem("userFav") || "",
-    userPhone: sessionStorage.getItem("userPhone") || "",
-    userIntro: sessionStorage.getItem("userIntro") || "",
-    userSeq: sessionStorage.getItem("userSeq"),
-    token: sessionStorage.getItem("token") || "",
-  });
+  const dispatch = useDispatch();
+  const userInfo = useSelector(state => state.user); // Redux 상태 가져오기
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -155,14 +150,12 @@ const InfoEdit = () => {
 
   const handleInputChange = e => {
     const { name, value } = e.target;
-    setUserInfo(prevInfo => ({
-      ...prevInfo,
-      [name]: value,
-    }));
+    // Redux 상태 업데이트
+    dispatch(setUser({ [name]: value }));
   };
 
   const handleSave = async () => {
-    const { userSeq } = userInfo;
+    const { userSeq, token } = userInfo;
     try {
       const response = await axios.patch(
         "/api/user/update/myInfo",
@@ -178,6 +171,7 @@ const InfoEdit = () => {
           headers: {
             "Content-Type": "application/json",
             accept: "*/*",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -246,7 +240,7 @@ const InfoEdit = () => {
     formData.append("userSeq", userInfo.userSeq);
     formData.append("pic", file);
 
-    const token = sessionStorage.getItem("token");
+    const token = userInfo.token;
 
     try {
       const response = await axios.patch("/api/user/pic", formData, {
@@ -259,7 +253,7 @@ const InfoEdit = () => {
       const { data } = response;
       if (data.code === 1) {
         alert("프로필 사진이 성공적으로 변경되었습니다.");
-        sessionStorage.setItem("userPic", data.resultData);
+        dispatch(setUser({ userPic: data.resultData }));
         window.location.reload();
       } else {
         alert("프로필 사진 변경에 실패했습니다.");
@@ -323,7 +317,7 @@ const InfoEdit = () => {
             <input
               type="text"
               name="userNickname"
-              value={userInfo.userNickname}
+              value={userInfo.userNickname || ""}
               onChange={handleInputChange}
               autoComplete="off"
             />
@@ -331,7 +325,7 @@ const InfoEdit = () => {
             <input
               type="text"
               name="userAddr"
-              value={userInfo.userAddr}
+              value={userInfo.userAddr || ""}
               onChange={handleInputChange}
               autoComplete="off"
             />
@@ -339,7 +333,7 @@ const InfoEdit = () => {
             <input
               type="text"
               name="userFav"
-              value={userInfo.userFav}
+              value={userInfo.userFav || ""}
               onChange={handleInputChange}
               autoComplete="off"
             />
@@ -347,7 +341,7 @@ const InfoEdit = () => {
             <input
               type="text"
               name="userPhone"
-              value={userInfo.userPhone}
+              value={userInfo.userPhone || ""}
               onChange={handleInputChange}
               autoComplete="off"
             />
@@ -355,7 +349,7 @@ const InfoEdit = () => {
             <input
               type="text"
               name="userIntro"
-              value={userInfo.userIntro}
+              value={userInfo.userIntro || ""}
               onChange={handleInputChange}
               autoComplete="off"
             />
