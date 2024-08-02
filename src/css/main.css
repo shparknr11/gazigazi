@@ -205,7 +205,6 @@
   margin-bottom: 10px;
 }
 .mm-meeting-picks {
-  position: relative;
   margin-bottom: 120px;
 }
 .mm-meeting-title {
@@ -223,21 +222,22 @@
 }
 .mm-meeting-list {
   display: flex;
-  gap: 15px;
   width: 100%;
 }
 .list-box {
   margin-top: 10px;
+
   display: block;
   width: 100%;
   max-width: 250px;
   cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 1px;
+  border: 1px solid #999;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 1px; */
 
   border-radius: 15px;
 }
 .list-box:hover {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 7px 22px 2px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 7px 22px 2px; */
 }
 .list-box-img {
   display: block;
@@ -302,10 +302,13 @@
   padding: 5px;
 }
 .mm-meeting-around {
+  position: relative;
   margin-bottom: 120px;
 }
 
 .mm-meeting-deadline {
+  position: relative;
+
   margin-bottom: 120px;
 }
 .main-bottom {

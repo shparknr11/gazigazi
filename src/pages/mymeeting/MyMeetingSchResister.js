@@ -18,6 +18,7 @@ const MyMeetingNoticeStyle = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
+  margin-top: 40px;
   .notice-wrap {
     width: 100%;
     display: flex;
@@ -25,7 +26,6 @@ const MyMeetingNoticeStyle = styled.div`
     justify-content: center;
     align-items: center;
     max-width: 1024px;
-    gap: 40px;
   }
   .notice-inner {
     width: 100%;
@@ -132,6 +132,8 @@ const MyMeetingSchResister = () => {
     document.getElementById(focusId).focus();
   };
   useEffect(() => {}, []);
+
+  // 등록 버튼
   const handleClick = async () => {
     if (!formDataFunc("dataForm").planTitle) {
       toast.warning("일정명은 필수값입니다.");
@@ -170,6 +172,8 @@ const MyMeetingSchResister = () => {
       state: { isAuth: location.state.isAuth },
     });
   };
+
+  // 취소버튼
   const changedValue = () => {
     if (
       formDataFunc("dataForm").planTitle ||
@@ -193,9 +197,11 @@ const MyMeetingSchResister = () => {
       },
     });
   };
+
   if (isLoading) {
     return <Loading></Loading>;
   }
+
   return (
     <>
       <MyMeetingNoticeStyle>

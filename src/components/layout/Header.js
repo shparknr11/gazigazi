@@ -56,10 +56,10 @@ const Header = () => {
         <nav className="header-menu">
           <ul className="header-menu-list">
             <li>
-              <Link to="/">홈</Link>
+              <Link to="/">웹 소개</Link>
             </li>
             <li>
-              <Link to="/admin">관리자(모임승인)</Link>
+              <Link to="/admin">랭킹</Link>
             </li>
             <li>
               <Link to="/review">커뮤니티 후기</Link>
