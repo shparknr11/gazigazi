@@ -10,6 +10,7 @@ import GuideTitle from "../../components/common/GuideTitle";
 import { toast } from "react-toastify";
 import Loading from "../../components/common/Loading";
 import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
@@ -178,6 +179,7 @@ const TitleDivStyle = styled.div`
   padding-top: 20px;
 `;
 const MyMeeting = () => {
+  const user = useSelector(state => state.user);
   const [imgUrl, setImgUrl] = useState();
   const [isAuth, setIsAuth] = useState(0);
   const [imgError, setImgError] = useState(false);
@@ -188,6 +190,7 @@ const MyMeeting = () => {
   const meetingEnter = useRef();
   const meetingMake = useRef();
   const navigate = useNavigate();
+
   // 나중에 axios 들어오면 이거 그냥 필요없음
   // 권한에 따라 쏘고 받고만 하면됨
   const handleClickEnterMeet = async () => {
@@ -195,7 +198,7 @@ const MyMeeting = () => {
     // size 는
     setIsLoading(true);
     const enterMeetObj = {
-      userSeq: sessionStorage.getItem("userSeq"),
+      userSeq: user.userSeq,
       page,
     };
     try {
@@ -210,7 +213,7 @@ const MyMeeting = () => {
   const handleClickMakeMeet = async () => {
     setIsLoading(true);
     const enterMeetObj = {
-      userSeq: sessionStorage.getItem("userSeq"),
+      userSeq: user.userSeq,
       page,
     };
     try {

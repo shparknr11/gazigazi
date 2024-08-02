@@ -2,7 +2,8 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { clearUser } from "../../redux/UserRedux/Actions/userActions";
+// import { clearUser } from "../../redux/UserRedux/Actions/userActions";
+import { clearUser } from "../../slices/userSlice";
 import { useState } from "react";
 
 const ButtonContainer = styled.div`

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import "../../css/calendar/calendar.css";
 import { getSchMemberAll } from "../../apis/mymeetingapi/meetschapi/meetschapi";
+import { useSelector } from "react-redux";
 
 const ReactCalendarStyle = styled.div`
   width: 35%;
@@ -140,6 +141,9 @@ const MyMeetingSchMemberList = ({
   setIsJoined,
   setPlanMemberJoinFunc,
 }) => {
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const [allData, setAllData] = useState([]);
   const [isClicked, setIsClicked] = useState(0);
   const params = useParams();
@@ -153,7 +157,7 @@ const MyMeetingSchMemberList = ({
   const a = async () => {
     const res = await getSchMemberAll(meetingId);
     setAllData(res);
-    const a = Number(sessionStorage.getItem("userSeq"));
+    const a = Number(user.userSeq);
     if (allData?.length > 0) {
       const b = allData?.filter(item => {
         return Number(item?.userSeq) === Number(a);

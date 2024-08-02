@@ -15,6 +15,7 @@ import "./common.js";
 import MyMeetingCalendar from "./MyMeetingCalendar";
 import "./printledger.css";
 import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
+import { useSelector } from "react-redux";
 
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
@@ -165,6 +166,7 @@ const TitleDivStyle = styled.div`
   padding: 20px 0px 20px 5px;
 `;
 const MyMeetingFuncLeader = () => {
+  const user = useSelector(state => state.user);
   const [isClicked, setIsClicked] = useState();
   const [monthValue, setMonthValue] = useState("01");
   const [budgetList, setBudgetList] = useState([]);
@@ -364,7 +366,7 @@ const MyMeetingFuncLeader = () => {
                         navigate(`/mymeeting/mymeetingnoticeresister`, {
                           state: {
                             boardPartySeq: params?.meetingId,
-                            boardMemberSeq: sessionStorage.getItem("userSeq"),
+                            boardMemberSeq: user.userSeq,
                           },
                         });
                       }}

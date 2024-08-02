@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { clearUser } from "../../redux/UserRedux/Actions/userActions";
+// import { clearUser } from "../../redux/UserRedux/Actions/userActions";
+import { clearUser } from "../../slices/userSlice";
 
 const LogOut = () => {
   const navigate = useNavigate();

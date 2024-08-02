@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getLocal, postParty } from "../../apis/meeting/meetingapi";
 import { useNavigate } from "react-router-dom";
 import GuideTitle from "../../components/common/GuideTitle";
+import { useSelector } from "react-redux";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -204,7 +205,10 @@ const Create = () => {
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
 
-  const userSeq = sessionStorage.getItem("userSeq");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const navigate = useNavigate();
   useEffect(() => {
     window.scroll({

@@ -10,6 +10,7 @@ import {
   MemberListTitle,
   PermissionBtn,
 } from "./MyMeetingMemberList";
+import { useSelector } from "react-redux";
 
 const MemberListMainStyle = styled.div`
   width: 80%;
@@ -50,7 +51,10 @@ const MyMeetingNewMemberList = () => {
 
   const { partySeq } = useParams();
   const location = useLocation();
-  const userSeq = sessionStorage.getItem("userSeq");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   // console.log(partySeq);
   // console.log(userSeq);
   // api함수

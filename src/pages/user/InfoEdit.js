@@ -3,7 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setUser } from "../../redux/UserRedux/Actions/userActions";
+// import { setUser } from "../../redux/UserRedux/Actions/userActions";
+import { setUser } from "../../slices/userSlice";
 
 const InfoEditStyle = styled.div`
   display: flex;

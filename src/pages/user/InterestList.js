@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import cate from "../../images/cate2.png";
+import { useSelector } from "react-redux";
 
 const InterestListStyle = styled.div`
   display: flex;
@@ -87,6 +88,9 @@ const InterestInnerStyle = styled.div`
 `;
 
 const InterestList = () => {
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+
   const [loading, setLoading] = useState(true);
   const [interestItems, setInterestItems] = useState([]);
   const [error, setError] = useState(null);
@@ -95,7 +99,7 @@ const InterestList = () => {
   useEffect(() => {
     const fetchInterestItem = async () => {
       try {
-        const userSeq = sessionStorage.getItem("userSeq");
+        //const userSeq = userSeq;
 
         if (!userSeq) {
           setError("사용자 Email을 찾을 수 없습니다.");
@@ -122,7 +126,7 @@ const InterestList = () => {
   }, []);
 
   const handleDelete = async partySeq => {
-    const userSeq = sessionStorage.getItem("userSeq");
+    //const userSeq = sessionStorage.getItem("userSeq");
     localStorage.removeItem(parseInt(partySeq) + parseInt(userSeq));
     if (!userSeq) {
       alert("사용자 정보를 찾을 수 없습니다.");

@@ -7,6 +7,7 @@ import Category from "../components/meeting/Category";
 
 import HomeMainAround from "../components/meeting/HomeMainAround";
 import HomeMainPopular from "../components/meeting/HomeMainPopular";
+import { useSelector } from "react-redux";
 
 const HomeInnerStyle = styled.div`
   width: 100%;
@@ -61,7 +62,9 @@ const Home = () => {
 
   // 검색
   const [searchKeyword, setSearchKeyword] = useState("");
-  const userSeq = sessionStorage.getItem("userSeq");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
 
   // search 클릭 시 검색
   const handleChangeSearch = e => {

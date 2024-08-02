@@ -3,10 +3,16 @@ import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import logo from "../../images/logo2.png";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-  const userSeq = sessionStorage.getItem("userSeq");
-  const userPic = sessionStorage.getItem("userPic");
+  // const userSeq = sessionStorage.getItem("userSeq");
+  // const userPic = sessionStorage.getItem("userPic");
+
+  const user = useSelector(state => state.user);
+  const userSeq = user.userSeq;
+  const userPic = user.userPic;
+
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import UserDelete from "./UserDelete";
 import LogOut from "./LogOut";
-import { setUser, clearUser } from "../../redux/UserRedux/Actions/userActions";
+// import { setUser, clearUser } from "../../redux/UserRedux/Actions/userActions";
+import { setUser, clearUser } from "../../slices/userSlice";
 
 const UserInfoStyle = styled.div`
   display: flex;

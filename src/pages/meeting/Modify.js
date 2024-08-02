@@ -10,6 +10,7 @@ import {
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import GuideTitle from "../../components/common/GuideTitle";
+import { useSelector } from "react-redux";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -107,7 +108,9 @@ const Modify = () => {
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
   const navigate = useNavigate();
-  const userSeq = parseInt(sessionStorage.getItem("userSeq"));
+  // const userSeq = parseInt(sessionStorage.getItem("userSeq"));
+  const user = useSelector(state => state.user);
+  const userSeq = parseInt(user.userSeq);
 
   useEffect(() => {
     const fetchData = async () => {
