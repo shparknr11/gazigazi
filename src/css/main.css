@@ -184,8 +184,10 @@
   background: url("../images/cate8.png") no-repeat center;
   background-size: cover;
   border-radius: 55px;
-  transition: border 0.5s ease; /* border 속성 변화를 0.5초 동안 부드럽게 처리 */
+  /* border 속성 변화를 0.5초 동안 부드럽게 처리 */
   border: 2px solid white;
+  transition: border 0.5s ease;
+
   cursor: pointer;
 }
 .mt-category-imgseven:hover {
@@ -202,51 +204,41 @@
 }
 .main-mid h1 {
   font-size: 18px;
-  margin-bottom: 10px;
 }
-.mm-meeting-picks {
-  margin-bottom: 120px;
-}
+
 .mm-meeting-title {
   display: flex;
   justify-content: space-between;
 }
-.mm-meeting-picks-more {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-bottom: 1px solid transparent;
-}
-.mm-meeting-picks-more:hover {
-  border-bottom: 1px solid #000;
-}
+
 .mm-meeting-list {
   display: flex;
   width: 100%;
+  padding: 10px 0px !important;
 }
 .list-box {
   margin-top: 10px;
-
   display: block;
-  width: 100%;
-  max-width: 250px;
-  cursor: pointer;
-  border: 1px solid #999;
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 1px; */
+  width: 240px;
 
+  cursor: pointer;
   border-radius: 15px;
+  border: 2px solid #efede5;
+  transition: border 0.5s ease !important;
 }
 .list-box:hover {
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 7px 22px 2px; */
+  /* border: 2px solid #999; */
+  border: 2px solid #c9c2a5;
 }
 .list-box-img {
   display: block;
+  width: 240px;
+
   height: 200px;
   /* background: url("../images/meetinga.png") no-repeat center;
   background-size: cover; */
-  margin-bottom: 5px;
   border-radius: 15px 15px 0px 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #e6e2d5;
 }
 .list-box-img img {
   display: block;
@@ -255,11 +247,12 @@
   border-radius: 15px 15px 0px 0px;
 }
 .list-box-content {
-  margin-bottom: 5px;
   padding-top: 7px;
   padding-left: 12px;
   padding-right: 12px;
   padding-bottom: 12px;
+  border-radius: 0px 0px 15px 15px;
+  background-color: #f9f8f5;
 }
 .list-box-title {
   display: flex;

@@ -50,6 +50,7 @@ import UserReview from "./pages/user/UserReview";
 import NotFoundPage from "./pages/NotFoundPage";
 import EventPage from "./pages/meeting/EventPage";
 import MyMeetingNoticeResister from "./pages/mymeeting/MyMeetingNoticeResister";
+import Rank from "./components/meeting/Rank";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -148,6 +149,7 @@ const App = () => {
           ></Route>
 
           <Route path="*" element={<NotFoundPage />}></Route>
+          <Route path="/rank" element={<Rank />}></Route>
         </Routes>
       </MainStyle>
 

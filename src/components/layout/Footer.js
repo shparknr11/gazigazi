@@ -3,8 +3,8 @@ import gazilogo from "../../images/logo2.png";
 import { prColor } from "../../css/color";
 
 const FooterStyle = styled.div`
-  background-color: ${prColor.p100};
-  border-top: 1px solid ${prColor.p300};
+  background-color: ${prColor.p300};
+  border-top: 1px solid ${prColor.p600};
 
   .footer-inner {
     display: flex;
@@ -26,6 +26,7 @@ const FooterStyle = styled.div`
     /* display: flex;
     flex-direction: column; */
     margin-bottom: 10px;
+    font-size: 12px;
   }
   .gazi-logo-div {
     margin-bottom: 15px;
