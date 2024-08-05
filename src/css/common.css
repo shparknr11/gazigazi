@@ -111,7 +111,8 @@ textarea {
   height: 50px;
   border: 1px solid #e5e1e5;
   /* 그림자 */
-  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.13);
+  box-shadow: 0 0 3px 0.5px rgba(0, 0, 0, 0.13);
+
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
@@ -145,7 +146,8 @@ textarea {
   height: 50px;
   border: 1px solid #e5e1e5;
   /* 그림자 */
-  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.13);
+  box-shadow: 0 0 3px 0.5px rgba(0, 0, 0, 0.13);
+
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
@@ -174,4 +176,99 @@ textarea {
 
 .c-slide-next.swiper-button-disabled {
   display: none;
+}
+
+.c-slide-next:hover,
+.c-slide-prev:hover {
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.13);
+}
+
+.cube {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+  transform-origin: center;
+  transition: transform 1s;
+}
+
+.cube:hover {
+  /* transform: rotateX(-30deg) rotateY(405deg); */
+}
+
+.top {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.bottom {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.left {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.right {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.front {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.back {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.bottom {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.front {
+  transform: rotateY(0deg) translateZ(75px);
+}
+.back {
+  transform: rotateY(-180deg) translateZ(75px);
+}
+.left {
+  transform: rotateY(-90deg) translateZ(-125px);
+}
+
+.right {
+  transform: rotateY(-90deg) translateZ(75px);
+}
+.top {
+  transform: rotateX(90deg) translateZ(75px);
+}
+.bottom {
+  transform: rotateX(-90deg) translateZ(75px);
 }
