@@ -129,10 +129,11 @@ const ReviewItemStyle = styled.div`
       margin-right: 5px;
     }
     .review-partyname-click {
-      border-bottom: 1px solid transparent;
+      /* border-bottom: 1px solid transparent; */
     }
     .review-partyname-click:hover {
-      border-bottom: 1px solid;
+      /* border-bottom: 1px solid; */
+      text-decoration: underline;
     }
   }
   .review-bottom {
