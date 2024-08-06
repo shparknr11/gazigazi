@@ -163,6 +163,10 @@ const Login = () => {
           userIntro,
         });
 
+        // 쿠키에 토큰 저장
+        // setCookie("token", accessToken);
+        sessionStorage.setItem("token", accessToken);
+
         alert("로그인 성공!");
         console.log(response.data);
         navigate("/");
