@@ -167,7 +167,7 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingFuncLeader = () => {
   const user = useSelector(state => state.user);
-  const [isClicked, setIsClicked] = useState();
+  const [isClicked, setIsClicked] = useState(0);
   const [monthValue, setMonthValue] = useState("01");
   const [budgetList, setBudgetList] = useState([]);
   const [depositSum, setDepositSum] = useState(0);
@@ -188,7 +188,7 @@ const MyMeetingFuncLeader = () => {
   }, [noticeList]);
 
   useEffect(() => {
-    console.log("isClicked : ", isClicked);
+    // console.log("isClicked : ", isClicked);
   }, [isClicked]);
   useEffect(() => {}, [monthValue]);
   useEffect(() => {}, [isPopup]);
@@ -287,7 +287,7 @@ const MyMeetingFuncLeader = () => {
   const handleNoticeList = async (pages = 1) => {
     setIsLoading(true);
     try {
-      const res = await getNoticeAll(params?.meetingId, pages);
+      const res = await getNoticeAll(params?.meetingId, pages, user.token);
       setNoticeList(res.list);
     } catch (error) {
       console.log(error);

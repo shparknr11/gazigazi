@@ -51,6 +51,7 @@ export const postNotice = async (formData, token) => {
 // http://112.222.157.156:5122/api/board?page=1
 // 페이지네이션 나중에 추가
 export const getNoticeAll = async (partySeq, page = 1, token) => {
+  console.log(token);
   try {
     const res = await axios.get(
       `/api/board?page=${page}&boardPartySeq=${partySeq}`,
