@@ -208,6 +208,7 @@ const Create = () => {
   // const userSeq = sessionStorage.getItem("userSeq");
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
+  const token = sessionStorage.getItem("token");
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -382,7 +383,6 @@ const Create = () => {
 
     const formData = new FormData();
     const infoData = JSON.stringify({
-      userSeq,
       partyName,
       partyGenre,
       partyLocation,
@@ -403,7 +403,7 @@ const Create = () => {
 
     // navigate(`/admin`);
     try {
-      const result = await postParty(formData);
+      const result = await postParty(formData, token);
       // console.log(result);
       if (result.code !== 1) {
         alert(result.resultMsg);

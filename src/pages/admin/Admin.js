@@ -167,41 +167,46 @@ const Admin = () => {
         <span></span>
         <div className="admin-application-div">
           {filteredPartyList.map((item, index) => (
-            <div key={index} className="list-box">
-              <div className="list-box-img">
-                <img
-                  src={`/pic/party/${item.partySeq}/${item.partyPic}`}
-                  alt="파티이미지"
-                />
-              </div>
-              <div className="list-box-content">
-                <div className="list-box-title">
-                  <div className="list-box-profileimg">
-                    <img
-                      src={`/pic/user/${item.userSeq}/${item.userPic}`}
-                      alt="프로필이미지"
-                    />
-                  </div>
-                  <span style={{ fontWeight: "bold" }}>{item.userName}</span>
-                  <span style={{ color: "#999" }}> 님의 모임</span>
+            <div
+              key={index}
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+              <div className="list-box">
+                <div className="list-box-img">
+                  <img
+                    src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                    alt="파티이미지"
+                  />
                 </div>
-                <h3 className="list-box-text" style={{ fontWeight: "bold" }}>
-                  {item.partyName}
-                </h3>
-                <p className="list-box-local" style={{ fontSize: "13px" }}>
-                  {item.partyLocation1} {item.partyLocation2}
-                </p>
-                <span className="list-box-gender">
-                  {getGenderText(item.partyGender)}
-                </span>
-                <span className="list-box-age">
-                  {getYearLastTwoDigits(item.partyMinAge) === "1901"
-                    ? "연령무관"
-                    : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
-                  {getYearLastTwoDigits(item.partyMaxAge) === "2155"
-                    ? ""
-                    : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
-                </span>
+                <div className="list-box-content">
+                  <div className="list-box-title">
+                    <div className="list-box-profileimg">
+                      <img
+                        src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                        alt="프로필이미지"
+                      />
+                    </div>
+                    <span style={{ fontWeight: "bold" }}>{item.userName}</span>
+                    <span style={{ color: "#999" }}> 님의 모임</span>
+                  </div>
+                  <h3 className="list-box-text" style={{ fontWeight: "bold" }}>
+                    {item.partyName}
+                  </h3>
+                  <p className="list-box-local" style={{ fontSize: "13px" }}>
+                    {item.partyLocation1} {item.partyLocation2}
+                  </p>
+                  <span className="list-box-gender">
+                    {getGenderText(item.partyGender)}
+                  </span>
+                  <span className="list-box-age">
+                    {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                      ? "연령무관"
+                      : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                    {getYearLastTwoDigits(item.partyMaxAge) === "2155"
+                      ? ""
+                      : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                  </span>
+                </div>
               </div>
               <div
                 style={{

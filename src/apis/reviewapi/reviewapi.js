@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtAxios from "../jwtUtil";
 
 // // 리뷰 불러오기
 // export const getReviewList = async (_searchText, _totalPage, _pageSize) => {
@@ -39,7 +40,7 @@ export const getReviewList = async (_searchText, _currentPage) => {
 // 리뷰 추천
 export const getRecommend = async (_userSeq, _reviewSeq) => {
   try {
-    const response = await axios.get(
+    const response = await jwtAxios.get(
       `/api/review/fav?reviewFavUserSeq=${_userSeq}&reviewFavReviewSeq=${_reviewSeq}`,
     );
     // console.log(response);

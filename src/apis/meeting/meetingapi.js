@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtAxios from "../jwtUtil";
 // 모임 전체 불러오기
 export const getPartyAll = async () => {
   try {
@@ -31,11 +32,15 @@ export const getPartyOne = async _partySeq => {
 };
 
 // 모임 생성하기
-export const postParty = async _data => {
+export const postParty = async (_data, _token) => {
   try {
-    const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const response = await axios.post(`/api/party`, _data, header);
-    // console.log(response);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${_token}`,
+    };
+
+    const response = await axios.post(`/api/party`, _data, { headers });
+    console.log(response);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       return response.data;
@@ -47,10 +52,13 @@ export const postParty = async _data => {
   }
 };
 // 모임 수정하기
-export const patchParty = async _data => {
+export const patchParty = async (_data, _token) => {
   try {
-    const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const response = await axios.patch(`/api/party`, _data, header);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${_token}`,
+    };
+    const response = await axios.patch(`/api/party`, _data, { headers });
     // console.log(response);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
@@ -120,7 +128,7 @@ export const getLocalDetail = async _data => {
 // 찜하기
 export const getWishParty = async (_userSeq, _partySeq) => {
   try {
-    const response = await axios.get(
+    const response = await jwtAxios.get(
       `/api/party/wish?wishUserSeq=${_userSeq}&wishPartySeq=${_partySeq}`,
     );
     const status = response.status.toString().charAt(0);
