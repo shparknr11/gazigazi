@@ -76,6 +76,9 @@ const MyPage = () => {
         await axios.get(`/api/user/${userSeq}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (window.location.pathname === `/myprofile/${userSeq}`) {
+          navigate(`/myprofile/${userSeq}/userInfo`);
+        }
       } catch (error) {
         alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
         navigate("/login");
@@ -96,10 +99,10 @@ const MyPage = () => {
       <GuideTitle guideTitle="마이페이지" />
       <MyPageWrapStyle>
         <NavLinks>
-          <Link to={`/myprofile/:userId/userInfo`}>사용자 정보</Link>
-          <Link to={`/myprofile/:userId/myreview`}>사용자 리뷰</Link>
-          <Link to={`/myprofile/:userId/infoEdit`}>정보 수정</Link>
-          <Link to={`/myprofile/:userId/myinterestlist`}>찜 목록</Link>
+          <Link to={`/myprofile/${userSeq}/userInfo`}>내 정보</Link>
+          <Link to={`/myprofile/${userSeq}/infoEdit`}>정보 수정</Link>
+          <Link to={`/myprofile/${userSeq}/myreview`}>내가 작성한 리뷰</Link>
+          <Link to={`/myprofile/${userSeq}/myinterestlist`}>찜 목록</Link>
         </NavLinks>
         <MyPageInnerStyle>
           <Outlet />

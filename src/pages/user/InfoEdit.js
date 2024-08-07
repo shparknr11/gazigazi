@@ -254,12 +254,15 @@ const InfoEdit = () => {
       const { data } = response;
       if (data.code === 1) {
         alert("프로필 사진이 성공적으로 변경되었습니다.");
+        // Redux 상태 업데이트
         dispatch(setUser({ userPic: data.resultData }));
-        window.location.reload();
+        // 미리보기 이미지 업데이트
+        setPreviewImage(data.resultData);
       } else {
         alert("프로필 사진 변경에 실패했습니다.");
       }
     } catch (error) {
+      console.error(error);
       alert(
         `프로필 사진 변경에 실패했습니다. 다시 시도해주세요. (${error.message})`,
       );

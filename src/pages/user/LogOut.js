@@ -11,6 +11,9 @@ const LogOut = () => {
   const handleLogout = () => {
     dispatch(clearUser());
 
+    sessionStorage.removeItem("userData");
+    sessionStorage.removeItem("token");
+
     alert("로그아웃 되었습니다.");
     navigate("/login");
   };
