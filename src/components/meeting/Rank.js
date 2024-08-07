@@ -10,7 +10,7 @@ import {
 } from "../button/Button";
 const RankWrapStyle = styled.div`
   width: calc(100% - 10px);
-  max-width: 1300px;
+  max-width: 1280px;
   margin: 40px auto;
   height: auto;
   .rank-inner {
@@ -18,6 +18,7 @@ const RankWrapStyle = styled.div`
     justify-content: center;
     align-items: center;
     gap: 40px;
+    margin-top: 250px;
   }
   .rank-first-div {
     margin-bottom: 100px;
@@ -35,10 +36,10 @@ const RankCubeStyle = styled.div`
     `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`};
   transform-origin: center;
   transition: transform 1s;
+
   .party-name {
     font-size: 13px;
-    font-weight: 700;
-    color: #999;
+    color: #000;
   }
   .party-admin-div {
     display: flex;
@@ -61,9 +62,26 @@ const RankCubeStyle = styled.div`
       `rotateX(${rotateX1}deg) rotateY(${rotateY1}deg)`};
     /* transform: rotateX(-7deg) rotateY(187deg); */
   }
-  .cube-contents {
-    padding: 10px;
+  .cube-front {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
   }
+  .cube-contents {
+    position: relative;
+    padding: 10px;
+    .cube-contents-no {
+      position: absolute;
+      top: -35px;
+      left: 47px;
+      padding: 10px;
+      font-size: 29px;
+      font-weight: bold;
+      color: ${prColor.p900};
+    }
+  }
+
   .cube-front,
   .cube-back {
     position: absolute;
@@ -152,28 +170,42 @@ const RankTopTenStyle = styled.div`
   ul {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     justify-content: center;
     align-items: center;
   }
   li {
+    display: flex;
+    align-items: center;
     width: 1000px;
     height: 40px;
     background-color: ${prColor.p000};
+  }
+  .rank-top10 {
+    padding: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: ${prColor.p500};
+  }
+  .rank-party-desctiption {
+    display: flex;
+    justify-content: space-around;
+    width: 700px;
   }
 `;
 const Rank = () => {
   return (
     <RankWrapStyle>
-      <GuideTitle subTitle="랭킹" />
+      <GuideTitle subTitle="모임 랭킹" guideTitle="rank" />
       <div className="rank-inner">
         <div className="rank-second-div">
           {/* <div className="rank-second">
             <div className="rank-party-pic"></div>
           </div> */}
-          <RankCubeStyle rotateX={-7} rotateY={7} rotateX1={-7} rotateY1={187}>
+          <RankCubeStyle rotateX={-5} rotateY={5} rotateX1={-5} rotateY1={185}>
             <div className="cube-front">
               <div className="cube-contents">
+                <p className="cube-contents-no">2</p>
                 <span className="party-name">[모임제목]자리 입니다.</span>
                 <div className="party-admin-div">
                   <img src="" alt="프로필사진" />
@@ -200,13 +232,24 @@ const Rank = () => {
           {/* <div className="rank-first">
             <div className="rank-party-pic">사진</div>
           </div> */}
-          <RankCubeStyle rotateX={-7} rotateY={0} rotateX1={-7} rotateY1={180}>
-            <div className="cube-front"></div>
+          <RankCubeStyle rotateX={-5} rotateY={0} rotateX1={-5} rotateY1={180}>
+            <div className="cube-front">
+              <div className="cube-contents">
+                <p className="cube-contents-no">1</p>
+                <span className="party-name">[모임제목]자리 입니다.</span>
+                <div className="party-admin-div">
+                  <img src="" alt="프로필사진" />
+                  <p className="party-admin">모임장 님의 모임</p>
+                </div>
+              </div>
+            </div>
             <div className="cube-pic">
               <img src={partyImg} alt="파티이미지" />
               <div className="cube-medal">🥇</div>
             </div>
-            <div className="cube-back"></div>
+            <div className="cube-back">
+              <MainButton label="모임 자세히보기" />
+            </div>
             <div className="cube-top"></div>
             <div className="cube-bottom"></div>
             <div className="cube-left"></div>
@@ -218,13 +261,24 @@ const Rank = () => {
           {/* <div className="rank-third">
             <div className="rank-party-pic">사진</div>
           </div> */}
-          <RankCubeStyle rotateX={-7} rotateY={-7} rotateX1={-7} rotateY1={173}>
-            <div className="cube-front"></div>
+          <RankCubeStyle rotateX={-5} rotateY={-5} rotateX1={-5} rotateY1={175}>
+            <div className="cube-front">
+              <div className="cube-contents">
+                <p className="cube-contents-no">3</p>
+                <span className="party-name">[모임제목]자리 입니다.</span>
+                <div className="party-admin-div">
+                  <img src="" alt="프로필사진" />
+                  <p className="party-admin">모임장 님의 모임</p>
+                </div>
+              </div>
+            </div>
             <div className="cube-pic">
               <img src={partyImg} alt="파티이미지" />
               <div className="cube-medal">🥉</div>
             </div>
-            <div className="cube-back"></div>
+            <div className="cube-back">
+              <MainButton label="모임 자세히보기" />
+            </div>
             <div className="cube-top"></div>
             <div className="cube-bottom"></div>
             <div className="cube-left"></div>
@@ -234,13 +288,34 @@ const Rank = () => {
       </div>
       <RankTopTenStyle>
         <ul>
-          <li>4</li>
-          <li>5</li>
-          <li>6</li>
-          <li>7</li>
-          <li>8</li>
-          <li>9</li>
-          <li>10</li>
+          <li>
+            <sapn className="rank-top10">4</sapn>
+            <div className="rank-party-desctiption">
+              <div className="rank-party-title">모임이름</div>
+              <div className="rank-party-admin">
+                <img src="" alt="모임장사진" />
+                <span>모임장의 모임</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <sapn className="rank-top10">5</sapn>
+          </li>
+          <li>
+            <sapn className="rank-top10">6</sapn>
+          </li>
+          <li>
+            <sapn className="rank-top10">7</sapn>
+          </li>
+          <li>
+            <sapn className="rank-top10">8</sapn>
+          </li>
+          <li>
+            <sapn className="rank-top10">9</sapn>
+          </li>
+          <li>
+            <sapn className="rank-top10">10</sapn>
+          </li>
         </ul>
       </RankTopTenStyle>
     </RankWrapStyle>

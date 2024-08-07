@@ -96,13 +96,13 @@ const Home = () => {
     const userLocation = sessionStorage.getItem("userAddr");
     if (!userLocation) {
       const filteredListOne = _resultData.filter(
-        item => item.partyAuthGb === "1" && item.partyLocation1 === "대구",
+        item => item.partyAuthGb === "2" && item.partyLocation1 === "대구",
       );
       setArroundPartyList(filteredListOne);
     } else {
       const filteredList = _resultData.filter(
         item =>
-          item.partyAuthGb === "1" &&
+          item.partyAuthGb === "2" &&
           item.partyLocation1 === userLocation.slice(0, 2),
       );
 
@@ -114,7 +114,7 @@ const Home = () => {
   const popularHomeList = _resultData => {
     const filteredList = _resultData.filter(
       item =>
-        item.partyAuthGb === "1" && item.partyMaximum - item.partyNowMem < 5,
+        item.partyAuthGb === "2" && item.partyMaximum - item.partyNowMem < 5,
     );
     setPopularList(filteredList);
   };

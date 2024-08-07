@@ -65,10 +65,10 @@ const Header = () => {
               <Link to="/">웹 소개</Link>
             </li>
             <li>
-              <Link to="/admin">랭킹</Link>
+              <Link to="/rank">랭킹</Link>
             </li>
             <li>
-              <Link to="/review">커뮤니티 후기</Link>
+              <Link to="/review">후기</Link>
             </li>
             <li>
               <div
@@ -121,6 +121,30 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+      </div>
+      <div className="header-submenu-div">
+        <ul className="header-submenu">
+          <li>
+            <Link>전체랭킹</Link>
+            <Link>월별랭킹</Link>
+            <Link>카테고리별 랭킹</Link>
+          </li>
+          <li>
+            <Link>전체랭킹</Link>
+            <Link>월별랭킹</Link>
+            <Link>카테고리별 랭킹</Link>
+          </li>
+          <li>
+            <Link>전체랭킹</Link>
+            <Link>월별랭킹</Link>
+            <Link>카테고리별 랭킹</Link>
+          </li>
+          <li>
+            <Link>전체랭킹</Link>
+            <Link>월별랭킹</Link>
+            <Link>카테고리별 랭킹</Link>
+          </li>
+        </ul>
       </div>
     </header>
   );

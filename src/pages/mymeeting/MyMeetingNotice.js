@@ -10,6 +10,9 @@ import {
 import Loading from "../../components/common/Loading";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import DOMPurify from "dompurify";
+
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
   display: flex;
@@ -91,6 +94,8 @@ const TitleDivStyle = styled.div`
   padding-top: 20px;
 `;
 const MyMeetingNotice = () => {
+  const user = useSelector(state => state.user);
+  // console.log(user);
   // jfs 수정 상태
   const [isEdit, setIsEdit] = useState(false);
 
@@ -104,6 +109,7 @@ const MyMeetingNotice = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imgFile, setImgFile] = useState();
   const [previewPreImg, setPreviewPreImg] = useState();
+  const [originPreImg, setOriginPreImg] = useState();
   const location = useLocation();
   const param = useParams();
   const navigate = useNavigate();
@@ -115,31 +121,38 @@ const MyMeetingNotice = () => {
         param.meetingnoticeId,
         location.state.boardPartySeq,
         location.state.boardMemberSeq,
+        user.token,
       );
 
       // jfs 진행해야 해요.
-      res = {
-        boardSeq: 24,
-        boardPartySeq: 11,
-        boardMemberSeq: 41,
-        userName: "이재문",
-        boardTitle: "요즘 무라카미하루키 책 읽는데 재밌네요",
-        boardContents: "간만에 재밌게 읽었어요",
-        boardHit: 11,
-        inputDt: "2024-07-29T14:56:47",
-        updateDt: "2024-07-29T16:42:23",
-        pics: ["c4215e8a-901d-46da-8e64-6db1e939be39.jpg"],
-      };
+
+      //console.log(res);
+      // res ={
+      //     "boardSeq": 47,
+      //     "boardPartySeq": 39,
+      //     "boardMemberSeq": 17,
+      //     "userName": "윤성환",
+      //     "boardTitle": "ㄴㄴㄴㄴ",
+      //     "boardContents": "ㄴㄴㄴㄴ",
+      //     "boardHit": 5,
+      //     "inputDt": "2024-08-06T14:42:52",
+      //     "updateDt": "2024-08-06T15:18:27",
+      //     "pics": [
+      //         "9014e416-27cc-4183-9adb-f7e8bed824a6.png"
+      //     ]
+      // }
 
       setData(res);
       setDataOrigin(res);
       // 수정 항목
       setBoardTitle(res.boardTitle);
       setTextAreaVal(res.boardContents);
+      setOriginPreImg(res.pics[0]);
+      setPreviewPreImg(`/pic/board/${res.boardSeq}/${res.pics[0]}`);
       // console.log("여기니?");
       // console.log(res);
-      console.log(res?.pics.length);
-      console.log(`/pic/board/41/${res?.pics[0]}`);
+      // console.log(res?.pics.length);
+      // console.log(`/pic/board/41/${res?.pics[0]}`);
     } catch (error) {
       console.log(error);
     }
@@ -163,9 +176,7 @@ const MyMeetingNotice = () => {
     console.log(tempFile);
     if (tempFile) {
       const tempUrl = URL?.createObjectURL(tempFile);
-
       setPreviewPreImg(tempUrl);
-
       // 전송할 파일 변경(주의합니다. 파일을 넣어주세요.)
       setImgFile(tempFile);
     }
@@ -177,20 +188,73 @@ const MyMeetingNotice = () => {
 
   const handleDeleteClick = async () => {
     try {
+      // const objData = {
+      //   boardPartySeq: Number(param.boardPartySeq),
+      //   boardSeq: location.state.boardPartySeq,
+      //   boardMemberSeq: location.state.boardMemberSeq,
+      // };
       const objData = {
-        boardPartySeq: Number(param.meetingnoticeId),
-        boardSeq: location.state.boardPartySeq,
-        boardMemberSeq: location.state.boardMemberSeq,
+        boardPartySeq: Number(dataOrigin.boardPartySeq),
+        boardSeq: dataOrigin.boardSeq,
+        boardMemberSeq: dataOrigin.boardMemberSeq,
       };
-      console.log(objData);
+      // console.log(objData);
       // const a = 1;
       // if (a === 1) return;
-      await deleteNotice(objData);
+      await deleteNotice(objData, user.token);
     } catch (error) {
       console.log(error);
     }
     toast.success("게시글이 삭제되었습니다.");
     navigate(`/mymeeting/mymeetingLeader/${location.state.boardPartySeq}`);
+  };
+
+  const handleClickUpdate = async () => {
+    if (!boardTitle) {
+      toast.success("제목을 입력하세요.");
+      return false;
+    }
+    if (!textAreaVal) {
+      toast.success("내용을 입력하세요.");
+      return false;
+    }
+
+    // 1. 전송데이터 포맷 만들기
+    const formData = new FormData();
+    // 모임장 seq, budgetMemberSeq 2개
+    // const form = {
+    //   boardSeq: dataOrigin.boardSeq,
+    //   boardMemberSeq: dataOrigin.boardMemberSeq,
+    //   boardTitle: boardTitle,
+    //   boardContents: textAreaVal,
+    // };
+    // console.log("게시판저장데이터 : ", form);
+    // console.log("form : ", form);
+    // const infoData = JSON.stringify(form);
+    // const dto = new Blob([infoData], { type: "application/json" });
+    formData.append("boardSeq", dataOrigin.boardSeq);
+    formData.append("boardMemberSeq", dataOrigin.boardMemberSeq);
+    formData.append("boardTitle", boardTitle);
+    formData.append("boardContents", textAreaVal);
+
+    // if (!imgFile) {
+    formData.append("nowFileNames", imgFile);
+    formData.append("deleteFileNames", dataOrigin.pics[0]);
+    // }
+
+    try {
+      const result = await patchNotice(formData, user.token);
+      console.log(result);
+
+      toast.success("게시글이 저장되었습니다.");
+      // navigate(`/mymeeting/mymeetingLeader/${isAuth}`, {
+      //   state: { isAuth: isAuth },
+      // });
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isLoading) {
@@ -218,31 +282,43 @@ const MyMeetingNotice = () => {
                     >
                       {/* data?.pics.length > 0 */}
                       <label htmlFor="fileId">
-                        {previewPreImg ? (
-                          // 나중에 pics 로 조건 쳐야함.
-                          <img
-                            style={{
-                              cursor: "pointer",
-                              width: "200px",
-                              height: "200px",
-                            }}
-                            src={previewPreImg}
-                          />
-                        ) : (
-                          <CiImageOff
-                            style={{ cursor: "pointer", textAlign: "center" }}
-                            className="caption-img"
-                            size="200"
-                          />
-                        )}
-                        <input
-                          style={{ width: "0", height: "0" }}
-                          type="file"
-                          id="fileId"
-                          onChange={e => {
-                            handleFileChange(e);
+                        <div
+                          style={{
+                            width: "200px",
+                            height: "200px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            overflow: "hidden",
+                            borderRadius: 10,
                           }}
-                        ></input>
+                        >
+                          {previewPreImg ? (
+                            // 나중에 pics 로 조건 쳐야함.
+                            <img
+                              style={{
+                                cursor: "pointer",
+                                width: "200px",
+                                height: "200px",
+                              }}
+                              src={previewPreImg}
+                            />
+                          ) : (
+                            <CiImageOff
+                              style={{ cursor: "pointer", textAlign: "center" }}
+                              className="caption-img"
+                              size="200"
+                            />
+                          )}
+                          <input
+                            style={{ width: "0", height: "0" }}
+                            type="file"
+                            id="fileId"
+                            onChange={e => {
+                              handleFileChange(e);
+                            }}
+                          ></input>
+                        </div>
                       </label>
                     </div>
                     <div style={{ width: "50%" }}>
@@ -346,6 +422,10 @@ const MyMeetingNotice = () => {
                         className="etc-btn"
                         onClick={() => {
                           setIsEdit(false);
+                          setPreviewPreImg(
+                            `/pic/board/${dataOrigin.boardSeq}/${dataOrigin.pics[0]}`,
+                          );
+                          setImgFile(null);
                         }}
                       >
                         취소
@@ -356,6 +436,7 @@ const MyMeetingNotice = () => {
                         onClick={() => {
                           //setIsEdit(false);
                           console.log("새로운 수정으로 변경 전달");
+                          handleClickUpdate();
                         }}
                       >
                         수정
@@ -394,23 +475,35 @@ const MyMeetingNotice = () => {
                     >
                       {/* data?.pics.length > 0 */}
                       <label htmlFor="fileId">
-                        {previewPreImg ? (
-                          // 나중에 pics 로 조건 쳐야함.
-                          <img
-                            style={{
-                              // cursor: "pointer",
-                              width: "200px",
-                              height: "200px",
-                            }}
-                            src={previewPreImg}
-                          />
-                        ) : (
-                          <CiImageOff
-                            style={{ textAlign: "center" }}
-                            className="caption-img"
-                            size="200"
-                          />
-                        )}
+                        <div
+                          style={{
+                            width: "200px",
+                            height: "200px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            overflow: "hidden",
+                            borderRadius: 10,
+                          }}
+                        >
+                          {originPreImg ? (
+                            // 나중에 pics 로 조건 쳐야함.
+                            <img
+                              style={{
+                                // cursor: "pointer",
+                                width: "200px",
+                                height: "200px",
+                              }}
+                              src={`/pic/board/${dataOrigin.boardSeq}/${originPreImg}`}
+                            />
+                          ) : (
+                            <CiImageOff
+                              style={{ textAlign: "center" }}
+                              className="caption-img"
+                              size="200"
+                            />
+                          )}
+                        </div>
                       </label>
                     </div>
                     <div style={{ width: "50%" }}>
@@ -487,14 +580,20 @@ const MyMeetingNotice = () => {
                       >
                         내용
                       </label>
-                      <textarea
+                      {/* <textarea
                         id="noticecontent"
                         className="notice-textarea"
                         style={{ border: 0 }}
                         rows="10"
                         value={dataOrigin?.boardContents}
                         maxLength={300}
-                      ></textarea>
+                        readOnly
+                      ></textarea> */}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(dataOrigin?.boardContents),
+                        }}
+                      />
                       <div style={{ textAlign: "right" }}>
                         <span style={{ display: "none" }}>
                           <strong style={{ color: "red" }}>*</strong>

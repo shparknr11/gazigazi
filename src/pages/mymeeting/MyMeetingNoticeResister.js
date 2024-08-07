@@ -3,7 +3,16 @@ import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { postNotice } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
+import {
+  getMemberSeq,
+  postNotice,
+} from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
+import { useSelector } from "react-redux";
+
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
   display: flex;
@@ -85,6 +94,67 @@ const TitleDivStyle = styled.div`
   padding-top: 20px;
 `;
 const MyMeetingNoticeResister = () => {
+  const user = useSelector(state => state.user);
+  // console.log(user);
+  // Quill
+  // 모듈 활용
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, "link"],
+        [
+          {
+            color: [
+              "#000000",
+              "#e60000",
+              "#ff9900",
+              "#ffff00",
+              "#008a00",
+              "#0066cc",
+              "#9933ff",
+              "#ffffff",
+              "#facccc",
+              "#ffebcc",
+              "#ffffcc",
+              "#cce8cc",
+              "#cce0f5",
+              "#ebd6ff",
+              "#bbbbbb",
+              "#f06666",
+              "#ffc266",
+              "#ffff66",
+              "#66b966",
+              "#66a3e0",
+              "#c285ff",
+              "#888888",
+              "#a10000",
+              "#b26b00",
+              "#b2b200",
+              "#006100",
+              "#0047b2",
+              "#6b24b2",
+              "#444444",
+              "#5c0000",
+              "#663d00",
+              "#666600",
+              "#003700",
+              "#002966",
+              "#3d1466",
+              "custom-color",
+            ],
+          },
+          { background: [] },
+        ],
+
+        ["clean"],
+      ],
+    },
+  };
+
   const [isAuth, setIsAuth] = useState();
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [boardTitle, setBoardTitle] = useState("");
@@ -95,11 +165,26 @@ const MyMeetingNoticeResister = () => {
   const location = useLocation();
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   // console.log(location);
-
+  const [nowMemberSeq, setNowMemberSeq] = useState(null);
+  const getMemberSeqCall = async () => {
+    try {
+      const result = await getMemberSeq(
+        location?.state.boardPartySeq,
+        user.userSeq,
+        user.token,
+      );
+      setNowMemberSeq(result.memberSeq);
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     setIsAuth(location.state.boardPartySeq);
+    getMemberSeqCall();
   }, []);
   useEffect(() => {}, [previewPreImg]);
   const formDataFunc = formId => {
@@ -138,9 +223,7 @@ const MyMeetingNoticeResister = () => {
     // console.log(tempFile);
     if (tempFile) {
       const tempUrl = URL?.createObjectURL(tempFile);
-
       setPreviewPreImg(tempUrl);
-
       // 전송할 파일 변경(주의합니다. 파일을 넣어주세요.)
       setImgFile(tempFile);
     }
@@ -166,17 +249,20 @@ const MyMeetingNoticeResister = () => {
     // 모임장 seq, budgetMemberSeq 2개
     const form = {
       boardPartySeq: location?.state.boardPartySeq,
-      boardMemberSeq: location?.state.boardMemberSeq,
+      boardMemberSeq: nowMemberSeq,
       boardTitle: boardTitle,
       boardContents: boardContents,
     };
-    console.log("form : ", form);
+    // console.log("form : ", form);
     const infoData = JSON.stringify(form);
     const dto = new Blob([infoData], { type: "application/json" });
     formData.append("p", dto);
     formData.append("pics", imgFile);
+
+    // console.log("게시판저장데이터 : ", form);
+
     try {
-      await postNotice(formData);
+      await postNotice(formData, user.token);
       toast.success("게시글이 저장되었습니다.");
       navigate(`/mymeeting/mymeetingLeader/${isAuth}`, {
         state: { isAuth: isAuth },
@@ -201,7 +287,7 @@ const MyMeetingNoticeResister = () => {
       boardMemberSeq: location?.state.boardMemberSeq,
       ...formDataFunc("dataForm"),
     };
-    console.log(form);
+    // console.log(form);
     // if (!imgFile) {
     //   toast.warning("영수증 사진은 필수값입니다.");
     //   return;
@@ -358,7 +444,7 @@ const MyMeetingNoticeResister = () => {
                     >
                       내용
                     </label>
-                    <textarea
+                    {/* <textarea
                       id="boardContents"
                       name="boardContents"
                       className="notice-textarea"
@@ -375,7 +461,10 @@ const MyMeetingNoticeResister = () => {
                         <strong style={{ color: "red" }}>*</strong>
                         제한 숫자{textAreaLength}/300
                       </span>
-                    </div>
+                    </div> */}
+
+                    <ReactQuill onChange={setBoardContents} modules={modules} />
+                    {/* <div>{boardContents}</div> */}
                   </div>
                   <div className="button-wrap">
                     <button

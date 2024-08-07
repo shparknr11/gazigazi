@@ -40,6 +40,8 @@ const userSlice = createSlice({
     },
     logout: (state, action) => {
       console.log("userSlice LogOut!!!!", action);
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userData");
       return initialState;
     },
   },

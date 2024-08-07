@@ -88,8 +88,12 @@ const LoginInnerStyle = styled.div`
 `;
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  const [email, setEmail] = useState("tarolong@naver.com");
+  const [password, setPassword] = useState("Lo3!ko7b9q");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -101,6 +105,16 @@ const Login = () => {
   //     navigate("/");
   //   }
   // }, [user.token]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+
+    if (token && userData) {
+      dispatch(setUser({ ...userData, token }));
+      navigate("/");
+    }
+  }, [dispatch, navigate]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -146,6 +160,26 @@ const Login = () => {
             userIntro,
           }),
         );
+
+        const userData = {
+          userSeq,
+          userPic,
+          userEmail,
+          userName,
+          userPw,
+          userPwCheck,
+          userNickname,
+          userFav,
+          userBirth,
+          userPhone,
+          userGender,
+          userIntro,
+        };
+
+        dispatch(setUser({ ...userData, token: accessToken }));
+
+        sessionStorage.setItem("token", accessToken);
+        sessionStorage.setItem("userData", JSON.stringify(userData));
 
         console.log("디스패치 후 상태:", {
           userSeq,
