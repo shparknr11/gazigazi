@@ -31,7 +31,7 @@ const GuideTitle = ({ title, guideTitle, subTitle }) => {
         <IoIosArrowForward />
         <span>{guideTitle}</span>
       </span>
-      <h1>
+      <h1 className="subtitle-h1">
         {title}
         {subTitle}
       </h1>

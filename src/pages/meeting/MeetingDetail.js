@@ -15,6 +15,8 @@ import { IoPersonSharp } from "react-icons/io5";
 import { prColor } from "../../css/color";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+// react quill
+import DOMPurify from "dompurify";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -177,7 +179,7 @@ const MeetItemInfo = styled.div`
   }
 
   p {
-    margin-top: 30px;
+    /* margin-top: 30px; */
     line-height: 1.7rem;
   }
   .meet-item-partyinfo {
@@ -449,7 +451,12 @@ const MeetingDetail = () => {
                             ? "🍷 분위기 있게 한잔"
                             : "💬 기타 취미, 새로운 친구들과 함께 즐겨요!"}
             </h2>
-            <p className="meet-item-partyinfo">{detailList.partyIntro}</p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(detailList.partyIntro),
+              }}
+            />
+            {/* <p className="meet-item-partyinfo">{detailList.partyIntro}</p> */}
           </div>
           <div className="meet-item-imgs"></div>
         </MeetItemInfo>

@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 import GuideTitle from "../../components/common/GuideTitle";
 import { useSelector } from "react-redux";
 
+// react Quill
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -30,7 +35,7 @@ const CreateInnerStyle = styled.div`
   input,
   textarea,
   select {
-    padding: 10px;
+    padding: 0px 10px;
   }
 `;
 const CreateCheckStyle = styled.div`
@@ -210,6 +215,65 @@ const Create = () => {
   const userSeq = user.userSeq;
   const token = sessionStorage.getItem("token");
 
+  // Quill
+  // 모듈 활용
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, "link"],
+        [
+          {
+            color: [
+              "#000000",
+              "#e60000",
+              "#ff9900",
+              "#ffff00",
+              "#008a00",
+              "#0066cc",
+              "#9933ff",
+              "#ffffff",
+              "#facccc",
+              "#ffebcc",
+              "#ffffcc",
+              "#cce8cc",
+              "#cce0f5",
+              "#ebd6ff",
+              "#bbbbbb",
+              "#f06666",
+              "#ffc266",
+              "#ffff66",
+              "#66b966",
+              "#66a3e0",
+              "#c285ff",
+              "#888888",
+              "#a10000",
+              "#b26b00",
+              "#b2b200",
+              "#006100",
+              "#0047b2",
+              "#6b24b2",
+              "#444444",
+              "#5c0000",
+              "#663d00",
+              "#666600",
+              "#003700",
+              "#002966",
+              "#3d1466",
+              "custom-color",
+            ],
+          },
+          { background: [] },
+        ],
+
+        ["clean"],
+      ],
+    },
+  };
+
   const navigate = useNavigate();
   useEffect(() => {
     window.scroll({
@@ -321,10 +385,10 @@ const Create = () => {
     setPartyMaximum(maximum);
   };
 
-  // 모임소개 작성
-  const handleChangeIntro = e => {
-    setPartyIntro(e.target.value);
-  };
+  // // 모임소개 작성
+  // const handleChangeIntro = e => {
+  //   setPartyIntro(e.target.value);
+  // };
   // 모임 신청양식 작성
   const handleChangeJoinForm = e => {
     setPartyJoinForm(e.target.value);
@@ -622,7 +686,7 @@ const Create = () => {
         </div>
         <div className="create-textarea-group">
           <label htmlFor="partytext">더 상세히 모임을 소개해 주세요*</label>
-          <textarea
+          {/* <textarea
             type="textfield"
             id="partytext"
             autoComplete="off"
@@ -630,7 +694,8 @@ const Create = () => {
             onChange={e => {
               handleChangeIntro(e);
             }}
-          />
+          /> */}
+          <ReactQuill onChange={setPartyIntro} modules={modules} />
         </div>
         <div className="create-textarea-group">
           <label htmlFor="partyform">

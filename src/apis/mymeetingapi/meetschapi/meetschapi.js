@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtAxios from "../../jwtUtil";
 
 // GET
 // /api/plan
@@ -6,7 +7,7 @@ import axios from "axios";
 // /api/plan?plan_party_seq=${}
 export const getSchAll = async schMeetSeq => {
   try {
-    const res = await axios.get(`/api/plan?plan_party_seq=${schMeetSeq}`);
+    const res = await jwtAxios.get(`/api/plan?plan_party_seq=${schMeetSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -19,7 +20,7 @@ export const getSchAll = async schMeetSeq => {
 // /api/plan/${}
 export const getSchOne = async schSeq => {
   try {
-    const res = await axios.get(`/api/plan/${schSeq}`);
+    const res = await jwtAxios.get(`/api/plan/${schSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -60,7 +61,7 @@ export const postMonthCalculateBudget = async ({
   planLocation,
 }) => {
   try {
-    const res = await axios.post(`/api/plan`, {
+    const res = await jwtAxios.post(`/api/plan`, {
       planPartySeq,
       planStartDt,
       planTitle,
