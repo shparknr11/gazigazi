@@ -289,6 +289,11 @@ const Review = () => {
   };
 
   const handleClickRecommend = async _reviewSeq => {
+    if (!userSeq) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     try {
       const result = await getRecommend(userSeq, _reviewSeq);
       if (result.code != 1) {

@@ -241,7 +241,6 @@ const Modify = () => {
     }
     const formData = new FormData();
     const infoData = JSON.stringify({
-      userSeq,
       partySeq: parseInt(partySeq),
       partyName,
       partyGenre,
@@ -258,13 +257,13 @@ const Modify = () => {
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
     formData.append("partyPic", partyPic);
+    console.log(formData);
 
-    const result = await patchParty(formData);
+    const result = await patchParty(formData, user.token);
     if (result.code != 1) {
       toast.warning(result.resultMsg);
       return;
     }
-
     toast.success("수정이 완료되었습니다.");
 
     navigate(-1);
