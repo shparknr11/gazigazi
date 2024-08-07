@@ -87,9 +87,18 @@ const MyMeetingNewMemberList = () => {
       leaderUserSeq: parseInt(userSeq),
       joinGb: 1,
     };
-    await patchNewMember(partySeq, data);
 
-    await getData();
+    try {
+      const result = await patchNewMember(partySeq, data);
+
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      await getData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getGenderText = genderCode => {

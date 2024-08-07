@@ -12,15 +12,45 @@ import { toast } from "react-toastify";
 import GuideTitle from "../../components/common/GuideTitle";
 import { useSelector } from "react-redux";
 
+// react Quill
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+import { modules } from "../../components/modules/quill";
+
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
+  .subtitle-h1 {
+    margin-bottom: 0px !important;
+  }
+  .modify-subtitle {
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
+    margin-bottom: 40px;
+  }
   > h1 {
     font-size: 28px;
     margin-bottom: 40px;
+  }
+  label {
+    margin-bottom: 20px;
+  }
+
+  select {
+    height: 35px;
+    width: 50%;
+    font-size: 0.8rem;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 0px 10px;
   }
   .create-del-button-div {
     display: flex;
@@ -50,8 +80,12 @@ const CreateFormDivStyle = styled.div`
   margin-bottom: 25px;
   > h1 {
     font-size: 18px;
-    font-weight: bold;
     margin-bottom: 10px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    border-bottom: 2px solid black;
+    width: fit-content;
+    padding-bottom: 5px;
   }
   .create-option-group,
   .create-input-group,
@@ -61,9 +95,66 @@ const CreateFormDivStyle = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 40px;
+
+    textarea {
+      width: 50%;
+      height: 100px;
+    }
   }
   .create-radio-group {
     margin-bottom: 40px;
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    input {
+      margin-right: 5px;
+    }
+
+    label {
+      margin-right: 10px;
+    }
+  }
+
+  .create-form-group {
+    > input {
+      height: 35px;
+      width: 50%;
+    }
+  }
+
+  .create-input-group {
+    input {
+      height: 35px;
+      width: 50%;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .party-Maximum {
+      width: 10%;
+    }
+
+    .party-Maximum-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .minage-label {
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .maxage-label {
+      font-size: 0.85rem;
+      margin: 10px 0 5px 0;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -112,33 +203,34 @@ const Modify = () => {
   const user = useSelector(state => state.user);
   const userSeq = parseInt(user.userSeq);
 
+  const fetchData = async () => {
+    try {
+      const result = await getPartyOne(partySeq); // API에서 기존 모임 데이터 가져오기
+      // console.log("result", result);
+      console.log(result.resultData);
+      // // 가져온 데이터를 상태 변수에 설정
+      setPartyName(result.resultData.partyName);
+      setPartyGenre(parseInt(result.resultData.partyGenre));
+      setPartyLocation(parseInt(result.resultData.partyLocation));
+      setPartyMinAge(parseInt(result.resultData.partyMinAge));
+      setPartyMaxAge(parseInt(result.resultData.partyMaxAge));
+      setPartyMaximum(parseInt(result.resultData.partyMaximum));
+      setPartyGender(parseInt(result.resultData.partyGender));
+      setPartyIntro(result.resultData.partyIntro);
+      setPartyJoinForm(result.resultData.partyJoinForm);
+      setLocalData(result.resultData.setPartyPic);
+      setpartPrevLocation(
+        result.resultData.partyLocation1 + result.resultData.partyLocation2,
+      );
+      setPartyPic(result.resultData.partyPic);
+      setPreviewImg(result.resultData.previewImg);
+      // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getPartyOne(partySeq); // API에서 기존 모임 데이터 가져오기
-        // console.log("result", result);
-
-        // // 가져온 데이터를 상태 변수에 설정
-        setPartyName(result.resultData.partyName);
-        setPartyGenre(parseInt(result.resultData.partyGenre));
-        setPartyLocation(parseInt(result.resultData.partyLocation));
-        setPartyMinAge(parseInt(result.resultData.partyMinAge));
-        setPartyMaxAge(parseInt(result.resultData.partyMaxAge));
-        setPartyMaximum(parseInt(result.resultData.partyMaximum));
-        setPartyGender(parseInt(result.resultData.partyGender));
-        setPartyIntro(result.resultData.partyIntro);
-        setPartyJoinForm(result.resultData.partyJoinForm);
-        setLocalData(result.resultData.setPartyPic);
-        setpartPrevLocation(
-          result.resultData.partyLocation1 + result.resultData.partyLocation2,
-        );
-        // setPreviewImg(partyDetails.previewImg);
-        // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchData();
   }, []);
   // useEffect(() => {
@@ -225,10 +317,10 @@ const Modify = () => {
     setPartyMaximum(maximum);
   };
 
-  // 모임소개 작성
-  const handleChangeIntro = e => {
-    setPartyIntro(e.target.value);
-  };
+  // // 모임소개 작성
+  // const handleChangeIntro = e => {
+  //   setPartyIntro(e.target.value);
+  // };
   // 모임 신청양식 작성
   const handleChangeJoinForm = e => {
     setPartyJoinForm(e.target.value);
@@ -253,12 +345,11 @@ const Modify = () => {
       partyJoinForm,
       partyIntro,
     });
-    // console.log("infoData", infoData);
+    console.log("infoData", infoData);
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
     formData.append("partyPic", partyPic);
     console.log(formData);
-
     const result = await patchParty(formData, user.token);
     if (result.code != 1) {
       toast.warning(result.resultMsg);
@@ -281,7 +372,7 @@ const Modify = () => {
         <button className="create-del-button">삭제</button>
       </div>
       <CreateFormDivStyle>
-        <h1>모임 등록양식</h1>
+        <p className="modify-subtitle">모임 수정</p>
 
         <div className="create-option-group">
           <label htmlFor="partygenre">모임의 카테고리를 선정해 주세요.</label>
@@ -451,7 +542,7 @@ const Modify = () => {
         </div>
         <div className="create-textarea-group">
           <label htmlFor="partytext">더 상세히 모임을 소개해 주세요.</label>
-          <textarea
+          {/* <textarea
             type="textfield"
             id="partytext"
             autoComplete="off"
@@ -459,6 +550,11 @@ const Modify = () => {
             onChange={e => {
               handleChangeIntro(e);
             }}
+          /> */}
+          <ReactQuill
+            value={partyIntro}
+            onChange={setPartyIntro}
+            modules={modules}
           />
         </div>
         <div className="create-textarea-group">

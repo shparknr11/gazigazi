@@ -71,11 +71,11 @@ export const getMemberList = async _partySeq => {
 // 신청승인 (모임장)
 export const patchNewMember = async (_partySeq, _data) => {
   try {
-    const response = await axios.patch(`/api/join/gb/${_partySeq}`, _data);
+    const response = await jwtAxios.patch(`/api/join/gb/${_partySeq}`, _data);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       // console.log("response", response.data);
-      // return response.data;
+      return response.data;
     } else {
       alert("API 오류발생 status 확인해주세요");
     }

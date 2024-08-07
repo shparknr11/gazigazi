@@ -182,7 +182,7 @@ const CategoryOthers = () => {
     const updateList = _resultData.filter(
       item =>
         // 여기수정******************************************************
-        item.partyAuthGb === "1" &&
+        item.partyAuthGb === "2" &&
         (partyGenre === "0" || item.partyGenre === partyGenre) &&
         (!searchKeyword || item.partyName.includes(searchKeyword)),
     );
