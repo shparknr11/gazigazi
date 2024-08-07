@@ -88,12 +88,11 @@ const InterestInnerStyle = styled.div`
 `;
 
 const InterestList = () => {
-  const user = useSelector(state => state.user);
-  const userSeq = user.userSeq;
-
   const [loading, setLoading] = useState(true);
   const [interestItems, setInterestItems] = useState([]);
   const [error, setError] = useState(null);
+  const userSeq = useSelector(state => state.user.userSeq);
+  const token = useSelector(state => state.user.token);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -107,7 +106,11 @@ const InterestList = () => {
           return;
         }
 
-        const response = await axios.get(`/api/party/wish/${userSeq}`);
+        const response = await axios.get(`/api/party/wish/list`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log(response.data);
         const { resultData, resultMsg, code } = response.data;
 
         if (code === 1) {

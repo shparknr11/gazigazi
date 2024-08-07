@@ -88,12 +88,10 @@ const LoginInnerStyle = styled.div`
 `;
 
 const Login = () => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  const [email, setEmail] = useState("tarolong@naver.com");
-  const [password, setPassword] = useState("Lo3!ko7b9q");
-
+  // const [email, setEmail] = useState("tarolong@naver.com");
+  // const [password, setPassword] = useState("Lo3!ko7b9q");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -140,6 +138,7 @@ const Login = () => {
           userPhone,
           userGender,
           userIntro,
+          userAddr,
         } = response.data.resultData;
 
         // Redux에 사용자 정보 저장
@@ -158,6 +157,7 @@ const Login = () => {
             userPhone,
             userGender,
             userIntro,
+            userAddr,
           }),
         );
 
@@ -174,6 +174,7 @@ const Login = () => {
           userPhone,
           userGender,
           userIntro,
+          userAddr,
         };
 
         dispatch(setUser({ ...userData, token: accessToken }));
@@ -195,6 +196,7 @@ const Login = () => {
           userPhone,
           userGender,
           userIntro,
+          userAddr,
         });
 
         // 쿠키에 토큰 저장

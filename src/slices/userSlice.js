@@ -14,6 +14,7 @@ const initialState = {
   userPhone: null,
   userGender: null,
   userIntro: null,
+  userAddr: null,
 };
 
 const userSlice = createSlice({
