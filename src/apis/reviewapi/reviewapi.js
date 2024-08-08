@@ -39,9 +39,10 @@ export const getReviewList = async (_searchText, _currentPage) => {
 };
 // 리뷰 추천
 export const getRecommend = async (_userSeq, _reviewSeq) => {
+  console.log(_userSeq);
   try {
     const response = await jwtAxios.get(
-      `/api/review/fav?reviewFavUserSeq=${_userSeq}&reviewFavReviewSeq=${_reviewSeq}`,
+      `/api/review/fav?reviewFavReviewSeq=${_reviewSeq}`,
     );
     // console.log(response);
     const status = response.status.toString().charAt(0);
@@ -53,5 +54,19 @@ export const getRecommend = async (_userSeq, _reviewSeq) => {
     }
   } catch (error) {
     console.log(error);
+    // const token = sessionStorage.getItem("token");
+    // const header = { headers: { Authorization: `Bearer ${token}` } };
+    // const response = await axios.get(
+    //   `/api/review/fav?reviewFavReviewSeq=${_reviewSeq}`,
+    //   header,
+    // );
+    // // console.log(response);
+    // const status = response.status.toString().charAt(0);
+    // if (status === "2") {
+    //   // console.log("response", response.data);
+    //   return response.data;
+    // } else {
+    //   alert("API 오류발생 status 확인해주세요");
+    // }
   }
 };

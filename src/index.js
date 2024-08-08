@@ -5,6 +5,7 @@ import App from "./App";
 import "./index.css";
 // import { store } from "./store";
 import store from "./storert";
+import { ToastContainer } from "react-toastify";
 
 // const root = ReactDOM.createRoot(
 //   document.getElementById("root") as HTMLElement
@@ -25,5 +26,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <App />
+    <ToastContainer autoClose={500} closeOnClick></ToastContainer>
   </Provider>,
 );

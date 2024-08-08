@@ -8,6 +8,7 @@ import GuideTitle from "../../components/common/GuideTitle";
 import { useNavigate } from "react-router-dom";
 import { prColor } from "../../css/color";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -227,6 +228,7 @@ const Review = () => {
 
   useEffect(() => {
     getReviewData();
+    toast.success("리뷰목록이 조회되었습니다.");
     window.scroll({
       top: 0,
       left: 0,
