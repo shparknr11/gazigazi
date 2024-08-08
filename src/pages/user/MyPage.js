@@ -61,11 +61,16 @@ const NavLinks = styled.div`
 const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isUserInfoFetched, setIsUserInfoFetched] = useState(false);
   const userSeq = useSelector(state => state.user.userSeq);
   const token = useSelector(state => state.user.token);
+  // const userData = JSON.parse(sessionStorage.getItem("userData"));
+  // const userSeq = userData.userSeq;
+  // const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log(userSeq, token);
       if (!userSeq || !token) {
         alert("로그인 상태를 확인하세요.");
         navigate("/login");
@@ -73,13 +78,13 @@ const MyPage = () => {
       }
 
       try {
-        await axios.get(`/api/user/${userSeq}`, {
+        const response = await axios.get(`/api/user/${userSeq}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (window.location.pathname === `/myprofile/${userSeq}`) {
-          navigate(`/myprofile/${userSeq}/userInfo`);
-        }
+        setIsUserInfoFetched(true);
+        navigate(`/myprofile/${userSeq}/userInfo`, { replace: true });
       } catch (error) {
+        console.error(error);
         alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
         navigate("/login");
       } finally {
@@ -88,7 +93,7 @@ const MyPage = () => {
     };
 
     fetchUserData();
-  }, [navigate, userSeq, token]);
+  }, [userSeq, token, isUserInfoFetched]);
 
   if (loading) {
     return <Loading>로딩 중...</Loading>;

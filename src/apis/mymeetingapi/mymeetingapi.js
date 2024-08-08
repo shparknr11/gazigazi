@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtUtil";
+import jwtAxios from "../jwtAxios";
 
 // 내가 만든 모임 불러오기
 // http://112.222.157.156:5122/api/party/mine?userSeq=9&page=1&size=10

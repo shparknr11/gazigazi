@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../../jwtUtil";
+import jwtAxios from "../../jwtAxios";
 
 // GET
 // /api/plan

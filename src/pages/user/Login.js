@@ -90,8 +90,8 @@ const LoginInnerStyle = styled.div`
 const Login = () => {
   // const [email, setEmail] = useState("tarolong@naver.com");
   // const [password, setPassword] = useState("Lo3!ko7b9q");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("data123@naver.com");
+  const [password, setPassword] = useState("Datadata123!");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);

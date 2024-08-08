@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtUtil";
+import jwtAxios from "../jwtAxios";
 
 // // 리뷰 불러오기
 // export const getReviewList = async (_searchText, _totalPage, _pageSize) => {
