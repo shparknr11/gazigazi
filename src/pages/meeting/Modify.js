@@ -197,17 +197,23 @@ const Modify = () => {
   const [localDetailData, setLocaDetaillData] = useState("");
   // file
   const [partyPic, setPartyPic] = useState(null);
+  const [originPartyPic, setOriginPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
   const navigate = useNavigate();
   // const userSeq = parseInt(sessionStorage.getItem("userSeq"));
   const user = useSelector(state => state.user);
   const userSeq = parseInt(user.userSeq);
 
-  const fetchData = async () => {
+  const getData = async () => {
     try {
-      const result = await getPartyOne(partySeq); // API에서 기존 모임 데이터 가져오기
+      // 기존 모임 데이터 가져오기
+      const result = await getPartyOne(partySeq);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
       // console.log("result", result);
-      console.log(result.resultData);
+      // console.log(result.resultData);
       // // 가져온 데이터를 상태 변수에 설정
       setPartyName(result.resultData.partyName);
       setPartyGenre(parseInt(result.resultData.partyGenre));
@@ -222,8 +228,7 @@ const Modify = () => {
       setpartPrevLocation(
         result.resultData.partyLocation1 + result.resultData.partyLocation2,
       );
-      setPartyPic(result.resultData.partyPic);
-      setPreviewImg(result.resultData.previewImg);
+      setOriginPartyPic(result.resultData.partyPic);
       // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
     } catch (error) {
       console.error(error);
@@ -231,13 +236,8 @@ const Modify = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    getData();
   }, []);
-  // useEffect(() => {
-  //   // console.log(localList);
-  //   // console.log(localData);
-  //   // console.log(localDetailData);
-  // }, [localList, localData, localDetailData]);
 
   // 년도
   const years = Array.from({ length: 2009 - 1924 + 1 }, (v, i) => 1924 + i);
@@ -298,7 +298,7 @@ const Modify = () => {
   // 파일 선택
   const handleFileChange = e => {
     const tempFile = e.target.files[0];
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0]);
 
     if (tempFile) {
       setPartyPic(tempFile);
@@ -321,6 +321,7 @@ const Modify = () => {
   // const handleChangeIntro = e => {
   //   setPartyIntro(e.target.value);
   // };
+
   // 모임 신청양식 작성
   const handleChangeJoinForm = e => {
     setPartyJoinForm(e.target.value);
@@ -349,8 +350,14 @@ const Modify = () => {
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
     formData.append("partyPic", partyPic);
-    console.log(formData);
+
+    // if (partyPic) {
+    //   formData.append("partyPic", partyPic);
+    // } else {
+    //   formData.append("partyPic", originPartyPic);
+    // }
     const result = await patchParty(formData, user.token);
+
     if (result.code != 1) {
       toast.warning(result.resultMsg);
       return;
@@ -536,6 +543,7 @@ const Modify = () => {
               handleFileChange(e);
             }}
           />
+
           {previewImg ? (
             <img style={{ width: "50%" }} src={previewImg} />
           ) : null}
