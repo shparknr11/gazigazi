@@ -8,6 +8,8 @@ import {
   MainButton,
   SubButton,
 } from "../button/Button";
+import { useEffect, useState } from "react";
+import { getTotalRank } from "../../apis/meeting/rankapi";
 const RankWrapStyle = styled.div`
   width: calc(100% - 10px);
   max-width: 1280px;
@@ -69,12 +71,11 @@ const RankCubeStyle = styled.div`
     align-items: end;
   }
   .cube-contents {
-    position: relative;
     padding: 10px;
     .cube-contents-no {
       position: absolute;
-      top: -35px;
-      left: 47px;
+      top: -2px;
+      left: 55px;
       padding: 10px;
       font-size: 29px;
       font-weight: bold;
@@ -190,132 +191,197 @@ const RankTopTenStyle = styled.div`
   .rank-party-desctiption {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width: 700px;
+    height: 100%;
+  }
+  .rank-party-title {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  .rank-party-admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 15px;
+      margin-right: 5px;
+    }
+    span {
+      font-size: 14px;
+    }
+  }
+  .rank-party-points {
+    font-size: 13px;
+    font-weight: bold;
   }
 `;
 const Rank = () => {
+  const [totalRank, setTotalRank] = useState([]);
+
+  const getTotalData = async () => {
+    try {
+      const result = await getTotalRank();
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      // console.log(result.resultData);
+      setTotalRank(result.resultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTotalData();
+  }, []);
+
   return (
     <RankWrapStyle>
       <GuideTitle subTitle="모임 랭킹" guideTitle="rank" />
       <div className="rank-inner">
-        <div className="rank-second-div">
-          {/* <div className="rank-second">
+        {totalRank.slice(1, 2).map((item, index) => (
+          <div key={index} className="rank-second-div">
+            {/* <div className="rank-second">
             <div className="rank-party-pic"></div>
           </div> */}
-          <RankCubeStyle rotateX={-5} rotateY={5} rotateX1={-5} rotateY1={185}>
-            <div className="cube-front">
-              <div className="cube-contents">
-                <p className="cube-contents-no">2</p>
-                <span className="party-name">[모임제목]자리 입니다.</span>
-                <div className="party-admin-div">
-                  <img src="" alt="프로필사진" />
-                  <p className="party-admin">모임장 님의 모임</p>
+            <RankCubeStyle
+              rotateX={-5}
+              rotateY={5}
+              rotateX1={-5}
+              rotateY1={185}
+            >
+              <div className="cube-front">
+                <div className="cube-contents">
+                  <p className="cube-contents-no">2</p>
+                  <span className="party-name">{item.partyName}</span>
+                  <div className="party-admin-div">
+                    <img
+                      src={`/pic/user/${item.presidentSeq}/${item.presidentPic}`}
+                      alt="프로필사진"
+                    />
+                    <p className="party-admin">{item.president} 님의 모임</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="cube-pic">
-              <img src={partyImg} alt="파티이미지" />
-              <div className="cube-medal">🥈</div>
-            </div>
+              <div className="cube-pic">
+                <img src={partyImg} alt="파티이미지" />
+                <div className="cube-medal">🥈</div>
+              </div>
 
-            <div className="cube-back">
-              <MainButton label="모임 자세히보기" />
-            </div>
-            <div className="cube-top"></div>
-            <div className="cube-bottom"></div>
-            <div className="cube-left"></div>
-            <div className="cube-right"></div>
-          </RankCubeStyle>
-        </div>
+              <div className="cube-back">
+                <MainButton label="모임 자세히보기" />
+              </div>
+              <div className="cube-top"></div>
+              <div className="cube-bottom"></div>
+              <div className="cube-left"></div>
+              <div className="cube-right"></div>
+            </RankCubeStyle>
+          </div>
+        ))}
 
-        <div className="rank-first-div">
-          {/* <div className="rank-first">
+        {totalRank.slice(0, 1).map((item, index) => (
+          <div key={index} className="rank-first-div">
+            {/* <div className="rank-first">
             <div className="rank-party-pic">사진</div>
           </div> */}
-          <RankCubeStyle rotateX={-5} rotateY={0} rotateX1={-5} rotateY1={180}>
-            <div className="cube-front">
-              <div className="cube-contents">
-                <p className="cube-contents-no">1</p>
-                <span className="party-name">[모임제목]자리 입니다.</span>
-                <div className="party-admin-div">
-                  <img src="" alt="프로필사진" />
-                  <p className="party-admin">모임장 님의 모임</p>
+            <RankCubeStyle
+              rotateX={-5}
+              rotateY={0}
+              rotateX1={-5}
+              rotateY1={180}
+            >
+              <div className="cube-front">
+                <div className="cube-contents">
+                  <p className="cube-contents-no">1</p>
+                  <span className="party-name">{item.partyName}</span>
+                  <div className="party-admin-div">
+                    <img
+                      src={`/pic/user/${item.presidentSeq}/${item.presidentPic}`}
+                      alt="프로필사진"
+                    />
+                    <p className="party-admin">{item.president} 님의 모임</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="cube-pic">
-              <img src={partyImg} alt="파티이미지" />
-              <div className="cube-medal">🥇</div>
-            </div>
-            <div className="cube-back">
-              <MainButton label="모임 자세히보기" />
-            </div>
-            <div className="cube-top"></div>
-            <div className="cube-bottom"></div>
-            <div className="cube-left"></div>
-            <div className="cube-right"></div>
-          </RankCubeStyle>
-        </div>
+              <div className="cube-pic">
+                <img src={partyImg} alt="파티이미지" />
+                <div className="cube-medal">🥇</div>
+              </div>
+              <div className="cube-back">
+                <MainButton label="모임 자세히보기" />
+              </div>
+              <div className="cube-top"></div>
+              <div className="cube-bottom"></div>
+              <div className="cube-left"></div>
+              <div className="cube-right"></div>
+            </RankCubeStyle>
+          </div>
+        ))}
 
-        <div className="rank-third-div">
-          {/* <div className="rank-third">
+        {totalRank.slice(2, 3).map((item, index) => (
+          <div key={index} className="rank-third-div">
+            {/* <div className="rank-third">
             <div className="rank-party-pic">사진</div>
           </div> */}
-          <RankCubeStyle rotateX={-5} rotateY={-5} rotateX1={-5} rotateY1={175}>
-            <div className="cube-front">
-              <div className="cube-contents">
-                <p className="cube-contents-no">3</p>
-                <span className="party-name">[모임제목]자리 입니다.</span>
-                <div className="party-admin-div">
-                  <img src="" alt="프로필사진" />
-                  <p className="party-admin">모임장 님의 모임</p>
+            <RankCubeStyle
+              rotateX={-5}
+              rotateY={-5}
+              rotateX1={-5}
+              rotateY1={175}
+            >
+              <div className="cube-front">
+                <div className="cube-contents">
+                  <p className="cube-contents-no">3</p>
+                  <span className="party-name">{item.partyName}</span>
+                  <div className="party-admin-div">
+                    <img
+                      src={`/pic/user/${item.presidentSeq}/${item.presidentPic}`}
+                      alt="프로필사진"
+                    />
+                    <p className="party-admin">{item.president} 님의 모임</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="cube-pic">
-              <img src={partyImg} alt="파티이미지" />
-              <div className="cube-medal">🥉</div>
-            </div>
-            <div className="cube-back">
-              <MainButton label="모임 자세히보기" />
-            </div>
-            <div className="cube-top"></div>
-            <div className="cube-bottom"></div>
-            <div className="cube-left"></div>
-            <div className="cube-right"></div>
-          </RankCubeStyle>
-        </div>
+              <div className="cube-pic">
+                <img src={partyImg} alt="파티이미지" />
+                <div className="cube-medal">🥉</div>
+              </div>
+              <div className="cube-back">
+                <MainButton label="모임 자세히보기" />
+              </div>
+              <div className="cube-top"></div>
+              <div className="cube-bottom"></div>
+              <div className="cube-left"></div>
+              <div className="cube-right"></div>
+            </RankCubeStyle>
+          </div>
+        ))}
       </div>
       <RankTopTenStyle>
         <ul>
-          <li>
-            <sapn className="rank-top10">4</sapn>
-            <div className="rank-party-desctiption">
-              <div className="rank-party-title">모임이름</div>
-              <div className="rank-party-admin">
-                <img src="" alt="모임장사진" />
-                <span>모임장의 모임</span>
+          {totalRank.slice(3).map((item, index) => (
+            <li key={index}>
+              <sapn className="rank-top10">{index + 4}</sapn>
+              <div className="rank-party-desctiption">
+                <div className="rank-party-title">{item.partyName}</div>
+                <div className="rank-party-admin">
+                  <img
+                    src={`/pic/user/${item.presidentSeq}/${item.presidentPic}`}
+                    alt="모임장사진"
+                  />
+                  <span>{item.president} 님의 모임</span>
+                </div>
+                <div className="rank-party-points">
+                  <span>{item.totalPoints} points</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li>
-            <sapn className="rank-top10">5</sapn>
-          </li>
-          <li>
-            <sapn className="rank-top10">6</sapn>
-          </li>
-          <li>
-            <sapn className="rank-top10">7</sapn>
-          </li>
-          <li>
-            <sapn className="rank-top10">8</sapn>
-          </li>
-          <li>
-            <sapn className="rank-top10">9</sapn>
-          </li>
-          <li>
-            <sapn className="rank-top10">10</sapn>
-          </li>
+            </li>
+          ))}
         </ul>
       </RankTopTenStyle>
     </RankWrapStyle>

@@ -1,6 +1,6 @@
 # 프로젝트 시작
 
-## 3차 Final Project
+## 3차 Final Project!
 
 ### 2024-07-23 ~ 2024-08-23
 
@@ -126,7 +126,6 @@ https://github.com/user-attachments/assets/d2b512e6-63f1-4b12-a11d-ee13c1c8e731
 - swiper
 - react-redux
 - redux-persist
-
 
 ### 2차 주요 기능
 

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "../../css/quill.css";
+import { modules } from "../../components/modules/quill";
 
 const CreateInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -210,69 +211,7 @@ const Create = () => {
   const [partyPic, setPartyPic] = useState(null);
   const [previewImg, setPreviewImg] = useState("");
 
-  // const userSeq = sessionStorage.getItem("userSeq");
-  const user = useSelector(state => state.user);
-  const userSeq = user.userSeq;
   const token = sessionStorage.getItem("token");
-
-  // Quill
-  // 모듈 활용
-  const modules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [{ list: "ordered" }, { list: "bullet" }, "link"],
-        [
-          {
-            color: [
-              "#000000",
-              "#e60000",
-              "#ff9900",
-              "#ffff00",
-              "#008a00",
-              "#0066cc",
-              "#9933ff",
-              "#ffffff",
-              "#facccc",
-              "#ffebcc",
-              "#ffffcc",
-              "#cce8cc",
-              "#cce0f5",
-              "#ebd6ff",
-              "#bbbbbb",
-              "#f06666",
-              "#ffc266",
-              "#ffff66",
-              "#66b966",
-              "#66a3e0",
-              "#c285ff",
-              "#888888",
-              "#a10000",
-              "#b26b00",
-              "#b2b200",
-              "#006100",
-              "#0047b2",
-              "#6b24b2",
-              "#444444",
-              "#5c0000",
-              "#663d00",
-              "#666600",
-              "#003700",
-              "#002966",
-              "#3d1466",
-              "custom-color",
-            ],
-          },
-          { background: [] },
-        ],
-
-        ["clean"],
-      ],
-    },
-  };
 
   const navigate = useNavigate();
   useEffect(() => {
