@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtUtil";
+import jwtAxios from "../jwtAxios";
 // 모임 전체 불러오기
 export const getPartyAll = async () => {
   try {

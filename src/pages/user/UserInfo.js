@@ -110,10 +110,13 @@ const UserInfo = () => {
   const dispatch = useDispatch();
 
   // Redux 스토어에서 사용자 정보 가져옴
-  const userSeq = useSelector(state => state.user.userSeq);
+  // const userSeq = useSelector(state => state.user.userSeq);
   const userEmail = useSelector(state => state.user.userEmail);
   const token = useSelector(state => state.user.token);
   const userData = useSelector(state => state.user);
+  // const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const userSeq = userData.userSeq;
+  // const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     setIsEmailCompleted(userData.isEmailCompleted);
@@ -133,9 +136,11 @@ const UserInfo = () => {
       }
 
       try {
-        const response = await axios.get(`/api/user/${userSeq}`, {
+        const response = await axios.get(`/api/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log(response);
+
         dispatch(setUser(response.data.resultData));
       } catch (error) {
         if (error.response && error.response.status === 401) {

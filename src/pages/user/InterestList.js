@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import cate from "../../images/cate2.png";
 import { useSelector } from "react-redux";
+import jwtAxios from "../../apis/jwtAxios";
 
 const InterestListStyle = styled.div`
   display: flex;
@@ -91,9 +92,12 @@ const InterestList = () => {
   const [loading, setLoading] = useState(true);
   const [interestItems, setInterestItems] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const userSeq = useSelector(state => state.user.userSeq);
   const token = useSelector(state => state.user.token);
-  const navigate = useNavigate();
+  // const userData = JSON.parse(sessionStorage.getItem("userData"));
+  // const userSeq = userData.userSeq;
+  // const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const fetchInterestItem = async () => {
@@ -138,9 +142,12 @@ const InterestList = () => {
 
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       try {
-        const url = `/api/party/wish?wishUserSeq=${userSeq}&wishPartySeq=${partySeq}`;
-
-        const response = await axios.get(url);
+        const response = await jwtAxios.get(
+          `/api/party/wish?wishUserSeq=${userSeq}&wishPartySeq=${partySeq}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         if (response.data.code === 1) {
           if (response.data.resultData === 0) {

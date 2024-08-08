@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtUtil";
+import jwtAxios from "../jwtAxios";
 
 // 모임신청서 작성
 export const postApplication = async (_partySeq, _data) => {
