@@ -112,11 +112,11 @@ const UserInfo = () => {
   // Redux 스토어에서 사용자 정보 가져옴
   // const userSeq = useSelector(state => state.user.userSeq);
   const userEmail = useSelector(state => state.user.userEmail);
-  const token = useSelector(state => state.user.token);
+  // const token = useSelector(state => state.user.token);
   const userData = useSelector(state => state.user);
-  // const userData = JSON.parse(sessionStorage.getItem("userData"));
   const userSeq = userData.userSeq;
-  // const token = sessionStorage.getItem("token");
+  // const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     setIsEmailCompleted(userData.isEmailCompleted);
@@ -125,7 +125,6 @@ const UserInfo = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userSeq) {
-        alert("유저 정보가 없습니다. 로그인 상태를 확인하세요.");
         navigate("/login");
         return;
       }
@@ -163,25 +162,54 @@ const UserInfo = () => {
   }, [navigate, userSeq, token, dispatch]);
 
   const sendCertificationCode = async () => {
-    if (isEmailCompleted) {
-      alert("이미 인증된 계정입니다.");
-      return;
-    }
     try {
-      await axios.post(`/mailSend`, { userEmail });
-      alert("인증 코드가 이메일로 발송되었습니다.");
-      setIsCertifying(true);
+      const response = await axios.post(
+        `/mailSend`,
+        { userEmail },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      // 서버 응답의 data 속성을 사용하여 처리
+      if (response.status === 200) {
+        alert(
+          response.data.message || "인증 코드가 성공적으로 발송되었습니다.",
+        );
+        setIsCertifying(true);
+        setIsEmailCompleted(false);
+      }
     } catch (error) {
-      alert("인증 코드 발송에 실패했습니다. 다시 시도해주세요.");
+      console.error("Error during sendCertificationCode:", error);
+
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 409) {
+          alert(data.message || "이미 인증을 완료한 계정입니다."); // 서버에서 반환한 메시지를 표시
+        } else if (status === 400) {
+          alert(data.message || "잘못된 요청입니다. 다시 시도해주십시오.");
+        } else {
+          alert(
+            data.message ||
+              "인증 코드 발송에 실패했습니다. 다시 시도해주십시오.",
+          );
+        }
+      }
     }
   };
 
   const verifyCertificationCode = async () => {
     try {
-      const response = await axios.post(`/mailauthCheck`, {
-        userEmail,
-        authNum: certificationCode,
-      });
+      const response = await axios.post(
+        `/mailauthCheck`,
+        {
+          userEmail,
+          authNum: certificationCode,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
       if (response.data.code === 1) {
         alert("이메일 인증이 완료되었습니다.");
         setIsEmailVerified(true);
@@ -189,10 +217,25 @@ const UserInfo = () => {
         setIsEmailCompleted(true);
         dispatch(setUser({ isEmailCompleted: true })); // Redux 상태 업데이트
       } else {
+        // 서버 응답의 code 값에 따라 메시지 처리
         alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      alert("인증 코드 검증에 실패했습니다. 다시 시도해주세요.");
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 404) {
+          // 유효 시간 만료 등의 에러 처리
+          alert(
+            data.message ||
+              "인증번호의 유효 시간이 만료되었습니다. 새로운 인증코드를 발급해주세요.",
+          );
+        } else {
+          alert(
+            data.message || "인증 코드 검증에 실패했습니다. 다시 시도해주세요.",
+          );
+        }
+      }
     }
   };
 

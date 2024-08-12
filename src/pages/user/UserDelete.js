@@ -53,12 +53,13 @@ const Modalbutton1 = styled.button`
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  width: 50%;
+  width: 35%;
   font-size: 10pt;
   text-align: center;
   transition: background-color 0.3s;
   margin: auto;
   margin-top: 15px;
+  margin-left: 20px;
 
   &:hover {
     background-color: #c5965e;
@@ -72,12 +73,13 @@ const Modalbutton2 = styled.button`
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  width: 50%;
+  width: 35%;
   font-size: 10pt;
   text-align: center;
   transition: background-color 0.3s;
-  margin: auto;
+  margin: 10px;
   margin-top: 15px;
+  margin-left: 65px;
 
   &:hover {
     background-color: #c5965e;
@@ -88,6 +90,7 @@ const UserDelete = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userSeq = useSelector(state => state.user.userSeq);
+  const token = useSelector(state => state.user.token);
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -109,24 +112,27 @@ const UserDelete = () => {
         return;
       }
       const response = await axios.patch(
-        `/api/user/${userSeq}`,
+        `/api/user`,
         { password },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${useSelector(state => state.user.token)}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (response.data.code === 1) {
         dispatch(clearUser());
+        sessionStorage.removeItem("userData");
+        sessionStorage.removeItem("token");
         alert("회원 탈퇴가 완료되었습니다.");
         navigate("/login");
       } else {
         alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
+      console.error(error);
       alert("회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

@@ -126,6 +126,11 @@ const FindId = () => {
       }
     } catch (error) {
       console.error("이메일 찾기 오류:", error);
+      if (error.response?.status === 404) {
+        const errorMsg =
+          error.response?.data?.message || "존재하지 않는 유저입니다.";
+        alert(errorMsg);
+      }
       setResultMessage("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

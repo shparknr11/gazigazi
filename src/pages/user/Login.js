@@ -90,8 +90,10 @@ const LoginInnerStyle = styled.div`
 const Login = () => {
   // const [email, setEmail] = useState("tarolong@naver.com");
   // const [password, setPassword] = useState("Lo3!ko7b9q");
-  const [email, setEmail] = useState("data123@naver.com");
-  const [password, setPassword] = useState("Datadata123!");
+  // const [email, setEmail] = useState("data123@naver.com");
+  // const [password, setPassword] = useState("Datadata123!");
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -116,6 +118,11 @@ const Login = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
 
     try {
       const response = await axios.post("/api/user/sign_in", {
@@ -161,59 +168,53 @@ const Login = () => {
           }),
         );
 
-        const userData = {
-          userSeq,
-          userPic,
-          userEmail,
-          userName,
-          userPw,
-          userPwCheck,
-          userNickname,
-          userFav,
-          userBirth,
-          userPhone,
-          userGender,
-          userIntro,
-          userAddr,
-        };
-
-        dispatch(setUser({ ...userData, token: accessToken }));
-
         sessionStorage.setItem("token", accessToken);
-        sessionStorage.setItem("userData", JSON.stringify(userData));
-
-        console.log("디스패치 후 상태:", {
-          userSeq,
-          token: accessToken,
-          userPic,
-          userEmail,
-          userName,
-          userPw,
-          userPwCheck,
-          userNickname,
-          userFav,
-          userBirth,
-          userPhone,
-          userGender,
-          userIntro,
-          userAddr,
-        });
-
-        // 쿠키에 토큰 저장
-        // setCookie("token", accessToken);
-        sessionStorage.setItem("token", accessToken);
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({
+            userSeq,
+            userPic,
+            userEmail,
+            userName,
+            userPw,
+            userPwCheck,
+            userNickname,
+            userFav,
+            userBirth,
+            userPhone,
+            userGender,
+            userIntro,
+            userAddr,
+          }),
+        );
 
         alert("로그인 성공!");
-        console.log(response.data);
         navigate("/");
       } else {
-        alert(response.data.resultMsg || "로그인에 실패했습니다.");
+        // 서버에서 반환된 에러 메시지 처리
+        const { resultMsg } = response.data;
+        let errorMessage;
+
+        switch (resultMsg) {
+          case "가입되지 않은 계정입니다.":
+            errorMessage = "가입되지 않은 계정입니다. 회원가입 해주세요.";
+            break;
+          case "이메일이 틀립니다. 또는 비밀번호가 틀립니다.":
+            errorMessage =
+              "이메일이 틀리거나 비밀번호가 틀립니다. 다시 확인해 주세요.";
+            break;
+          default:
+            errorMessage = "로그인에 실패했습니다. 다시 시도해주세요.";
+        }
+
+        alert(errorMessage);
       }
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "오류가 발생했습니다. 다시 시도해주세요.",
-      );
+      // 서버와의 통신 중 오류 처리
+      const errorMsg =
+        error.response?.data?.resultMsg ||
+        "오류가 발생했습니다. 다시 시도해주세요.";
+      alert(errorMsg);
     }
   };
 
