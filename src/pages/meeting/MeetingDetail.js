@@ -463,7 +463,7 @@ const MeetingDetail = () => {
         <UnderLine />
         <div></div>
       </div>
-      {detailList.partyAuthGb === "0" ? (
+      {detailList.partyAuthGb === "1" ? (
         <div
           style={{
             position: "fixed",

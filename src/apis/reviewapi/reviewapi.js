@@ -20,10 +20,14 @@ import jwtAxios from "../jwtAxios";
 //   }
 // };
 // 리뷰 불러오기
-export const getReviewList = async (_searchText, _currentPage) => {
+export const getReviewList = async (
+  _searchCondition,
+  _searchText,
+  _currentPage,
+) => {
   try {
     const response = await axios.get(
-      `/api/review?search=1&searchData=${_searchText}&page=${_currentPage}&size=10`,
+      `/api/review?search=${_searchCondition}&searchData=${_searchText}&page=${_currentPage}&size=10`,
     );
     // console.log(response);
     const status = response.status.toString().charAt(0);
@@ -39,7 +43,7 @@ export const getReviewList = async (_searchText, _currentPage) => {
 };
 // 리뷰 추천
 export const getRecommend = async (_userSeq, _reviewSeq) => {
-  console.log(_userSeq);
+  // console.log(_userSeq);
   try {
     const response = await jwtAxios.get(
       `/api/review/fav?reviewFavReviewSeq=${_reviewSeq}`,

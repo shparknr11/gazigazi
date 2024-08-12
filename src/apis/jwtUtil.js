@@ -47,7 +47,7 @@ const beforeRes = async res => {
   // - ERROR_ACCESS_TOKEN 확인이 필요하다.
 
   // if (data && data.error === "UNAUTHENTICATED") {
-  if (data) {
+  if (data && data.code === 2) {
     console.log("3. 일반적인 오류가 아닌 액세스 토큰 오류다.");
     console.log("4. 액세스 토큰 오류이므로 새로운 토큰을 요청한다.");
     console.log("5. 세션에 담겨진 Refresh Token 을 읽어들인다.");

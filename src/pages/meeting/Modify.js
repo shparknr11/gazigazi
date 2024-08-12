@@ -232,6 +232,8 @@ const Modify = () => {
       // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
     } catch (error) {
       console.error(error);
+      alert("에러가발생했습니다.");
+      navigate("/");
     }
   };
 

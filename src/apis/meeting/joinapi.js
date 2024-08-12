@@ -1,10 +1,12 @@
 import axios from "axios";
 import jwtAxios from "../jwtAxios";
 
-// 모임신청서 작성
-export const postApplication = async (_partySeq, _data) => {
+// 모임 승인 (관리자)
+export const patchApproval = async (_partySeq, _userSeq) => {
   try {
-    const response = await axios.post(`/api/join/${_partySeq}`, _data);
+    const response = await axios.patch(
+      `/api/party/authGb1?partySeq=${_partySeq}&userSeq=${_userSeq}`,
+    );
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       // console.log("response", response.data);
@@ -16,12 +18,27 @@ export const postApplication = async (_partySeq, _data) => {
     console.log(error);
   }
 };
-// 모임신청서 승인
-export const patchApproval = async (_partySeq, _userSeq) => {
+
+// 모임 승인 (관리자)
+export const patchApprovalAdmin = async _data => {
   try {
-    const response = await axios.patch(
-      `/api/party/authGb1?partySeq=${_partySeq}&userSeq=${_userSeq}`,
-    );
+    const response = await axios.patch(`/api/admin/auth`, _data);
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      // console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 모임신청서 작성
+export const postApplication = async (_partySeq, _data) => {
+  try {
+    const response = await axios.post(`/api/join/${_partySeq}`, _data);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       // console.log("response", response.data);

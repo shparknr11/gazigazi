@@ -24,6 +24,12 @@ const ReviewInnerStyle = styled.div`
     justify-content: end;
     margin-bottom: 10px;
   }
+  .review-selectbox {
+    margin-right: 3px;
+    padding: 3px;
+    background-color: ${prColor.g100};
+    border: 1px solid ${prColor.g200};
+  }
   .review-search {
     display: flex;
     align-items: center;
@@ -202,6 +208,7 @@ const Review = () => {
   const [reviewSearchText, setRevieSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [searchCondition, setSearchCondition] = useState(1);
 
   const navigate = useNavigate();
 
@@ -214,7 +221,11 @@ const Review = () => {
   // api함수
   const getReviewData = async () => {
     try {
-      const result = await getReviewList(reviewSearchText, currentPage);
+      const result = await getReviewList(
+        searchCondition,
+        reviewSearchText,
+        currentPage,
+      );
       if (result.code != 1) {
         alert(result.resultMsg);
         return;
@@ -308,6 +319,10 @@ const Review = () => {
     }
   };
 
+  const handleChangeSearchCondition = e => {
+    const condition = parseInt(e.target.value);
+    setSearchCondition(condition);
+  };
   return (
     <ReviewInnerStyle>
       <ReviewTitleStyle>
@@ -315,6 +330,17 @@ const Review = () => {
         <div>
           <p>가까운 지역 가까운 지인을 만난 맴버들이 남긴 후기들</p>
           <div className="review-search-div">
+            <select
+              className="review-selectbox"
+              onChange={e => {
+                handleChangeSearchCondition(e);
+              }}
+            >
+              <option value="1">전체</option>
+              <option value="2">모임명 </option>
+              <option value="3">모임장</option>
+              <option value="4">작성자</option>
+            </select>
             <div className="review-search">
               <input
                 type="text"
@@ -370,7 +396,6 @@ const Review = () => {
               <div className="review-bottom">
                 <div>
                   <div className="review-partyname">
-                    <h3>모임(일정) :</h3>
                     <span
                       className="review-partyname-click"
                       style={{ fontWeight: "bold", cursor: "pointer" }}
@@ -378,7 +403,7 @@ const Review = () => {
                         handleClickDetailPage(item.partySeq);
                       }}
                     >
-                      {item.partyName}
+                      {item.partyName} - {item.president}
                     </span>
                   </div>
                   <span style={{ fontSize: "12px" }}>
