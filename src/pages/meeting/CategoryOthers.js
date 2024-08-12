@@ -258,7 +258,7 @@ const CategoryOthers = () => {
 
   return (
     <CateInnerStyle>
-      <GuideTitle guideTitle="카테고리" title="나만의 모임 찾기" />
+      <GuideTitle guideTitle="카테고리" title="나의 모임 찾기" />
 
       <div className="category-category">
         <CartegoryWrapStyle>

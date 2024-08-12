@@ -29,7 +29,6 @@ const MainButtonStyle = styled(ButtonStyle)`
   align-items: center;
   justify-content: center;
   border: 1px solid ${prColor.p800};
-
   &:hover {
     border: 1px solid ${prColor.p1000};
     background-color: ${prColor.p1000};
@@ -77,6 +76,33 @@ const DelectButtonStyle = styled(ButtonStyle)`
     color: ${prColor.white};
   }
 `;
+const DelButtonStyle = styled(ButtonStyle)`
+  background-color: #ca2929;
+  color: ${prColor.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border: 1px solid #ca2929;
+    background-color: #ca2929;
+    color: ${prColor.white};
+  }
+`;
+
+const ReturnButtonStyle = styled(ButtonStyle)`
+  background-color: ${prColor.p500};
+  color: ${prColor.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${prColor.p500};
+
+  &:hover {
+    border: 1px solid ${prColor.p1000};
+    background-color: ${prColor.p1000};
+  }
+`;
 
 const MainButton = ({ label = "버튼", onClick }) => {
   return <MainButtonStyle onClick={onClick}>{label}</MainButtonStyle>;
@@ -92,5 +118,18 @@ const ActionButton = ({ label = "버튼", onClick }) => {
 const DelectButton = ({ label = "버튼", onClick }) => {
   return <DelectButtonStyle onClick={onClick}>{label}</DelectButtonStyle>;
 };
+const DelButton = ({ label = "버튼", onClick }) => {
+  return <DelButtonStyle onClick={onClick}>{label}</DelButtonStyle>;
+};
+const ReturnButton = ({ label = "버튼", onClick }) => {
+  return <ReturnButtonStyle onClick={onClick}>{label}</ReturnButtonStyle>;
+};
 
-export { MainButton, SubButton, ActionButton, DelectButton };
+export {
+  MainButton,
+  SubButton,
+  ActionButton,
+  DelectButton,
+  DelButton,
+  ReturnButton,
+};
