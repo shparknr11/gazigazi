@@ -142,7 +142,7 @@ const CreateAccount = () => {
   const emailRegex = /^[a-zA-Z0-9]{6,15}@[a-z]{3,7}\.(com|net){1}$/;
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
   const NameRegex = /^[가-힣]{2,6}$/;
-  const PhoneRegex = /^01[01](?:\d{3}|\d{4})\d{4}$/;
+  const PhoneRegex = /^01[0-9](?:-?\d{4}){2}$/;
 
   const [accountPic, setAccountPic] = useState(null);
   const [previewPic, setPreviewPic] = useState(null);
@@ -436,7 +436,12 @@ const CreateAccount = () => {
         alert(response.data.message || "계정 생성에 실패했습니다.");
       }
     } catch (error) {
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
+      if (error.response?.status === 409) {
+        const errorMsg =
+          error.response?.data?.message || "이미 등록된 데이터가 있습니다.";
+        alert(errorMsg);
+      }
+      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -474,6 +479,7 @@ const CreateAccount = () => {
         }
       }
     } catch (error) {
+      console.error("중복 체크 오류:", error); // 오류 로그를 콘솔에 기록
       alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };

@@ -51,6 +51,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import EventPage from "./pages/meeting/EventPage";
 import MyMeetingNoticeResister from "./pages/mymeeting/MyMeetingNoticeResister";
 import Rank from "./components/meeting/Rank";
+import SocialLogin from "./pages/SocialLogin";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -89,7 +90,7 @@ const App = () => {
             <Route path="logout" element={<LogOut />}></Route>
             <Route path="myinterestlist" element={<InterestList />}></Route>
           </Route>
-
+          <Route path="/sns" element={<SocialLogin />}></Route>
           <Route path="/review" element={<Review />}></Route>
           <Route
             path="/review/:boardId"

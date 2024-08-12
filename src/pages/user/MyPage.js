@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import GuideTitle from "../../components/common/GuideTitle";
+import { clearUser } from "../../slices/userSlice";
 
 const MyPageStyle = styled.div`
   width: 100%;
@@ -60,40 +61,71 @@ const NavLinks = styled.div`
 
 const MyPage = () => {
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false); // 로그아웃 상태 관리
   const navigate = useNavigate();
-  const [isUserInfoFetched, setIsUserInfoFetched] = useState(false);
+  const dispatch = useDispatch();
   const userSeq = useSelector(state => state.user.userSeq);
   const token = useSelector(state => state.user.token);
-  // const userData = JSON.parse(sessionStorage.getItem("userData"));
-  // const userSeq = userData.userSeq;
-  // const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log(userSeq, token);
-      if (!userSeq || !token) {
-        alert("로그인 상태를 확인하세요.");
-        navigate("/login");
-        return;
-      }
+      if (isLoggingOut) return; // 로그아웃 상태면 데이터 요청 종료
 
       try {
-        const response = await axios.get(`/api/user/${userSeq}`, {
+        if (isTokenExpired(token)) {
+          handleLogout();
+          return;
+        }
+
+        await axios.get(`/api/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setIsUserInfoFetched(true);
-        navigate(`/myprofile/${userSeq}/userInfo`, { replace: true });
-      } catch (error) {
-        console.error(error);
-        alert("정보를 가져오는 것에 실패했습니다. 다시 로그인해주세요.");
-        navigate("/login");
-      } finally {
+
+        // 데이터 가져오기 성공, 로딩을 종료
         setLoading(false);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          handleLogout();
+        } else {
+          console.error(error);
+          alert("정보를 가져오는 데 실패했습니다. 다시 로그인해주세요.");
+        }
       }
     };
 
+    const isTokenExpired = token => {
+      if (!token) return true; // 토큰이 없으면 만료된 것으로 간주
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = JSON.parse(atob(base64));
+
+      const currentTime = Date.now() / 1000;
+      return jsonPayload.exp < currentTime;
+    };
+
+    const handleLogout = () => {
+      if (isLoggingOut) return; // 이미 로그아웃 중이면 함수 종료
+
+      setIsLoggingOut(true); // 로그아웃 진행 중으로 설정
+
+      dispatch(clearUser());
+      sessionStorage.removeItem("userData");
+      sessionStorage.removeItem("token");
+      navigate("/login");
+    };
+
     fetchUserData();
-  }, [userSeq, token, isUserInfoFetched]);
+
+    const currentPath = window.location.pathname;
+    if (!currentPath.includes(`/myprofile/${userSeq}`)) {
+      window.history.replaceState(null, "", `/myprofile/${userSeq}/userInfo`);
+    }
+
+    // Cleanup function
+    return () => {
+      setIsLoggingOut(false); // 컴포넌트 언마운트 시 플래그 리셋
+    };
+  }, [userSeq, token, navigate, dispatch, isLoggingOut]);
 
   if (loading) {
     return <Loading>로딩 중...</Loading>;
