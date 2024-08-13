@@ -17,6 +17,7 @@ import "./printledger.css";
 import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 import { useSelector } from "react-redux";
 import MyMeetingBoard from "./jfs/MyMeetingBoard.js";
+
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
   margin: 0 auto;

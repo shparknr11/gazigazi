@@ -89,6 +89,7 @@ const MyPage = () => {
         } else {
           console.error(error);
           alert("정보를 가져오는 데 실패했습니다. 다시 로그인해주세요.");
+          navigate("/login");
         }
       }
     };
