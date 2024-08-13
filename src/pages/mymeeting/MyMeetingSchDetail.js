@@ -15,6 +15,7 @@ import {
 } from "../../apis/mymeetingapi/meetschapi/meetschapi";
 import Loading from "../../components/common/Loading";
 import { useSelector } from "react-redux";
+import ReviewModal from "../../components/modal/ReviewModal";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -237,6 +238,7 @@ let initailData = {};
 const MyMeetingSchDetail = () => {
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [imgUrl, setImgUrl] = useState("meetinga.png");
   const [planTitle, setPlanTitle] = useState("");
@@ -276,6 +278,7 @@ const MyMeetingSchDetail = () => {
         planLocation: res.planLocation,
         planContents: res.planContents,
       };
+      console.log(res);
       // setPlanObj(res);
       setPlanTitle(res.planTitle);
       setPlanStartDt(res.planStartDt);
@@ -424,6 +427,19 @@ const MyMeetingSchDetail = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
+
+  const handleClickReview = () => {
+    setIsModalOpen(true);
+    // navigate("/review/write", {
+    //   state: {
+    //     planSeq: planSeqForReview,
+    //     planMemberSeq: planMemberSeq,
+    //     planTitle: planTitle,
+    //     partyName: location.state.partyName,
+    //   },
+    // });
+  };
+
   return (
     <>
       <MyMeetingNoticeStyle>
@@ -442,10 +458,11 @@ const MyMeetingSchDetail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {isCompleted === 2 ? (
+                  {isCompleted === "2" ? (
                     <>
                       <button
                         className="etc-btn"
+                        // style={{pointerEvents:"none"}}
                         onClick={() => {
                           toast.warning("이미 종료된 일정입니다.");
                         }}
@@ -456,14 +473,7 @@ const MyMeetingSchDetail = () => {
                         <button
                           className={"etc-btn"}
                           onClick={() => {
-                            navigate("/review/write", {
-                              state: {
-                                planSeq: planSeqForReview,
-                                planMemberSeq: planMemberSeq,
-                                planTitle: planTitle,
-                                partyName: location.state.partyName,
-                              },
-                            });
+                            handleClickReview();
                           }}
                         >
                           리뷰 작성
@@ -532,19 +542,12 @@ const MyMeetingSchDetail = () => {
                       >
                         참가완료
                       </button>
-                      {isCompleted === 2 ? (
+                      {isCompleted === "2" ? (
                         <button
                           style={{ marginLeft: "5px" }}
                           className={"etc-btn"}
                           onClick={() => {
-                            navigate("/review/write", {
-                              state: {
-                                planSeq: planSeqForReview,
-                                planMemberSeq: planMemberSeq,
-                                planTitle: planTitle,
-                                partyName: location.state.partyName,
-                              },
-                            });
+                            handleClickReview();
                           }}
                         >
                           리뷰 작성
@@ -570,7 +573,7 @@ const MyMeetingSchDetail = () => {
                     </>
                   ) : (
                     <>
-                      {location.state.isDateEnd && isCompleted === 1 ? (
+                      {location.state.isDateEnd && isCompleted === "1" ? (
                         <button
                           className="etc-btn"
                           onClick={() => {
@@ -654,7 +657,6 @@ const MyMeetingSchDetail = () => {
                               style={{
                                 width: "100%",
                                 display: "flex",
-
                                 flexDirection: "column",
                                 justifyContent: "center",
                                 gap: "10px",
@@ -770,7 +772,7 @@ const MyMeetingSchDetail = () => {
                                 id="planTitle"
                                 name="planTitle"
                                 className="input-style"
-                                readOnly
+                                disabled
                                 value={planTitle}
                                 style={{ height: "30px", padding: "5px" }}
                                 onChange={e => {
@@ -794,7 +796,7 @@ const MyMeetingSchDetail = () => {
                                 type="date"
                                 id="planStartDt"
                                 name="planStartDt"
-                                readOnly
+                                disabled
                                 value={planStartDt}
                                 className="input-style"
                                 onChange={e => {
@@ -819,7 +821,7 @@ const MyMeetingSchDetail = () => {
                                 name="planStartTime"
                                 type="time"
                                 className="input-style"
-                                readOnly
+                                disabled
                                 style={{ height: "30px", padding: "5px" }}
                                 value={planStartTime}
                                 onChange={e => {
@@ -842,7 +844,7 @@ const MyMeetingSchDetail = () => {
                                 id="planLocation"
                                 name="planLocation"
                                 value={planLocation}
-                                readOnly
+                                disabled
                                 className="input-style"
                                 onChange={e => {
                                   setPlanLocation(e.target.value);
@@ -857,7 +859,7 @@ const MyMeetingSchDetail = () => {
                         <textarea
                           type="textarea"
                           id="planContents"
-                          readOnly
+                          disabled
                           name="planContents"
                           value={planContents}
                           className="notice-textarea"
@@ -960,6 +962,13 @@ const MyMeetingSchDetail = () => {
           </div>
         </div>
       </MyMeetingNoticeStyle>
+      {/* 모달 */}
+      <ReviewModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        planMemberSeq={planMemberSeq}
+        planSeqForReview={planSeqForReview}
+      />
     </>
   );
 };

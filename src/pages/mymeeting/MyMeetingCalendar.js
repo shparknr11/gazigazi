@@ -155,7 +155,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
                 {item.planStartDt}&nbsp;/&nbsp;{item.planStartTime}
               </div>
               <div style={{ fontWeight: "bold" }}>
-                {item.planCompleted === 2 ? (
+                {item.planCompleted === "2" ? (
                   <span style={{ color: "red" }}>일정 종료</span>
                 ) : (
                   <span>진행중</span>
@@ -306,7 +306,7 @@ const MyMeetingCalendar = ({ isClicked }) => {
                   {allData?.planStartTime}
                 </span>
                 <span>
-                  {allData?.planCompleted === 2 ? "일정종료" : "진행중"}
+                  {allData?.planCompleted === "2" ? "일정종료" : "진행중"}
                 </span>
               </li>
             </li>

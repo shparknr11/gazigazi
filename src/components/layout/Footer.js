@@ -14,7 +14,8 @@ const FooterStyle = styled.div`
     max-width: 1300px;
     margin: 0 auto;
     padding-bottom: 5px;
-    padding-top: 40px;
+    padding-top: 60px;
+    padding-bottom: 10px;
   }
   /* .footer-menu-list {
     display: flex;
