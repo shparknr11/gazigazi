@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const UserReviewStyle = styled.div`
   display: flex;
@@ -111,6 +112,57 @@ const UserReviewInnerStyle = styled.div`
         font-size: 14px;
         color: #888;
       }
+
+      .edit-form {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        select {
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        input[type="file"] {
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 10px;
+        }
+
+        button {
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          background-color: #4caf50;
+          color: white;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: #45a049;
+          }
+        }
+      }
+
+      .image-preview {
+        margin-top: 10px;
+        img {
+          max-width: 100px;
+          border-radius: 8px;
+        }
+      }
     }
   }
 
@@ -148,7 +200,6 @@ const UserReviewInnerStyle = styled.div`
   }
 `;
 
-// 날짜 문자열을 Date 객체로 변환하는 함수
 const formatDateString = dateString => {
   const [datePart, timePart] = dateString.split(" ");
   const [year, month, day] = datePart.split("-");
@@ -160,6 +211,11 @@ function MyPageReviews() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editContent, setEditContent] = useState("");
+  const [editRating, setEditRating] = useState(5);
+  const [editPics, setEditPics] = useState([]);
+  const [previewPics, setPreviewPics] = useState([]);
 
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
@@ -175,7 +231,7 @@ function MyPageReviews() {
     setLoading(true);
     try {
       const url = new URL("/api/review/user", window.location.origin);
-      url.searchParams.append("userSeq", 12345);
+      url.searchParams.append("userSeq", 12345); // userSeq는 적절한 값으로 설정
       url.searchParams.append("search", searchType);
       url.searchParams.append("searchData", searchQuery);
       url.searchParams.append("page", page);
@@ -191,14 +247,15 @@ function MyPageReviews() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log("리뷰 데이터를 불러오는 데 실패했습니다.", errorData);
-        throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
+        throw new Error(
+          errorData.message || "리뷰 데이터를 불러오는 데 실패했습니다.",
+        );
       }
 
       const { resultData } = await response.json();
+      console.log("Fetched reviews:", resultData.list);
       setReviews(resultData.list);
     } catch (error) {
-      console.log("에러 발생:", error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -206,12 +263,80 @@ function MyPageReviews() {
   };
 
   const handleSearch = () => {
-    setPage(1); // 검색 시 페이지를 처음으로 리셋
+    setPage(1);
     fetchReviews();
   };
 
   const handlePageChange = newPage => {
     setPage(newPage);
+  };
+
+  const handleEditClick = review => {
+    console.log("Clicked review:", review);
+    setEditingReviewId(review.reviewSeq);
+    setEditContent(review.reviewContents);
+    setEditRating(review.reviewRating);
+    setPreviewPics(review.pics || []);
+  };
+
+  const handleFileChange = e => {
+    const files = Array.from(e.target.files);
+    setEditPics(files);
+
+    // 이미지 미리보기
+    const filePreviews = files.map(file => URL.createObjectURL(file));
+    setPreviewPics(filePreviews);
+  };
+
+  const convertFileToBase64 = file => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result.split(",")[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleEditSubmit = async reviewSeq => {
+    if (!reviewSeq) {
+      console.error("Review ID is undefined");
+      return;
+    }
+
+    // Base64 인코딩된 이미지 데이터 변환
+    const base64Pics = await Promise.all(editPics.map(convertFileToBase64));
+
+    const data = {
+      pics: base64Pics,
+      p: {
+        reviewSeq: reviewSeq,
+        reviewContents: editContent,
+        reviewRating: editRating,
+      },
+    };
+
+    try {
+      const response = await axios.patch(`/api/review`, JSON.stringify(data), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Review ID:", reviewSeq);
+      console.log(response.data);
+
+      // 요청 성공 후 상태 업데이트
+      setEditingReviewId(null);
+      fetchReviews();
+    } catch (error) {
+      console.error(
+        "Error occurred:",
+        error.response ? error.response.data : error.message,
+      );
+    }
   };
 
   return (
@@ -245,19 +370,66 @@ function MyPageReviews() {
           {!loading && !error && (
             <ul className="review-list">
               {reviews.length > 0 ? (
-                reviews.map((review, index) => (
-                  <li key={index}>
+                reviews.map(review => (
+                  <li key={review.reviewSeq}>
                     <h3>{review.partyName}</h3>
-                    <p>{review.reviewContents}</p>
-                    <span>
-                      작성일:{" "}
-                      {formatDateString(review.inputDt).toLocaleDateString()}
-                    </span>
-                    <span>
-                      <Link to={`/review`} className="allreview">
-                        모든 후기
-                      </Link>
-                    </span>
+                    {editingReviewId === review.reviewSeq ? (
+                      <div className="edit-form">
+                        <textarea
+                          value={editContent}
+                          onChange={e => setEditContent(e.target.value)}
+                        />
+                        <select
+                          value={editRating}
+                          onChange={e => setEditRating(Number(e.target.value))}
+                        >
+                          {[1, 2, 3, 4, 5].map(rating => (
+                            <option key={rating} value={rating}>
+                              {rating}점
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleFileChange}
+                        />
+                        <div className="image-preview">
+                          {previewPics.map((pic, index) => (
+                            <img
+                              key={index}
+                              src={pic}
+                              alt={`preview ${index}`}
+                            />
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => handleEditSubmit(review.reviewSeq)}
+                        >
+                          저장
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <p>{review.reviewContents}</p>
+                        <span>평점: {review.reviewRating}점</span>
+                        <span>
+                          작성일:{" "}
+                          {formatDateString(
+                            review.inputDt,
+                          ).toLocaleDateString()}
+                        </span>
+                        <span>
+                          <Link to={`/review`} className="allreview">
+                            모든 후기
+                          </Link>
+                        </span>
+                        <button onClick={() => handleEditClick(review)}>
+                          수정
+                        </button>
+                      </>
+                    )}
                   </li>
                 ))
               ) : (

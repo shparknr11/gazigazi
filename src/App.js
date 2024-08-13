@@ -70,6 +70,7 @@ const App = () => {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/createaccount" element={<CreateAccount />}></Route>
           <Route path="/login/findid:pw" element={<FindIdPw />}></Route>
+          <Route path="/logout" element={<LogOut />}></Route>
 
           {/* 담당자 : 박성호 */}
           <Route path="/" element={<Home />}></Route>
