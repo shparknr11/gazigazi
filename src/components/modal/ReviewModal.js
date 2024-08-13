@@ -1,51 +1,273 @@
 import styled from "@emotion/styled";
+import { Rating } from "@mui/material";
+import axios from "axios";
+import { useRef, useState } from "react";
+import { MainButton } from "../../components/button/Button";
+import { useLocation, useNavigate } from "react-router-dom";
+import { prColor } from "../../css/color";
+import jwtAxios from "../../apis/jwtAxios";
 
-const ModalFormDivStyle = styled.div`
-  width: 100%;
+const WriteInnerStyle = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 20px;
-  height: 300px;
-  background-color: beige;
+  border: 1px solid #000;
+  width: 100%;
+  max-width: 350px;
+  /* maxwidth: */
+  margin: 0 auto;
+  height: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background-color: ${prColor.p000};
+  border: 1px solid ${prColor.p200};
+  .review-write-div {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+`;
+const ReviewSelectStyle = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  .review-form-group {
-    display: flex;
-    flex-direction: column;
-    select,
-    input {
-      padding: 10px;
-      width: 500px;
-      height: 40px;
-    }
-    textarea {
-      resize: none;
-    }
+  margin-bottom: 10px;
+`;
+const ReviewCommentStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
+const ReviewFileStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  .review-write-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 `;
 
-const ReviewModal = () => {
+const ReviewTextStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  textarea {
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid ${prColor.g200};
+    border-radius: 13px;
+    resize: none;
+  }
+`;
+const ReviewButtonStyle = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+`;
+const ReviewModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  planMemberSeq,
+  planSeqForReview,
+}) => {
+  if (!isModalOpen) return null;
+  const navigate = useNavigate();
+  const [reviewRating, setReviewRating] = useState(null);
+  const [reviewContents, setReviewContents] = useState("");
+  const [reviewPic, setReviewPic] = useState([]);
+  const [previewPic, setPreviewPic] = useState([]);
+  const fileBt = useRef(null);
+  const location = useLocation();
+  console.log(location.state);
+  const handleRwFileChange = e => {
+    const filesArr = Array.from(e.target.files);
+
+    if (filesArr) {
+      setReviewPic([...reviewPic, ...filesArr]);
+      const imgUrlArr = filesArr.map(item => URL.createObjectURL(item));
+      setPreviewPic([...previewPic, ...imgUrlArr]);
+    } else {
+      setReviewPic([]);
+      setPreviewPic("");
+    }
+  };
+  const deleteFile = _index => {
+    // console.log("삭제", _index);
+    // 미리보기 배열에서 제거 : 기준 순서(index)
+    const tempPreviewArr = previewPic.filter((item, index) => index !== _index);
+    setPreviewPic(tempPreviewArr);
+    // 전송 파일 배열에서 제거 : 기준 순서(index)
+    const tempFileArr = reviewPic.filter((item, index) => index !== _index);
+    setReviewPic(tempFileArr);
+  };
+
+  const makeThumbnail = () => {
+    return previewPic.map((item, index) => (
+      <img
+        src={item}
+        key={index}
+        style={{ width: 80 }}
+        onClick={() => {
+          deleteFile(index);
+        }}
+      />
+    ));
+  };
+
+  // submit 이벤트 핸들러
+  const handleSubmitWrite = async e => {
+    // 기본 기능 막기
+    e.preventDefault();
+    if (!setReviewContents) {
+      alert("후기를 작성해주세요");
+      return;
+    }
+    // step 1. 전송 데이터 포맷 만들기
+    const formData = new FormData();
+
+    // step 2. 보낼 데이터 (json 형식의 문자열로 만들기)
+    const infoData = JSON.stringify({
+      reviewPlanSeq: parseInt(planSeqForReview),
+      reviewPlmemberSeq: parseInt(planMemberSeq),
+      reviewContents,
+      reviewRating,
+    });
+    // step 3. Blob 바이너리 데이터 만들기
+    const data = new Blob([infoData], { type: "application/json" });
+
+    // step 4. form-data에 "키명" 값으로 추가하기
+    formData.append("p", data);
+    reviewPic.forEach((item, index, arr) => {
+      // step 5. 파일 추가하기
+      // console.log(item);
+      formData.append("pics", item);
+    });
+
+    // step 6. axios 로 전달
+
+    try {
+      const result = await postReview(formData);
+      // console.log(result);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsModalOpen(false);
+  };
+
+  // 리뷰 등록하기
+  const postReview = async _formData => {
+    try {
+      const response = await jwtAxios.post(`/api/review`, _formData);
+      // console.log(response);
+      const status = response.status.toString().charAt(0);
+      if (status === "2") {
+        // console.log("response", response.data);
+        return response.data;
+      } else {
+        alert("API 오류발생 status 확인해주세요");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // 강제로 input type="file" 을 클릭한 것처럼 js 에서 실행
+  const handleFileClick = () => {
+    // document.querySelector("#filebt_id").click();
+    fileBt.current.click();
+  };
+
+  const handleChangeContents = e => {
+    setReviewContents(e.target.value);
+  };
+
   return (
-    <ModalFormDivStyle>
-      <div>
+    <WriteInnerStyle>
+      <div className="review-write-div">
         <h1>후기작성</h1>
       </div>
-      <div className="review-form-group">
-        <label htmlFor="meetname">가입한 모임</label>
-        <input type="text" id="meetname" />
-      </div>
-      <div className="review-form-group">
-        <label htmlFor="meetreview">후기</label>
-        <input type="text" id="meetreview" />
-      </div>
-      <div className="review-form-group">
-        <label htmlFor="meetpic">사진</label>
-        <input type="text" id="meetpic" />
-      </div>
-      <div className="review-form-group">
-        <label htmlFor="meetcomment">별점을 선택해주세요</label>
-        <input type="text" id="meetcomment" />
-      </div>
-    </ModalFormDivStyle>
+      <ReviewSelectStyle>
+        <label htmlFor="review-title">내가 가입한 모임</label>
+        <select id="review-title">
+          <option>{location.state.partyName}</option>
+        </select>
+      </ReviewSelectStyle>
+      <ReviewCommentStyle>
+        <label htmlFor="review-comment">별점을 선택해주세요</label>
+        <div>
+          <Rating
+            name="simple-controlled"
+            size="large"
+            precision={1}
+            value={reviewRating}
+            onChange={(event, newValue) => {
+              setReviewRating(newValue);
+            }}
+          />
+        </div>
+      </ReviewCommentStyle>
+      <ReviewFileStyle>
+        <label htmlFor="review-pic"></label>
+        <button
+          onClick={() => {
+            handleFileClick();
+          }}
+        >
+          사진첨부
+        </button>
+        <input
+          style={{ display: "none" }}
+          ref={fileBt}
+          type="file"
+          id="review-pic"
+          multiple
+          accept="image/jpg, image/png, image/gif"
+          onChange={e => {
+            handleRwFileChange(e);
+          }}
+        />
+        {previewPic ? (
+          <div className="review-write-preview">{makeThumbnail()}</div>
+        ) : null}
+      </ReviewFileStyle>
+      <ReviewTextStyle>
+        <label htmlFor="revew-text">솔직한 리뷰를 작성해주세요</label>
+        <textarea
+          type="text"
+          id="revew-text"
+          value={reviewContents}
+          onChange={e => {
+            handleChangeContents(e);
+          }}
+        />
+      </ReviewTextStyle>
+      <ReviewButtonStyle>
+        <MainButton
+          onClick={e => {
+            handleSubmitWrite(e);
+          }}
+          label="작성"
+        ></MainButton>
+        <MainButton
+          label="취소"
+          onClick={() => {
+            setIsModalOpen(false);
+          }}
+        ></MainButton>
+      </ReviewButtonStyle>
+    </WriteInnerStyle>
   );
 };
 

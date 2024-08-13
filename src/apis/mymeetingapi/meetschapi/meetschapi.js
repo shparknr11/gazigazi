@@ -33,7 +33,7 @@ export const getSchOne = async schSeq => {
 // /api/plan/member?planSeq=1
 export const getSchMemberAll = async schSeq => {
   try {
-    const res = await axios.get(`/api/plan/member?planSeq=${schSeq}`);
+    const res = await jwtAxios.get(`/api/plan/member?planSeq=${schSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -83,7 +83,7 @@ export const postMonthCalculateBudget = async ({
 // /api/plan?plan_seq=
 export const deleteSchOne = async schSeq => {
   try {
-    const res = await axios.delete(`/api/plan?plan_seq=${schSeq}`);
+    const res = await jwtAxios.delete(`/api/plan?plan_seq=${schSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -111,7 +111,7 @@ export const patchSch = async ({
   planContents,
 }) => {
   try {
-    const res = await axios.patch(`/api/plan`, {
+    const res = await jwtAxios.patch(`/api/plan`, {
       planSeq,
       planStartDt,
       planStartTime,
@@ -131,7 +131,7 @@ export const patchSch = async ({
 // /api/plan/234234
 export const patchSchComp = async schSeq => {
   try {
-    const res = await axios.patch(`/api/plan/${schSeq}`);
+    const res = await jwtAxios.patch(`/api/plan/${schSeq}`);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -143,7 +143,7 @@ export const patchSchComp = async schSeq => {
 // 모임 일정 참가 신청 취소
 export const deleteSchJoin = async (plmemberPlanSeq, userSeq) => {
   try {
-    const res = await axios.delete(`/api/plan/join`, {
+    const res = await jwtAxios.delete(`/api/plan/join`, {
       plmemberPlanSeq: Number(plmemberPlanSeq),
       memberSeq: Number(userSeq),
     });
@@ -157,7 +157,7 @@ export const deleteSchJoin = async (plmemberPlanSeq, userSeq) => {
 // 모임 일정 참가 신청
 export const postSchJoin = async (planSeq, userSeq) => {
   try {
-    const res = await axios.post(`/api/plan/join`, {
+    const res = await jwtAxios.post(`/api/plan/join`, {
       plmemberPlanSeq: Number(planSeq),
       memberSeq: Number(userSeq),
     });
@@ -174,7 +174,7 @@ export const postSchJoin = async (planSeq, userSeq) => {
 // /api/member/detail/{partySeq}
 export const getSchMemberSeq = async (memberPartySeq, memberUserSeq) => {
   try {
-    const res = await axios.get(
+    const res = await jwtAxios.get(
       `/api/member/detail/${memberPartySeq}?memberUserSeq=${memberUserSeq}`,
     );
     return res.data.resultData;

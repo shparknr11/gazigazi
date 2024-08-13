@@ -174,6 +174,7 @@ const MeetItemInfo = styled.div`
   margin-top: 40px;
 
   h2 {
+    margin-bottom: 5px;
     font-size: 1.5rem;
     font-weight: bold;
   }
