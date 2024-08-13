@@ -1,88 +1,55 @@
 // board-controller
 
 import axios from "axios";
+import { makeRequest } from "../../jwtAxios";
 
 // 사용자 memberSeq 알아내기
-export const getMemberSeq = async (partySeq, userSeq, token) => {
+
+export const getMemberSeq = async (partySeq, userSeq) => {
   try {
-    const res = await axios.get(
+    const result = await makeRequest(
       `/api/member/detail/${partySeq}?memberUserSeq=${userSeq}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
+      "GET",
     );
-    return res.data.resultData;
+    return result;
   } catch (error) {
     console.log(error);
   }
 };
 
-// POST
-// /api/board
 // 게시글 등록
-// {
-//     "pics": [
-//       "string"
-//     ],
-//     "p": {
-//       "boardPartySeq": 9007199254740991,
-//       "boardMemberSeq": 9007199254740991,
-//       "boardTitle": "string",
-//       "boardContents": "string"
-//     }
-//   }
-export const postNotice = async (formData, token) => {
+export const postNotice = async formData => {
   try {
-    const headers = {
+    const result = await makeRequest("/api/board", "POST", formData, {
       "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    };
-
-    const res = await axios.post("/api/board", formData, { headers });
-    return res.data.resultData;
-  } catch (error) {
-    return error;
-  }
-};
-
-// GET
-// /api/board
-// 게시글 조회
-// http://112.222.157.156:5122/api/board?page=1
-// 페이지네이션 나중에 추가
-export const getNoticeAll = async (partySeq, page = 1, token) => {
-  console.log(token);
-  try {
-    const res = await axios.get(
-      `/api/board?page=${page}&boardPartySeq=${partySeq}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-    return res.data.resultData;
+    });
+    return result;
   } catch (error) {
     console.log(error);
   }
 };
 
 // GET
-// /api/board/{boardSeq}
-// 게시글 상세 조회
-// http://112.222.157.156:5122/api/board/1
-export const getNoticeOne = async (
-  boardSeq,
-  boardPartySeq,
-  boardMemberSeq,
-  token,
-) => {
+export const getNoticeAll = async (partySeq, page = 1) => {
   try {
-    const res = await axios.get(
-      `/api/board/${boardSeq}?boardSeq=${boardSeq}&boardMemberSeq=${boardMemberSeq}&boardPartySeq=${boardPartySeq}&page=1&size=10`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
+    const result = await makeRequest(
+      `/api/board?page=${page}&boardPartySeq=${partySeq}`,
+      "GET",
     );
-    return res.data.resultData;
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// GET
+export const getNoticeOne = async (boardSeq, boardPartySeq, boardMemberSeq) => {
+  try {
+    const result = await makeRequest(
+      `/api/board/${boardSeq}?boardSeq=${boardSeq}&boardMemberSeq=${boardMemberSeq}&boardPartySeq=${boardPartySeq}&page=1&size=10`,
+      "GET",
+    );
+    return result;
   } catch (error) {
     console.log(error);
   }
@@ -91,16 +58,12 @@ export const getNoticeOne = async (
 // PATCH
 // /api/board
 // 게시글 수정 3차 예정
-export const patchNotice = async (formData, token) => {
+export const patchNotice = async formData => {
   try {
-    const header = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const res = await axios.patch(`/api/board`, formData, header);
-    return res.data.resultData;
+    const result = await makeRequest(`/api/board`, "PATCH", formData, {
+      "Content-Type": "multipart/form-data",
+    });
+    return result;
   } catch (error) {
     console.log(error);
   }
@@ -115,28 +78,18 @@ export const patchNotice = async (formData, token) => {
 //     "boardMemberSeq": 9007199254740991
 //   }'
 
-// 헤더 설정
-
-export const deleteNotice = async (
-  { boardSeq, boardMemberSeq, boardPartySeq },
-  token,
-) => {
-  // console.log({ boardSeq, boardMemberSeq, boardPartySeq });
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
+export const deleteNotice = async ({
+  boardSeq,
+  boardMemberSeq,
+  boardPartySeq,
+}) => {
+  try {
+    const result = await makeRequest(`/api/board`, "DELETE", {
       boardSeq,
       boardMemberSeq: boardMemberSeq,
       boardPartySeq,
-    }, // 데이터 추가
-  };
-
-  try {
-    const res = await axios.delete(`/api/board`, config);
-    return res.data.resultData;
+    });
+    return result;
   } catch (error) {
     console.log(error);
   }
