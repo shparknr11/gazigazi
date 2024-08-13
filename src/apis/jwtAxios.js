@@ -1,82 +1,81 @@
 import axios from "axios";
-import { getCookie } from "../utils/cookie";
 
+// 기본 axios 인스턴스 생성
 const jwtAxios = axios.create();
-// Request Intercepter
-// Access Token 활용하기
-const beforeReq = config => {
-  console.log("1. 요청 전  전달", config);
-  const accessToken = sessionStorage.getItem("token");
-  console.log("2. 쿠키로 토큰 가져오기 ", accessToken);
-  if (!accessToken) {
-    console.log("쿠키정보가 없습니다.!!!!!!!!");
-    console.log("호출 중인 axios 를 중단합니다.");
-    return Promise.reject({
-      response: { data: { error: "Login 하셔서 인증받으세요." } },
+
+// interceptors.request
+jwtAxios.interceptors.request.use(
+  config => {
+    const token = sessionStorage.getItem("token");
+
+    // 기본 Authorization 헤더 추가
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
+
+// interceptors.response
+jwtAxios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const newAccessToken = await getAccessToken();
+        // 새로 받은 토큰을 sessionStorage에 저장
+        sessionStorage.setItem("token", newAccessToken);
+        // Authorization 헤더를 새로 받은 토큰으로 업데이트
+        axios.defaults.headers.common["Authorization"] =
+          `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        return jwtAxios(originalRequest);
+      } catch (error) {
+        console.error("토큰 갱신 및 재요청 실패:", error);
+        return Promise.reject(error);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+export const getAccessToken = async () => {
+  try {
+    const response = await axios.get("/api/user/access-token");
+    console.log("getAccessToken : ", response.data);
+    return response.data.resultData.accessToken;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const makeRequest = async (url, method, data = {}, headers = {}) => {
+  try {
+    const response = await jwtAxios({
+      url,
+      method,
+      data,
+      headers: {
+        ...headers,
+      },
     });
+    return response.data.resultData;
+  } catch (error) {
+    console.error("요청 실패:", error);
+    throw error;
   }
-  console.log("3. AccessToken을 인증키에 등록하기");
-  config.headers.Authorization = `Bearer ${accessToken}`;
-  return config;
 };
-
-const failReq = err => {
-  console.log("요청 후... 실패", err);
-  return Promise.reject(err);
-};
-
-// axios의 intercepter 적용
-jwtAxios.interceptors.request.use(beforeReq, failReq);
-
-// Response Intercepter
-// 새로운 토큰을 요청하는 함수
-const refereshJWT = async accessToken => {
-  console.log("accessToken ==== 새로운 토큰을 요청함 : ", accessToken);
-  const header = { headers: { Authorization: `Bearer ${accessToken}` } };
-  const res = await axios.get(`/api/user/access-token`, header);
-  console.log("BE 에서 새로 만들어준 토큰값", res.data);
-  return res.data;
-};
-const beforeRes = async res => {
-  console.log("1. 요청 Response 전처리", res);
-  const data = res.data;
-  console.log("2. Response 오기전 서버 전달해 준 데이터", data);
-
-  // 여기서 부터 테스트 필요로 함.
-  // 2조 BE 에서 어떤 error 메세지가 있다면?
-  // - ERROR_ACCESS_TOKEN 확인이 필요하다.
-
-  if (data && data.error === "UNAUTHENTICATED") {
-    console.log("3. 일반적인 오류가 아닌 액세스 토큰 오류다.");
-    console.log("4. 액세스 토큰 오류이므로 새로운 토큰을 요청한다.");
-    console.log("5. 세션에 담겨진 Refresh Token 을 읽어들인다.");
-    const accessToken = sessionStorage.getItem("token");
-    // const reFreshToken = getCookie("refresh-token");
-    console.log("6. Refresh Token 을 이용해서 새로운 토큰을 요청한다. ");
-    console.log("7. 새로운 access Token 생성 요청. ");
-    // 새로운 토큰을 요청하는 함수 실행
-    const result = await refereshJWT(accessToken);
-    console.log("8. 새로운 토큰으로 쿠키를 업데이트한다. ", result);
-
-    // {
-    //   "code": 1,
-    //   "resultMsg": "Access Token 발급",
-    //   "resultData": {
-    //     "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MjMwMTc0NjYsImV4cCI6MTcyMzAyMTA2Niwic2lnbmVkVXNlciI6IntcInVzZXJJZFwiOjE3LFwicm9sZVwiOlwiUk9MRV9VU0VSXCJ9In0.aSgulSKI33aj3vYJ9ZqWwlzBzcmogyC2BucWkMy-p1bCAuhRSm7ry1dP_40k1GuX-y8eWil5BEbRBPGqb04lAA"
-    //   }
-    // }
-    sessionStorage.setItem("token", result.data.resultData.accessToken);
-    console.log(
-      "9. 이전에 요청했던 axios 를 새로운 토큰을 담아서 다시 호출한다. ",
-    );
-  }
-
-  return res;
-};
-const responseFail = err => {
-  console.log("요청 Response 에러일 때", err);
-  return Promise.reject(err);
-};
-jwtAxios.interceptors.response.use(beforeRes, responseFail);
 
 export default jwtAxios;
