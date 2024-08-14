@@ -36,7 +36,7 @@ const InfoEditInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 100%;
+    width: 70%;
     box-sizing: border-box;
   }
 
@@ -58,7 +58,7 @@ const InfoEditInnerStyle = styled.div`
   }
 
   .info-container button {
-    width: 100%;
+    width: 30%;
     padding: 10px;
     background-color: #ebddcc;
     border: none;
@@ -68,6 +68,7 @@ const InfoEditInnerStyle = styled.div`
     cursor: pointer;
     margin: 5px 0;
     margin-top: 10px;
+    margin-left: 50px;
   }
 
   .info-container button:hover {

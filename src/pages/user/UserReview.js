@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import jwtAxios from "../../apis/jwtAxios";
 import axios from "axios";
 
+// 스타일 컴포넌트 정의
 const UserReviewStyle = styled.div`
   display: flex;
   justify-content: start;
@@ -37,6 +39,24 @@ const UserReviewInnerStyle = styled.div`
     margin-bottom: 20px;
   }
 
+  button {
+    width: 10%;
+    padding: 5px;
+    background-color: #ebddcc;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin: 10px 20px;
+    margin-left: 0px;
+
+    &:hover {
+      background-color: #e0b88a;
+    }
+  }
+
   .search-wrapper {
     display: flex;
     justify-content: space-between;
@@ -56,7 +76,7 @@ const UserReviewInnerStyle = styled.div`
     }
 
     button {
-      padding: 10px 20px;
+      width: 10%;
       border: none;
       border-radius: 4px;
       background-color: #ebddcc;
@@ -64,6 +84,7 @@ const UserReviewInnerStyle = styled.div`
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s;
+      margin-top: 0px;
 
       &:hover {
         background-color: #e0b88a;
@@ -141,23 +162,26 @@ const UserReviewInnerStyle = styled.div`
         }
 
         button {
+          width: 100%;
           padding: 10px;
           border: none;
           border-radius: 4px;
-          background-color: #4caf50;
+          background-color: #ebddcc;
           color: white;
-          font-size: 16px;
+          font-size: 12px;
           cursor: pointer;
           transition: background-color 0.3s;
+          margin-top: 0px;
 
           &:hover {
-            background-color: #45a049;
+            background-color: #e0b88a;
           }
         }
       }
 
       .image-preview {
         margin-top: 10px;
+
         img {
           max-width: 100px;
           border-radius: 8px;
@@ -172,13 +196,14 @@ const UserReviewInnerStyle = styled.div`
     margin-top: 20px;
 
     button {
+      width: auto;
       padding: 10px 20px;
       border: 1px solid #ddd;
       border-radius: 4px;
       background-color: #ebddcc;
-      color: #333;
+      color: white;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 12px;
       margin: 0 5px;
       transition: background-color 0.3s;
 
@@ -200,6 +225,7 @@ const UserReviewInnerStyle = styled.div`
   }
 `;
 
+// 날짜 포맷 함수
 const formatDateString = dateString => {
   const [datePart, timePart] = dateString.split(" ");
   const [year, month, day] = datePart.split("-");
@@ -229,9 +255,10 @@ function MyPageReviews() {
 
   const fetchReviews = async () => {
     setLoading(true);
+    setError(null);
     try {
       const url = new URL("/api/review/user", window.location.origin);
-      url.searchParams.append("userSeq", 12345); // userSeq는 적절한 값으로 설정
+      url.searchParams.append("userSeq", 12345); // userSeq를 적절한 값으로 설정
       url.searchParams.append("search", searchType);
       url.searchParams.append("searchData", searchQuery);
       url.searchParams.append("page", page);
@@ -276,27 +303,24 @@ function MyPageReviews() {
     setEditingReviewId(review.reviewSeq);
     setEditContent(review.reviewContents);
     setEditRating(review.reviewRating);
-    setPreviewPics(review.pics || []);
+    setEditPics([]);
+    setPreviewPics(review.pics.map(pic => pic.url) || []);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingReviewId(null);
+    setEditContent("");
+    setEditRating(5);
+    setEditPics([]);
+    setPreviewPics([]);
   };
 
   const handleFileChange = e => {
     const files = Array.from(e.target.files);
     setEditPics(files);
 
-    // 이미지 미리보기
     const filePreviews = files.map(file => URL.createObjectURL(file));
     setPreviewPics(filePreviews);
-  };
-
-  const convertFileToBase64 = file => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result.split(",")[1]);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
   };
 
   const handleEditSubmit = async reviewSeq => {
@@ -305,30 +329,39 @@ function MyPageReviews() {
       return;
     }
 
-    // Base64 인코딩된 이미지 데이터 변환
-    const base64Pics = await Promise.all(editPics.map(convertFileToBase64));
+    const formData = new FormData();
+    setLoading(true);
+    setError(null);
 
-    const data = {
-      pics: base64Pics,
-      p: {
-        reviewSeq: reviewSeq,
-        reviewContents: editContent,
-        reviewRating: editRating,
-      },
-    };
+    formData.append(
+      "p",
+      new Blob(
+        [
+          JSON.stringify({
+            reviewSeq: reviewSeq,
+            reviewContents: editContent,
+            reviewRating: editRating,
+          }),
+        ],
+        { type: "application/json" },
+      ),
+    );
+
+    editPics.forEach((item, index) => {
+      formData.append(`pics[${index}]`, item);
+    });
 
     try {
-      const response = await axios.patch(`/api/review`, JSON.stringify(data), {
+      const response = await jwtAxios.patch(`/api/review`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
       console.log("Review ID:", reviewSeq);
       console.log(response.data);
 
-      // 요청 성공 후 상태 업데이트
+      alert("리뷰를 수정하였습니다!");
       setEditingReviewId(null);
       fetchReviews();
     } catch (error) {
@@ -336,6 +369,39 @@ function MyPageReviews() {
         "Error occurred:",
         error.response ? error.response.data : error.message,
       );
+      alert("오류가 발생하여 수정에 실패하였습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const DeleteReview = async reviewSeq => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await jwtAxios.delete(`/api/review`, {
+        params: { reviewSeq: reviewSeq }, // params 객체로 쿼리 파라미터 전달
+      });
+
+      if (response.data.code === 1) {
+        console.log(response.data);
+        alert(response.data.message || "리뷰 삭제에 성공하셨습니다!");
+        setEditingReviewId(null);
+      } else {
+        alert(
+          response.data.message ||
+            "리뷰 삭제에 실패하셨습니다. 다시 시도해주세요.",
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting review:",
+        error.response ? error.response.data : error.message,
+      );
+      alert("오류가 발생하였습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -409,6 +475,13 @@ function MyPageReviews() {
                         >
                           저장
                         </button>
+                        <button
+                          onClick={() => {
+                            handleCancelEdit();
+                          }}
+                        >
+                          취소
+                        </button>
                       </div>
                     ) : (
                       <>
@@ -427,6 +500,9 @@ function MyPageReviews() {
                         </span>
                         <button onClick={() => handleEditClick(review)}>
                           수정
+                        </button>
+                        <button onClick={() => DeleteReview(review)}>
+                          삭제
                         </button>
                       </>
                     )}
