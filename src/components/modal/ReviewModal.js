@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
 import { Rating } from "@mui/material";
-import axios from "axios";
 import { useRef, useState } from "react";
 import { MainButton } from "../../components/button/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { prColor } from "../../css/color";
 import jwtAxios from "../../apis/jwtAxios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+import { modules } from "../../components/modules/quill";
 
 const WriteInnerStyle = styled.div`
   position: fixed;
@@ -15,14 +18,14 @@ const WriteInnerStyle = styled.div`
   padding: 20px;
   border: 1px solid #000;
   width: 100%;
-  max-width: 350px;
-  /* maxwidth: */
+  max-width: 500px;
   margin: 0 auto;
   height: auto;
   margin-top: 40px;
   margin-bottom: 40px;
-  background-color: ${prColor.p000};
+  background-color: ${prColor.p100};
   border: 1px solid ${prColor.p200};
+  z-index: 99;
   .review-write-div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
@@ -36,20 +39,52 @@ const ReviewSelectStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  & label {
+    font-weight: bold;
+  }
+  & select {
+    padding: 5px;
+  }
 `;
 const ReviewCommentStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  & label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
 `;
 const ReviewFileStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+
   .review-write-preview {
-    display: block;
+    display: flex;
+    gap: 1px;
+    flex-wrap: wrap;
     width: 100%;
-    height: 100%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .review-write-nopreview {
+    display: block;
+    width: 150px;
+    height: 150px;
+    border-color: #000;
+  }
+  .preview-reviewpic {
+    display: block;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+  }
+  .morerv-button {
+    margin-top: 10px;
+    cursor: pointer;
+    color: ${prColor.p700};
+    text-decoration: underline;
   }
 `;
 
@@ -58,13 +93,8 @@ const ReviewTextStyle = styled.div`
   flex-direction: column;
   margin-bottom: 10px;
 
-  textarea {
-    height: 150px;
-    width: 300px;
-    padding: 10px;
-    border: 1px solid ${prColor.g200};
-    border-radius: 13px;
-    resize: none;
+  & label {
+    margin-bottom: 5px;
   }
 `;
 const ReviewButtonStyle = styled.div`
@@ -72,6 +102,7 @@ const ReviewButtonStyle = styled.div`
   gap: 10px;
   justify-content: end;
 `;
+
 const ReviewModal = ({
   isModalOpen,
   setIsModalOpen,
@@ -84,9 +115,10 @@ const ReviewModal = ({
   const [reviewContents, setReviewContents] = useState("");
   const [reviewPic, setReviewPic] = useState([]);
   const [previewPic, setPreviewPic] = useState([]);
+  const [showMore, setShowMore] = useState(false); // 추가된 상태
   const fileBt = useRef(null);
   const location = useLocation();
-  console.log(location.state);
+
   const handleRwFileChange = e => {
     const filesArr = Array.from(e.target.files);
 
@@ -96,66 +128,50 @@ const ReviewModal = ({
       setPreviewPic([...previewPic, ...imgUrlArr]);
     } else {
       setReviewPic([]);
-      setPreviewPic("");
+      setPreviewPic([]);
     }
   };
+
   const deleteFile = _index => {
-    // console.log("삭제", _index);
-    // 미리보기 배열에서 제거 : 기준 순서(index)
     const tempPreviewArr = previewPic.filter((item, index) => index !== _index);
     setPreviewPic(tempPreviewArr);
-    // 전송 파일 배열에서 제거 : 기준 순서(index)
     const tempFileArr = reviewPic.filter((item, index) => index !== _index);
     setReviewPic(tempFileArr);
   };
 
   const makeThumbnail = () => {
-    return previewPic.map((item, index) => (
+    const visiblePics = showMore ? previewPic : previewPic.slice(0, 3); // 보여줄 이미지
+    return visiblePics.map((item, index) => (
       <img
         src={item}
         key={index}
-        style={{ width: 80 }}
-        onClick={() => {
-          deleteFile(index);
-        }}
+        className="preview-reviewpic"
+        onClick={() => deleteFile(index)}
       />
     ));
   };
 
-  // submit 이벤트 핸들러
   const handleSubmitWrite = async e => {
-    // 기본 기능 막기
     e.preventDefault();
-    if (!setReviewContents) {
+    if (!reviewContents) {
       alert("후기를 작성해주세요");
       return;
     }
-    // step 1. 전송 데이터 포맷 만들기
-    const formData = new FormData();
 
-    // step 2. 보낼 데이터 (json 형식의 문자열로 만들기)
+    const formData = new FormData();
     const infoData = JSON.stringify({
       reviewPlanSeq: parseInt(planSeqForReview),
       reviewPlmemberSeq: parseInt(planMemberSeq),
       reviewContents,
       reviewRating,
     });
-    // step 3. Blob 바이너리 데이터 만들기
     const data = new Blob([infoData], { type: "application/json" });
 
-    // step 4. form-data에 "키명" 값으로 추가하기
     formData.append("p", data);
-    reviewPic.forEach((item, index, arr) => {
-      // step 5. 파일 추가하기
-      // console.log(item);
-      formData.append("pics", item);
-    });
-
-    // step 6. axios 로 전달
+    reviewPic.forEach(item => formData.append("pics", item));
 
     try {
       const result = await postReview(formData);
-      // console.log(result);
       if (result.code !== 1) {
         alert(result.resultMsg);
         return;
@@ -164,17 +180,20 @@ const ReviewModal = ({
       console.log(error);
     }
 
+    setReviewRating(null);
+    setReviewContents("");
+    setReviewPic([]);
+    setPreviewPic([]);
+
     setIsModalOpen(false);
+    navigate(`/review`);
   };
 
-  // 리뷰 등록하기
   const postReview = async _formData => {
     try {
       const response = await jwtAxios.post(`/api/review`, _formData);
-      // console.log(response);
       const status = response.status.toString().charAt(0);
       if (status === "2") {
-        // console.log("response", response.data);
         return response.data;
       } else {
         alert("API 오류발생 status 확인해주세요");
@@ -183,9 +202,8 @@ const ReviewModal = ({
       console.log(error);
     }
   };
-  // 강제로 input type="file" 을 클릭한 것처럼 js 에서 실행
+
   const handleFileClick = () => {
-    // document.querySelector("#filebt_id").click();
     fileBt.current.click();
   };
 
@@ -212,21 +230,13 @@ const ReviewModal = ({
             size="large"
             precision={1}
             value={reviewRating}
-            onChange={(event, newValue) => {
-              setReviewRating(newValue);
-            }}
+            onChange={(event, newValue) => setReviewRating(newValue)}
           />
         </div>
       </ReviewCommentStyle>
       <ReviewFileStyle>
         <label htmlFor="review-pic"></label>
-        <button
-          onClick={() => {
-            handleFileClick();
-          }}
-        >
-          사진첨부
-        </button>
+        <button onClick={handleFileClick}>사진첨부</button>
         <input
           style={{ display: "none" }}
           ref={fileBt}
@@ -234,37 +244,29 @@ const ReviewModal = ({
           id="review-pic"
           multiple
           accept="image/jpg, image/png, image/gif"
-          onChange={e => {
-            handleRwFileChange(e);
-          }}
+          onChange={handleRwFileChange}
         />
-        {previewPic ? (
-          <div className="review-write-preview">{makeThumbnail()}</div>
-        ) : null}
+        <div className="review-write-preview">{makeThumbnail()}</div>
+        {previewPic.length > 3 && !showMore && (
+          <div className="morerv-button" onClick={() => setShowMore(true)}>
+            더보기
+          </div>
+        )}
+        {showMore && previewPic.length > 3 && (
+          <div className="morerv-button" onClick={() => setShowMore(false)}>
+            접기
+          </div>
+        )}
       </ReviewFileStyle>
       <ReviewTextStyle>
-        <label htmlFor="revew-text">솔직한 리뷰를 작성해주세요</label>
-        <textarea
-          type="text"
-          id="revew-text"
-          value={reviewContents}
-          onChange={e => {
-            handleChangeContents(e);
-          }}
-        />
+        <label htmlFor="review-text">솔직한 리뷰를 작성해주세요</label>
+        <ReactQuill onChange={setReviewContents} modules={modules} />
       </ReviewTextStyle>
       <ReviewButtonStyle>
-        <MainButton
-          onClick={e => {
-            handleSubmitWrite(e);
-          }}
-          label="작성"
-        ></MainButton>
+        <MainButton onClick={handleSubmitWrite} label="작성"></MainButton>
         <MainButton
           label="취소"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
+          onClick={() => setIsModalOpen(false)}
         ></MainButton>
       </ReviewButtonStyle>
     </WriteInnerStyle>

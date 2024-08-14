@@ -1,3 +1,6 @@
 .ql-editor {
-  min-height: 400px !important;
+  min-height: 300px !important;
+  height: 150px !important;
+  caret-color: #000 !important;
+  background-color: #f9f8f5 !important;
 }

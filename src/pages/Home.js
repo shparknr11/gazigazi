@@ -65,6 +65,7 @@ const Home = () => {
   // const userSeq = sessionStorage.getItem("userSeq");
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
+  const userAddr = user.userAddr;
 
   // search 클릭 시 검색
   const handleChangeSearch = e => {
@@ -93,8 +94,7 @@ const Home = () => {
 
   // 주변모임 필터
   const filterHomeList = _resultData => {
-    const userLocation = sessionStorage.getItem("userAddr");
-    if (!userLocation) {
+    if (!userAddr) {
       const filteredListOne = _resultData.filter(
         item => item.partyAuthGb === "2" && item.partyLocation1 === "대구",
       );
@@ -103,7 +103,7 @@ const Home = () => {
       const filteredList = _resultData.filter(
         item =>
           item.partyAuthGb === "2" &&
-          item.partyLocation1 === userLocation.slice(0, 2),
+          item.partyLocation1 === userAddr.slice(0, 2),
       );
 
       setArroundPartyList(filteredList);

@@ -650,14 +650,6 @@ const Create = () => {
             }}
           />
         </div>
-        {/* <div className="create-radio-group">
-          <h1>허용/비허용</h1>
-          <input type="radio" id="partyadd" name="add-select" />
-          <label htmlFor="partyadd">허용</label>
-
-          <input type="radio" id="partyadd" name="add-select" />
-          <label htmlFor="partyadd">비허용</label>
-        </div> */}
       </CreateFormDivStyle>
       <CreateBtnWrapStyle>
         <div className="create-button">취소</div>

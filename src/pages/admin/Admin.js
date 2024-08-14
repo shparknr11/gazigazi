@@ -2,11 +2,13 @@ import styled from "@emotion/styled";
 import { Link, useSearchParams } from "react-router-dom";
 import MeetingState from "../../components/admin/MeetingState";
 import GuideTitle from "../../components/common/GuideTitle";
+import { prColor } from "../../css/color";
 
 const AdminWrapStyle = styled.div`
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
+  min-height: 627px;
   margin-top: 40px;
   margin-bottom: 40px;
 `;
@@ -28,13 +30,14 @@ const AdminLeftDivStyle = styled.div`
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    background-color: rgba(249, 248, 245, 0.2);
 
     & .admin-list-item-menu {
       text-align: end;
       width: 100%;
       padding: 10px 16px 10px 24px;
       margin-bottom: 5px;
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: ${prColor.p100};
 
       a {
         display: block;
@@ -51,7 +54,6 @@ const AdminLeftDivStyle = styled.div`
       display: flex;
       flex-direction: column;
       min-width: 110px;
-
       gap: 10px;
       margin: 10px 0px;
       margin-left: 50px;
@@ -96,7 +98,7 @@ const AdminRightDivStyle = styled.div`
   }
   .yoffset {
     position: relative;
-    border: 2px dashed #c9c2a5;
+    /* border: 2px dashed #c9c2a5; */
   }
   .admin-btns {
     position: absolute;
