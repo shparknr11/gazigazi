@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useModal from "../../hooks/useModal";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
@@ -8,9 +7,11 @@ import { DelButton, MainButton, ReturnButton } from "../button/Button";
 import { getGenderText, getYearLastTwoDigits } from "../meeting/homeFunction";
 import ApprovalModal from "../modal/admin/ApprovalModal";
 import Loading from "../common/Loading";
+import useAdminModal from "../../hooks/useAdminModal";
 
 const MeetingState = ({ meetingState }) => {
-  const { isModalOpen, confirmAction, openModal, closeModal } = useModal();
+  const { modalTitle, isModalOpen, confirmAction, openModal, closeModal } =
+    useAdminModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const [filteredPartyList, setFilteredPartyList] = useState([]);
@@ -56,12 +57,13 @@ const MeetingState = ({ meetingState }) => {
   }, [meetingState]);
 
   // 모임 승인
-  const handleClickApproval = (_partySeq, _userEmail) => {
+  const handleClickApproval = (_partySeq, _userEmail, _num) => {
     openModal({
+      topTitle: getModalTitle(_num),
       onConfirm: async joinContent => {
         const data = {
           partySeq: _partySeq,
-          num: 2,
+          num: _num,
           text: joinContent,
           userEmail: _userEmail,
         };
@@ -79,14 +81,28 @@ const MeetingState = ({ meetingState }) => {
       },
     });
   };
+
   // 클릭시 상페 페이지로
   const handleClickDetail = _partySeq => {
     // console.log(_partySeq);
     navigate(`/meeting/${_partySeq}`);
   };
 
-  const getMeetingBorderStyle = num => {
-    switch (num) {
+  const getModalTitle = _num => {
+    switch (_num) {
+      case 2:
+        return "모임[승인] 안내";
+      case 3:
+        return "모임[반려] 안내";
+      case 4:
+        return "모임[삭제] 안내";
+      default:
+        return;
+    }
+  };
+
+  const getMeetingBorderStyle = _num => {
+    switch (_num) {
       case "2":
         return "2px soild red";
       case "3":
@@ -94,7 +110,20 @@ const MeetingState = ({ meetingState }) => {
       case "4":
         return "2px solid orange";
       default:
-        return "2px dashed #c9c2a5";
+        return "2px dashed #e6e2d5";
+    }
+  };
+
+  const getNoMeeting = _num => {
+    switch (_num) {
+      case "2":
+        return "승인된 모임이 없습니다.";
+      case "3":
+        return "반려된 모임이 없습니다.";
+      case "4":
+        return "삭제된 모임이 없습니다.";
+      default:
+        return "승인 대기중인 모임이 없습니다.";
     }
   };
 
@@ -103,80 +132,91 @@ const MeetingState = ({ meetingState }) => {
   }
   return (
     <>
-      <div className="admin-application-div">
-        {filteredPartyList.map((item, index) => (
-          <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+      {filteredPartyList.length > 0 ? (
+        <div className="admin-application-div">
+          {filteredPartyList.map((item, index) => (
             <div
-              className="list-box yoffset"
-              style={{ border: getMeetingBorderStyle(meetingState) }}
-              onClick={() => {
-                handleClickDetail(item.partySeq);
-              }}
+              key={index}
+              style={{ display: "flex", flexDirection: "column" }}
             >
-              <div className="list-box-img">
-                <img
-                  src={`/pic/party/${item.partySeq}/${item.partyPic}`}
-                  alt="파티이미지"
-                />
-                <div className="admin-btns">
-                  <DelButton
-                    label="삭제"
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                  ></DelButton>
+              <div
+                className="list-box yoffset"
+                style={{ border: getMeetingBorderStyle(meetingState) }}
+                onClick={() => {
+                  handleClickDetail(item.partySeq);
+                }}
+              >
+                <div className="list-box-img">
+                  <img
+                    src={`/pic/party/${item.partySeq}/${item.partyPic}`}
+                    alt="파티이미지"
+                  />
+                  <div className="admin-btns">
+                    <DelButton
+                      label="삭제"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleClickApproval(item.partySeq, item.userEmail, 4);
+                      }}
+                    ></DelButton>
 
-                  <ReturnButton
-                    label="반려"
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                  ></ReturnButton>
+                    <ReturnButton
+                      label="반려"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleClickApproval(item.partySeq, item.userEmail, 3);
+                      }}
+                    ></ReturnButton>
 
-                  <MainButton
-                    label="승인"
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleClickApproval(item.partySeq, item.userEmail);
-                    }}
-                  ></MainButton>
-                </div>
-              </div>
-              <div className="list-box-content">
-                <div className="list-box-title">
-                  <div className="list-box-profileimg">
-                    <img
-                      src={`/pic/user/${item.userSeq}/${item.userPic}`}
-                      alt="프로필이미지"
-                    />
+                    <MainButton
+                      label="승인"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleClickApproval(item.partySeq, item.userEmail, 2);
+                      }}
+                    ></MainButton>
                   </div>
-                  <span style={{ fontWeight: "bold" }}>{item.userName}</span>
-                  <span style={{ color: "#999" }}> 님의 모임</span>
                 </div>
-                <h3 className="list-box-text" style={{ fontWeight: "bold" }}>
-                  {item.partyName}
-                </h3>
-                <p className="list-box-local" style={{ fontSize: "13px" }}>
-                  {item.partyLocation1} {item.partyLocation2}
-                </p>
-                <span className="list-box-gender">
-                  {getGenderText(item.partyGender)}
-                </span>
-                <span className="list-box-age">
-                  {getYearLastTwoDigits(item.partyMinAge) === "1901"
-                    ? "연령무관"
-                    : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
-                  {getYearLastTwoDigits(item.partyMaxAge) === "2155"
-                    ? ""
-                    : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
-                </span>
+                <div className="list-box-content">
+                  <div className="list-box-title">
+                    <div className="list-box-profileimg">
+                      <img
+                        src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                        alt="프로필이미지"
+                      />
+                    </div>
+                    <span style={{ fontWeight: "bold" }}>{item.userName}</span>
+                    <span style={{ color: "#999" }}> 님의 모임</span>
+                  </div>
+                  <h3 className="list-box-text" style={{ fontWeight: "bold" }}>
+                    {item.partyName}
+                  </h3>
+                  <p className="list-box-local" style={{ fontSize: "13px" }}>
+                    {item.partyLocation1} {item.partyLocation2}
+                  </p>
+                  <span className="list-box-gender">
+                    {getGenderText(item.partyGender)}
+                  </span>
+                  <span className="list-box-age">
+                    {getYearLastTwoDigits(item.partyMinAge) === "1901"
+                      ? "연령무관"
+                      : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
+                    {getYearLastTwoDigits(item.partyMaxAge) === "2155"
+                      ? ""
+                      : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p>{getNoMeeting(meetingState)}</p>
+      )}
+
       {/* 모달 */}
       <ApprovalModal
+        modalTitle={modalTitle}
         isOpen={isModalOpen}
         onClose={closeModal}
         onConfirm={confirmAction}

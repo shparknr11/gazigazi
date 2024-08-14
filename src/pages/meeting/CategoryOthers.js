@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { IoIosList } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
@@ -177,7 +177,8 @@ const CategoryOthers = () => {
   const [searchParams] = useSearchParams();
   const partyGenre = searchParams.get("partyGenre");
   const searchKeyword = searchParams.get("search");
-
+  const location = useLocation();
+  console.log(location);
   const filterCategory = _resultData => {
     const updateList = _resultData.filter(
       item =>

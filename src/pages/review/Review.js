@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { prColor } from "../../css/color";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+// react quill
+import DOMPurify from "dompurify";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
   max-width: 1280px;
@@ -93,8 +95,9 @@ const ReviewItemStyle = styled.div`
     align-items: center;
   }
   .review-mid {
-    width: 100%;
-    max-width: 700px;
+    /* width: 100%; */
+    /* max-width: 700px; */
+    width: auto;
     .review-mid-text {
     }
   }
@@ -110,20 +113,26 @@ const ReviewItemStyle = styled.div`
     margin-bottom: 10px;
   } */
   .review-img {
+    width: 100%;
     display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     gap: 10px;
+    /* min-height: 210px; */
+    margin-right: 4px;
+  }
+  .review-img-pic {
+  }
+  .review-img-pic img {
     height: 210px;
     min-height: 210px;
-    margin-right: 4px;
-    border-radius: 12px 0px 0px 12px;
-  }
-
-  .review-img-pic {
-    margin: 0px;
-    min-width: 0px;
-    max-width: 100%;
-    height: 100%;
-    width: auto;
+    border-radius: 8px;
+    border: 2px solid ${prColor.p200};
+    transition: border 0.5s ease;
+    cursor: pointer;
+    &:hover {
+      border: 2px solid ${prColor.p500};
+    }
   }
   /* .review-bottom-div {
     display: flex;
@@ -265,11 +274,18 @@ const Review = () => {
   // 리뷰 사진
   const makeReviewPic = (_reviewSeq, _pics) => {
     return _pics.map((item, index) => (
-      <img
-        className="review-img-pic"
-        src={`/pic/review/${_reviewSeq}/${item}`}
-        key={index}
-      />
+      <div key={index} className="review-img-pic">
+        <img
+          onClick={() => {
+            window.open(
+              `http://112.222.157.156:5122/pic/review/${_reviewSeq}/${item}`,
+              `gazi_img`,
+              `width=430,hight=500`,
+            );
+          }}
+          src={`/pic/review/${_reviewSeq}/${item}`}
+        />
+      </div>
     ));
   };
 
@@ -384,7 +400,11 @@ const Review = () => {
 
               <div className="review-mid">
                 <div className="review-mid-text">
-                  <p>{item.reviewContents}</p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(item.reviewContents),
+                    }}
+                  />
                 </div>
               </div>
               {item.pics && item.pics[0] && (

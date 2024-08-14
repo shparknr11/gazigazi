@@ -411,7 +411,7 @@ const MyMeeting = () => {
                         </div>
                         <div className="cut-text">
                           {/* 일단 물어볼 것 */}
-                          {item.partyAuthGb !== "0" ? (
+                          {item.partyAuthGb === "2" ? (
                             <>
                               현재 참가 인원 : {item.partyNowMem} /{" "}
                               {item.partyMaximum}

@@ -87,7 +87,7 @@ const MeetItemCard = styled.div`
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      /* object-fit: contain; */
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
   }
@@ -459,8 +459,19 @@ const MeetingDetail = () => {
             />
             {/* <p className="meet-item-partyinfo">{detailList.partyIntro}</p> */}
           </div>
-          <div className="meet-item-imgs"></div>
+          {/* <div className="meet-item-imgs"></div> */}
         </MeetItemInfo>
+        <UnderLine />
+        <div>
+          <div>
+            <h1>모임장 님과 진행된 최근 일정</h1>
+          </div>
+          <div>
+            <div>
+              <span></span>
+            </div>
+          </div>
+        </div>
         <UnderLine />
         <div></div>
       </div>

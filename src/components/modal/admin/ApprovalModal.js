@@ -28,6 +28,12 @@ const JoinInputStyle = styled.div`
   flex-direction: column;
   height: 180px;
 
+  span {
+    color: #999;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
   textarea {
     height: 100%;
     width: 250px;
@@ -50,6 +56,7 @@ const JoinInputStyle = styled.div`
 `;
 
 const ApprovalModal = ({
+  modalTitle,
   isOpen,
   onClose,
   onConfirm,
@@ -80,8 +87,9 @@ const ApprovalModal = ({
             handleSubmit(e);
           }}
         >
-          <JoinTitle>모임 [승인]</JoinTitle>
+          <JoinTitle>{modalTitle}</JoinTitle>
           <JoinInputStyle>
+            <span>신청 회원의 이메일로 내용이 발송됩니다.</span>
             <textarea
               id="jointext"
               type="text"

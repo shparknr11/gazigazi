@@ -101,6 +101,12 @@ const CreateFormDivStyle = styled.div`
       height: 100px;
     }
   }
+  .partyfile-subtext {
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #999;
+  }
   .create-radio-group {
     margin-bottom: 40px;
 
@@ -536,7 +542,13 @@ const Modify = () => {
         </div>
 
         <div className="create-file-group">
-          <label htmlFor="partyfile">사진으로 모임을 소개해 주세요.</label>
+          <label htmlFor="partyfile">
+            변경할 모임소개 사진을 선택해 주세요.
+            <span className="partyfile-subtext">
+              * 미선택 시 기존 사진 적용
+            </span>
+          </label>
+
           <input
             type="file"
             id="partyfile"
