@@ -68,13 +68,13 @@ export const getMemberBudget = async ({ budgetPartySeq, month }) => {
 };
 
 // PATCH /api/budget 회계 내역 수정
-export const patchBudget = async formData => {
+export const patchBudget = async budgetData => {
   try {
-    const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const res = await jwtAxios.patch("/api/budget", formData, header);
+    const header = { headers: { "Content-Type": "application/json" } };
+    const res = await jwtAxios.patch("/api/budget", budgetData, header);
     return res.data.resultData;
   } catch (error) {
-    error(
+    console.error(
       error.response?.data?.message || "회계 내역 수정 중 오류가 발생했습니다.",
     );
     throw error; // 에러를 상위로 전달
