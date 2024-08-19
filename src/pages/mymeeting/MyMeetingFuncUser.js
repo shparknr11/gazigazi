@@ -177,7 +177,7 @@ const MyMeetingFuncUser = () => {
       clickedItem.classList.add("divButtonStyle");
       if (titletext) {
         titletext.innerHTML =
-          "Blog" + "(" + document.getElementById(e.target.id).innerText + ")";
+          "게시판" + "(" + document.getElementById(e.target.id).innerText + ")";
         activeItem = clickedItem;
         // 이벤트 걸곳 axios 여기다 걸자
         switch (clickedItem.id) {

@@ -332,7 +332,7 @@ const MyMeeting = () => {
                                     );
                                   }}
                                 >
-                                  Blog
+                                  게시판
                                 </Button>
                               </>
                             ) : (
@@ -374,7 +374,7 @@ const MyMeeting = () => {
                                     );
                                   }}
                                 >
-                                  Blog
+                                  게시판
                                 </Button>
                                 {/* <div>{item.partyAuthGb}</div> */}
                                 <Button

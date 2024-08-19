@@ -8,7 +8,7 @@ export const deleteComment = async ({ commentSeq, commentMemberSeq }) => {
       commentSeq,
       commentMemberSeq,
     });
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -21,7 +21,7 @@ export const getComment = async (boardSeq, page) => {
       `/api/board/comment?boardSeq=${boardSeq}&page=${page}`,
       "GET",
     );
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -37,7 +37,7 @@ export const patchComment = async (
 
   try {
     const result = await makeRequest(url, "PATCH", null);
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -55,7 +55,7 @@ export const postComment = async ({
       commentMemberSeq,
       commentContents,
     });
-    return res.data;
+    return res.data.resultData;
   } catch (error) {
     return error;
   }

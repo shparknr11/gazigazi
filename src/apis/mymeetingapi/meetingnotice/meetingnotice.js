@@ -11,7 +11,7 @@ export const getMemberSeq = async (partySeq, userSeq) => {
       `/api/member/detail/${partySeq}?memberUserSeq=${userSeq}`,
       "GET",
     );
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -23,7 +23,7 @@ export const postNotice = async formData => {
     const result = await makeRequest("/api/board", "POST", formData, {
       "Content-Type": "multipart/form-data",
     });
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -36,7 +36,7 @@ export const getNoticeAll = async (partySeq, page = 1) => {
       `/api/board?page=${page}&boardPartySeq=${partySeq}`,
       "GET",
     );
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -49,7 +49,7 @@ export const getNoticeOne = async (boardSeq, boardPartySeq, boardMemberSeq) => {
       `/api/board/${boardSeq}?boardSeq=${boardSeq}&boardMemberSeq=${boardMemberSeq}&boardPartySeq=${boardPartySeq}&page=1&size=10`,
       "GET",
     );
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +63,7 @@ export const patchNotice = async formData => {
     const result = await makeRequest(`/api/board`, "PATCH", formData, {
       "Content-Type": "multipart/form-data",
     });
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }
@@ -89,7 +89,7 @@ export const deleteNotice = async ({
       boardMemberSeq: boardMemberSeq,
       boardPartySeq,
     });
-    return result;
+    return result.data.resultData;
   } catch (error) {
     console.log(error);
   }

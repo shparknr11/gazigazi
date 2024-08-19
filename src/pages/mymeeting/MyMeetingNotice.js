@@ -1,17 +1,21 @@
 import styled from "@emotion/styled";
+import DOMPurify from "dompurify";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   deleteNotice,
   getNoticeOne,
   patchNotice,
 } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 import Loading from "../../components/common/Loading";
-import { toast } from "react-toastify";
-import moment from "moment";
-import { useSelector } from "react-redux";
-import DOMPurify from "dompurify";
+import "../../css/quill.css";
+import NoticeComment from "./jfs/NoticeComment";
 
 const MyMeetingNoticeStyle = styled.div`
   width: 100%;
@@ -21,7 +25,7 @@ const MyMeetingNoticeStyle = styled.div`
   .notice-wrap {
     width: 100%;
     margin-bottom: 75px;
-    height: 650px;
+    /* height: 650px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,7 +42,7 @@ const MyMeetingNoticeStyle = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 30px;
-    max-width: 900px;
+    /* max-width: 900px; */
     border: 1px solid gray;
     border-radius: 4px;
     box-shadow: 1px 1px 1px 1px gray;
@@ -84,18 +88,71 @@ const MyMeetingNoticeStyle = styled.div`
   }
 `;
 const TitleDivStyle = styled.div`
-  width: 100%;
-  display: block;
-  text-align: left;
   font-size: 20px;
   font-weight: bold;
   color: black;
-  padding-left: 5px;
-  padding-top: 20px;
+  padding: 20px 0px 20px 5px;
 `;
 const MyMeetingNotice = () => {
   const user = useSelector(state => state.user);
   // console.log(user);
+  // 모듈 활용
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, "link"],
+        [
+          {
+            color: [
+              "#000000",
+              "#e60000",
+              "#ff9900",
+              "#ffff00",
+              "#008a00",
+              "#0066cc",
+              "#9933ff",
+              "#ffffff",
+              "#facccc",
+              "#ffebcc",
+              "#ffffcc",
+              "#cce8cc",
+              "#cce0f5",
+              "#ebd6ff",
+              "#bbbbbb",
+              "#f06666",
+              "#ffc266",
+              "#ffff66",
+              "#66b966",
+              "#66a3e0",
+              "#c285ff",
+              "#888888",
+              "#a10000",
+              "#b26b00",
+              "#b2b200",
+              "#006100",
+              "#0047b2",
+              "#6b24b2",
+              "#444444",
+              "#5c0000",
+              "#663d00",
+              "#666600",
+              "#003700",
+              "#002966",
+              "#3d1466",
+              "custom-color",
+            ],
+          },
+          { background: [] },
+        ],
+
+        ["clean"],
+      ],
+    },
+  };
   // jfs 수정 상태
   const [isEdit, setIsEdit] = useState(false);
 
@@ -121,7 +178,6 @@ const MyMeetingNotice = () => {
         param.meetingnoticeId,
         location.state.boardPartySeq,
         location.state.boardMemberSeq,
-        user.token,
       );
 
       // jfs 진행해야 해요.
@@ -201,10 +257,11 @@ const MyMeetingNotice = () => {
       // console.log(objData);
       // const a = 1;
       // if (a === 1) return;
-      await deleteNotice(objData, user.token);
+      await deleteNotice(objData);
     } catch (error) {
       console.log(error);
     }
+    alert("게시글이 삭제되었습니다.");
     toast.success("게시글이 삭제되었습니다.");
     navigate(`/mymeeting/mymeetingLeader/${location.state.boardPartySeq}`);
   };
@@ -398,7 +455,7 @@ const MyMeetingNotice = () => {
                       >
                         내용
                       </label>
-                      <textarea
+                      {/* <textarea
                         id="noticecontent"
                         className="notice-textarea"
                         rows="10"
@@ -408,13 +465,20 @@ const MyMeetingNotice = () => {
                           setTextAreaVal(e.target.value);
                           setTextAreaLength(e.target.value.length);
                         }}
-                      ></textarea>
-                      <div style={{ textAlign: "right" }}>
+                      ></textarea> */}
+
+                      {/* <div style={{ textAlign: "right" }}>
                         <span style={{ display: "none" }}>
                           <strong style={{ color: "red" }}>*</strong>
                           제한 숫자{textAreaLength}/300
                         </span>
-                      </div>
+                      </div> */}
+                      <ReactQuill
+                        onChange={setTextAreaVal}
+                        value={textAreaVal}
+                        modules={modules}
+                        key={textAreaVal}
+                      />
                     </div>
                     <div className="button-wrap">
                       <button
@@ -635,6 +699,10 @@ const MyMeetingNotice = () => {
                   </div>
                 </form>
               </div>
+              <NoticeComment
+                boardSeq={dataOrigin.boardSeq}
+                memberSeq={dataOrigin.boardMemberSeq}
+              />
             </div>
           </div>
         )}
