@@ -71,7 +71,7 @@ export const makeRequest = async (url, method, data = {}, headers = {}) => {
         ...headers,
       },
     });
-    return response.data.resultData;
+    return response;
   } catch (error) {
     console.error("요청 실패:", error);
     throw error;

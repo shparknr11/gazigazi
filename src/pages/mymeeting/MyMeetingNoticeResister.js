@@ -21,7 +21,7 @@ const MyMeetingNoticeStyle = styled.div`
   .notice-wrap {
     width: 100%;
     margin-bottom: 75px;
-    height: 650px;
+    /* height: 650px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,7 +38,7 @@ const MyMeetingNoticeStyle = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 30px;
-    max-width: 900px;
+    /* max-width: 900px; */
     border: 1px solid gray;
     border-radius: 4px;
     box-shadow: 1px 1px 1px 1px gray;
@@ -174,7 +174,6 @@ const MyMeetingNoticeResister = () => {
       const result = await getMemberSeq(
         location?.state.boardPartySeq,
         user.userSeq,
-        user.token,
       );
       setNowMemberSeq(result.memberSeq);
       // console.log(result);
@@ -233,14 +232,17 @@ const MyMeetingNoticeResister = () => {
     // console.log("boardTitle : ", boardTitle);
     // console.log("boardContents : ", boardContents);
     if (!boardTitle) {
+      alert("제목을 입력하세요.");
       toast.success("제목을 입력하세요.");
       return false;
     }
     if (!boardContents) {
+      alert("내용을 입력하세요.");
       toast.success("내용을 입력하세요.");
       return false;
     }
     if (!imgFile) {
+      alert("이미지를 선택하세요.");
       toast.success("이미지를 선택하세요.");
       return false;
     }
@@ -262,7 +264,8 @@ const MyMeetingNoticeResister = () => {
     // console.log("게시판저장데이터 : ", form);
 
     try {
-      await postNotice(formData, user.token);
+      await postNotice(formData);
+      alert("게시글이 저장되었습니다.");
       toast.success("게시글이 저장되었습니다.");
       navigate(`/mymeeting/mymeetingLeader/${isAuth}`, {
         state: { isAuth: isAuth },
