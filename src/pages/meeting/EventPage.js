@@ -106,7 +106,7 @@ const EventPage = () => {
 
   const handleClickDetail = _partySeq => {
     console.log(_partySeq);
-    navigate(`/meeting/${_partySeq}`);
+    navigate(`/meeting/${_partySeq}?mu=1`);
   };
 
   const getGenderText = genderCode => {
