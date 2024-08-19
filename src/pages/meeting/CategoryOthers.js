@@ -140,12 +140,12 @@ const CartegoryWrapStyle = styled.div`
 `;
 const CateGoryListStyle = styled.div`
   width: 100%;
-  max-width: 1100px;
+  max-width: 1062px;
   margin: 0 auto;
   .category-main-div {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
   .mm-meeting-dl-name {
     display: flex;

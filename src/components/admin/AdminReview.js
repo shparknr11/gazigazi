@@ -17,8 +17,8 @@ import { toast } from "react-toastify";
 import DOMPurify from "dompurify";
 const ReviewInnerStyle = styled.div`
   width: calc(100% - 30px);
-  max-width: 1280px;
-  min-width: 1280px;
+  max-width: 1080px;
+  min-width: 1080px;
   /* maxwidth: */
   margin: 0 auto;
   height: auto;
