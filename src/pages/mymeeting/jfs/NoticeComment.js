@@ -45,7 +45,7 @@ const NoticeComment = ({ boardSeq, memberSeq }) => {
   const getCommentCall = async () => {
     try {
       const result = await getComment(boardSeq, page);
-      setCommentList(result.list);
+      setCommentList(result.commentList);
       setTotalPage(result.totalPage);
       setTotalElements(result.totalElements);
     } catch (error) {

@@ -20,7 +20,7 @@ const JoinTitle = styled.div`
 
 const JoinBoxStyle = styled.div`
   border: 1px solid ${prColor.p1000};
-  padding: 25px 40px 10px 40px;
+  padding: 25px 40px 25px 40px;
   z-index: 99;
   background-color: ${prColor.p000};
 `;

@@ -9,6 +9,8 @@ import { IoIosArrowForward } from "react-icons/io";
 
 const AdminWrapStyle = styled.div`
   /* maxwidth: */
+  width: calc(100% - 30px);
+  max-width: 1280px;
   margin: 0 auto;
   height: auto;
   min-height: 627px;
@@ -107,7 +109,7 @@ const AdminLeftDivStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: end;
-        font-size: 16px;
+        font-size: 14px;
         color: #000;
         padding: 5px 5px;
       }

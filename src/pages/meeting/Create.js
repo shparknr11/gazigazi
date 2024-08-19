@@ -425,7 +425,8 @@ const Create = () => {
       // setPreviewImg("");
       // setLocalData("");
       // setLocaDetaillData("");
-      navigate(`/admin`);
+      // navigate(`/admin?manage=meeting&num=1`);
+      navigate(`/mymeeting`);
     } catch (error) {
       console.log(error);
     }

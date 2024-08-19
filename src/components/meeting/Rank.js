@@ -242,7 +242,8 @@ const Rank = () => {
 
   return (
     <RankWrapStyle>
-      <GuideTitle subTitle="모임 랭킹" guideTitle="rank" />
+      <GuideTitle subTitle="전체 랭킹" guideTitle="모임 랭킹" />
+
       <div className="rank-inner">
         {totalRank.slice(1, 2).map((item, index) => (
           <div key={index} className="rank-second-div">
