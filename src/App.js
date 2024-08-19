@@ -37,6 +37,7 @@ import InfoEdit from "./pages/user/InfoEdit";
 import InterestList from "./pages/user/InterestList";
 import Login from "./pages/user/Login";
 import UserInfo from "./pages/user/UserInfo";
+import OAuth2Handler from "./pages/user/Oauth2Handler";
 
 import LogOut from "./pages/user/LogOut";
 
@@ -66,6 +67,9 @@ const App = () => {
       <Header />
       <MainStyle>
         <Routes>
+          {/* 소셜로그인 */}
+          <Route path="/oauth/redirect" element={<OAuth2Handler />}></Route>
+
           {/* 담당자 : 황운철 */}
           <Route path="/login" element={<Login />}></Route>
           <Route path="/createaccount" element={<CreateAccount />}></Route>

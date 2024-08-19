@@ -94,6 +94,7 @@ const Login = () => {
   // const [password, setPassword] = useState("Datadata123!");
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [redirectUrl, setRedirectUrl] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -107,6 +108,8 @@ const Login = () => {
   // }, [user.token]);
 
   useEffect(() => {
+    const host = window.location.origin;
+    setRedirectUrl(`${host}/oauth/redirect`);
     const token = sessionStorage.getItem("token");
     const userData = JSON.parse(sessionStorage.getItem("userData"));
 
@@ -156,15 +159,15 @@ const Login = () => {
             userPic,
             userEmail,
             userName,
-            userPw,
-            userPwCheck,
-            userNickname,
+            userPw, //X
+            userPwCheck, //X
+            userNickname, //X
             userFav,
             userBirth,
             userPhone,
             userGender,
             userIntro,
-            userAddr,
+            userAddr, 
           }),
         );
 
@@ -222,6 +225,8 @@ const Login = () => {
     return null;
   }
 
+
+
   return (
     <LoginStyle>
       <LoginWrapStyle>
@@ -259,6 +264,17 @@ const Login = () => {
                   <div className="login-options">
                     <Link to="/login/findid:pw">이메일 / 비밀번호 찾기</Link>
                     <Link to="/createAccount">회원가입</Link>
+                  </div>
+                  <div>                    
+                    <div>
+                      <a href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}>구글</a>
+                    </div>
+                    <div>
+                      <a href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}>네이버</a>                      
+                    </div>
+                    <div>
+                      <a href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}>카카오</a>
+                    </div>
                   </div>
                 </div>
               </div>

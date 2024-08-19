@@ -1,22 +1,31 @@
 import styled from "@emotion/styled";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   deleteBudget,
   getMemberBudget,
   getMonthBudget,
   getMonthCalculateBudget,
+  patchBudget,
 } from "../../apis/mymeetingapi/budget/budgetapi";
+import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 import Loading from "../../components/common/Loading";
 import MyMeetingBudgetResister from "../../components/mymeeting/MyMeetingBudgetResister";
-import "./common.js";
+import userReducer from "../../redux/UserRedux/Reducers/userReducer";
 import MyMeetingCalendar from "./MyMeetingCalendar";
-import "./printledger.css";
-import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
-import { useSelector } from "react-redux";
+import "./common.js";
 import MyMeetingBoard from "./jfs/MyMeetingBoard.js";
+import "./printledger.css";
 
 const MyMeetingFuncLeaderStyle = styled.div`
   max-width: 1200px;
@@ -167,7 +176,6 @@ const TitleDivStyle = styled.div`
   padding: 20px 0px 20px 5px;
 `;
 const MyMeetingFuncLeader = () => {
-  const user = useSelector(state => state.user);
   const [isClicked, setIsClicked] = useState(0);
   const [monthValue, setMonthValue] = useState("01");
   const [budgetList, setBudgetList] = useState([]);
@@ -176,8 +184,9 @@ const MyMeetingFuncLeader = () => {
   const [depositMember, setDepositMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
+  const [isEditPopup, setIsEditPopup] = useState(false);
   const [noticeList, setNoticeList] = useState([]);
-  // const [subTitle, setSubTitle] = useState("일정관리");
+  const [selectedBudget, setSelectedBudget] = useState(null); // 수정할 예산 데이터
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
@@ -273,6 +282,39 @@ const MyMeetingFuncLeader = () => {
       activeItem = itemRef.current;
     }, 100);
   };
+
+  const handleEditBudget = budget => {
+    setIsEditPopup(true);
+    setSelectedBudget(budget);
+  };
+
+  const handleBudgetUpdate = async () => {
+    const updateBudget = {
+      ...selectedBudget,
+      budgetPic: selectedBudget.budgetPic || "",
+      budgetSeq: selectedBudget.budgetSeq,
+      budgetMemberSeq: selectedBudget.budgetMemberSeq,
+      budgetGb: selectedBudget.type === "입금" ? 1 : 2,
+      budgetDt: selectedBudget.budgetDt,
+      budgetAmount: parseInt(selectedBudget.budgetAmount, 10),
+      budgetText: selectedBudget.budgetText,
+      cdNm: selectedBudget.cdNm,
+    };
+    console.log("Selected Budget:", selectedBudget);
+    console.log("Update Budget:", updateBudget);
+
+    try {
+      await patchBudget(updateBudget);
+      console.log(updateBudget);
+      toast.success("회계 내역이 수정되었습니다.");
+      handleBudgetClick(monthValue); // 데이터 새로 고침
+      setIsEditPopup(false); // 수정 폼 닫기
+    } catch (error) {
+      console.error(error);
+      toast.error("수정 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleBudgetDelete = async budgetSeq => {
     if (confirm("삭제하시겠습니까?")) {
       try {
@@ -288,7 +330,11 @@ const MyMeetingFuncLeader = () => {
   const handleNoticeList = async (pages = 1) => {
     setIsLoading(true);
     try {
-      const res = await getNoticeAll(params?.meetingId, pages, user.token);
+      const res = await getNoticeAll(
+        params?.meetingId,
+        pages,
+        userReducer.token,
+      );
       setNoticeList(res.list);
     } catch (error) {
       console.log(error);
@@ -299,31 +345,114 @@ const MyMeetingFuncLeader = () => {
       funcRef.current.style.backgroundColor = "#f8ebd6";
     }, 100);
   };
+
   const handlePrint = () => {
     window.print();
   };
+
   if (isLoading) {
     return <Loading></Loading>;
   }
+
   return (
     <MyMeetingFuncLeaderStyle>
-      {isPopup ? (
+      {isPopup && (
         <MyMeetingBudgetResister
           setIsPopup={setIsPopup}
           handleBudgetClick={handleBudgetClick}
           monthValue={monthValue}
         />
-      ) : null}
+      )}
+      {isEditPopup && selectedBudget && (
+        <Box
+          sx={{
+            padding: "20px",
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          <TextField
+            label="금액"
+            variant="outlined"
+            fullWidth
+            value={selectedBudget.budgetAmount}
+            onChange={e =>
+              setSelectedBudget({
+                ...selectedBudget,
+                budgetAmount: e.target.value,
+              })
+            }
+            type="number"
+            sx={{ marginBottom: "10px" }}
+          />
+          <TextField
+            label="상세내역"
+            variant="outlined"
+            fullWidth
+            value={selectedBudget.budgetText}
+            onChange={e =>
+              setSelectedBudget({
+                ...selectedBudget,
+                budgetText: e.target.value,
+              })
+            }
+            sx={{ marginBottom: "10px" }}
+          />
+          <FormControl fullWidth>
+            <InputLabel id="budget-type-label">회계 구분</InputLabel>
+            <Select
+              labelId="budget-type-label"
+              id="budget-type"
+              value={selectedBudget.type}
+              label="회계 구분"
+              onChange={e =>
+                setSelectedBudget({ ...selectedBudget, type: e.target.value })
+              }
+            >
+              <MenuItem value="입금">입금</MenuItem>
+              <MenuItem value="출금">출금</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            label="일자"
+            fullWidth
+            type="date"
+            value={selectedBudget.budgetDt}
+            onChange={e =>
+              setSelectedBudget({ ...selectedBudget, budgetDt: e.target.value })
+            }
+            InputLabelProps={{ shrink: true }}
+            sx={{ marginBottom: "10px" }}
+          />
+          <Box sx={{ marginTop: "20px" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBudgetUpdate}
+            >
+              수정
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => setIsEditPopup(false)}
+              sx={{ marginLeft: "10px" }}
+            >
+              취소
+            </Button>
+          </Box>
+        </Box>
+      )}
+
       <TitleDivStyle id="titletext">Blog</TitleDivStyle>
       <div className="meeting-wrap">
-        {/* <!-- 일단 누르면 이벤트 나오게 해놓음. --> */}
         <div className="item-wrap">
           <div
             id="1"
             className={`item item-border cut-text ${isClicked === 1 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(1);
-              // setSubTitle("일정관리");
             }}
           >
             일정 관리
@@ -333,7 +462,6 @@ const MyMeetingFuncLeader = () => {
             className={`item item-border cut-text ${isClicked === 2 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(2);
-              // setSubTitle("모임게시판");
               handleNoticeList();
             }}
           >
@@ -344,7 +472,6 @@ const MyMeetingFuncLeader = () => {
             className={`item item-border cut-text ${isClicked === 3 ? "divButtonStyle" : null}`}
             onClick={() => {
               setIsClicked(3);
-              // setSubTitle("가계부");
               handleBudgetClick(monthValue);
             }}
             ref={itemRef}
@@ -352,18 +479,13 @@ const MyMeetingFuncLeader = () => {
             가계부
           </div>
         </div>
-        {/*  height: "600px */}
         <div className="func-main" style={{ width: "100%" }} ref={funcRef}>
           <div className="func-main-inner">
-            {/* <!-- 삼항 연산자 들어올 자리 지금은 조건값 1,2임 --> */}
             {isClicked === 1 ? (
               <MyMeetingCalendar isClicked={isClicked} />
             ) : isClicked === 2 ? (
-              // li map 돌릴거임
-              // 컴포넌트로 빠질애들임
               <MyMeetingBoard noticeList={noticeList} />
             ) : isClicked === 3 ? (
-              // 가계부가 추가되서 여기다가 해야될듯
               <div id="printTagId">
                 <LedgerStyle>
                   <TitleDivStyle id="title-print">
@@ -395,59 +517,44 @@ const MyMeetingFuncLeader = () => {
                             handleBudgetClick(e.target.value);
                           }}
                         >
-                          <MenuItem value={"01"}>1월</MenuItem>
-                          <MenuItem value={"02"}>2월</MenuItem>
-                          <MenuItem value={"03"}>3월</MenuItem>
-                          <MenuItem value={"04"}>4월</MenuItem>
-                          <MenuItem value={"05"}>5월</MenuItem>
-                          <MenuItem value={"06"}>6월</MenuItem>
-                          <MenuItem value={"07"}>7월</MenuItem>
-                          <MenuItem value={"08"}>8월</MenuItem>
-                          <MenuItem value={"09"}>9월</MenuItem>
-                          <MenuItem value={"10"}>10월</MenuItem>
-                          <MenuItem value={"11"}>11월</MenuItem>
-                          <MenuItem value={"12"}>12월</MenuItem>
+                          <MenuItem value={"01"}>01</MenuItem>
+                          <MenuItem value={"02"}>02</MenuItem>
+                          <MenuItem value={"03"}>03</MenuItem>
+                          <MenuItem value={"04"}>04</MenuItem>
+                          <MenuItem value={"05"}>05</MenuItem>
+                          <MenuItem value={"06"}>06</MenuItem>
+                          <MenuItem value={"07"}>07</MenuItem>
+                          <MenuItem value={"08"}>08</MenuItem>
+                          <MenuItem value={"09"}>09</MenuItem>
+                          <MenuItem value={"10"}>10</MenuItem>
+                          <MenuItem value={"11"}>11</MenuItem>
+                          <MenuItem value={"12"}>12</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
-                    <button
-                      type="button"
-                      className="resister-btn"
-                      onClick={() => {
-                        setIsPopup(true);
-                      }}
+                    <Button variant="outlined" onClick={handlePrint}>
+                      출력
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => setIsPopup(true)}
                     >
                       등록
-                    </button>
-                    <button
-                      className="etc-btn"
-                      onClick={() => {
-                        handlePrint();
-                      }}
-                    >
-                      출력
-                    </button>
+                    </Button>
                   </div>
-
-                  {/* 권한 나왔을 때.... 조건 걸어서 보여주고 안보여주고 해야함. */}
                   <ul className="ledger-ul">
                     <li className="ledger-li">
-                      <span>순서</span>
+                      <span>번호</span>
                       <span>회계 구분</span>
-                      {/* 일단 해둠 */}
                       <span>상세내역</span>
                       <span>금액</span>
                       <span>일자</span>
-                      <span className="print-delete">삭제</span>
+                      <span>관리</span>
                     </li>
                     {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
-                        <span>
-                          {index + 1}
-                          {/* <img src={`../../images/${item.budgetPic}`} /> */}
-                        </span>
-                        <span>{item.cdNm}</span>
-                        {/* 일단 해둠 */}
+                        <span>{index + 1}</span>
+                        <span>{item.budgetGb}</span>
                         <span>{item.budgetText}</span>
                         <span>
                           {item?.budgetAmount !== undefined
@@ -460,43 +567,27 @@ const MyMeetingFuncLeader = () => {
                           style={{ paddingTop: "17px" }}
                         >
                           {item?.budgetSeq ? (
-                            <button
-                              className="delete-btn"
-                              onClick={() => {
-                                handleBudgetDelete(item.budgetSeq);
-                              }}
-                            >
-                              내역삭제
-                            </button>
+                            <>
+                              <button
+                                className="edit-btn"
+                                onClick={() => handleEditBudget(item)}
+                              >
+                                수정
+                              </button>
+                              /
+                              <button
+                                className="delete-btn"
+                                onClick={() =>
+                                  handleBudgetDelete(item.budgetSeq)
+                                }
+                              >
+                                삭제
+                              </button>
+                            </>
                           ) : null}
                         </span>
                       </li>
                     ))}
-                    <li className="ledger-li">
-                      {/* 영수증 이미지의 값이 있을 시 ... 이미지  */}
-                      <span style={{ display: "inline-block", width: "100%" }}>
-                        납입 내역
-                      </span>
-                      {/* (미납입: {depositMember?.unDepositedMember}명) */}
-                      <span style={{ display: "inline-block", width: "100%" }}>
-                        {budgetListLength} 건
-                        {/* {depositMember?.depositedMember}
-                        /&nbsp;
-                        {depositMember?.memberSum}명 */}
-                      </span>
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: "100%",
-                        }}
-                      >
-                        {monthValue} 월 금액 내역
-                      </span>
-                      <span style={{ display: "inline-block", width: "100%" }}>
-                        {depositSum} 원
-                      </span>
-                    </li>
-                    <li className="ledger-li"></li>
                   </ul>
                 </LedgerStyle>
               </div>

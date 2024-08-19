@@ -1,0 +1,31 @@
+--- pages/user/Oauth2Handler.js 파일 추가 ---
+
+--- App.js ---
+Line.40 
+import OAuth2Handler from "./pages/user/Oauth2Handler";
+
+Line.70~71
+{/* 소셜로그인 */}
+<Route path="/oauth/redirect" element={<OAuth2Handler />}></Route>
+
+
+--- pages/user/Login.js ---
+# Line.97 
+const [redirectUrl, setRedirectUrl] = useState('');
+
+# Line.111 ~ 112
+const host = window.location.origin;
+setRedirectUrl(`${host}/oauth/redirect`);
+
+# Line.268 ~ 278
+<div>                    
+                    <div>
+                      <a href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}>구글</a>
+                    </div>
+                    <div>
+                      <a href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}>네이버</a>                      
+                    </div>
+                    <div>
+                      <a href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}>카카오</a>
+                    </div>
+                  </div>
