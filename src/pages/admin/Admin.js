@@ -3,6 +3,9 @@ import { Link, useSearchParams } from "react-router-dom";
 import MeetingState from "../../components/admin/MeetingState";
 import GuideTitle from "../../components/common/GuideTitle";
 import { prColor } from "../../css/color";
+import AdminService from "../../components/admin/AdminService";
+import AdminReview from "../../components/admin/AdminReview";
+import { IoIosArrowForward } from "react-icons/io";
 
 const AdminWrapStyle = styled.div`
   /* maxwidth: */
@@ -47,20 +50,66 @@ const AdminLeftDivStyle = styled.div`
         font-size: 19px;
       }
     }
+
     & .admin-list-item-menu:hover {
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: ${prColor.p300};
+    }
+    & .meetings {
+      background-color: ${props =>
+        props.manage === "meeting" ? "#c9c2a5" : "#efede5"};
+    }
+    & .reviews {
+      background-color: ${props =>
+        props.manage === "review" ? "#c9c2a5" : "#efede5"};
+    }
+    & .services {
+      background-color: ${props =>
+        props.manage === "service" ? "#c9c2a5" : "#efede5"};
     }
     & .admin-list-item-submenu {
       display: flex;
       flex-direction: column;
-      min-width: 110px;
       gap: 10px;
       margin: 10px 0px;
-      margin-left: 50px;
+      & .meeting-state-one svg {
+        visibility: ${props =>
+          props.meetingState === "1" ? "visible" : "hidden"};
+      }
+      & .meeting-state-two svg {
+        visibility: ${props =>
+          props.meetingState === "2" ? "visible" : "hidden"};
+      }
+      & .meeting-state-three svg {
+        visibility: ${props =>
+          props.meetingState === "3" ? "visible" : "hidden"};
+      }
+      & .meeting-state-four svg {
+        visibility: ${props =>
+          props.meetingState === "4" ? "visible" : "hidden"};
+      }
+      & .meeting-state-one a {
+        text-decoration: ${props =>
+          props.meetingState === "1" ? "underline" : "none"};
+      }
+      & .meeting-state-two a {
+        text-decoration: ${props =>
+          props.meetingState === "2" ? "underline" : "none"};
+      }
+      & .meeting-state-three a {
+        text-decoration: ${props =>
+          props.meetingState === "3" ? "underline" : "none"};
+      }
+      & .meeting-state-four a {
+        text-decoration: ${props =>
+          props.meetingState === "4" ? "underline" : "none"};
+      }
       & span {
+        display: flex;
+        align-items: center;
+        justify-content: end;
         font-size: 16px;
         color: #000;
-        padding: 5px 10px;
+        padding: 5px 5px;
       }
       & span:hover {
         color: #000;
@@ -133,11 +182,11 @@ const Admin = () => {
   const getMeetingSubtitle = meetingState => {
     switch (manage) {
       case "meeting":
-        return "🔒 모임관리";
+        return "🔒 모임 관리";
       case "review":
-        return "🔒 리뷰관리";
+        return "🔒 후기 관리";
       case "service":
-        return "🔒 서비스관리";
+        return "🔒 서비스 통계";
     }
   };
 
@@ -145,39 +194,43 @@ const Admin = () => {
     <AdminWrapStyle>
       <GuideTitle guideTitle="관리자 페이지" subTitle={getMeetingSubtitle()} />
       <AdminInnerStyle>
-        <AdminLeftDivStyle>
+        <AdminLeftDivStyle meetingState={meetingState} manage={manage}>
           <nav>
             <ul className="admin-list">
               <li className="admin-list-item">
-                <div className="admin-list-item-menu">
+                <div className="admin-list-item-menu meetings">
                   <Link to={`/admin?manage=meeting&num=1`}>모임 관리</Link>
                 </div>
                 <div className="admin-list-item-submenu">
-                  <span>
+                  <span className="meeting-state-one">
+                    <IoIosArrowForward />
                     <Link to={`/admin?manage=meeting&num=1`}>
                       승인대기 모임
                     </Link>
                   </span>
-                  <span>
+                  <span className="meeting-state-two">
+                    <IoIosArrowForward />
                     <Link to={`/admin?manage=meeting&num=2`}>승인된 모임</Link>
                   </span>
-                  <span>
+                  <span className="meeting-state-three">
+                    <IoIosArrowForward />
                     <Link to={`/admin?manage=meeting&num=3`}>반려된 모임</Link>
                   </span>
-                  <span>
+                  <span className="meeting-state-four">
+                    <IoIosArrowForward />
                     <Link to={`/admin?manage=meeting&num=4`}>삭제된 모임</Link>
                   </span>
                 </div>
               </li>
 
               <li className="admin-list-item">
-                <div className="admin-list-item-menu">
+                <div className="admin-list-item-menu reviews">
                   <Link to={`/admin?manage=review`}>후기 관리</Link>
                 </div>
               </li>
               <li className="admin-list-item">
-                <div className="admin-list-item-menu">
-                  <Link to={`/admin?manage=service`}>서비스 관리</Link>
+                <div className="admin-list-item-menu services">
+                  <Link to={`/admin?manage=service`}>서비스 통계</Link>
                 </div>
               </li>
             </ul>
@@ -185,6 +238,8 @@ const Admin = () => {
         </AdminLeftDivStyle>
         <AdminRightDivStyle>
           {meetingState && <MeetingState meetingState={meetingState} />}
+          {manage === "service" && <AdminService />}
+          {manage === "review" && <AdminReview />}
         </AdminRightDivStyle>
       </AdminInnerStyle>
     </AdminWrapStyle>

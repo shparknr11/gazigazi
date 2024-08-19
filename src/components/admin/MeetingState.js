@@ -85,7 +85,7 @@ const MeetingState = ({ meetingState }) => {
   // 클릭시 상페 페이지로
   const handleClickDetail = _partySeq => {
     // console.log(_partySeq);
-    navigate(`/meeting/${_partySeq}`);
+    navigate(`/meeting/${_partySeq}?mu=1`);
   };
 
   const getModalTitle = _num => {

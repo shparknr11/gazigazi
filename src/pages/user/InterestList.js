@@ -172,7 +172,7 @@ const InterestList = () => {
   };
 
   const handleItemClick = partySeq => {
-    navigate(`/meeting/${partySeq}`);
+    navigate(`/meeting/${partySeq}?mu=1`);
   };
 
   if (loading) {

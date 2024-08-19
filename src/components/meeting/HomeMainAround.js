@@ -15,7 +15,7 @@ const HomeMainAround = ({ arroundPartyList }) => {
   const swiperRef = useRef(null);
   const handleClickDetail = _partySeq => {
     // console.log(_partySeq);
-    navigate(`/meeting/${_partySeq}`);
+    navigate(`/meeting/${_partySeq}?mu=1`);
   };
   return (
     <div className="mm-meeting-around">

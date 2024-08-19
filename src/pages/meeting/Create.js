@@ -329,9 +329,9 @@ const Create = () => {
   //   setPartyIntro(e.target.value);
   // };
   // 모임 신청양식 작성
-  const handleChangeJoinForm = e => {
-    setPartyJoinForm(e.target.value);
-  };
+  // const handleChangeJoinForm = e => {
+  //   setPartyJoinForm(e.target.value);
+  // };
 
   const handSubmitCreate = async e => {
     e.preventDefault();
@@ -640,7 +640,7 @@ const Create = () => {
           <label htmlFor="partyform">
             모임원의 모임 신청양식을 작성해 주세요*
           </label>
-          <textarea
+          {/* <textarea
             type="textfield"
             id="partyform"
             autoComplete="off"
@@ -648,7 +648,8 @@ const Create = () => {
             onChange={e => {
               handleChangeJoinForm(e);
             }}
-          />
+          /> */}
+          <ReactQuill onChange={setPartyJoinForm} modules={modules} />
         </div>
       </CreateFormDivStyle>
       <CreateBtnWrapStyle>

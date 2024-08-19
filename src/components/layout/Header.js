@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 const Header = () => {
   // const userSeq = sessionStorage.getItem("userSeq");
   // const userPic = sessionStorage.getItem("userPic");
-
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
   const userPic = user.userPic;

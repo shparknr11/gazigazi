@@ -55,7 +55,7 @@ const ReviewTitleStyle = styled.div`
     margin-bottom: 20px;
   }
 `;
-const ReviewItemStyle = styled.div`
+export const ReviewItemStyle = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   .review-comment {
     padding: 20px 0px;
@@ -119,10 +119,32 @@ const ReviewItemStyle = styled.div`
     overflow-x: auto;
     gap: 10px;
     /* min-height: 210px; */
+    margin: 10px 0px;
     margin-right: 4px;
   }
   .review-img-pic {
+    /* Firefox 스크롤바 스타일 */
+    scrollbar-width: thin; /* 스크롤바 두께 */
+    scrollbar-color: ${prColor.p300}; /* 스크롤바 색상 */
   }
+
+  /* 웹킷 기반 브라우저에서 스크롤바 스타일 */
+  .review-img::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 6px;
+  }
+
+  .review-img::-webkit-scrollbar-track {
+    background: ${prColor.p100}; /* 스크롤바 트랙 색상 */
+    border-radius: 8px;
+  }
+
+  .review-img::-webkit-scrollbar-thumb {
+    background: ${prColor.p300};
+    border-radius: 6px;
+  }
+
   .review-img-pic img {
     height: 210px;
     min-height: 210px;
@@ -205,7 +227,7 @@ const ReviewPaginationStyle = styled.div`
     }
   }
 `;
-const NoReviewStyle = styled.div`
+export const NoReviewStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -314,7 +336,7 @@ const Review = () => {
   };
 
   const handleClickDetailPage = _partySeq => {
-    navigate(`/meeting/${_partySeq}`);
+    navigate(`/meeting/${_partySeq}?mu=1`);
   };
 
   const handleClickRecommend = async _reviewSeq => {
@@ -380,6 +402,7 @@ const Review = () => {
           </div>
         </div>
       </ReviewTitleStyle>
+
       {reviewList.length ? (
         reviewList.map((item, index) => (
           <ReviewItemStyle key={index}>
