@@ -164,6 +164,7 @@ const Login = () => {
             userIntro,
             userAddr,
             userRole,
+
           }),
         );
 
@@ -185,7 +186,6 @@ const Login = () => {
           }),
         );
 
-        alert("로그인 성공!");
         navigate("/");
       } else {
         // 서버에서 반환된 에러 메시지 처리
