@@ -10,7 +10,7 @@ import { clearUser } from "../../slices/userSlice";
 const MyPageStyle = styled.div`
   width: 100%;
   max-width: 1280px;
-  height: 120vh;
+  height: 100vh;
   margin: 0 auto;
   margin-top: 40px;
 `;
@@ -139,6 +139,7 @@ const MyPage = () => {
         <NavLinks>
           <Link to={`/myprofile/${userSeq}/userInfo`}>내 정보</Link>
           <Link to={`/myprofile/${userSeq}/infoEdit`}>정보 수정</Link>
+          <Link to={`/myprofile/${userSeq}/mymeeting`}>내가 신청한 모임</Link>
           <Link to={`/myprofile/${userSeq}/myreview`}>내가 작성한 리뷰</Link>
           <Link to={`/myprofile/${userSeq}/myinterestlist`}>찜 목록</Link>
         </NavLinks>

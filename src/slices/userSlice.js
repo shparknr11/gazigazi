@@ -6,15 +6,13 @@ const initialState = {
   userPic: null,
   userEmail: null,
   userName: null,
-  userPw: null,
-  userPwCheck: null,
-  userNickname: null,
   userFav: null,
   userBirth: null,
   userPhone: null,
   userGender: null,
   userIntro: null,
   userAddr: null,
+  userRole: null,
 };
 
 const getInfo = () => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtAxios";
+import jwtAxios, { makeRequest } from "../jwtAxios";
 // 모임 전체 불러오기
 export const getPartyAll = async () => {
   try {
@@ -106,6 +106,7 @@ export const getLocal = async _data => {
   }
 };
 
+// 상세지역 불러오기 api
 export const getLocalDetail = async _data => {
   try {
     const response = await axios.get(
@@ -130,6 +131,27 @@ export const getWishParty = async (_userSeq, _partySeq) => {
   try {
     const response = await jwtAxios.get(
       `/api/party/wish?wishUserSeq=${_userSeq}&wishPartySeq=${_partySeq}`,
+    );
+    const status = response.status.toString().charAt(0);
+    // console.log("resopnse : ", response);
+    if (status === "2") {
+      //   console.log(response);
+      //   console.log(response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 모임 상세페이지 일정 불러오기
+export const getPlanList = async (_partySeq, _limit = 10) => {
+  try {
+    const response = await makeRequest(
+      `/api/plan/party?plan_party_seq=${_partySeq}&limit=${_limit}`,
+      "GET",
     );
     const status = response.status.toString().charAt(0);
     // console.log("resopnse : ", response);

@@ -140,15 +140,13 @@ const Login = () => {
           accessToken,
           userPic,
           userName,
-          userPw,
-          userPwCheck,
-          userNickname,
           userFav,
           userBirth,
           userPhone,
           userGender,
           userIntro,
           userAddr,
+          userRole,
         } = response.data.resultData;
 
         // Redux에 사용자 정보 저장
@@ -159,15 +157,14 @@ const Login = () => {
             userPic,
             userEmail,
             userName,
-            userPw, //X
-            userPwCheck, //X
-            userNickname, //X
             userFav,
             userBirth,
             userPhone,
             userGender,
             userIntro,
             userAddr,
+            userRole,
+
           }),
         );
 
@@ -179,15 +176,13 @@ const Login = () => {
             userPic,
             userEmail,
             userName,
-            userPw,
-            userPwCheck,
-            userNickname,
             userFav,
             userBirth,
             userPhone,
             userGender,
             userIntro,
             userAddr,
+            userRole,
           }),
         );
 

@@ -40,22 +40,33 @@
   gap: 77px;
   width: 100%;
   height: 100%;
-  margin-left: 250px;
+  margin-left: 200px;
+}
+.header-menu-list li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
 }
 .header:hover .header-submenu-div {
   visibility: visible;
+}
+@media (max-width: 1377px) {
+  .header:hover .header-submenu-div {
+    visibility: hidden;
+  }
+  .header-menu-list {
+    display: none;
+  }
 }
 .header-menu-list li a {
   display: block;
   padding: 10px;
   min-width: 50px;
-  height: 100%;
-  margin-top: 11px;
 }
 .header-menu-item {
   cursor: pointer;
   padding: 10px;
-  margin-top: 11px;
   min-width: 50px;
 }
 .header-submenu-div {
@@ -66,14 +77,15 @@
   height: 250px;
   background-color: rgba(249, 248, 245, 0.9);
 }
-
+.header-submenu-div:active {
+  visibility: hidden;
+}
 .header-submenu {
   width: calc(100% - 30px);
-  height: 300px;
   display: flex;
   margin-top: 40px;
   justify-content: center;
-  padding-left: 550px;
+  padding-left: 433px;
   gap: 12px;
 }
 
@@ -87,33 +99,51 @@
 .header-icon-list {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 25px;
-  margin-top: 10px;
-  width: 100%;
+  margin-top: 7px;
 }
 .header-icon-list svg {
   cursor: pointer;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
 }
 
-.header-profileicon {
+.header-profileicon img {
   width: 33px;
   height: 33px;
-  border: 2px solid #fff;
+  border: 2px solid #efede5;
   transition: border 0.5 ease; /* border 속성 변화를 0.5초 동안 부드럽게 처리 */
   border-radius: 50%;
   cursor: pointer;
 }
 
-/* .header-profileicon img {
-  width: 29px;
-  height: 29px;
-  border: 1px solid #999;
-  border-radius: 60%;
-  cursor: pointer;
-} */
-.header-profileicon:hover {
+.header-profileicon img:hover {
   border: 2px solid #d3cdb5;
+}
+.header-submenu-mobile {
+  display: none;
+}
+@media (max-width: 1377px) {
+  .header-submenu-mobile {
+    display: block;
+  }
+}
+.header-profileicon-notuser-name {
+  display: block;
+  font-size: 10px;
+  width: 77px;
+  height: 10px;
+  letter-spacing: -0.6px;
+}
+.header-profileicon-div {
+  display: flex;
+  align-items: center;
+}
+.header-profileicon-name {
+  display: block;
+  font-size: 12px;
+  width: 60px;
+  margin-left: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

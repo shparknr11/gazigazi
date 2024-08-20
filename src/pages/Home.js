@@ -8,7 +8,12 @@ import Category from "../components/meeting/Category";
 import HomeMainAround from "../components/meeting/HomeMainAround";
 import HomeMainPopular from "../components/meeting/HomeMainPopular";
 import { useSelector } from "react-redux";
+// Swiper 활용
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
+import "swiper/css";
+import "swiper/css/pagination";
 const HomeInnerStyle = styled.div`
   width: 100%;
   max-width: 1920px;
@@ -17,6 +22,12 @@ const HomeInnerStyle = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
+  .mt-banner {
+    .swiper-slide {
+      /* max-width: 1200px !important; */
+      width: 100% !important;
+    }
+  }
 `;
 const HomeMidInnerStyle = styled.div`
   width: calc(100% - 10px);
@@ -192,14 +203,33 @@ const Home = () => {
       navigate(`/login`);
     }
   };
+  // swiper 옵션
+  const swiperOption = {
+    loop: true,
+    pagination: true,
+    modules: [Pagination],
+  };
 
   return (
     <HomeInnerStyle>
       <div className="main-top">
-        <div className="mt-banner-div">
+        {/* <div className="mt-banner-div">
           <span>집에만 있는 당신,</span>
           <p>취미를 고르고 일상을 찾으세요</p>
         </div>
+
+        <div className="mt-newbanner-div"></div> */}
+        <Swiper className="mt-banner" {...swiperOption}>
+          <SwiperSlide>
+            <div className="mt-banner-div">
+              <span>집에만 있는 당신,</span>
+              <p>취미를 고르고 일상을 찾으세요</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="mt-newbanner-div"></div>
+          </SwiperSlide>
+        </Swiper>
         <div className="mt-searchbox-div">
           <div className="mt-searchbox">
             <input
