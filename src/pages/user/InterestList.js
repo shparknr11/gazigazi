@@ -185,7 +185,9 @@ const InterestList = () => {
         <InterestInnerStyle>
           <div className="interest-container">
             {interestItems.length === 0 ? (
-              <p>죄송합니다. 찜한 모임이 없습니다.</p>
+              <p style={{ width: "100%", alignItems: "center" }}>
+                죄송합니다. 찜한 모임이 없습니다.
+              </p>
             ) : (
               interestItems.map(item => (
                 <div

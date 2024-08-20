@@ -27,60 +27,65 @@ const InfoEditWrapStyle = styled.div`
 const InfoEditInnerStyle = styled.div`
   width: 100%;
   display: flex;
-  justify-content: start;
-  align-items: start;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 20px;
+  height: 85vh;
 
   .info-container {
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 70%;
+    width: 500px;
     box-sizing: border-box;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
   }
 
   .info-container label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 14px;
+    color: #333;
   }
 
   .info-container input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 12px; // 입력 필드의 패딩을 약간 증가시켜 여백을 넓힘
+    margin-bottom: 16px; // 항목 사이의 여백을 약간 증가시킴
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 12pt;
+    font-size: 14px; // 폰트 사이즈를 약간 증가시켜 가독성 향상
+    color: #333; // 입력 텍스트 색상을 어두운 색으로 설정하여 가독성 향상
   }
 
   .info-container button {
-    width: 30%;
-    padding: 10px;
+    padding: 12px 20px; // 버튼의 패딩을 조정하여 클릭 영역을 넓힘
     background-color: #ebddcc;
+    color: #fff;
     border: none;
     border-radius: 4px;
-    color: white;
-    font-size: 12px;
+
+    font-size: 14px; // 폰트 사이즈를 증가시켜 클릭할 때 더 명확하게 보이도록 함
     cursor: pointer;
-    margin: 5px 0;
-    margin-top: 10px;
-    margin-left: 50px;
+    margin: 10px 0; // 버튼 위아래 여백을 설정하여 요소 간격을 조정
   }
 
   .info-container button:hover {
     background-color: #e0b88a;
   }
 
-  .info-container .image-preview {
-    max-width: 200px; /* 이미지의 최대 너비 설정 */
-    height: auto; /* 이미지 높이 자동 조정 */
-    margin-top: 10px;
+  .image-preview {
+    width: 150px;
+    height: 150px;
     border-radius: 4px;
-    object-fit: cover; /* 이미지를 요소에 꽉 채우기 */
+    object-fit: cover;
+    margin-bottom: 20px; // 이미지와 다른 요소 간의 여백을 설정
+    align-self: center; // 이미지를 중앙에 정렬
   }
 `;
 

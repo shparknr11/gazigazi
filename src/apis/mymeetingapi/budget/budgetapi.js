@@ -45,14 +45,19 @@ export const deleteBudget = async budgetSeq => {
 // GET
 // /api/budget/{budget_seq}
 // 회계 사진 조회
-export const getBudgetPhoto = async ({ budgetSeq }) => {
+export const getBudgetPhoto = async ({ budgetSeq, token }) => {
   try {
-    const res = await jwtAxios.get(`/api/budget/${budgetSeq}`);
+    const res = await jwtAxios.get(`/api/budget/${budgetSeq}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(res.data);
+    console.log(res.data.resultData);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
   }
 };
+
 // GET
 // /api/budget/member
 // 멤버 별 회비 입금 내역 조회
@@ -61,6 +66,7 @@ export const getMemberBudget = async ({ budgetPartySeq, month }) => {
     const res = await jwtAxios.get(
       `/api/budget/member?budgetPartySeq=${budgetPartySeq}&month=${month}`,
     );
+    console.log(res.data);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -70,7 +76,13 @@ export const getMemberBudget = async ({ budgetPartySeq, month }) => {
 // PATCH /api/budget 회계 내역 수정
 export const patchBudget = async budgetData => {
   try {
-    const header = { headers: { "Content-Type": "application/json" } };
+    const header = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MjQwNTAzNjEsImV4cCI6MTcyNDA1MjE2MSwic2lnbmVkVXNlciI6IntcInVzZXJJZFwiOjI1LFwicm9sZVwiOlwiUk9MRV9VU0VSXCJ9In0.TfXwE03cPzri-7ixVJa2nUwWX-xR0xAqH39LokYTUqpbwu1LEE926eHXbJNPRLWpH4k-9eMY5M7OrDUzwtWZng",
+      },
+    };
     const res = await jwtAxios.patch("/api/budget", budgetData, header);
     return res.data.resultData;
   } catch (error) {

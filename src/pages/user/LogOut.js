@@ -39,7 +39,6 @@ const LogOut = () => {
 
       if (response.data.code === 1) {
         console.log(response.data);
-        alert("로그아웃 되었습니다.");
       }
     } catch (error) {
       // 서버와의 통신 중 오류 처리

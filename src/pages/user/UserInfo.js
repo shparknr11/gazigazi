@@ -40,8 +40,9 @@ const UserInfoInnerStyle = styled.div`
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    width: 100%;
+    width: 500px;
     height: auto;
+    margin-bottom: 130px;
     box-sizing: border-box;
     overflow: hidden;
   }
@@ -292,14 +293,14 @@ const UserInfo = () => {
               <span>이름</span>
               <input type="text" value={userData.userName} readOnly />
             </label>
-            <label>
+            {/* <label>
               <span>비밀번호</span>
               <input type="password" value={userData.userPw} readOnly />
             </label>
             <label>
               <span>비밀번호 확인</span>
               <input type="password" value={userData.userPwCheck} readOnly />
-            </label>
+            </label> */}
             <label>
               <span>닉네임</span>
               <input type="text" value={userData.userNickname} readOnly />
