@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getMemberList } from "../../apis/meeting/joinapi";
+import { prColor } from "../../css/color";
+import { IoIosClose } from "react-icons/io";
 
 export const MemberListInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -56,6 +58,7 @@ export const MemberListTitle = styled.div`
 
 const MemberListMainStyle = styled.div`
   width: 80%;
+  position: relative;
 
   .memberlist-member-div {
     display: flex;
@@ -87,6 +90,37 @@ const MemberListMainStyle = styled.div`
   .member-checkbox {
     align-self: end;
   }
+  .member-leave {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    & svg {
+      width: 29px;
+      height: 29px;
+      color: #999;
+    }
+    & svg:hover {
+      color: #000;
+    }
+  }
+  .member-leave-sub {
+    visibility: hidden;
+    position: absolute;
+    top: 8px;
+    right: 29px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 15px;
+    border: 1px solid ${prColor.p300};
+    font-size: 12px;
+    color: ${prColor.p300};
+  }
+  .member-leave-div {
+  }
+  .member-leave-div:hover .member-leave-sub {
+    visibility: visible;
+  }
 `;
 
 export const MemberInfo = styled.div`
@@ -101,6 +135,14 @@ export const MemberInfo = styled.div`
   .member-position {
     font-weight: 700;
     font-size: 1rem;
+  }
+  .member-position-detail {
+    margin-top: 5px;
+    color: rgba(0, 0, 0, 0.5);
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -130,6 +172,7 @@ const MyMeetingMemberList = () => {
         return;
       }
       setMemberList(result.resultData);
+      console.log(result.resultData);
     } catch (error) {
       console.log(error);
     }
@@ -181,10 +224,6 @@ const MyMeetingMemberList = () => {
       <MemberListMainStyle>
         <MemberListTitle>
           <h1>회원관리</h1>
-          {/* <div className="member-list-btn">
-            <MainButton label="버튼1" />
-            <ActionButton label="버튼2" />
-          </div> */}
         </MemberListTitle>
         <div className="memberlist-member-div">
           {memberList.map((item, index) => (
@@ -203,21 +242,16 @@ const MyMeetingMemberList = () => {
                   {item.userName}({getGenderText(item.userGender)})
                 </div>
               </MemberInfo>
+              {item.memberRole === "2" && (
+                <div className="member-leave-div">
+                  <div className="member-leave">
+                    <IoIosClose />
+                  </div>
+                  <div className="member-leave-sub">모임 방출</div>
+                </div>
+              )}
             </div>
           ))}
-
-          {/* <div className="membelist-member">
-            <div className="membelist-member-img" />
-            <MemberInfo>
-              <div className="member-position">직급</div>
-              <div>박성호(남)</div>
-              <div>24세</div>
-            </MemberInfo>
-            <PermissionBtn>
-              <MainButton label="승인" />
-              <ActionButton label="반려" />
-            </PermissionBtn>
-          </div> */}
         </div>
       </MemberListMainStyle>
     </MemberListInnerStyle>

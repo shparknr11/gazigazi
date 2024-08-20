@@ -37,6 +37,18 @@
     1.5rem
   ); /* 최소 1rem, 최대 1.5rem 사이에서 2vw로 조정 */
 }
+.mt-newbanner-div {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  height: 450px;
+  min-height: 450px;
+  margin-bottom: 85px;
+  background: url("../images/banner2.png") no-repeat;
+  background-size: contain;
+  background-position: center right;
+  background-color: rgb(241, 238, 235);
+}
 .mt-searchbox-div {
   display: flex;
   justify-content: center;
@@ -352,3 +364,28 @@
   .list-box-img img {
   }
 } */
+
+/* swiper */
+
+.mt-banner {
+  width: 100%;
+  height: 100%;
+}
+
+.mt-banner .swiper-pagination {
+  bottom: 30px !important;
+}
+.mt-banner .swiper-pagination-bullet {
+  width: 4px !important;
+  height: 4px !important;
+  margin: 0 2px !important;
+  background: #000 !important;
+  transition: width 0.3s;
+  opacity: 0.7 !important;
+  border-radius: 4px !important;
+}
+.mt-banner .swiper-pagination-bullet-active {
+  width: 20px !important;
+  background: #000 !important;
+  opacity: 1 !important;
+}

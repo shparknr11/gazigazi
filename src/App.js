@@ -51,8 +51,9 @@ import UserReview from "./pages/user/UserReview";
 import NotFoundPage from "./pages/NotFoundPage";
 import EventPage from "./pages/meeting/EventPage";
 import MyMeetingNoticeResister from "./pages/mymeeting/MyMeetingNoticeResister";
-import Rank from "./components/meeting/Rank";
 import SocialLogin from "./pages/SocialLogin";
+import Rank from "./pages/meeting/Rank";
+import AppliedMeeting from "./pages/user/AppliedMeeting";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -94,6 +95,7 @@ const App = () => {
             <Route path="myreview" element={<UserReview />}></Route>
             <Route path="logout" element={<LogOut />}></Route>
             <Route path="myinterestlist" element={<InterestList />}></Route>
+            <Route path="mymeeting" element={<AppliedMeeting />}></Route>
           </Route>
           <Route path="/sns" element={<SocialLogin />}></Route>
           <Route path="/review" element={<Review />}></Route>

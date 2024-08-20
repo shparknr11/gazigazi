@@ -2,8 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import logo from "../../images/logo2.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { TiThMenuOutline } from "react-icons/ti";
+import { CiMenuBurger } from "react-icons/ci";
 
 const Header = () => {
   // const userSeq = sessionStorage.getItem("userSeq");
@@ -11,9 +13,8 @@ const Header = () => {
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
   const userPic = user.userPic;
-
+  const userName = user.userName;
   const navigate = useNavigate();
-
   useEffect(() => {
     const handleStorageChange = () => {
       // Handle changes in sessionStorage, if necessary
@@ -38,15 +39,7 @@ const Header = () => {
     if (!userSeq) {
       navigate("/login");
     } else {
-      navigate(`myprofile/:userId/userInfo`);
-    }
-  };
-
-  const handleclickHeart = () => {
-    if (userSeq) {
-      navigate(`/myprofile/:userId/myinterestlist`);
-    } else {
-      navigate(`/login`);
+      navigate(`myprofile/${userSeq}/userInfo`);
     }
   };
 
@@ -64,7 +57,7 @@ const Header = () => {
               <Link to="/admin?manage=meeting&num=1">관리자</Link>
             </li>
             <li>
-              <Link to="/rank">랭킹</Link>
+              <Link to="/rank?rank=total">랭킹</Link>
             </li>
             <li>
               <Link to="/review">후기</Link>
@@ -81,46 +74,47 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <nav>
-          <ul className="header-icon-list">
-            <li>
+        <div className="header-icon-list">
+          {!userSeq ? (
+            <>
               <div
+                className="header-profileicon-notuser-div"
                 onClick={() => {
-                  handleclickHeart();
+                  handleClickProfile();
                 }}
               >
-                <PiHeartLight />
+                <BsPerson />
               </div>
-            </li>
-            <li>
-              {!userSeq ? (
-                <div
-                  onClick={() => {
-                    handleClickProfile();
-                  }}
-                >
-                  <BsPerson />
-                </div>
-              ) : (
-                <div
-                  className="header-profileicon"
-                  style={{
-                    backgroundImage: `url(/pic/user/${userSeq}/${userPic})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                  }}
-                  onClick={() => {
-                    handleClickProfile();
-                  }}
-                >
-                  {/* <img src={`/pic/user/${userSeq}/${userPic}`} /> */}
-                </div>
-              )}
-            </li>
-          </ul>
-        </nav>
+              <div>
+                <span className="header-profileicon-notuser-name">
+                  로그인이 필요합니다.
+                </span>
+              </div>
+              <div className="header-submenu-mobile">
+                <CiMenuBurger />
+              </div>
+            </>
+          ) : (
+            <div className="header-profileicon-div">
+              <div
+                className="header-profileicon"
+                onClick={() => {
+                  handleClickProfile();
+                }}
+              >
+                <img src={`/pic/user/${userSeq}/${userPic}`} alt="프로필사진" />
+              </div>
+              <div>
+                <span className="header-profileicon-name">{userName} 님</span>
+              </div>
+              <div className="header-submenu-mobile">
+                <CiMenuBurger />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="header-submenu-div">
         <ul className="header-submenu">
           <li>
@@ -129,7 +123,7 @@ const Header = () => {
             <Link to={`/admin?manage=service`}>서비스 통계</Link>
           </li>
           <li>
-            <Link>전체랭킹</Link>
+            <Link to={`rank?rank=total`}>전체랭킹</Link>
             <Link>월별랭킹</Link>
             <Link>카테고리별 랭킹</Link>
           </li>
@@ -137,8 +131,8 @@ const Header = () => {
             <Link to={`/review`}>커뮤니티 후기</Link>
           </li>
           <li>
-            <Link to={`/mymeeting`}>내 모임관리</Link>
-            <Link to={`/meeting/create`}>모임생성</Link>
+            <div onClick={() => {}}>내 모임관리</div>
+            <div onClick={() => {}}>모임생성</div>
           </li>
         </ul>
       </div>

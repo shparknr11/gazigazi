@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtAxios from "../jwtAxios";
+import jwtAxios, { makeRequest } from "../jwtAxios";
 
 // 모임 승인 (관리자) --- api 변경으로 사용 X
 export const patchApproval = async (_partySeq, _userSeq) => {
@@ -51,7 +51,7 @@ export const postApplication = async (_partySeq, _data) => {
   }
 };
 
-// 신청서 불러오기
+// 신청서 불러오기 (전체)
 export const getApplication = async (_partySeq, _leaderUserSeq) => {
   try {
     const response = await jwtAxios.get(
@@ -68,7 +68,24 @@ export const getApplication = async (_partySeq, _leaderUserSeq) => {
     console.log(error);
   }
 };
-
+// 신청서 하나 불러오기 (내용)
+export const getOneApplication = async (_partySeq, _joinUserSeq) => {
+  try {
+    const response = await makeRequest(
+      `/api/join/detail/${_partySeq}?joinUserSeq=${_joinUserSeq}`,
+      "GET",
+    );
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      // console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 // 모임 맴버 불러오기
 export const getMemberList = async _partySeq => {
   try {
@@ -89,6 +106,22 @@ export const getMemberList = async _partySeq => {
 export const patchNewMember = async (_partySeq, _data) => {
   try {
     const response = await jwtAxios.patch(`/api/join/gb/${_partySeq}`, _data);
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      // console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 나의 모임신청 목록 불러오기 (마이페이지)
+export const getMyAppliedList = async _userSeq => {
+  try {
+    const response = await makeRequest(`/api/join?userSeq=${_userSeq}`, "GET");
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       // console.log("response", response.data);

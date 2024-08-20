@@ -65,7 +65,7 @@ export const ReviewItemStyle = styled.div`
       justify-content: end;
       width: 100%;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       .rt-profile {
         display: flex;
         width: 100%;
@@ -99,6 +99,7 @@ export const ReviewItemStyle = styled.div`
     /* max-width: 700px; */
     width: auto;
     .review-mid-text {
+      margin-bottom: 10px;
     }
   }
   /* .review-img {

@@ -2,6 +2,12 @@ import styled from "@emotion/styled";
 import { prColor } from "../../css/color";
 import { MainButton, SubButton } from "../button/Button";
 
+// react Quill
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+import { modules } from "../../components/modules/quill";
+
 const JoinModalStyle = styled.div`
   position: fixed;
   top: 50%;
@@ -12,13 +18,12 @@ const JoinModalStyle = styled.div`
 const JoinTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 15px;
   color: ${prColor.black};
 `;
 
 const JoinBoxStyle = styled.div`
   border: 1px solid ${prColor.p1000};
-  padding: 25px 40px 10px 40px;
+  padding: 20px 40px 10px 40px;
   z-index: 99;
   background-color: ${prColor.p000};
 `;
@@ -26,7 +31,6 @@ const JoinBoxStyle = styled.div`
 const JoinInputStyle = styled.div`
   display: flex;
   flex-direction: column;
-  height: 180px;
 
   textarea {
     height: 100%;
@@ -45,6 +49,17 @@ const JoinInputStyle = styled.div`
       width: 90px;
       margin-top: 20px;
       cursor: pointer;
+    }
+  }
+  .join-quill {
+    .ql-editor {
+      min-height: 300px !important;
+      height: 150px !important;
+      caret-color: #000 !important;
+      background-color: #fff !important;
+    }
+    .ql-toolbar {
+      visibility: hidden;
     }
   }
 `;
@@ -82,14 +97,20 @@ const JoinModal = ({
         >
           <JoinTitle>모임신청</JoinTitle>
           <JoinInputStyle>
-            <textarea
+            {/* <textarea
               id="jointext"
               type="text"
               placeholder="신청 내용을 입력하세요"
               autoComplete="off"
               value={joinContent}
               onChange={e => handleChangeContent(e)}
+            /> */}
+            <ReactQuill
+              className="join-quill"
+              onChange={setJoinContent}
+              modules={modules}
             />
+
             <div className="join-btn">
               <MainButton label="신청" type="submit"></MainButton>
               <MainButton label="취소" onClick={() => onClose()}></MainButton>

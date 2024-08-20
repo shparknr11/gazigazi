@@ -94,7 +94,7 @@ const Login = () => {
   // const [password, setPassword] = useState("Datadata123!");
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [redirectUrl, setRedirectUrl] = useState('');
+  const [redirectUrl, setRedirectUrl] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -140,15 +140,13 @@ const Login = () => {
           accessToken,
           userPic,
           userName,
-          userPw,
-          userPwCheck,
-          userNickname,
           userFav,
           userBirth,
           userPhone,
           userGender,
           userIntro,
           userAddr,
+          userRole,
         } = response.data.resultData;
 
         // Redux에 사용자 정보 저장
@@ -159,15 +157,13 @@ const Login = () => {
             userPic,
             userEmail,
             userName,
-            userPw, //X
-            userPwCheck, //X
-            userNickname, //X
             userFav,
             userBirth,
             userPhone,
             userGender,
             userIntro,
-            userAddr, 
+            userAddr,
+            userRole,
           }),
         );
 
@@ -179,15 +175,13 @@ const Login = () => {
             userPic,
             userEmail,
             userName,
-            userPw,
-            userPwCheck,
-            userNickname,
             userFav,
             userBirth,
             userPhone,
             userGender,
             userIntro,
             userAddr,
+            userRole,
           }),
         );
 
@@ -224,8 +218,6 @@ const Login = () => {
   if (user.token) {
     return null;
   }
-
-
 
   return (
     <LoginStyle>
@@ -265,15 +257,27 @@ const Login = () => {
                     <Link to="/login/findid:pw">이메일 / 비밀번호 찾기</Link>
                     <Link to="/createAccount">회원가입</Link>
                   </div>
-                  <div>                    
+                  <div>
                     <div>
-                      <a href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}>구글</a>
+                      <a
+                        href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}
+                      >
+                        구글
+                      </a>
                     </div>
                     <div>
-                      <a href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}>네이버</a>                      
+                      <a
+                        href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}
+                      >
+                        네이버
+                      </a>
                     </div>
                     <div>
-                      <a href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}>카카오</a>
+                      <a
+                        href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}
+                      >
+                        카카오
+                      </a>
                     </div>
                   </div>
                 </div>

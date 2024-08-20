@@ -22,6 +22,7 @@ import { NoReviewStyle, ReviewItemStyle } from "../review/Review";
 import { getMeetingPageReviewList } from "../../apis/reviewapi/reviewapi";
 import { Link } from "react-router-dom";
 import ApplicationModal from "../../components/modal/ApplicationModal";
+import MeeetingDetailCalendar from "../../components/meeting/MeetingDetailCalendar";
 
 const MeetItemStyle = styled.div`
   margin-top: 30px;
@@ -341,7 +342,7 @@ const MeetItemMenu = styled.div`
 const MeetItemInfo = styled.div`
   margin-top: 40px;
 
-  h2 {
+  .meeting-tag {
     margin-bottom: 20px;
     font-size: 1.5rem;
     font-weight: bold;
@@ -378,6 +379,7 @@ const MeetingDetail = () => {
   const navigate = useNavigate();
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
+  // console.log(user);
 
   const currentWish = localStorage.getItem(
     parseInt(partySeq) + parseInt(userSeq),
@@ -389,9 +391,11 @@ const MeetingDetail = () => {
   const telNumber = user.userPhone;
   // const forUserBirth = sessionStorage.getItem("userBirth");
   const forUserBirth = user.userBirth;
+  const birthDate = new Date(forUserBirth);
+  const userBirth = birthDate.getFullYear();
   // const userGender = parseInt(sessionStorage.getItem("userGender"));
   const userGender = parseInt(user.userGender);
-  const userBirth = parseInt(forUserBirth?.substring(0, 4));
+  // const userBirth = parseInt(forUserBirth?.substring(0, 4));
 
   // api 함수 (모임 정보 불러오기)
   const getDetailData = async _partySeq => {
@@ -456,10 +460,10 @@ const MeetingDetail = () => {
   const handleJoinModal = () => {
     const partyMaximum = parseInt(detailList.partyMaximum);
     const partyNowMem = parseInt(detailList.partyNowMem);
-    const partMinAge = parseInt(detailList.partMinAge);
+    const partyMinAge = parseInt(detailList.partyMinAge);
     const partyMaxAge = parseInt(detailList.partyMaxAge);
     const partyGender = parseInt(detailList.partyGender);
-
+    // console.log(userBirth > partyMaxAge, userBirth, partyMaxAge);
     if (!userSeq) {
       navigate(`/login`);
       return;
@@ -470,7 +474,7 @@ const MeetingDetail = () => {
       return;
     }
 
-    if (partMinAge > userBirth || partyMaxAge < userBirth) {
+    if (partyMinAge > userBirth || partyMaxAge < userBirth) {
       alert("연령제한이 있습니다.");
       return;
     }
@@ -695,7 +699,7 @@ const MeetingDetail = () => {
         {detailMenu == 1 ? (
           <MeetItemInfo>
             <div>
-              <h2>
+              <h2 className="meeting-tag">
                 {detailList.partyGenre === "1"
                   ? "🏈 운동은 삶의 활력소, 같이 즐겨요!"
                   : detailList.partyGenre === "2"
@@ -712,7 +716,6 @@ const MeetingDetail = () => {
                               ? "🍷 분위기 있게 한잔"
                               : "💬 기타 취미, 새로운 친구들과 함께 즐겨요!"}
               </h2>
-
               <p
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(detailList.partyIntro),
@@ -720,7 +723,9 @@ const MeetingDetail = () => {
               />
               {/* <p className="meet-item-partyinfo">{detailList.partyIntro}</p> */}
             </div>
-            {/* <div className="meet-item-imgs"></div> */}
+            <UnderLine />
+
+            <MeeetingDetailCalendar partySeq={partySeq} />
           </MeetItemInfo>
         ) : (
           <MeetReviewStyle>
@@ -800,11 +805,6 @@ const MeetingDetail = () => {
               ) : (
                 <NoReviewStyle>작성된 후기가 없습니다.</NoReviewStyle>
               )}
-            </div>
-            <div>
-              <div>
-                <span></span>
-              </div>
             </div>
           </MeetReviewStyle>
         )}

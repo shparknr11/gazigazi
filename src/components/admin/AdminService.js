@@ -61,7 +61,7 @@ const AdminService = () => {
 
   return (
     <div>
-      <h1>AdminService</h1>
+      <h1>📉📈📊AdminService</h1>
       <div style={{ width: "1000px", height: "400px" }}>
         <ResponsiveLine
           data={data}

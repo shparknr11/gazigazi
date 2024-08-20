@@ -292,14 +292,14 @@ const UserInfo = () => {
               <span>이름</span>
               <input type="text" value={userData.userName} readOnly />
             </label>
-            <label>
+            {/* <label>
               <span>비밀번호</span>
               <input type="password" value={userData.userPw} readOnly />
             </label>
             <label>
               <span>비밀번호 확인</span>
               <input type="password" value={userData.userPwCheck} readOnly />
-            </label>
+            </label> */}
             <label>
               <span>닉네임</span>
               <input type="text" value={userData.userNickname} readOnly />
