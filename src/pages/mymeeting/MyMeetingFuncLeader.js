@@ -5,18 +5,20 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Modal,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   deleteBudget,
+  getBudgetPhoto,
   getMemberBudget,
   getMonthBudget,
   getMonthCalculateBudget,
-  patchBudget,
 } from "../../apis/mymeetingapi/budget/budgetapi";
 import { getNoticeAll } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
 import Loading from "../../components/common/Loading";
@@ -168,13 +170,42 @@ const LedgerStyle = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .edit-btn {
+    background-color: #3fe87f;
+    padding: 0 10px;
+    height: 30px;
+    border: 1px solid #babfc5;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 1px 1px 1px 1px #f4f2f2;
+    color: #fff;
+    cursor: pointer;
+  }
+  .edit-btn:hover {
+    background-color: #80ff00;
+    box-shadow: 1px 1px 1px 1px inset gray;
+    font-weight: bold;
+  }
 `;
+
 const TitleDivStyle = styled.div`
   font-size: 20px;
   font-weight: bold;
   color: black;
   padding: 20px 0px 20px 5px;
 `;
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const MyMeetingFuncLeader = () => {
   const [isClicked, setIsClicked] = useState(0);
   const [monthValue, setMonthValue] = useState("01");
@@ -186,12 +217,18 @@ const MyMeetingFuncLeader = () => {
   const [isPopup, setIsPopup] = useState(false);
   const [isEditPopup, setIsEditPopup] = useState(false);
   const [noticeList, setNoticeList] = useState([]);
-  const [selectedBudget, setSelectedBudget] = useState(null); // 수정할 예산 데이터
+  const [isDetailPopup, setIsDetailPopup] = useState(false);
+  const [detailBudget, setDetailBudget] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
+  const [selectedBudget, setSelectedBudget] = useState();
+  const [incomeTotal, setIncomeTotal] = useState(0);
+  const [expenseTotal, setExpenseTotal] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     //console.log(noticeList);
@@ -250,6 +287,7 @@ const MyMeetingFuncLeader = () => {
   // window.onbeforeprint = b();
   // window.print();
   // window.onafterprint = document.body.innerHTML = resetHtml;
+
   useEffect(() => {}, [isPopup]);
   const handleBudgetClick = async _monthValue => {
     setIsLoading(true);
@@ -262,6 +300,29 @@ const MyMeetingFuncLeader = () => {
       const res = await getMonthBudget(budgetObj);
       const resData = await getMonthCalculateBudget(budgetObj);
       const resDataMember = await getMemberBudget(budgetObj);
+
+      const income = res?.reduce((acc, item) => {
+        // cdNm 필드를 사용하여 입금을 확인
+        if (item.cdNm === "입금") {
+          const amount = Number(item.budgetAmount);
+          return acc + (isNaN(amount) ? 0 : amount);
+        }
+        return acc;
+      }, 0);
+
+      const expense = res?.reduce((acc, item) => {
+        // cdNm 필드를 사용하여 출금을 확인
+        if (item.cdNm === "출금") {
+          const amount = Number(item.budgetAmount);
+          return acc + (isNaN(amount) ? 0 : amount);
+        }
+        return acc;
+      }, 0);
+
+      setIncomeTotal(income);
+      setExpenseTotal(expense);
+      setTotal(income - expense);
+
       setDepositSum(resData?.depositSum.toLocaleString());
       setDepositMember(resDataMember);
       setBudgetListLength(res?.length);
@@ -288,30 +349,51 @@ const MyMeetingFuncLeader = () => {
     setSelectedBudget(budget);
   };
 
-  const handleBudgetUpdate = async () => {
-    const updateBudget = {
-      ...selectedBudget,
-      budgetPic: selectedBudget.budgetPic || "",
-      budgetSeq: selectedBudget.budgetSeq,
-      budgetMemberSeq: selectedBudget.budgetMemberSeq,
-      budgetGb: selectedBudget.type === "입금" ? 1 : 2,
-      budgetDt: selectedBudget.budgetDt,
-      budgetAmount: parseInt(selectedBudget.budgetAmount, 10),
-      budgetText: selectedBudget.budgetText,
-      cdNm: selectedBudget.cdNm,
-    };
-    console.log("Selected Budget:", selectedBudget);
-    console.log("Update Budget:", updateBudget);
+  // const handleBudgetUpdate = async () => {
+  //   // Budget data preparation
+  //   const budgetData = {
+  //     ...selectedBudget,
+  //     budgetPic: selectedBudget.budgetPic || "",
+  //     budgetSeq: selectedBudget.budgetSeq,
+  //     budgetMemberSeq: selectedBudget.budgetMemberSeq,
+  //     budgetGb: selectedBudget.type === "입금" ? 1 : 2,
+  //     budgetDt: selectedBudget.budgetDt,
+  //     budgetAmount: parseInt(selectedBudget.budgetAmount, 10),
+  //     budgetText: selectedBudget.budgetText,
+  //   };
 
-    try {
-      await patchBudget(updateBudget);
-      console.log(updateBudget);
-      toast.success("회계 내역이 수정되었습니다.");
-      handleBudgetClick(monthValue); // 데이터 새로 고침
-      setIsEditPopup(false); // 수정 폼 닫기
-    } catch (error) {
-      console.error(error);
-      toast.error("수정 중 오류가 발생했습니다.");
+  //   // Log data for debugging
+  //   console.log("Selected Budget:", selectedBudget);
+  //   console.log("Update Budget Data:", budgetData);
+
+  //   try {
+  //     // Call the patchBudget function
+  //     const result = await patchBudget(budgetData);
+  //     console.log("회계 내역 수정 결과:", result);
+
+  //     // Handle successful update
+  //     toast.success("회계 내역이 수정되었습니다.");
+  //     handleBudgetClick(monthValue); // 데이터 새로 고침
+  //     setIsEditPopup(false); // 수정 폼 닫기
+  //   } catch (error) {
+  //     // Error handling
+  //     console.error("회계 내역 수정 오류:", error);
+  //     toast.error("수정 중 오류가 발생했습니다.");
+  //   }
+  // };
+  // 500 에러 나서 주석처리함
+
+  const handleFileChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedBudget(prev => ({
+          ...prev,
+          budgetPic: reader.result, // 이미지 파일을 Base64 문자열로 저장
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -354,8 +436,96 @@ const MyMeetingFuncLeader = () => {
     return <Loading></Loading>;
   }
 
+  const BudgetDetailModal = ({ open, onClose, budgetDetail }) => {
+    useEffect(() => {
+      if (budgetDetail) {
+        const fetchImage = async () => {
+          try {
+            const data = await getBudgetPhoto({
+              budgetSeq: budgetDetail.budgetSeq,
+            });
+            setImageUrl(data.budgetPic); // budgetPic을 imageUrl에 설정
+          } catch (error) {
+            console.error("이미지 로드 중 오류 발생:", error);
+          }
+        };
+
+        fetchImage();
+      }
+    }, [budgetDetail]);
+
+    return (
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-title" variant="h6" component="h2">
+            회계 내역 상세 정보
+          </Typography>
+          <Typography id="modal-description" sx={{ mt: 2 }}>
+            <div>
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="영수증"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    marginBottom: "10px",
+                  }}
+                />
+              ) : (
+                <p>이미지를 로딩 중입니다...</p>
+              )}
+              <p>
+                <strong>멤버명:</strong> {budgetDetail.memberName}
+              </p>
+              <p>
+                <strong>금액:</strong>{" "}
+                {budgetDetail.budgetAmount.toLocaleString()} 원
+              </p>
+              <p>
+                <strong>날짜:</strong> {budgetDetail.budgetDt}
+              </p>
+              <p>
+                <strong>상세 내역:</strong> {budgetDetail.budgetText}
+              </p>
+              <p>
+                <strong>입출금 종류:</strong> {budgetDetail.cdNm}
+              </p>
+            </div>
+          </Typography>
+          <Button onClick={onClose} sx={{ mt: 2 }} variant="outlined">
+            닫기
+          </Button>
+        </Box>
+      </Modal>
+    );
+  };
+
+  const handleOpenDetailModal = budget => {
+    setDetailBudget(budget);
+    setIsDetailPopup(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailPopup(false);
+    setDetailBudget(null);
+  };
+
   return (
     <MyMeetingFuncLeaderStyle>
+      {/* BudgetDetailModal 컴포넌트 */}
+      {isDetailPopup && detailBudget && (
+        <BudgetDetailModal
+          open={isDetailPopup}
+          onClose={handleCloseDetailModal}
+          budgetDetail={detailBudget}
+        />
+      )}
       {isPopup && (
         <MyMeetingBudgetResister
           setIsPopup={setIsPopup}
@@ -425,14 +595,22 @@ const MyMeetingFuncLeader = () => {
             InputLabelProps={{ shrink: true }}
             sx={{ marginBottom: "10px" }}
           />
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          {selectedBudget.budgetPic && (
+            <img
+              src={selectedBudget.budgetPic}
+              alt="예상 이미지"
+              style={{ width: "100px", height: "100px", marginTop: "10px" }}
+            />
+          )}
           <Box sx={{ marginTop: "20px" }}>
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={handleBudgetUpdate}
             >
               수정
-            </Button>
+            </Button> */}
             <Button
               variant="outlined"
               color="secondary"
@@ -552,7 +730,7 @@ const MyMeetingFuncLeader = () => {
                     {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
                         <span>{index + 1}</span>
-                        <span>{item.budgetGb}</span>
+                        <span>{item.cdNm}</span>
                         <span>{item.budgetText}</span>
                         <span>
                           {item?.budgetAmount !== undefined
@@ -568,9 +746,9 @@ const MyMeetingFuncLeader = () => {
                             <>
                               <button
                                 className="edit-btn"
-                                onClick={() => handleEditBudget(item)}
+                                onClick={() => handleOpenDetailModal(item)}
                               >
-                                수정
+                                보기
                               </button>
                               /
                               <button
@@ -586,6 +764,21 @@ const MyMeetingFuncLeader = () => {
                         </span>
                       </li>
                     ))}
+                  </ul>
+                  <ul className="ledger-ul">
+                    <li className="ledger-li">
+                      <span>
+                        입금 합계:{" "}
+                        {incomeTotal ? incomeTotal.toLocaleString() : "0"} 원
+                      </span>
+                      <span>
+                        출금 합계:{" "}
+                        {expenseTotal ? expenseTotal.toLocaleString() : "0"} 원
+                      </span>
+                      <span>
+                        총 합계: {total ? total.toLocaleString() : "0"} 원
+                      </span>
+                    </li>
                   </ul>
                 </LedgerStyle>
               </div>

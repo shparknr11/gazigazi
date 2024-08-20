@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   deleteNotice,
+  getMemberSeq,
   getNoticeOne,
   patchNotice,
 } from "../../apis/mymeetingapi/meetingnotice/meetingnotice";
@@ -95,6 +96,22 @@ const TitleDivStyle = styled.div`
 `;
 const MyMeetingNotice = () => {
   const user = useSelector(state => state.user);
+  const [nowMemberSeq, setNowMemberSeq] = useState(null);
+  const getMemberSeqCall = async () => {
+    try {
+      const result = await getMemberSeq(
+        location?.state.boardPartySeq,
+        user.userSeq,
+      );
+      setNowMemberSeq(result.memberSeq);
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getMemberSeqCall();
+  }, []);
   // console.log(user);
   // 모듈 활용
   const modules = {
@@ -180,24 +197,6 @@ const MyMeetingNotice = () => {
         location.state.boardMemberSeq,
       );
 
-      // jfs 진행해야 해요.
-
-      //console.log(res);
-      // res ={
-      //     "boardSeq": 47,
-      //     "boardPartySeq": 39,
-      //     "boardMemberSeq": 17,
-      //     "userName": "윤성환",
-      //     "boardTitle": "ㄴㄴㄴㄴ",
-      //     "boardContents": "ㄴㄴㄴㄴ",
-      //     "boardHit": 5,
-      //     "inputDt": "2024-08-06T14:42:52",
-      //     "updateDt": "2024-08-06T15:18:27",
-      //     "pics": [
-      //         "9014e416-27cc-4183-9adb-f7e8bed824a6.png"
-      //     ]
-      // }
-
       setData(res);
       setDataOrigin(res);
       // 수정 항목
@@ -229,7 +228,7 @@ const MyMeetingNotice = () => {
     // 웹브라우저는 이미지를 캐시에 보관함.
     // 임시 공간에 저장한 이미지를 우리는 경로를 알아내야 한다.
     // 그때 웹브라우저 상의 임시 URL 을 알아내는 기능 제공한다.
-    console.log(tempFile);
+    // console.log(tempFile);
     if (tempFile) {
       const tempUrl = URL?.createObjectURL(tempFile);
       setPreviewPreImg(tempUrl);
@@ -477,7 +476,7 @@ const MyMeetingNotice = () => {
                         onChange={setTextAreaVal}
                         value={textAreaVal}
                         modules={modules}
-                        key={textAreaVal}
+                        // key={textAreaVal}
                       />
                     </div>
                     <div className="button-wrap">
@@ -701,7 +700,8 @@ const MyMeetingNotice = () => {
               </div>
               <NoticeComment
                 boardSeq={dataOrigin.boardSeq}
-                memberSeq={dataOrigin.boardMemberSeq}
+                // memberSeq={dataOrigin.boardMemberSeq}
+                memberSeq={nowMemberSeq}
               />
             </div>
           </div>

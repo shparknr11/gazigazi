@@ -94,7 +94,7 @@ const Login = () => {
   // const [password, setPassword] = useState("Datadata123!");
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [redirectUrl, setRedirectUrl] = useState('');
+  const [redirectUrl, setRedirectUrl] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -167,7 +167,7 @@ const Login = () => {
             userPhone,
             userGender,
             userIntro,
-            userAddr, 
+            userAddr,
           }),
         );
 
@@ -191,7 +191,6 @@ const Login = () => {
           }),
         );
 
-        alert("로그인 성공!");
         navigate("/");
       } else {
         // 서버에서 반환된 에러 메시지 처리
@@ -224,8 +223,6 @@ const Login = () => {
   if (user.token) {
     return null;
   }
-
-
 
   return (
     <LoginStyle>
@@ -265,15 +262,27 @@ const Login = () => {
                     <Link to="/login/findid:pw">이메일 / 비밀번호 찾기</Link>
                     <Link to="/createAccount">회원가입</Link>
                   </div>
-                  <div>                    
+                  <div>
                     <div>
-                      <a href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}>구글</a>
+                      <a
+                        href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}
+                      >
+                        구글
+                      </a>
                     </div>
                     <div>
-                      <a href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}>네이버</a>                      
+                      <a
+                        href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}
+                      >
+                        네이버
+                      </a>
                     </div>
                     <div>
-                      <a href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}>카카오</a>
+                      <a
+                        href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}
+                      >
+                        카카오
+                      </a>
                     </div>
                   </div>
                 </div>
