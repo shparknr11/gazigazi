@@ -59,7 +59,10 @@ const ReviewFileStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-
+  & label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
   .review-write-preview {
     display: flex;
     gap: 1px;
@@ -67,6 +70,7 @@ const ReviewFileStyle = styled.div`
     width: 100%;
     margin-bottom: 5px;
     margin-top: 5px;
+    min-height: 150px;
   }
   .review-write-nopreview {
     display: block;
@@ -94,6 +98,7 @@ const ReviewTextStyle = styled.div`
   margin-bottom: 10px;
 
   & label {
+    font-weight: bold;
     margin-bottom: 5px;
   }
 `;
@@ -235,8 +240,7 @@ const ReviewModal = ({
         </div>
       </ReviewCommentStyle>
       <ReviewFileStyle>
-        <label htmlFor="review-pic"></label>
-        <button onClick={handleFileClick}>사진첨부</button>
+        <label htmlFor="review-pic">사진을 첨부해 주세요. (선택)</label>
         <input
           style={{ display: "none" }}
           ref={fileBt}
@@ -257,6 +261,7 @@ const ReviewModal = ({
             접기
           </div>
         )}
+        <button onClick={handleFileClick}>사진첨부</button>
       </ReviewFileStyle>
       <ReviewTextStyle>
         <label htmlFor="review-text">솔직한 리뷰를 작성해주세요</label>

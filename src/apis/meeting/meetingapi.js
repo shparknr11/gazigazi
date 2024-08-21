@@ -72,10 +72,12 @@ export const patchParty = async (_data, _token) => {
 };
 
 // 모임 삭제하기
-export const DeleteParty = async _data => {
+export const DeleteParty = async _partySeq => {
   try {
-    const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const response = await axios.delete(`/api/party`, _data, header);
+    const response = await makeRequest(
+      `/api/party/authGb2?partySeq=${_partySeq}`,
+      "PATCH",
+    );
     // console.log(response);
     const status = response.status.toString().charAt(0);
     if (status === "2") {

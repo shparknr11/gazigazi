@@ -97,14 +97,6 @@ const JoinModal = ({
         >
           <JoinTitle>모임신청</JoinTitle>
           <JoinInputStyle>
-            {/* <textarea
-              id="jointext"
-              type="text"
-              placeholder="신청 내용을 입력하세요"
-              autoComplete="off"
-              value={joinContent}
-              onChange={e => handleChangeContent(e)}
-            /> */}
             <ReactQuill
               className="join-quill"
               onChange={setJoinContent}

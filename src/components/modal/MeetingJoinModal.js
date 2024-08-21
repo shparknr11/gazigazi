@@ -46,7 +46,7 @@ const JoinInputStyle = styled.div`
     gap: 20px;
     .join-btn-close {
       top: 15px;
-      right: 15px;
+      right: 69px;
       position: absolute;
       cursor: pointer;
       svg {
@@ -68,7 +68,7 @@ const MeetingJoinModal = ({ modalOpen, setModalOpen, modalContents }) => {
       <JoinBoxStyle>
         <form>
           <JoinTitle>
-            &quot;{modalContents?.userName}&quot;님의 신청서
+            &quot;{modalContents[0]?.userName}&quot;님의 신청서
           </JoinTitle>
           <JoinInputStyle>
             {/* <textarea
@@ -80,7 +80,7 @@ const MeetingJoinModal = ({ modalOpen, setModalOpen, modalContents }) => {
             <div
               className="join-form-div"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(modalContents?.joinMsg),
+                __html: DOMPurify.sanitize(modalContents[0]?.joinMsg),
               }}
             />
             <div className="join-btn">
