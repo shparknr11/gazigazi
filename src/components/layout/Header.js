@@ -1,10 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { PiHeartLight } from "react-icons/pi";
 import { BsPerson } from "react-icons/bs";
 import logo from "../../images/logo2.png";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { TiThMenuOutline } from "react-icons/ti";
 import { CiMenuBurger } from "react-icons/ci";
 
 const Header = () => {
@@ -14,6 +12,8 @@ const Header = () => {
   const userSeq = user.userSeq;
   const userPic = user.userPic;
   const userName = user.userName;
+  const userRole = user.userRole;
+  // console.log(userRole);
   const navigate = useNavigate();
   useEffect(() => {
     const handleStorageChange = () => {
@@ -54,7 +54,18 @@ const Header = () => {
         <nav className="header-menu">
           <ul className="header-menu-list">
             <li>
-              <Link to="/admin?manage=meeting&num=1">관리자</Link>
+              {userRole === "ROLE_USER" ? (
+                <>
+                  <Link
+                    to="/admin?manage=meeting&num=1"
+                    style={{ visibility: "hidden" }}
+                  >
+                    관리자
+                  </Link>
+                </>
+              ) : (
+                <Link to="/admin?manage=meeting&num=1">관리자</Link>
+              )}
             </li>
             <li>
               <Link to="/rank?rank=total">랭킹</Link>
@@ -118,9 +129,13 @@ const Header = () => {
       <div className="header-submenu-div">
         <ul className="header-submenu">
           <li>
-            <Link to={`/admin?manage=meeting&num=1`}>모임관리</Link>
-            <Link to={`/admin?manage=review`}>후기관리</Link>
-            <Link to={`/admin?manage=service`}>서비스 통계</Link>
+            {userRole === "ROLE_USER" || (
+              <>
+                <Link to={`/admin?manage=meeting&num=1`}>모임관리</Link>
+                <Link to={`/admin?manage=review`}>후기관리</Link>
+                <Link to={`/admin?manage=service`}>서비스 통계</Link>
+              </>
+            )}
           </li>
           <li>
             <Link to={`rank?rank=total`}>전체랭킹</Link>

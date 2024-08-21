@@ -67,12 +67,31 @@ export const getApplication = async (_partySeq, _leaderUserSeq) => {
     console.log(error);
   }
 };
-// 신청서 하나 불러오기 (내용)
+// 신청서 하나 불러오기 (본인)
 export const getOneApplication = async (_partySeq, _joinUserSeq) => {
   try {
     const response = await makeRequest(
       `/api/join/detail/${_partySeq}?joinUserSeq=${_joinUserSeq}`,
       "GET",
+    );
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      // console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+// 신청서 하나 불러오기 (수정)
+export const patchOneApplication = async (_partySeq, _data) => {
+  try {
+    const response = await makeRequest(
+      `/api/join/${_partySeq}`,
+      "PATCH",
+      _data,
     );
     const status = response.status.toString().charAt(0);
     if (status === "2") {

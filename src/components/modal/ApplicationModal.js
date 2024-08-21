@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { prColor } from "../../css/color";
 import { MainButton, SubButton } from "../button/Button";
 import DOMPurify from "dompurify";
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import { IoIosCloseCircleOutline, IoMdClose } from "react-icons/io";
 
 const JoinModalStyle = styled.div`
   position: fixed;
@@ -86,7 +86,7 @@ const ApplicationModal = ({ modalOpen, setModalOpen, applicationText }) => {
                 className="join-btn-close"
                 onClick={() => setModalOpen(false)}
               >
-                <IoIosCloseCircleOutline />
+                <IoMdClose />
               </div>
             </div>
           </JoinInputStyle>

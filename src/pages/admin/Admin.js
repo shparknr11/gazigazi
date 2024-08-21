@@ -184,11 +184,11 @@ const Admin = () => {
   const getMeetingSubtitle = meetingState => {
     switch (manage) {
       case "meeting":
-        return "🔒 모임 관리";
+        return "모임 관리";
       case "review":
-        return "🔒 후기 관리";
+        return "후기 관리";
       case "service":
-        return "🔒 서비스 통계";
+        return "서비스 통계";
     }
   };
 

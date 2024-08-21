@@ -19,6 +19,7 @@ const JoinTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   color: ${prColor.black};
+  margin-bottom: 10px;
 `;
 
 const JoinBoxStyle = styled.div`
@@ -54,12 +55,13 @@ const JoinInputStyle = styled.div`
   .join-quill {
     .ql-editor {
       min-height: 300px !important;
+      min-width: 350px !important;
       height: 150px !important;
       caret-color: #000 !important;
       background-color: #fff !important;
     }
     .ql-toolbar {
-      visibility: hidden;
+      display: none;
     }
   }
 `;
@@ -99,6 +101,7 @@ const JoinModal = ({
           <JoinInputStyle>
             <ReactQuill
               className="join-quill"
+              value={joinContent}
               onChange={setJoinContent}
               modules={modules}
             />

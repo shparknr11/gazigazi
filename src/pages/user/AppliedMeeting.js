@@ -4,11 +4,20 @@ import { prColor } from "../../css/color";
 import {
   getMyAppliedList,
   getOneApplication,
+  patchOneApplication,
 } from "../../apis/meeting/joinapi";
 import { useSelector } from "react-redux";
 import { MdOutlineArrowDropDownCircle } from "react-icons/md";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import DOMPurify from "dompurify";
+// react Quill
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../../css/quill.css";
+import { modules } from "../../components/modules/quill";
+import { MainButton } from "../../components/button/Button";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const AppliedMeetingWrapStyle = styled.div`
   width: 100%;
   min-height: 627px;
@@ -33,6 +42,9 @@ const AppliedMeetingItemStyle = styled.div`
       cursor: pointer;
       margin-bottom: 15px;
       min-height: 50px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   .applied-item-inner {
@@ -45,7 +57,6 @@ const AppliedMeetingItemStyle = styled.div`
       margin-right: 5px;
     }
     & svg {
-      position: relative;
       width: 33px;
       height: 33px;
       cursor: pointer;
@@ -57,28 +68,29 @@ const AppliedMeetingItemStyle = styled.div`
   }
 `;
 const JoinModalStyle = styled.div`
-  position: absolute;
+  margin-top: 40px;
   visibility: ${props => (props.isOpen ? "visible" : "hidden")};
 `;
-
 const JoinTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 15px;
   color: ${prColor.black};
+  margin-bottom: 15px;
 `;
-
 const JoinBoxStyle = styled.div`
   border: 1px solid ${prColor.p1000};
   padding: 25px 40px 25px 40px;
-  z-index: 99;
+  width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: ${prColor.p000};
 `;
 
 const JoinInputStyle = styled.div`
   display: flex;
   flex-direction: column;
-
   .join-form-div {
     /* width: 500px; */
 
@@ -86,37 +98,20 @@ const JoinInputStyle = styled.div`
     background-color: #fff;
     border-radius: 13px;
     margin-bottom: 15px;
-    height: 200px;
+    min-height: 300px;
     overflow-y: auto;
     /* resize: none; */
-  }
-
-  .join-btn {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    .join-btn-close {
-      top: 15px;
-      right: 15px;
-      position: absolute;
-      cursor: pointer;
-      svg {
-        width: 29px;
-        height: 29px;
-        &:hover {
-          color: #999;
-        }
-      }
-    }
   }
 `;
 const AppliedMeeting = () => {
   const [appliedList, setAppliedList] = useState([]);
   const [appliedContent, setAppliedContent] = useState("");
+  const [partySeq, setPartySeq] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
+  console.log(partySeq);
   console.log(isOpen);
   // api 호출 함수
   const getMyAppliedListCall = async () => {
@@ -145,7 +140,7 @@ const AppliedMeeting = () => {
         alert(result.resultMsg);
         return;
       }
-      console.log(result);
+      setPartySeq(_partySeq);
       setAppliedContent(result.resultData.joinMsg);
       setIsOpen(!isOpen);
     } catch (error) {
@@ -153,19 +148,44 @@ const AppliedMeeting = () => {
     }
   };
 
+  const handleClickModify = async () => {
+    try {
+      const data = {
+        joinUserSeq: userSeq,
+        joinMsg: appliedContent,
+      };
+
+      const result = await patchOneApplication(partySeq, data);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      setIsOpen(false);
+      toast.success("신청서가 수정 되었습니다.");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <AppliedMeetingWrapStyle>
       <h1>모임 신청현황</h1>
       <AppliedMeetingItemStyle>
         {appliedList.map((item, index) => (
-          <div className="applied-item-wrap" key={index}>
+          <div
+            className="applied-item-wrap"
+            key={index}
+            onClick={() => {
+              navigate(`/meeting/${item.partySeq}?mu=1`);
+            }}
+          >
             <h2>{item.partyName}</h2>
             <div className="applied-item-inner">
               <span>{item.inputDt}</span>
 
               <MdOutlineArrowDropDownCircle
-                onClick={() => {
-                  handleClickMore(item.partySeq);
+                onClick={e => {
+                  e.stopPropagation();
+                  handleClickMore(item.partySeq, item.joinSeq);
                 }}
               />
             </div>
@@ -174,14 +194,35 @@ const AppliedMeeting = () => {
       </AppliedMeetingItemStyle>
       <JoinModalStyle isOpen={isOpen}>
         <JoinBoxStyle>
+          <JoinTitle>신청서</JoinTitle>
           <JoinInputStyle>
-            <div
-              className="join-form-div"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(appliedContent),
-              }}
+            <ReactQuill
+              value={appliedContent}
+              onChange={setAppliedContent}
+              modules={modules}
             />
           </JoinInputStyle>
+          <div
+            style={{
+              display: "flex",
+              gap: "15px",
+              justifyContent: "end",
+              marginTop: "5px",
+            }}
+          >
+            <MainButton
+              label="수정"
+              onClick={() => {
+                handleClickModify();
+              }}
+            />
+            <MainButton
+              label="취소"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            />
+          </div>
         </JoinBoxStyle>
       </JoinModalStyle>
     </AppliedMeetingWrapStyle>
