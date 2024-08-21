@@ -13,7 +13,7 @@ const Header = () => {
   const userPic = user.userPic;
   const userName = user.userName;
   const userRole = user.userRole;
-  // console.log(userRole);
+  console.log(userRole);
   const navigate = useNavigate();
   useEffect(() => {
     const handleStorageChange = () => {
@@ -54,7 +54,7 @@ const Header = () => {
         <nav className="header-menu">
           <ul className="header-menu-list">
             <li>
-              {userRole === "ROLE_USER" ? (
+              {userRole !== "ROLE_ADMIN" ? (
                 <>
                   <Link
                     to="/admin?manage=meeting&num=1"
@@ -129,7 +129,7 @@ const Header = () => {
       <div className="header-submenu-div">
         <ul className="header-submenu">
           <li>
-            {userRole === "ROLE_USER" || (
+            {userRole === "ROLE_ADMIN" && (
               <>
                 <Link to={`/admin?manage=meeting&num=1`}>모임관리</Link>
                 <Link to={`/admin?manage=review`}>후기관리</Link>
