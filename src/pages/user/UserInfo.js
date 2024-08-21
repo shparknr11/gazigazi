@@ -13,7 +13,7 @@ const UserInfoStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: transparent;

@@ -127,7 +127,7 @@ const MyMeetingFuncUserStyle = styled.div`
   }
 `;
 
-const LedgerStyle = styled.div`
+const UserStyle = styled.div`
   .select-box-style {
     height: 30px;
     border: 1px solid antiquewhite;
@@ -192,17 +192,17 @@ const TitleDivStyle = styled.div`
   padding: 20px 0px 20px 5px;
 `;
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const modalStyle = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
 const MyMeetingFuncUser = () => {
   const [isClicked, setIsClicked] = useState(0);
@@ -341,10 +341,10 @@ const MyMeetingFuncUser = () => {
     }, 100);
   };
 
-  const handleEditBudget = budget => {
-    setIsEditPopup(true);
-    setSelectedBudget(budget);
-  };
+  // const handleEditBudget = budget => {
+  //   setIsEditPopup(true);
+  //   setSelectedBudget(budget);
+  // };
 
   // const handleBudgetUpdate = async () => {
   //   // Budget data preparation
@@ -433,99 +433,99 @@ const MyMeetingFuncUser = () => {
     return <Loading></Loading>;
   }
 
-  const BudgetDetailModal = ({ open, onClose, budgetDetail }) => {
-    const [imageUrl, setImageUrl] = useState(null); // 이미지 URL을 저장하는 상태 추가
+  // const BudgetDetailModal = ({ open, onClose, budgetDetail }) => {
+  //   const [imageUrl, setImageUrl] = useState(null); // 이미지 URL을 저장하는 상태 추가
 
-    useEffect(() => {
-      if (budgetDetail) {
-        const fetchImage = async () => {
-          try {
-            const data = await getBudgetPhoto({
-              budgetSeq: budgetDetail.budgetSeq,
-            });
-            const fullUrl = data.budgetPic; // 이미 전체 URL이 포함된 경우
-            setImageUrl(fullUrl);
-          } catch (error) {
-            console.error("이미지 로드 중 오류 발생:", error);
-          }
-        };
+  //   useEffect(() => {
+  //     if (budgetDetail) {
+  //       const fetchImage = async () => {
+  //         try {
+  //           const data = await getBudgetPhoto({
+  //             budgetSeq: budgetDetail.budgetSeq,
+  //           });
+  //           const fullUrl = data.budgetPic; // 이미 전체 URL이 포함된 경우
+  //           setImageUrl(fullUrl);
+  //         } catch (error) {
+  //           console.error("이미지 로드 중 오류 발생:", error);
+  //         }
+  //       };
 
-        fetchImage();
-      }
-    }, [budgetDetail]);
+  //       fetchImage();
+  //     }
+  //   }, [budgetDetail]);
 
-    return (
-      <Modal
-        open={open}
-        onClose={onClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            회계 내역 상세 정보
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            <div>
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt="영수증"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    marginBottom: "10px",
-                  }}
-                />
-              ) : (
-                <p>이미지를 로딩 중입니다...</p>
-              )}
-              <p>
-                <strong>멤버명:</strong> {budgetDetail?.memberName}
-              </p>
-              <p>
-                <strong>금액:</strong>{" "}
-                {budgetDetail?.budgetAmount?.toLocaleString()} 원
-              </p>
-              <p>
-                <strong>날짜:</strong> {budgetDetail?.budgetDt}
-              </p>
-              <p>
-                <strong>상세 내역:</strong> {budgetDetail?.budgetText}
-              </p>
-              <p>
-                <strong>입출금 종류:</strong> {budgetDetail?.cdNm}
-              </p>
-            </div>
-          </Typography>
-          <Button onClick={onClose} sx={{ mt: 2 }} variant="outlined">
-            닫기
-          </Button>
-        </Box>
-      </Modal>
-    );
-  };
+  //   return (
+  //     <Modal
+  //       open={open}
+  //       onClose={onClose}
+  //       aria-labelledby="modal-title"
+  //       aria-describedby="modal-description"
+  //     >
+  //       <Box sx={modalStyle}>
+  //         <Typography id="modal-title" variant="h6" component="h2">
+  //           회계 내역 상세 정보
+  //         </Typography>
+  //         <Typography id="modal-description" sx={{ mt: 2 }}>
+  //           <div>
+  //             {imageUrl ? (
+  //               <img
+  //                 src={imageUrl}
+  //                 alt="영수증"
+  //                 style={{
+  //                   width: "100px",
+  //                   height: "100px",
+  //                   marginBottom: "10px",
+  //                 }}
+  //               />
+  //             ) : (
+  //               <p>이미지를 로딩 중입니다...</p>
+  //             )}
+  //             <p>
+  //               <strong>멤버명:</strong> {budgetDetail?.memberName}
+  //             </p>
+  //             <p>
+  //               <strong>금액:</strong>{" "}
+  //               {budgetDetail?.budgetAmount?.toLocaleString()} 원
+  //             </p>
+  //             <p>
+  //               <strong>날짜:</strong> {budgetDetail?.budgetDt}
+  //             </p>
+  //             <p>
+  //               <strong>상세 내역:</strong> {budgetDetail?.budgetText}
+  //             </p>
+  //             <p>
+  //               <strong>입출금 종류:</strong> {budgetDetail?.cdNm}
+  //             </p>
+  //           </div>
+  //         </Typography>
+  //         <Button onClick={onClose} sx={{ mt: 2 }} variant="outlined">
+  //           닫기
+  //         </Button>
+  //       </Box>
+  //     </Modal>
+  //   );
+  // };
 
-  const handleOpenDetailModal = budget => {
-    setDetailBudget(budget);
-    setIsDetailPopup(true);
-  };
+  // const handleOpenDetailModal = budget => {
+  //   setDetailBudget(budget);
+  //   setIsDetailPopup(true);
+  // };
 
-  const handleCloseDetailModal = () => {
-    setIsDetailPopup(false);
-    setDetailBudget(null);
-  };
+  // const handleCloseDetailModal = () => {
+  //   setIsDetailPopup(false);
+  //   setDetailBudget(null);
+  // };
 
   return (
     <MyMeetingFuncUserStyle>
       {/* BudgetDetailModal 컴포넌트 */}
-      {isDetailPopup && detailBudget && (
+      {/* {isDetailPopup && detailBudget && (
         <BudgetDetailModal
           open={isDetailPopup}
           onClose={handleCloseDetailModal}
           budgetDetail={detailBudget}
         />
-      )}
+      )} */}
       {isPopup && (
         <MyMeetingBudgetResister
           setIsPopup={setIsPopup}
@@ -663,7 +663,7 @@ const MyMeetingFuncUser = () => {
               <MyMeetingBoard noticeList={noticeList} />
             ) : isClicked === 3 ? (
               <div id="printTagId">
-                <LedgerStyle>
+                <UserStyle>
                   <TitleDivStyle id="title-print">
                     {monthValue} 월 명세자료
                   </TitleDivStyle>
@@ -725,7 +725,7 @@ const MyMeetingFuncUser = () => {
                       <span>상세 내역</span>
                       <span>금액</span>
                       <span>일자</span>
-                      <span>자세히 보기</span>
+                      {/* <span>자세히 보기</span> */}
                     </li>
                     {budgetList?.map((item, index) => (
                       <li className="ledger-li" key={item?.budgetSeq}>
@@ -738,29 +738,6 @@ const MyMeetingFuncUser = () => {
                             : null}
                         </span>
                         <span>{item.budgetDt}</span>
-                        <span
-                          className="print-delete"
-                          style={{ paddingTop: "17px" }}
-                        >
-                          {item?.budgetSeq ? (
-                            <>
-                              <button
-                                className="edit-btn"
-                                onClick={() => handleOpenDetailModal(item)}
-                              >
-                                보기
-                              </button>
-                              {/* <button
-                                className="delete-btn"
-                                onClick={() =>
-                                  handleBudgetDelete(item.budgetSeq)
-                                }
-                              >
-                                삭제
-                              </button> */}
-                            </>
-                          ) : null}
-                        </span>
                       </li>
                     ))}
                   </ul>
@@ -779,7 +756,7 @@ const MyMeetingFuncUser = () => {
                       </span>
                     </li>
                   </ul>
-                </LedgerStyle>
+                </UserStyle>
               </div>
             ) : null}
           </div>

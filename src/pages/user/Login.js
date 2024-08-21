@@ -13,7 +13,6 @@ const LoginStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #ffffff;
@@ -135,8 +134,8 @@ const LoginInnerStyle = styled.div`
 `;
 
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -158,6 +157,11 @@ const Login = () => {
     e.preventDefault();
 
     if (!email || !password) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (typeof email === "undefined" || typeof password === "undefined") {
       alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
@@ -294,21 +298,21 @@ const Login = () => {
                       className="google"
                     >
                       <img src={googleLogo} alt="Google Logo" />
-                      구글로 로그인
+                      구글 로그인
                     </a>
                     <a
                       href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}
                       className="naver"
                     >
                       <img src={naverLogo} alt="Naver Logo" />
-                      네이버로 로그인
+                      네이버 로그인
                     </a>
                     <a
                       href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}
                       className="kakao"
                     >
                       <img src={kakaoLogo} alt="Kakao Logo" />
-                      카카오로 로그인
+                      카카오 로그인
                     </a>
                   </div>
                 </div>

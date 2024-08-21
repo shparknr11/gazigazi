@@ -7,7 +7,7 @@ const AccountStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120vh;
+  /* height: 120vh; */
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #fff;
@@ -143,6 +143,7 @@ const CreateAccount = () => {
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
   const NameRegex = /^[가-힣]{2,6}$/;
   const PhoneRegex = /^01[0-9](?:-?\d{4}){2}$/;
+  const addressRegex = /^[\w\s\-,.]{5,100}$/;
 
   const [accountPic, setAccountPic] = useState(null);
   const [previewPic, setPreviewPic] = useState(null);
@@ -229,8 +230,13 @@ const CreateAccount = () => {
         }
         break;
       case "userEmail":
+        if (!value) {
+          newMessages.userEmail = "이메일을 입력해주세요.";
+          Valid = false;
+        }
         if (!emailRegex.test(value)) {
-          newMessages.userEmail = "이메일 형식이 올바르지 않습니다.";
+          newMessages.userEmail =
+            "이메일 형식이 올바르지 않습니다. 형식: user123@example.com";
           Valid = false;
         } else {
           newMessages.userEmail = "사용할 수 있는 이메일입니다.";

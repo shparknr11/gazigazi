@@ -129,6 +129,7 @@ const MyMeetingFuncLeaderStyle = styled.div`
     text-overflow: ellipsis;
   }
 `;
+
 const LedgerStyle = styled.div`
   .select-box-style {
     height: 30px;
@@ -343,10 +344,10 @@ const MyMeetingFuncLeader = () => {
     }, 100);
   };
 
-  const handleEditBudget = budget => {
-    setIsEditPopup(true);
-    setSelectedBudget(budget);
-  };
+  // const handleEditBudget = budget => {
+  //   setIsEditPopup(true);
+  //   setSelectedBudget(budget);
+  // };
 
   // const handleBudgetUpdate = async () => {
   //   // Budget data preparation
