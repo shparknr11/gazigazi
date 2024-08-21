@@ -47,6 +47,7 @@ export const postApplication = async (_partySeq, _data) => {
       alert("API 오류발생 status 확인해주세요");
     }
   } catch (error) {
+    alert("이미 가입되거나 신청한 모임입니다.");
     console.log(error);
   }
 };
@@ -54,9 +55,7 @@ export const postApplication = async (_partySeq, _data) => {
 // 신청서 불러오기 (전체)
 export const getApplication = async (_partySeq, _leaderUserSeq) => {
   try {
-    const response = await jwtAxios.get(
-      `/api/join/${_partySeq}?leaderUserSeq=${_leaderUserSeq}`,
-    );
+    const response = await jwtAxios.get(`/api/join/${_partySeq}`);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       // console.log("response", response.data);

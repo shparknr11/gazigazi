@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import LocalSelect from "../../components/meeting/LocalSelect";
 import { useEffect, useState } from "react";
 import {
+  DeleteParty,
   getLocal,
   getPartyOne,
   patchParty,
@@ -219,7 +220,7 @@ const Modify = () => {
         return;
       }
       // console.log("result", result);
-      // console.log(result.resultData);
+      console.log(result.resultData);
       // // 가져온 데이터를 상태 변수에 설정
       setPartyName(result.resultData.partyName);
       setPartyGenre(parseInt(result.resultData.partyGenre));
@@ -238,8 +239,8 @@ const Modify = () => {
       // setSelectorOpen(true); // 필요에 따라 Selector를 열거나 닫을 수 있습니다.
     } catch (error) {
       console.error(error);
-      alert("에러가발생했습니다.");
-      navigate("/");
+      // alert("에러가발생했습니다.");
+      // navigate("/");
     }
   };
 
@@ -265,6 +266,7 @@ const Modify = () => {
     }
     setPartyGenre(genre);
   };
+
   // 지역 선택(도시 불러오기)
   const handleClickLocal = async () => {
     setSelectorOpen(true);
@@ -354,6 +356,7 @@ const Modify = () => {
       partyJoinForm,
       partyIntro,
     });
+
     console.log("infoData", infoData);
     const data = new Blob([infoData], { type: "application/json" });
     formData.append("p", data);
@@ -380,11 +383,37 @@ const Modify = () => {
     localData && localDetailData
       ? `${localData}${localDetailData}`
       : partyPrevLocation;
+
+  const handleClickDelete = async () => {
+    const isConfirmed = confirm("해당 모임를 삭제하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      // 기존 모임 데이터 가져오기
+      const result = await DeleteParty(partySeq);
+      if (result.code !== 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      toast.success("모임이 삭제되었습니다.");
+    } catch (error) {
+      console.error(error);
+      alert("에러가발생했습니다.");
+    }
+  };
   return (
     <CreateInnerStyle>
       <GuideTitle guideTitle="모임 수정" subTitle="모임 수정/삭제" />
       <div className="create-del-button-div">
-        <button className="create-del-button">삭제</button>
+        <button
+          className="create-del-button"
+          onClick={() => {
+            handleClickDelete();
+          }}
+        >
+          삭제
+        </button>
       </div>
       <CreateFormDivStyle>
         <p className="modify-subtitle">모임 수정</p>
@@ -581,7 +610,7 @@ const Modify = () => {
         </div>
         <div className="create-textarea-group">
           <label htmlFor="partyform">모임의 신청양식을 작성해 주세요.</label>
-          <textarea
+          {/* <textarea
             type="textfield"
             id="partyform"
             autoComplete="off"
@@ -589,6 +618,11 @@ const Modify = () => {
             onChange={e => {
               handleChangeJoinForm(e);
             }}
+          /> */}
+          <ReactQuill
+            value={partyJoinForm}
+            onChange={setPartyJoinForm}
+            modules={modules}
           />
         </div>
         {/* <div className="create-radio-group">

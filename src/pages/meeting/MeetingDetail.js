@@ -489,7 +489,7 @@ const MeetingDetail = () => {
     openModal({
       onConfirm: async joinContent => {
         try {
-          const application = { joinUserSeq: userSeq, joinMsg: joinContent };
+          const application = { joinMsg: joinContent };
           const result = await postApplication(partySeq, application);
           if (result.code != 1) {
             toast.warning(result.resultMsg);
@@ -809,7 +809,7 @@ const MeetingDetail = () => {
           </MeetReviewStyle>
         )}
 
-        <UnderLine style={{ height: "5px", marginBottom: "40px" }} />
+        {/* <UnderLine style={{ height: "5px", marginBottom: "40px" }} /> */}
       </div>
       {detailList.partyAuthGb !== "2" ? (
         <div

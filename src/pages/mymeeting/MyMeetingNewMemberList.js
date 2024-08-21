@@ -59,6 +59,7 @@ const MemberListMainStyle = styled.div`
 `;
 const MyMeetingNewMemberList = () => {
   const [applicationList, setApplicationList] = useState([]);
+  const [applicationItem, setApplicationItem] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContents, setModalContents] = useState(null);
 
@@ -73,7 +74,7 @@ const MyMeetingNewMemberList = () => {
   // api함수
   const getData = async () => {
     try {
-      const result = await getApplication(partySeq, userSeq);
+      const result = await getApplication(partySeq);
       if (result.code != 1) {
         alert(result.resultMsg);
         return;
@@ -116,20 +117,25 @@ const MyMeetingNewMemberList = () => {
 
   const handleClickMemberDetail = async _joinUserSeq => {
     setModalOpen(true);
-    try {
-      const result = await getOneApplication(parseInt(partySeq), _joinUserSeq);
-      if (result.code != 1) {
-        alert(result.resultMsg);
-        return;
-      }
-      console.log(result.resultData);
-      setModalContents({
-        userName: result.resultData.userName,
-        joinMsg: result.resultData.joinMsg,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const filted = applicationList.filter(
+      item => item.joinUserSeq === _joinUserSeq,
+    );
+    console.log(filted);
+    setApplicationItem(filted);
+    // try {
+    //   const result = await getOneApplication(parseInt(partySeq), _joinUserSeq);
+    //   if (result.code != 1) {
+    //     alert(result.resultMsg);
+    //     return;
+    //   }
+    //   console.log(result.resultData);
+    //   setModalContents({
+    //     userName: result.resultData.userName,
+    //     joinMsg: result.resultData.joinMsg,
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   return (
     <>
@@ -186,7 +192,8 @@ const MyMeetingNewMemberList = () => {
                     <PermissionBtn>
                       <MainButton
                         label="승인"
-                        onClick={() => {
+                        onClick={e => {
+                          e.stopPropagation();
                           handleClickConfirm(item.joinUserSeq);
                         }}
                       />
@@ -203,7 +210,7 @@ const MyMeetingNewMemberList = () => {
       <MeetingJoinModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        modalContents={modalContents}
+        modalContents={applicationItem}
       />
     </>
   );

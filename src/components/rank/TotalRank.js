@@ -1,8 +1,10 @@
 import React from "react";
 import { MainButton } from "../button/Button";
 import { RankCubeStyle, RankTopTenStyle } from "../../pages/meeting/Rank";
+import { useNavigate } from "react-router-dom";
 
 const TotalRank = ({ totalRank }) => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="rank-inner">
@@ -39,7 +41,12 @@ const TotalRank = ({ totalRank }) => {
               </div>
 
               <div className="cube-back">
-                <MainButton label="모임 자세히보기" />
+                <MainButton
+                  label="모임 자세히보기"
+                  onClick={() => {
+                    navigate(`/meeting/${item.partySeq}?mu=1`);
+                  }}
+                />
               </div>
               <div className="cube-top"></div>
               <div className="cube-bottom"></div>
@@ -81,7 +88,12 @@ const TotalRank = ({ totalRank }) => {
                 <div className="cube-medal">🥇</div>
               </div>
               <div className="cube-back">
-                <MainButton label="모임 자세히보기" />
+                <MainButton
+                  label="모임 자세히보기"
+                  onClick={() => {
+                    navigate(`/meeting/${item.partySeq}?mu=1`);
+                  }}
+                />
               </div>
               <div className="cube-top"></div>
               <div className="cube-bottom"></div>
@@ -123,7 +135,12 @@ const TotalRank = ({ totalRank }) => {
                 <div className="cube-medal">🥉</div>
               </div>
               <div className="cube-back">
-                <MainButton label="모임 자세히보기" />
+                <MainButton
+                  label="모임 자세히보기"
+                  onClick={() => {
+                    navigate(`/meeting/${item.partySeq}?mu=1`);
+                  }}
+                />
               </div>
               <div className="cube-top"></div>
               <div className="cube-bottom"></div>
@@ -136,9 +153,14 @@ const TotalRank = ({ totalRank }) => {
       <RankTopTenStyle>
         <ul>
           {totalRank.slice(3).map((item, index) => (
-            <li key={index}>
+            <li
+              key={index}
+              onClick={() => {
+                navigate(`/meeting/${item.partySeq}?mu=1`);
+              }}
+            >
               <span className="rank-top10">{index + 4}</span>
-              <div className="rank-party-desctiption">
+              <div className="rank-party-description">
                 <div className="rank-party-title">{item.partyName}</div>
                 <div className="rank-party-admin">
                   <img
@@ -151,6 +173,7 @@ const TotalRank = ({ totalRank }) => {
                   <span>{item.totalPoints} points</span>
                 </div>
               </div>
+              <button>모임 자세히보기</button>
             </li>
           ))}
         </ul>

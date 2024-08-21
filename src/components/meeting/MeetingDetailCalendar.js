@@ -1,9 +1,193 @@
 import Calendar from "react-calendar";
 // import "react-calendar/dist/Calendar.css";
-import "../../css/calendar/meeting-calendar.css";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { getPlanList } from "../../apis/meeting/meetingapi";
+import styled from "@emotion/styled";
+
+const MeetingCalendarWrapStyle = styled.div`
+  .react-calendar {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    background: #f9f8f5;
+    border: 1px solid #a0a096;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.125em;
+  }
+
+  .react-calendar--doubleView {
+    width: 700px;
+  }
+
+  .react-calendar--doubleView .react-calendar__viewContainer {
+    display: flex;
+    margin: -0.5em;
+  }
+
+  .react-calendar--doubleView .react-calendar__viewContainer > * {
+    width: 50%;
+    margin: 0.5em;
+  }
+
+  .react-calendar,
+  .react-calendar *,
+  .react-calendar *:before,
+  .react-calendar *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+  }
+
+  .react-calendar button:enabled:hover {
+    cursor: pointer;
+  }
+
+  .react-calendar__navigation {
+    display: flex;
+    height: 44px;
+    margin-bottom: 1em;
+  }
+  .react-calendar__navigation__arrow {
+    visibility: hidden;
+  }
+  .react-calendar__navigation button {
+    min-width: 44px;
+    background: none;
+  }
+
+  .react-calendar__navigation button:disabled {
+    background-color: #f0f0f0;
+  }
+
+  .react-calendar__navigation button:enabled:hover,
+  .react-calendar__navigation button:enabled:focus {
+    background-color: #e6e6e6;
+  }
+  .react-calendar__navigation__label {
+    pointer-events: none;
+  }
+
+  .react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font: inherit;
+    font-size: 0.75em;
+    font-weight: bold;
+  }
+
+  .react-calendar__month-view__weekdays__weekday {
+    padding: 0.5em;
+  }
+
+  .react-calendar__month-view__weekNumbers .react-calendar__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    font-size: 0.75em;
+    font-weight: bold;
+  }
+
+  .react-calendar__month-view__days__day--weekend {
+    color: #d10000;
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth,
+  .react-calendar__decade-view__years__year--neighboringDecade,
+  .react-calendar__century-view__decades__decade--neighboringCentury {
+    color: #757575;
+  }
+
+  .react-calendar__year-view .react-calendar__tile,
+  .react-calendar__decade-view .react-calendar__tile,
+  .react-calendar__century-view .react-calendar__tile {
+    padding: 2em 0.5em;
+  }
+
+  .react-calendar__tile {
+    max-width: 100%;
+    height: 77px;
+    padding: 10px 6.6667px;
+    background: none;
+    text-align: center;
+    line-height: 16px;
+    font: inherit;
+    font-size: 0.833em;
+  }
+
+  .react-calendar__tile:disabled {
+    /* background-color: #292929; */
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ababab;
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth:disabled,
+  .react-calendar__decade-view__years__year--neighboringDecade:disabled,
+  .react-calendar__century-view__decades__decade--neighboringCentury:disabled {
+    color: #cdcdcd;
+  }
+
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    background-color: #efede5;
+  }
+
+  .react-calendar__tile--now {
+    background: #efede5;
+  }
+
+  .react-calendar__tile--now:enabled:hover,
+  .react-calendar__tile--now:enabled:focus {
+    background: #efede5;
+  }
+
+  .react-calendar__tile--hasActive {
+    background: #e6e2d5;
+  }
+
+  .react-calendar__tile--hasActive:enabled:hover,
+  .react-calendar__tile--hasActive:enabled:focus {
+    background: #efede5;
+  }
+
+  .react-calendar__tile--active {
+    background: #e6e2d5;
+    color: #000;
+  }
+
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #efede5;
+  }
+
+  .react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: #e6e6e6;
+  }
+
+  .rain {
+    background-color: blue;
+  }
+  .sun {
+    background-color: #c9c2a5 !important;
+  }
+
+  .react-calendar__month-view__days {
+    height: auto !important;
+  }
+
+  .calendar-plan-title {
+    border: 1px solid #f9f8f5;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+  }
+`;
 
 const MeeetingDetailCalendar = ({ partySeq }) => {
   // 날짜 요일 출력
@@ -12,23 +196,6 @@ const MeeetingDetailCalendar = ({ partySeq }) => {
     const idx = date.getDay();
     return weekName[idx];
   };
-
-  // 특정 날짜 클래스 적용하기
-  //   const tileClassName = ({ date }) => {
-  //     // date.getDay()는 요일을 리턴함
-  //     // 0 은 일요일
-  //     // console.log(date.getDay());
-  //     const day = date.getDay();
-  //     let classNames = "";
-  //     if (day === 2) {
-  //       // 화요일인 경우 샘플
-  //       classNames += "rain";
-  //     } else if (day === 4) {
-  //       // 목요일
-  //       classNames += "sun";
-  //     }
-  //     return classNames;
-  //   };
 
   // 외부 데이터의 내용을 날짜에 출력하기
   // axios.get("todos") 리턴결과
@@ -157,7 +324,7 @@ const MeeetingDetailCalendar = ({ partySeq }) => {
       <div>
         {clickDay}의 상세정보 : {clickInfo?.title}
       </div>
-      <div>
+      <MeetingCalendarWrapStyle>
         <Calendar
           calendarType="gregory"
           formatShortWeekday={formatShortWeekday}
@@ -169,7 +336,7 @@ const MeeetingDetailCalendar = ({ partySeq }) => {
           minDate={startOfMonth}
           maxDate={endOfMonth}
         ></Calendar>
-      </div>
+      </MeetingCalendarWrapStyle>
     </div>
   );
 };
