@@ -219,7 +219,6 @@ const MyMeetingFuncLeader = () => {
   const [noticeList, setNoticeList] = useState([]);
   const [isDetailPopup, setIsDetailPopup] = useState(false);
   const [detailBudget, setDetailBudget] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
   const funcRef = useRef();
   const itemRef = useRef();
   const navigate = useNavigate();
@@ -437,6 +436,8 @@ const MyMeetingFuncLeader = () => {
   }
 
   const BudgetDetailModal = ({ open, onClose, budgetDetail }) => {
+    const [imageUrl, setImageUrl] = useState(null); // 이미지 URL을 저장하는 상태 추가
+
     useEffect(() => {
       if (budgetDetail) {
         const fetchImage = async () => {
@@ -444,7 +445,8 @@ const MyMeetingFuncLeader = () => {
             const data = await getBudgetPhoto({
               budgetSeq: budgetDetail.budgetSeq,
             });
-            setImageUrl(data.budgetPic); // budgetPic을 imageUrl에 설정
+            const fullUrl = data.budgetPic; // 이미 전체 URL이 포함된 경우
+            setImageUrl(fullUrl);
           } catch (error) {
             console.error("이미지 로드 중 오류 발생:", error);
           }
@@ -481,20 +483,20 @@ const MyMeetingFuncLeader = () => {
                 <p>이미지를 로딩 중입니다...</p>
               )}
               <p>
-                <strong>멤버명:</strong> {budgetDetail.memberName}
+                <strong>멤버명:</strong> {budgetDetail?.memberName}
               </p>
               <p>
                 <strong>금액:</strong>{" "}
-                {budgetDetail.budgetAmount.toLocaleString()} 원
+                {budgetDetail?.budgetAmount?.toLocaleString()} 원
               </p>
               <p>
-                <strong>날짜:</strong> {budgetDetail.budgetDt}
+                <strong>날짜:</strong> {budgetDetail?.budgetDt}
               </p>
               <p>
-                <strong>상세 내역:</strong> {budgetDetail.budgetText}
+                <strong>상세 내역:</strong> {budgetDetail?.budgetText}
               </p>
               <p>
-                <strong>입출금 종류:</strong> {budgetDetail.cdNm}
+                <strong>입출금 종류:</strong> {budgetDetail?.cdNm}
               </p>
             </div>
           </Typography>
