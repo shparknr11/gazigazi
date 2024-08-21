@@ -10,7 +10,7 @@ const InfoEditStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 75vh;
+  /* height: 75vh; */
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: transparent;
@@ -30,7 +30,7 @@ const InfoEditInnerStyle = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
-  height: 85vh;
+  /* height: 85vh; */
 
   .info-container {
     padding: 20px;

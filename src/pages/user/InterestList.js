@@ -11,7 +11,7 @@ const InterestListStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  /* height: 60vh; */
 `;
 
 const InterestWrapStyle = styled.div`

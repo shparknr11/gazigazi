@@ -10,7 +10,7 @@ import { clearUser } from "../../slices/userSlice";
 const MyPageStyle = styled.div`
   width: 100%;
   max-width: 1280px;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0 auto;
   margin-top: 40px;
 `;
