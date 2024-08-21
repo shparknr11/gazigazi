@@ -407,6 +407,7 @@ const MeetingDetail = () => {
       }
       // console.log(result.resultData);
       setDetailList(result.resultData);
+      setJoinContent(result.resultData.partyJoinForm);
     } catch (error) {
       console.log(error);
     }

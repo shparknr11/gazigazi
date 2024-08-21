@@ -51,7 +51,7 @@
 .header:hover .header-submenu-div {
   visibility: visible;
 }
-@media (max-width: 1377px) {
+@media (max-width: 1300px) {
   .header:hover .header-submenu-div {
     visibility: hidden;
   }
@@ -122,7 +122,7 @@
 .header-submenu-mobile {
   display: none;
 }
-@media (max-width: 1377px) {
+@media (max-width: 1300px) {
   .header-submenu-mobile {
     display: block;
   }
