@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import mainlogo from "../../images/logo2.png";
-// import { setUser } from "../../redux/UserRedux/Actions/userActions";
+import googleLogo from "../../images/chrome_888846.png";
+import naverLogo from "../../images/naver.jpg";
+import kakaoLogo from "../../images/free-icon-kakao-talk-3991999.png";
 import { setUser } from "../../slices/userSlice";
 
 const LoginStyle = styled.div`
@@ -37,7 +39,7 @@ const LoginInnerStyle = styled.div`
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     max-width: 700px;
-    width: 120%;
+    width: 100%;
   }
   .login-container .logo {
     display: block;
@@ -85,27 +87,60 @@ const LoginInnerStyle = styled.div`
   .login-options a:hover {
     text-decoration: underline;
   }
+
+  /* 소셜 로그인 버튼 스타일 */
+  .social-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  .social-buttons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  .social-buttons a img {
+    height: 20px; /* 로고 이미지 크기 */
+    margin-right: 10px; /* 로고와 텍스트 간의 간격 */
+  }
+  .social-buttons a.google {
+    background-color: #4285f4;
+  }
+  .social-buttons a.naver {
+    background-color: #1ec800;
+  }
+  .social-buttons a.kakao {
+    background-color: #ffeb00;
+    color: #3c1e1e;
+  }
+  .social-buttons a.google:hover {
+    background-color: #357ae8;
+  }
+  .social-buttons a.naver:hover {
+    background-color: #17b300;
+  }
+  .social-buttons a.kakao:hover {
+    background-color: #f7e600;
+  }
 `;
 
 const Login = () => {
-  // const [email, setEmail] = useState("tarolong@naver.com");
-  // const [password, setPassword] = useState("Lo3!ko7b9q");
-  // const [email, setEmail] = useState("data123@naver.com");
-  // const [password, setPassword] = useState("Datadata123!");
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [redirectUrl, setRedirectUrl] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  // console.log("user ", user);
-
-  // useEffect(() => {
-  //   if (user.token) {
-  //     alert("이미 로그인된 상태입니다.");
-  //     navigate("/");
-  //   }
-  // }, [user.token]);
 
   useEffect(() => {
     const host = window.location.origin;
@@ -149,7 +184,6 @@ const Login = () => {
           userRole,
         } = response.data.resultData;
 
-        // Redux에 사용자 정보 저장
         dispatch(
           setUser({
             userSeq,
@@ -164,7 +198,6 @@ const Login = () => {
             userIntro,
             userAddr,
             userRole,
-
           }),
         );
 
@@ -188,7 +221,6 @@ const Login = () => {
 
         navigate("/");
       } else {
-        // 서버에서 반환된 에러 메시지 처리
         const { resultMsg } = response.data;
         let errorMessage;
 
@@ -207,7 +239,6 @@ const Login = () => {
         alert(errorMessage);
       }
     } catch (error) {
-      // 서버와의 통신 중 오류 처리
       const errorMsg =
         error.response?.data?.resultMsg ||
         "오류가 발생했습니다. 다시 시도해주세요.";
@@ -257,28 +288,28 @@ const Login = () => {
                     <Link to="/login/findid:pw">이메일 / 비밀번호 찾기</Link>
                     <Link to="/createAccount">회원가입</Link>
                   </div>
-                  <div>
-                    <div>
-                      <a
-                        href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}
-                      >
-                        구글
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}
-                      >
-                        네이버
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}
-                      >
-                        카카오
-                      </a>
-                    </div>
+                  <div className="social-buttons">
+                    <a
+                      href={`/oauth2/authorization/google?redirect_uri=${redirectUrl}`}
+                      className="google"
+                    >
+                      <img src={googleLogo} alt="Google Logo" />
+                      구글로 로그인
+                    </a>
+                    <a
+                      href={`/oauth2/authorization/naver?redirect_uri=${redirectUrl}`}
+                      className="naver"
+                    >
+                      <img src={naverLogo} alt="Naver Logo" />
+                      네이버로 로그인
+                    </a>
+                    <a
+                      href={`/oauth2/authorization/kakao?redirect_uri=${redirectUrl}`}
+                      className="kakao"
+                    >
+                      <img src={kakaoLogo} alt="Kakao Logo" />
+                      카카오로 로그인
+                    </a>
                   </div>
                 </div>
               </div>
