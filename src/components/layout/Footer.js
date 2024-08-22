@@ -51,12 +51,14 @@ const FooterStyle = styled.div`
     }
   }
 
+
   .footer-links-div {
     .footer-links {
       margin-top: 10px;
       display: flex;
       gap: 10px;
     }
+
     a {
       color: #000;
       font-size: 12px;
