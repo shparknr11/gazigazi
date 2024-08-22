@@ -182,7 +182,7 @@ const CreateBtnWrapStyle = styled.div`
   }
 `;
 
-const Modify = () => {
+const ReApproval = () => {
   const { partySeq } = useParams();
   // form
   const [partyName, setPartyName] = useState("");
@@ -373,7 +373,7 @@ const Modify = () => {
       toast.warning(result.resultMsg);
       return;
     }
-    toast.success("수정이 완료되었습니다.");
+    toast.success("재신청이 완료되었습니다.");
 
     navigate(-1);
   };
@@ -405,7 +405,7 @@ const Modify = () => {
   };
   return (
     <CreateInnerStyle>
-      <GuideTitle guideTitle="모임 수정" subTitle="모임 수정/삭제" />
+      <GuideTitle guideTitle="반려모임 재신청" subTitle="모임 재신청/삭제" />
       <div className="create-del-button-div">
         <button
           className="create-del-button"
@@ -417,7 +417,7 @@ const Modify = () => {
         </button>
       </div>
       <CreateFormDivStyle>
-        <p className="modify-subtitle">모임 수정</p>
+        <p className="modify-subtitle">모임 재신청</p>
 
         <div className="create-option-group">
           <label htmlFor="partygenre">모임의 카테고리를 선정해 주세요.</label>
@@ -650,11 +650,11 @@ const Modify = () => {
             handSubmitCreate(e);
           }}
         >
-          수정하기
+          재신청하기
         </div>
       </CreateBtnWrapStyle>
     </CreateInnerStyle>
   );
 };
 
-export default Modify;
+export default ReApproval;

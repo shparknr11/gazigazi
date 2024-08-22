@@ -65,19 +65,15 @@ const MyMeetingStyle = styled.div`
     padding-left: 50px;
     min-height: 553px;
   }
-  .img-container {
-    width: 30%;
-    margin-bottom: 25px;
+  /* .img-container {
   }
   .img-container-inner {
-    border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 0px;
-  }
+  } */
   .caption-img {
     display: block;
   }
   .img-text-area {
-    padding: 5px;
+    padding: 10px;
     background-color: white;
     line-height: 2;
     /* css 조금 깨져있음  */
@@ -95,6 +91,22 @@ const MyMeetingStyle = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .cut-text-flex {
+    display: flex;
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      width: 22px;
+      height: 22px;
+      border-radius: 15px;
+      border: 1px solid #999;
+      overflow: hidden;
+      margin: 0px 5px;
+    }
+  }
   .container {
     position: relative;
     display: inline-block;
@@ -107,7 +119,8 @@ const MyMeetingStyle = styled.div`
   .caption-img {
     display: block;
     width: 100%;
-    border-radius: 10px 10px 0 0;
+    border-radius: 15px 15px 0px 0px;
+    border-bottom: 2px solid #efede5;
   }
   .caption-img.blur {
   }
@@ -178,12 +191,30 @@ const TitleDivStyle = styled.div`
   padding-left: 5px;
   padding-top: 20px;
 `;
+
+const ImgContainerStyle = styled.div`
+  width: 30%;
+  margin-bottom: 25px;
+  .img-container-inner {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px 0px;
+    border-radius: 15px;
+
+    /* border: 1px solid; */
+    border: ${props =>
+      props.borderState === "2"
+        ? "3px solid #efede5"
+        : props.borderState === "3"
+          ? "3px dashed #efede5"
+          : "none"} !important;
+  }
+`;
 const MyMeeting = () => {
   const user = useSelector(state => state.user);
   const [imgUrl, setImgUrl] = useState();
   const [isAuth, setIsAuth] = useState(0);
   const [imgError, setImgError] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [filtData, setFiltData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
@@ -203,13 +234,15 @@ const MyMeeting = () => {
     };
     try {
       const res = await getMyMeetMemberList(enterMeetObj);
-      setAllData(res?.list);
+      // setAllData(res?.list);
+      filtList(res?.list);
       toast.success("모임이 조회되었습니다.");
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
   };
+
   const handleClickMakeMeet = async () => {
     setIsLoading(true);
     const enterMeetObj = {
@@ -218,13 +251,22 @@ const MyMeeting = () => {
     };
     try {
       const res = await getMyMeetLeaderList(enterMeetObj);
-      setAllData(res?.list);
+      // setAllData(res?.list);
+      filtList(res?.list);
+
       toast.success("모임이 조회되었습니다.");
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
   };
+
+  // 삭제모임 필터
+  const filtList = _resultData => {
+    const filteredList = _resultData.filter(item => item.partyAuthGb !== "4");
+    setFiltData(filteredList);
+  };
+
   useEffect(() => {
     document.getElementById("meetingMake").click();
   }, []);
@@ -234,6 +276,45 @@ const MyMeeting = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
+
+  const getMeetingStateText = partyAuthGb => {
+    // console.log(partyAuthGb);
+    switch (partyAuthGb) {
+      case "3":
+        return (
+          <h3
+            style={{
+              backgroundColor: "#e6e2d5",
+              textAlign: "center",
+              color: "#f9f8f5",
+              borderRadius: "15px",
+            }}
+          >
+            반려된 모임
+          </h3>
+        );
+      case "4":
+        return (
+          <h3 style={{ border: "2px solid #FFEBE5", textAlign: "center" }}>
+            삭제된 모임
+          </h3>
+        );
+
+      default:
+        return (
+          <h3
+            style={{
+              backgroundColor: "#e6e2d5",
+              textAlign: "center",
+              color: "#999",
+              borderRadius: "15px",
+            }}
+          >
+            승인 대기중
+          </h3>
+        );
+    }
+  };
   return (
     <MyMeetingStyle>
       <div className="meeting-wrap">
@@ -284,9 +365,12 @@ const MyMeeting = () => {
             {/* <!-- 스와이퍼 들어올수도 있음. --> */}
             {/* <!-- 버튼 관련된건 media쪽에서 줄여야할듯. --> */}
             <div className="img-wrap">
-              {allData?.length > 0 ? (
-                allData?.map(item => (
-                  <div className="img-container" key={item?.partySeq}>
+              {filtData?.length > 0 ? (
+                filtData?.map(item => (
+                  <ImgContainerStyle
+                    borderState={item?.partyAuthGb}
+                    key={item?.partySeq}
+                  >
                     <div className="img-container-inner">
                       <div className="container">
                         {/* <!-- 얘 맵돌릴때 url 바꿔야함 --> */}
@@ -296,6 +380,7 @@ const MyMeeting = () => {
                           style={{
                             width: "100%",
                             height: "100%",
+                            objectFit: "cover",
                           }}
                           onError={imgOnError}
                         ></img>
@@ -320,6 +405,10 @@ const MyMeeting = () => {
                                 <Button
                                   variant="contained"
                                   className="button-style etc-btn"
+                                  style={{
+                                    width: "100px",
+                                    backgroundColor: "#c9c2a5",
+                                  }}
                                   onClick={e => {
                                     navigate(
                                       `/mymeeting/mymeetinguser/${item?.partySeq}`,
@@ -337,60 +426,86 @@ const MyMeeting = () => {
                               </>
                             ) : (
                               <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    width: "100px",
-                                    backgroundColor: "#c9c2a5",
-                                  }}
-                                  onClick={() => {
-                                    if (confirm("수정하시겠습니까?")) {
-                                      navigate(
-                                        `/meeting/modify/${item?.partySeq}`,
-                                      );
-                                    }
-                                    // toast.warning(
-                                    //   "3차에 기능 구현 예정입니다.",
-                                    // );
-                                  }}
-                                >
-                                  수정
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    width: "100px",
-                                    backgroundColor: "#c9c2a5",
-                                  }}
-                                  onClick={e => {
-                                    navigate(
-                                      `/mymeeting/mymeetingLeader/${item?.partySeq}`,
-                                      {
-                                        state: {
-                                          isAuth: isAuth,
-                                          partyName: item?.partyName,
-                                        },
-                                      },
-                                    );
-                                  }}
-                                >
-                                  게시판
-                                </Button>
-                                {/* <div>{item.partyAuthGb}</div> */}
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    width: "100px",
-                                    backgroundColor: "#c9c2a5",
-                                  }}
-                                  onClick={e => {
-                                    navigate(
-                                      `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
-                                    );
-                                  }}
-                                >
-                                  신청관리
-                                </Button>
+                                {item.partyAuthGb === "2" ? (
+                                  <>
+                                    <Button
+                                      variant="contained"
+                                      style={{
+                                        width: "100px",
+                                        backgroundColor: "#c9c2a5",
+                                      }}
+                                      onClick={() => {
+                                        if (confirm("수정하시겠습니까?")) {
+                                          navigate(
+                                            `/meeting/modify/${item?.partySeq}`,
+                                          );
+                                        }
+                                        // toast.warning(
+                                        //   "3차에 기능 구현 예정입니다.",
+                                        // );
+                                      }}
+                                    >
+                                      수정
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      style={{
+                                        width: "100px",
+                                        backgroundColor: "#c9c2a5",
+                                      }}
+                                      onClick={e => {
+                                        navigate(
+                                          `/mymeeting/mymeetingLeader/${item?.partySeq}`,
+                                          {
+                                            state: {
+                                              isAuth: isAuth,
+                                              partyName: item?.partyName,
+                                            },
+                                          },
+                                        );
+                                      }}
+                                    >
+                                      게시판
+                                    </Button>
+                                    {/* <div>{item.partyAuthGb}</div> */}
+                                    <Button
+                                      variant="contained"
+                                      style={{
+                                        width: "100px",
+                                        backgroundColor: "#c9c2a5",
+                                      }}
+                                      onClick={e => {
+                                        navigate(
+                                          `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
+                                        );
+                                      }}
+                                    >
+                                      신청관리
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Button
+                                      variant="contained"
+                                      style={{
+                                        width: "100px",
+                                        backgroundColor: "#c9c2a5",
+                                      }}
+                                      onClick={() => {
+                                        if (confirm("재신청하시겠습니까?")) {
+                                          navigate(
+                                            `/meeting/reapporval/${item?.partySeq}`,
+                                          );
+                                        }
+                                        // toast.warning(
+                                        //   "3차에 기능 구현 예정입니다.",
+                                        // );
+                                      }}
+                                    >
+                                      재신청
+                                    </Button>
+                                  </>
+                                )}
                               </>
                             )}
                           </div>
@@ -399,14 +514,26 @@ const MyMeeting = () => {
                       <div className="img-text-area">
                         {/* <!-- 얘 맵돌릴때 아이콘 바꿔야함 --> */}
 
-                        <div className="cut-text">
-                          모임장 : {item.userName}
+                        <div className="cut-text cut-text-flex">
+                          모임장 :{" "}
+                          <span
+                            style={{ fontSize: "16px", fontWeight: "bold" }}
+                          >
+                            <img
+                              src={`/pic/user/${item.userSeq}/${item.userPic}`}
+                              alt="프로필사진"
+                            />
+                            {item.userName}
+                          </span>
                           {/* 🚗(아이콘으로변경)최서윤 님의 모임 */}
                         </div>
                         {/* <div className="cut-text">신나는 모임 어쩌구</div> */}
                         <div className="cut-text">{item.partyIntro}</div>
                         <div className="cut-text">
-                          모임명 : {item.partyName}
+                          모임명 :{" "}
+                          <span style={{ fontWeight: "bold" }}>
+                            {item.partyName}
+                          </span>
                           {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                         </div>
                         <div className="cut-text">
@@ -417,13 +544,14 @@ const MyMeeting = () => {
                               {item.partyMaximum}
                             </>
                           ) : (
-                            "모임 승인 대기중"
+                            // "모임 승인 대기중"
+                            getMeetingStateText(item.partyAuthGb)
                           )}
                           {/* 7월 7일(일) 18:00 홍대 플레이스오션 */}
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </ImgContainerStyle>
                 ))
               ) : (
                 <div
