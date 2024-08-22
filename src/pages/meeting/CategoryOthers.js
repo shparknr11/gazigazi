@@ -28,6 +28,7 @@ const CateInnerStyle = styled.div`
     gap: 33px;
     width: 100%;
     height: auto;
+    min-height: 300px;
     margin-bottom: 40px;
   }
   .cate-box {
@@ -161,6 +162,9 @@ const CateGoryListStyle = styled.div`
     border: 1px solid #999;
     border-radius: 15px;
     gap: 10px;
+    & svg {
+      cursor: pointer;
+    }
   }
   .category-search-input {
     border: none;
@@ -171,6 +175,7 @@ const CateGoryListStyle = styled.div`
 `;
 const CategoryOthers = () => {
   const [filteredPartyList, setFilteredPartyList] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const navigate = useNavigate();
   //   const { partyGenre } = useParams();
@@ -179,6 +184,7 @@ const CategoryOthers = () => {
   const searchKeyword = searchParams.get("search");
   const location = useLocation();
   console.log(location);
+
   const filterCategory = _resultData => {
     const updateList = _resultData.filter(
       item =>
@@ -208,8 +214,13 @@ const CategoryOthers = () => {
 
   useEffect(() => {
     // api함수
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
     getData();
-  }, [partyGenre]);
+  }, [partyGenre, searchText, searchKeyword]);
 
   const handleClickDetail = _partySeq => {
     // console.log(_partySeq);
@@ -257,6 +268,20 @@ const CategoryOthers = () => {
     return year.toString();
   };
 
+  const handleClickSearch = () => {
+    if (searchText) {
+      navigate(`/category?partyGenre=0&search=${searchText}`);
+      setSearchText("");
+    } else {
+      alert("검색어를 입력해 주세요.");
+    }
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      handleClickSearch();
+    }
+  };
   return (
     <CateInnerStyle>
       <GuideTitle guideTitle="카테고리" title="나의 모임 찾기" />
@@ -328,8 +353,17 @@ const CategoryOthers = () => {
                 type="text"
                 placeholder="검색어를 입력하세요."
                 className="category-search-input"
+                value={searchText}
+                onKeyDown={e => {
+                  handleKeyDown(e);
+                }}
+                onChange={e => setSearchText(e.target.value)}
               ></input>
-              <CiSearch />
+              <CiSearch
+                onClick={() => {
+                  handleClickSearch();
+                }}
+              />
             </div>
           </div>
         </div>
@@ -355,12 +389,7 @@ const CategoryOthers = () => {
                       backgroundPosition: "center",
                       backgroundSize: "cover",
                     }}
-                  >
-                    {/* <img
-                      src={`/pic/user/${item.userSeq}/${item.userPic}`}
-                      alt="프로필"
-                    /> */}
-                  </div>
+                  ></div>
                   <span style={{ fontWeight: "bold" }}>{item.userName}</span>
                   <span style={{ color: "#999" }}> 님의 모임</span>
                 </div>
@@ -382,49 +411,6 @@ const CategoryOthers = () => {
               </div>
             </div>
           ))}
-          {/* {filteredPartyList.map((item, index) => (
-          <div
-            key={index}
-            className="cate-box"
-            onClick={() => {
-              handleClickDetail(item.partySeq);
-            }}
-          >
-            <div
-              className="cate-box-img"
-              style={{
-                backgroundImage: `url(/pic/party/${item.partySeq}/${item.partyPic})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-              }}
-            ></div>
-            <div className="cate-box-content">
-              <div className="cate-box-title">
-                <div className="cate-box-profileimg" style={{}}></div>
-                <span style={{ fontWeight: "bold" }}>{item.userName}</span>
-                <span style={{ color: "#999" }}> 님의 모임</span>
-              </div>
-              <h3 className="cate-box-text" style={{ fontWeight: "bold" }}>
-                {item.partyName}
-              </h3>
-              <p className="cate-box-local" style={{ fontSize: "13px" }}>
-                {item.partyLocation1} {item.partyLocation2}
-              </p>
-              <span className="cate-box-gender">
-                {getGenderText(item.partyGender)}
-              </span>
-              <span className="cate-box-age">
-                {getYearLastTwoDigits(item.partyMinAge) === "1940"
-                  ? "연령무관"
-                  : `${getYearLastTwoDigits(item.partyMinAge)} ~`}
-                {getYearLastTwoDigits(item.partyMaxAge) === "2024"
-                  ? ""
-                  : `${getYearLastTwoDigits(item.partyMaxAge)}년생`}
-              </span>
-            </div>
-          </div>
-        ))} */}
         </div>
       </CateGoryListStyle>
     </CateInnerStyle>

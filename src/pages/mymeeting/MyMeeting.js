@@ -270,7 +270,7 @@ const MyMeeting = () => {
   };
 
   useEffect(() => {
-    document.getElementById("meetingMake").click();
+    document.getElementById("meetingEnter").click();
   }, []);
   const imgOnError = () => {
     setImgError(true);
@@ -288,7 +288,7 @@ const MyMeeting = () => {
             style={{
               backgroundColor: "#e6e2d5",
               textAlign: "center",
-              color: "#f9f8f5",
+              color: "#000",
               borderRadius: "15px",
             }}
           >
@@ -320,7 +320,7 @@ const MyMeeting = () => {
 
   // 모임 탈퇴
   const handleClickLeave = async item => {
-    const isConfirmed = confirm("정말 모임을 삭제하시겠습니까?");
+    const isConfirmed = confirm("정말 모임을 탈퇴하시겠습니까?");
     if (!isConfirmed) {
       return;
     }
@@ -331,8 +331,10 @@ const MyMeeting = () => {
         alert(result.resultMsg);
         return;
       }
+      // window.location.reload();
+      document.getElementById("meetingEnter").click();
+
       toast.success("모임 탈퇴가 처리되었습니다.");
-      navigate(-1);
     } catch (error) {
       console.log(error);
     }
@@ -461,7 +463,7 @@ const MyMeeting = () => {
                                   variant="contained"
                                   style={{
                                     width: "100px",
-                                    backgroundColor: "#c9c2a5",
+                                    backgroundColor: "#e6e2d5",
                                     marginLeft: "40px",
                                   }}
                                   className="button-style delete-btn"
