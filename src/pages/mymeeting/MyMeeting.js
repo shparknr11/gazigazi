@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import Loading from "../../components/common/Loading";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { patchMemberLeave } from "../../apis/meeting/joinapi";
 
 const MyMeetingStyle = styled.div`
   width: 100%;
@@ -193,6 +194,7 @@ const TitleDivStyle = styled.div`
 `;
 
 const ImgContainerStyle = styled.div`
+  cursor: pointer;
   width: 30%;
   margin-bottom: 25px;
   .img-container-inner {
@@ -315,6 +317,36 @@ const MyMeeting = () => {
         );
     }
   };
+
+  // 모임 탈퇴
+  const handleClickLeave = async item => {
+    const isConfirmed = confirm("정말 모임을 삭제하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+    // console.log(item);
+    try {
+      const result = await patchMemberLeave(item.partySeq, item.memberSeq);
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      toast.success("모임 탈퇴가 처리되었습니다.");
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClickModify = item => {
+    const isConfirmed = confirm("모임을 수정/삭제 하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+
+    navigate(`/meeting/modify/${item?.partySeq}`);
+  };
+
   return (
     <MyMeetingStyle>
       <div className="meeting-wrap">
@@ -370,6 +402,21 @@ const MyMeeting = () => {
                   <ImgContainerStyle
                     borderState={item?.partyAuthGb}
                     key={item?.partySeq}
+                    onClick={e => {
+                      if (item?.partyAuthGb === "2") {
+                        navigate(
+                          `/mymeeting/mymeetingLeader/${item?.partySeq}`,
+                          {
+                            state: {
+                              isAuth: isAuth,
+                              partyName: item?.partyName,
+                            },
+                          },
+                        );
+                      } else {
+                        alert("승인된 모임이 아닙니다.");
+                      }
+                    }}
                   >
                     <div className="img-container-inner">
                       <div className="container">
@@ -390,26 +437,13 @@ const MyMeeting = () => {
                               <>
                                 <Button
                                   variant="contained"
-                                  style={{ display: "none" }}
-                                  className="button-style delete-btn"
-                                  onClick={() => {
-                                    if (
-                                      confirm("정말 모임을 삭제하시겠습니까?")
-                                    ) {
-                                      alert("삭제 되었습니다.");
-                                    }
-                                  }}
-                                >
-                                  탈퇴
-                                </Button>
-                                <Button
-                                  variant="contained"
                                   className="button-style etc-btn"
                                   style={{
                                     width: "100px",
                                     backgroundColor: "#c9c2a5",
                                   }}
                                   onClick={e => {
+                                    e.stopPropagation();
                                     navigate(
                                       `/mymeeting/mymeetinguser/${item?.partySeq}`,
                                       {
@@ -423,6 +457,21 @@ const MyMeeting = () => {
                                 >
                                   게시판
                                 </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    width: "100px",
+                                    backgroundColor: "#c9c2a5",
+                                    marginLeft: "40px",
+                                  }}
+                                  className="button-style delete-btn"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleClickLeave(item);
+                                  }}
+                                >
+                                  탈퇴하기
+                                </Button>
                               </>
                             ) : (
                               <>
@@ -434,15 +483,9 @@ const MyMeeting = () => {
                                         width: "100px",
                                         backgroundColor: "#c9c2a5",
                                       }}
-                                      onClick={() => {
-                                        if (confirm("수정하시겠습니까?")) {
-                                          navigate(
-                                            `/meeting/modify/${item?.partySeq}`,
-                                          );
-                                        }
-                                        // toast.warning(
-                                        //   "3차에 기능 구현 예정입니다.",
-                                        // );
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        handleClickModify(item);
                                       }}
                                     >
                                       수정
@@ -454,6 +497,7 @@ const MyMeeting = () => {
                                         backgroundColor: "#c9c2a5",
                                       }}
                                       onClick={e => {
+                                        e.stopPropagation();
                                         navigate(
                                           `/mymeeting/mymeetingLeader/${item?.partySeq}`,
                                           {
@@ -475,6 +519,7 @@ const MyMeeting = () => {
                                         backgroundColor: "#c9c2a5",
                                       }}
                                       onClick={e => {
+                                        e.stopPropagation();
                                         navigate(
                                           `/mymeeting/mymeetingmemberlist/${item.partySeq}`,
                                         );
@@ -491,7 +536,8 @@ const MyMeeting = () => {
                                         width: "100px",
                                         backgroundColor: "#c9c2a5",
                                       }}
-                                      onClick={() => {
+                                      onClick={e => {
+                                        e.stopPropagation();
                                         if (confirm("재신청하시겠습니까?")) {
                                           navigate(
                                             `/meeting/reapporval/${item?.partySeq}`,

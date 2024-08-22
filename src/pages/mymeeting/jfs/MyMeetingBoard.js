@@ -10,6 +10,7 @@ const TitleDivStyle = styled.div`
   padding: 20px 0px 20px 5px;
 `;
 const MyMeetingBoard = ({ noticeList }) => {
+  console.log(noticeList);
   const navigate = useNavigate();
   const params = useParams();
   return (
@@ -64,7 +65,7 @@ const MyMeetingBoard = ({ noticeList }) => {
                           {item.boardContents}
                         </span> */}
               <span style={{ width: "20%" }}>
-                {moment(item.inputD).format("YYYY-MM-DD")}
+                {moment(item.inputDt).format("YYYY-MM-DD")}
               </span>
             </li>
           ))}

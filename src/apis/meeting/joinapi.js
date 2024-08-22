@@ -52,7 +52,7 @@ export const postApplication = async (_partySeq, _data) => {
   }
 };
 
-// 모임 추방 (모임장)
+// 모임 추방/탈퇴
 export const patchMemberLeave = async (_partySeq, _memberSeq) => {
   try {
     const response = await makeRequest(

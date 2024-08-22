@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import gazilogo from "../../images/logo2.png";
 import { prColor } from "../../css/color";
+import { Link } from "react-router-dom";
 
 const FooterStyle = styled.div`
   background-color: ${prColor.p500};
@@ -18,7 +19,6 @@ const FooterStyle = styled.div`
   }
 
   .gazi-logo-div {
-    margin-bottom: 15px;
   }
 
   .gazi-logo {
@@ -33,14 +33,17 @@ const FooterStyle = styled.div`
 
   .footer-description-div {
     margin-bottom: 10px;
+    margin-left: 40px;
+    margin-top: 40px;
     font-size: 12px;
   }
   .additional-info-div {
     display: flex;
+    gap: 100px;
   }
   .additional-info {
     font-size: 12px;
-    margin-top: 10px;
+    margin-top: 40px;
     color: #000;
 
     .info-item {
@@ -48,10 +51,13 @@ const FooterStyle = styled.div`
     }
   }
 
-  .footer-links {
-    display: flex;
-    gap: 20px;
-    margin-top: 10px;
+
+  .footer-links-div {
+    .footer-links {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
 
     a {
       color: #000;
@@ -89,10 +95,12 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="footer-links">
-            <a>이용 약관</a>
-            <a>개인정보 처리방침</a>
-            <a>문의하기</a>
+          <div className="footer-links-div">
+            <div className="footer-links">
+              <Link>이용 약관</Link>
+              <Link>개인정보 처리방침</Link>
+              <Link>문의하기</Link>
+            </div>
             <div className="footer-description-div">
               <div className="footer-description">
                 가까운 지역 가까운 지인, 가지가지
