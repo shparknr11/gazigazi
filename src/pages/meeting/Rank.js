@@ -39,6 +39,7 @@ export const RankCubeStyle = styled.div`
 
   .party-name {
     font-size: 13px;
+    font-weight: bold;
     color: #000;
     margin-bottom: 10px;
   }
@@ -46,7 +47,7 @@ export const RankCubeStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 3px;
+    margin-top: 15px;
     img {
       height: 18px;
       width: 18px;
@@ -67,7 +68,7 @@ export const RankCubeStyle = styled.div`
   .cube-front {
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: center;
     align-items: center;
   }
   .cube-contents {
@@ -320,7 +321,7 @@ const Rank = () => {
     const showRank = searchParams.get("rank");
     console.log(showRank);
     if (showRank === "total") {
-      console.log("total");
+      // console.log("total");
       // navigate(`/`)
       navigate(`/rank?rank=local`);
     } else if (showRank === "local") {
@@ -338,7 +339,7 @@ const Rank = () => {
         <div className="rank-prev-btn">
           <IoIosArrowBack
             onClick={() => {
-              console.log("클릭");
+              // console.log("클릭");
               handleClickPrev();
             }}
           />

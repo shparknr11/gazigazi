@@ -21,7 +21,7 @@ const TotalRank = ({ totalRank }) => {
             >
               <div className="cube-front">
                 <div className="cube-contents">
-                  <p className="cube-contents-no">2</p>
+                  {/* <p className="cube-contents-no">2</p> */}
                   <span className="party-name">{item.partyName}</span>
                   <div className="party-admin-div">
                     <img
@@ -69,7 +69,7 @@ const TotalRank = ({ totalRank }) => {
             >
               <div className="cube-front">
                 <div className="cube-contents">
-                  <p className="cube-contents-no">1</p>
+                  {/* <p className="cube-contents-no">1</p> */}
                   <span className="party-name">{item.partyName}</span>
                   <div className="party-admin-div">
                     <img
@@ -116,7 +116,7 @@ const TotalRank = ({ totalRank }) => {
             >
               <div className="cube-front">
                 <div className="cube-contents">
-                  <p className="cube-contents-no">3</p>
+                  {/* <p className="cube-contents-no">3</p> */}
                   <span className="party-name">{item.partyName}</span>
                   <div className="party-admin-div">
                     <img
