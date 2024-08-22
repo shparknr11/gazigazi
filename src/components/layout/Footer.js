@@ -50,7 +50,7 @@ const FooterStyle = styled.div`
 
   .footer-links {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     margin-top: 10px;
 
     a {

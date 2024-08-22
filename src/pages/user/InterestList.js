@@ -29,6 +29,7 @@ const InterestInnerStyle = styled.div`
   justify-content: start;
   align-items: start;
   padding: 20px;
+  margin-bottom: 250px;
 
   .interest-container {
     padding: 20px;
