@@ -54,6 +54,7 @@ import MyMeetingNoticeResister from "./pages/mymeeting/MyMeetingNoticeResister";
 import SocialLogin from "./pages/SocialLogin";
 import Rank from "./pages/meeting/Rank";
 import AppliedMeeting from "./pages/user/AppliedMeeting";
+import ReApproval from "./pages/mymeeting/ReApproval";
 
 const MainStyle = styled.div`
   padding-top: 70px;
@@ -82,6 +83,10 @@ const App = () => {
           <Route path="/meeting/create" element={<Create />}></Route>
           <Route path="/meeting/:partySeq" element={<MeetingDetail />}></Route>
           <Route path="/meeting/modify/:partySeq" element={<Modify />}></Route>
+          <Route
+            path="/meeting/reapporval/:partySeq"
+            element={<ReApproval />}
+          ></Route>
           <Route path="/event/:eventId" element={<EventPage />}></Route>
           {/* <Route
             path="/category/:partyGenre"

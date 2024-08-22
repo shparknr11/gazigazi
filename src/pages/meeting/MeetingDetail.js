@@ -125,7 +125,7 @@ const MeetItemCard = styled.div`
       display: block;
       width: 100%;
       height: 100%;
-      /* object-fit: contain; */
+      object-fit: cover;
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
   }
@@ -466,6 +466,7 @@ const MeetingDetail = () => {
     const partyGender = parseInt(detailList.partyGender);
     // console.log(userBirth > partyMaxAge, userBirth, partyMaxAge);
     if (!userSeq) {
+      alert("로그인이 필요합니다.");
       navigate(`/login`);
       return;
     }
@@ -509,6 +510,7 @@ const MeetingDetail = () => {
   // 찜하기 클릭 시
   const handleClickWish = async () => {
     if (!userSeq) {
+      alert("로그인이 필요합니다.");
       navigate(`/login`);
       return;
     }

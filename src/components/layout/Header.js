@@ -63,6 +63,7 @@ const Header = () => {
 
   const handleClickMyMeeting = () => {
     if (!userSeq) {
+      alert("로그인이 필요합니다.");
       navigate("/login");
     } else {
       navigate(`/mymeeting`);
@@ -70,6 +71,7 @@ const Header = () => {
   };
   const handleClickCreateMeeting = () => {
     if (!userSeq) {
+      alert("로그인이 필요합니다.");
       navigate("/login");
     } else {
       navigate(`/meeting/create`);
