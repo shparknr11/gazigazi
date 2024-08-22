@@ -78,6 +78,7 @@ const MeetingState = ({ meetingState }) => {
             return;
           }
           await getData(); // 목록을 다시 가져와 업데이트
+          setJoinContent("");
         } catch (error) {
           console.error("Approval error:", error);
         }
