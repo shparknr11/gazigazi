@@ -8,6 +8,7 @@ import googleLogo from "../../images/chrome_888846.png";
 import naverLogo from "../../images/naver.jpg";
 import kakaoLogo from "../../images/free-icon-kakao-talk-3991999.png";
 import { setUser } from "../../slices/userSlice";
+import { prColor } from "../../css/color";
 
 const LoginStyle = styled.div`
   display: flex;
@@ -65,7 +66,7 @@ const LoginInnerStyle = styled.div`
   .login-container button {
     width: 100%;
     padding: 15px;
-    background-color: #d3cdb5;
+    background-color: ${prColor.p300};
     border: 1px solid #ccc;
     border-radius: 4px;
     color: white;
@@ -73,7 +74,7 @@ const LoginInnerStyle = styled.div`
     cursor: pointer;
   }
   .login-container button:hover {
-    background-color: #dcd8c5;
+    background-color: ${prColor.p200};
   }
   .login-options {
     display: flex;
