@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { clearUser } from "../../slices/userSlice";
 
 const LogOutButton = styled.button`
-  background-color: #ebddcc;
+  background-color: #d3cdb5;
   color: white;
   border: none;
   padding: 8px;
@@ -17,7 +17,7 @@ const LogOutButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 `;
 

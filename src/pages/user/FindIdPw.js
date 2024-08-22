@@ -5,7 +5,7 @@ import mainlogo from "../../images/logo2.png";
 
 const FindContainer = styled.div`
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,22 +16,22 @@ const FindContainer = styled.div`
 
 const TabMenu = styled.div`
   display: flex;
-  border-bottom: 2px solid #ebddcc;
+  border-bottom: 2px solid #d3cdb5;
   margin-bottom: 0px;
 `;
 
 const Tab = styled.div`
   padding: 10px 20px;
   cursor: pointer;
-  background-color: ${props => (props.active ? "#ebddcc" : "transparent")};
-  border: 1px solid #ebddcc;
+  background-color: ${props => (props.active ? "#d3cdb5" : "transparent")};
+  border: 1px solid #d3cdb5;
   border-radius: 4px 4px 0 0;
   margin-right: 10px;
   font-weight: ${props => (props.active ? "bold" : "normal")};
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 `;
 
@@ -83,7 +83,7 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
   width: 100px;
   padding: 10px;
-  background-color: #ebddcc;
+  background-color: #d3cdb5;
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -92,7 +92,7 @@ const Button = styled.button`
   margin: 0 10px;
 
   &:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 `;
 
