@@ -46,7 +46,7 @@ const NavLinks = styled.div`
 
   a {
     padding: 10px;
-    background-color: #d3cdb5;
+    background-color: #e6e2d5;
     color: white;
     text-decoration: none;
     border-radius: 4px;

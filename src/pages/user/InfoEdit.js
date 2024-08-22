@@ -66,7 +66,7 @@ const InfoEditInnerStyle = styled.div`
 
   .info-container button {
     padding: 12px 20px;
-    background-color: #d3cdb5;
+    background-color: #e6e2d5;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -130,7 +130,7 @@ const ModalStyle = styled.div`
   .modal-content button {
     width: 100%;
     padding: 10px;
-    background-color: #ebddcc;
+    background-color: #e6e2d5;
     border: none;
     border-radius: 4px;
     color: white;
@@ -140,7 +140,7 @@ const ModalStyle = styled.div`
   }
 
   .modal-content button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 `;
 
