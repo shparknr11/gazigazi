@@ -4,55 +4,55 @@ import React from "react";
 const AdminService = () => {
   const data = [
     {
-      id: "norway",
+      id: "통계",
       color: "hsl(107, 70%, 50%)",
       data: [
         {
-          x: "plane",
+          x: "8월 22일",
           y: 117,
         },
         {
-          x: "helicopter",
+          x: "8월 23일",
           y: 214,
         },
         {
-          x: "boat",
+          x: "8월 24일",
           y: 64,
         },
         {
-          x: "train",
+          x: "8월 25일",
           y: 166,
         },
         {
-          x: "subway",
+          x: "8월 26일",
           y: 24,
         },
         {
-          x: "bus",
+          x: "8월 27일",
           y: 171,
         },
         {
-          x: "car",
+          x: "8월 28일",
           y: 281,
         },
         {
-          x: "moto",
+          x: "8월 29일",
           y: 192,
         },
         {
-          x: "bicycle",
+          x: "8월 30일",
           y: 188,
         },
         {
-          x: "horse",
+          x: "8월 31일",
           y: 201,
         },
         {
-          x: "skateboard",
+          x: "9월 01일",
           y: 165,
         },
         {
-          x: "others",
+          x: "9월 02일",
           y: 136,
         },
       ],
@@ -61,7 +61,7 @@ const AdminService = () => {
 
   return (
     <div>
-      <h1>📉📈📊AdminService</h1>
+      <h1>📊AdminService (구현 예정인 페이지 입니다.)</h1>
       <div style={{ width: "1000px", height: "400px" }}>
         <ResponsiveLine
           data={data}
@@ -81,7 +81,7 @@ const AdminService = () => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "transportation",
+            legend: "날짜",
             legendOffset: 36,
             legendPosition: "middle",
             truncateTickAt: 0,
@@ -90,7 +90,7 @@ const AdminService = () => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "count",
+            legend: "갯수",
             legendOffset: -40,
             legendPosition: "middle",
             truncateTickAt: 0,

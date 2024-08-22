@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { getMemberList } from "../../apis/meeting/joinapi";
+import { getMemberList, patchMemberLeave } from "../../apis/meeting/joinapi";
 import { prColor } from "../../css/color";
 import { IoIosClose } from "react-icons/io";
+import { toast } from "react-toastify";
 
 export const MemberListInnerStyle = styled.div`
   width: calc(100% - 30px);
@@ -161,12 +162,10 @@ const MyMeetingMemberList = () => {
 
   const { partySeq } = useParams();
 
-  // console.log(partySeq);
-
   // api함수
   const getData = async () => {
     try {
-      const result = await getMemberList(partySeq);
+      const result = await getMemberList(parseInt(partySeq));
       if (result.code != 1) {
         alert(result.resultMsg);
         return;
@@ -202,6 +201,26 @@ const MyMeetingMemberList = () => {
         return "모임원";
       default:
         return "";
+    }
+  };
+
+  const handleClickLeave = async _memberSeq => {
+    // console.log(partySeq, _memberSeq);
+    const isConfirmed = confirm("해당 맴버를 탈퇴처리 하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const result = await patchMemberLeave(parseInt(partySeq), _memberSeq);
+      if (result.code != 1) {
+        alert(result.resultMsg);
+        return;
+      }
+      // console.log(result.resultData);
+      toast.success("해당 맴버가 탈퇴처리 되었습니다.");
+      getData();
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -243,7 +262,12 @@ const MyMeetingMemberList = () => {
                 </div>
               </MemberInfo>
               {item.memberRole === "2" && (
-                <div className="member-leave-div">
+                <div
+                  className="member-leave-div"
+                  onClick={() => {
+                    handleClickLeave(item.memberSeq);
+                  }}
+                >
                   <div className="member-leave">
                     <IoIosClose />
                   </div>

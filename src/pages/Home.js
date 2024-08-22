@@ -52,6 +52,7 @@ const HomeCreateMeetingBtnStyle = styled.div`
     color: white;
     cursor: pointer;
     transition: box-shadow 0.3s ease;
+    z-index: 99;
     box-shadow:
       rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
       rgba(0, 0, 0, 0.3) 0px 3px 3px,

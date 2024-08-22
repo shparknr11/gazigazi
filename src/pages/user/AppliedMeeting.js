@@ -26,6 +26,16 @@ const AppliedMeetingWrapStyle = styled.div`
     font-weight: bold;
     margin-bottom: 35px;
   }
+  .applied-find-meeting {
+    padding: 5px 10px;
+    width: 80px;
+    border-radius: 15px;
+    background-color: ${prColor.p200};
+    cursor: pointer;
+    &:hover {
+      background-color: ${prColor.p300};
+    }
+  }
 `;
 const AppliedMeetingItemStyle = styled.div`
   display: flex;
@@ -121,7 +131,7 @@ const AppliedMeeting = () => {
         alert(result.resultMsg);
         return;
       }
-      console.log(result.resultData);
+      // console.log(result.resultData);
       setAppliedList(result.resultData);
     } catch (error) {
       console.log(error);
@@ -169,29 +179,45 @@ const AppliedMeeting = () => {
   return (
     <AppliedMeetingWrapStyle>
       <h1>모임 신청현황</h1>
-      <AppliedMeetingItemStyle>
-        {appliedList.map((item, index) => (
-          <div
-            className="applied-item-wrap"
-            key={index}
+      {appliedList.length > 0 ? (
+        <AppliedMeetingItemStyle>
+          {appliedList.map((item, index) => (
+            <div
+              className="applied-item-wrap"
+              key={index}
+              onClick={() => {
+                navigate(`/meeting/${item.partySeq}?mu=1`);
+              }}
+            >
+              <h2>{item.partyName}</h2>
+              <div className="applied-item-inner">
+                <span>{item.inputDt}</span>
+
+                <MdOutlineArrowDropDownCircle
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleClickMore(item.partySeq, item.joinSeq);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </AppliedMeetingItemStyle>
+      ) : (
+        <>
+          <h2 style={{ marginBottom: "10px" }}>* 신청한 모임이 없습니다.</h2>
+          <h2
+            className="applied-find-meeting"
+            style={{ marginLeft: "10px" }}
             onClick={() => {
-              navigate(`/meeting/${item.partySeq}?mu=1`);
+              navigate(`/category?partyGenre=0`);
             }}
           >
-            <h2>{item.partyName}</h2>
-            <div className="applied-item-inner">
-              <span>{item.inputDt}</span>
+            모임찾기
+          </h2>
+        </>
+      )}
 
-              <MdOutlineArrowDropDownCircle
-                onClick={e => {
-                  e.stopPropagation();
-                  handleClickMore(item.partySeq, item.joinSeq);
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      </AppliedMeetingItemStyle>
       <JoinModalStyle isOpen={isOpen}>
         <JoinBoxStyle>
           <JoinTitle>신청서</JoinTitle>

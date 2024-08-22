@@ -62,6 +62,7 @@ const ApprovalModal = ({
   onConfirm,
   joinContent,
   setJoinContent,
+  labelState,
 }) => {
   if (!isOpen) return null;
 
@@ -73,11 +74,25 @@ const ApprovalModal = ({
       return;
     }
     onConfirm(joinContent);
+    onClose();
   };
 
   const handleChangeContent = e => {
     // console.log(e.target.value);
     setJoinContent(e.target.value);
+  };
+
+  const getLabelName = () => {
+    switch (parseInt(labelState)) {
+      case 2:
+        return "승인";
+      case 3:
+        return "반려";
+      case 4:
+        return "삭제";
+      default:
+        return "승인";
+    }
   };
   return (
     <JoinModalStyle>
@@ -99,7 +114,7 @@ const ApprovalModal = ({
               onChange={e => handleChangeContent(e)}
             />
             <div className="join-btn">
-              <MainButton label="승인" type="submit"></MainButton>
+              <MainButton label={getLabelName()} type="submit"></MainButton>
               <MainButton label="취소" onClick={() => onClose()}></MainButton>
             </div>
           </JoinInputStyle>

@@ -156,7 +156,7 @@ const AdminRightDivStyle = styled.div`
     top: 160px;
     left: 19px;
     display: flex;
-    gap: 15px;
+    gap: 10px;
     padding: 10px 0px;
     justify-content: end;
     padding-right: 10px;

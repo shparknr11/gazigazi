@@ -52,6 +52,24 @@ export const postApplication = async (_partySeq, _data) => {
   }
 };
 
+// 모임 추방 (모임장)
+export const patchMemberLeave = async (_partySeq, _memberSeq) => {
+  try {
+    const response = await makeRequest(
+      `/api/member/leave?memberSeq=${_memberSeq}&memberPartySeq=${_partySeq}`,
+      "PATCH",
+    );
+    const status = response.status.toString().charAt(0);
+    if (status === "2") {
+      // console.log("response", response.data);
+      return response.data;
+    } else {
+      alert("API 오류발생 status 확인해주세요");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 // 신청서 불러오기 (전체)
 export const getApplication = async (_partySeq, _leaderUserSeq) => {
   try {
