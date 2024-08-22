@@ -85,7 +85,7 @@ const UserInfoInnerStyle = styled.div`
   }
 
   .button {
-    background-color: #d3cdb5;
+    background-color: #e6e2d5;
     color: white;
     border: none;
     padding: 10px;

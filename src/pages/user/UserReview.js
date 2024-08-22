@@ -44,7 +44,7 @@ const UserReviewInnerStyle = styled.div`
   button {
     width: 10%;
     padding: 5px;
-    background-color: #d3cdb5;
+    background-color: #e6e2d5;
     border: none;
     border-radius: 2px;
     color: white;
@@ -81,7 +81,7 @@ const UserReviewInnerStyle = styled.div`
       width: 10%;
       border: none;
       border-radius: 4px;
-      background-color: #d3cdb5;
+      background-color: #e6e2d5;
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -168,7 +168,7 @@ const UserReviewInnerStyle = styled.div`
           padding: 10px;
           border: none;
           border-radius: 4px;
-          background-color: #d3cdb5;
+          background-color: #e6e2d5;
           color: white;
           font-size: 12px;
           cursor: pointer;
@@ -202,7 +202,7 @@ const UserReviewInnerStyle = styled.div`
       padding: 10px 20px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      background-color: #d3cdb5;
+      background-color: #e6e2d5;
       color: white;
       cursor: pointer;
       font-size: 12px;
@@ -214,7 +214,7 @@ const UserReviewInnerStyle = styled.div`
       }
 
       &:disabled {
-        background-color: #dcd8c5;
+        background-color: #e6e2d5;
         cursor: not-allowed;
       }
     }

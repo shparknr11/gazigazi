@@ -70,7 +70,7 @@ const InterestInnerStyle = styled.div`
     font-size: 12pt;
     border: none;
     border-radius: 4px;
-    background-color: #d3cdb5;
+    background-color: #e6e2d5;
     color: white;
     cursor: pointer;
   }
