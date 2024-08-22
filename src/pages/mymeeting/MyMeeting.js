@@ -309,9 +309,9 @@ const MyMeeting = () => {
                                   className="button-style delete-btn"
                                   onClick={() => {
                                     if (
-                                      confirm("정말 모임을 탈퇴하시겠습니까?")
+                                      confirm("정말 모임을 삭제하시겠습니까?")
                                     ) {
-                                      alert("탈퇴 되었습니다.");
+                                      alert("삭제 되었습니다.");
                                     }
                                   }}
                                 >

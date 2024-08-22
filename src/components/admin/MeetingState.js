@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getPartyAll } from "../../apis/meeting/meetingapi";
 import { patchApprovalAdmin } from "../../apis/meeting/joinapi";
@@ -13,7 +13,7 @@ const MeetingState = ({ meetingState }) => {
   const { modalTitle, isModalOpen, confirmAction, openModal, closeModal } =
     useAdminModal();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [labelState, setLabelState] = useState(0);
   const [filteredPartyList, setFilteredPartyList] = useState([]);
   const [joinContent, setJoinContent] = useState("");
   const navigate = useNavigate();
@@ -58,6 +58,9 @@ const MeetingState = ({ meetingState }) => {
 
   // 모임 승인
   const handleClickApproval = (_partySeq, _userEmail, _num) => {
+    // 모달버튼 라벨관리
+    setLabelState(_num);
+
     openModal({
       topTitle: getModalTitle(_num),
       onConfirm: async joinContent => {
@@ -91,26 +94,27 @@ const MeetingState = ({ meetingState }) => {
   const getModalTitle = _num => {
     switch (_num) {
       case 2:
-        return "모임[승인] 안내";
+        return "모임승인 안내";
       case 3:
-        return "모임[반려] 안내";
+        return "모임반려 안내";
       case 4:
-        return "모임[삭제] 안내";
+        return "모임삭제 안내";
       default:
         return;
     }
   };
 
   const getMeetingBorderStyle = _num => {
+    console.log(_num);
     switch (_num) {
       case "2":
-        return "2px soild red";
+        return "2px soild #e6e2d5";
       case "3":
-        return "2px solid blue";
+        return "2px solid #f5f5f5";
       case "4":
-        return "2px solid orange";
+        return "2px solid #FFEBE5";
       default:
-        return "2px dashed #e6e2d5";
+        return "2px dashed #B59A6F";
     }
   };
 
@@ -126,12 +130,28 @@ const MeetingState = ({ meetingState }) => {
         return "승인 대기중인 모임이 없습니다.";
     }
   };
-
+  const getMeetingTitle = () => {
+    switch (parseInt(meetingState)) {
+      case 2:
+        return "승인된 모임";
+      case 3:
+        return "반려된 모임";
+      case 4:
+        return "삭제된 모임";
+      default:
+        return "승인 대기중 모임";
+    }
+  };
   if (isLoading) {
     return <Loading></Loading>;
   }
   return (
     <>
+      <h3
+        style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}
+      >
+        {getMeetingTitle()}
+      </h3>
       {filteredPartyList.length > 0 ? (
         <div className="admin-application-div">
           {filteredPartyList.map((item, index) => (
@@ -222,6 +242,8 @@ const MeetingState = ({ meetingState }) => {
         onConfirm={confirmAction}
         joinContent={joinContent}
         setJoinContent={setJoinContent}
+        labelState={labelState}
+        setLabelState={setLabelState}
       />
     </>
   );

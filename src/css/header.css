@@ -64,17 +64,30 @@
   padding: 10px;
   min-width: 50px;
 }
+.header-menu-list li a:hover {
+  text-decoration: underline;
+}
+.header-submenu li a:hover {
+  text-decoration: underline;
+}
+.header-submenu-user:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
 .header-menu-item {
   cursor: pointer;
   padding: 10px;
   min-width: 50px;
+}
+.header-menu-item:hover {
+  text-decoration: underline;
 }
 .header-submenu-div {
   visibility: hidden;
   position: fixed;
   top: 70px;
   width: 100%;
-  height: 250px;
+  height: 275px;
   background-color: rgba(249, 248, 245, 0.9);
 }
 .header-submenu-div:active {
@@ -85,7 +98,7 @@
   display: flex;
   margin-top: 40px;
   justify-content: center;
-  padding-left: 433px;
+  padding-left: 640px;
   gap: 12px;
 }
 
@@ -146,4 +159,33 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.header-logout {
+  margin-left: 73px;
+}
+
+/* -------------- */
+.hover-effect {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-effect::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 4px;
+  bottom: 0;
+  left: 0;
+  border-radius: 1rem;
+  background: var(--highlight);
+  transform-origin: bottom right;
+  transition: transform 0.14s ease-out;
+}
+
+.hover-effect:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }

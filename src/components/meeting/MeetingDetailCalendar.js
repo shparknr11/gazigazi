@@ -175,6 +175,7 @@ const MeetingCalendarWrapStyle = styled.div`
     background-color: blue;
   }
   .sun {
+    border-radius: 55px;
     background-color: #c9c2a5 !important;
   }
 
@@ -183,9 +184,20 @@ const MeetingCalendarWrapStyle = styled.div`
   }
 
   .calendar-plan-title {
-    border: 1px solid #f9f8f5;
-    background-color: #f5f5f5;
-    border-radius: 15px;
+    /* background-color: #b59a6f; */
+    /* border-radius: 15px; */
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .react-calendar__tile--active,
+  .react-calendar__tile--now,
+  .react-calendar__tile--active,
+  .react-calendar__tile--range,
+  .react-calendar__tile--rangeStart,
+  .react-calendar__tile--rangeEnd,
+  .react-calendar__tile--rangeBothEnds {
   }
 `;
 
