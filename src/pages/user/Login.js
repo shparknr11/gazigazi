@@ -34,12 +34,12 @@ const LoginInnerStyle = styled.div`
   padding: 20px;
 
   .login-container {
-    padding: 50px;
+    padding: 50px 100px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
     max-width: 700px;
     width: 100%;
-    background-color: #efede5;
+    background-color: #fff;
   }
   .login-container .logo {
     display: block;
@@ -65,7 +65,7 @@ const LoginInnerStyle = styled.div`
   .login-container button {
     width: 100%;
     padding: 15px;
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     border: 1px solid #ccc;
     border-radius: 4px;
     color: white;
@@ -73,7 +73,7 @@ const LoginInnerStyle = styled.div`
     cursor: pointer;
   }
   .login-container button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
   .login-options {
     display: flex;
