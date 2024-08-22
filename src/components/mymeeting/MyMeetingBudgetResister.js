@@ -407,7 +407,7 @@ const MyMeetingBudgetResister = ({
                       className="notice-textarea"
                       rows="4"
                       value={textAreaVal}
-                      maxLength={300}
+                      maxLength={50}
                       onChange={e => {
                         setTextAreaVal(e.target.value);
                         setTextAreaLength(e.target.value.length);
@@ -415,7 +415,7 @@ const MyMeetingBudgetResister = ({
                     />
                     <div style={{ textAlign: "right", color: "#666" }}>
                       <strong style={{ color: "red" }}>*</strong>
-                      제한 숫자 {textAreaLength}/300
+                      제한 숫자 {textAreaLength}/50
                     </div>
                   </div>
 

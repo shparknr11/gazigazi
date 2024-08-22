@@ -45,6 +45,7 @@ const UserInfoInnerStyle = styled.div`
     margin-bottom: 130px;
     box-sizing: border-box;
     overflow: hidden;
+    background-color: #f9f8f5;
   }
 
   .profile-picture-container {

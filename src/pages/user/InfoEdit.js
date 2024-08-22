@@ -42,6 +42,7 @@ const InfoEditInnerStyle = styled.div`
     background-color: #fff;
     display: flex;
     flex-direction: column;
+    background-color: #f9f8f5;
   }
 
   .info-container label {
@@ -54,25 +55,25 @@ const InfoEditInnerStyle = styled.div`
 
   .info-container input {
     width: 100%;
-    padding: 12px; // 입력 필드의 패딩을 약간 증가시켜 여백을 넓힘
-    margin-bottom: 16px; // 항목 사이의 여백을 약간 증가시킴
+    padding: 12px;
+    margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 14px; // 폰트 사이즈를 약간 증가시켜 가독성 향상
-    color: #333; // 입력 텍스트 색상을 어두운 색으로 설정하여 가독성 향상
+    font-size: 14px;
+    color: #333;
   }
 
   .info-container button {
-    padding: 12px 20px; // 버튼의 패딩을 조정하여 클릭 영역을 넓힘
+    padding: 12px 20px;
     background-color: #ebddcc;
     color: #fff;
     border: none;
     border-radius: 4px;
 
-    font-size: 14px; // 폰트 사이즈를 증가시켜 클릭할 때 더 명확하게 보이도록 함
+    font-size: 14px;
     cursor: pointer;
-    margin: 10px 0; // 버튼 위아래 여백을 설정하여 요소 간격을 조정
+    margin: 10px 0;
   }
 
   .info-container button:hover {
@@ -84,8 +85,8 @@ const InfoEditInnerStyle = styled.div`
     height: 150px;
     border-radius: 4px;
     object-fit: cover;
-    margin-bottom: 20px; // 이미지와 다른 요소 간의 여백을 설정
-    align-self: center; // 이미지를 중앙에 정렬
+    margin-bottom: 20px;
+    align-self: center;
   }
 `;
 
@@ -162,7 +163,7 @@ const InfoEdit = () => {
   };
 
   const handleSave = async () => {
-    const { userSeq, token } = userInfo;
+    const { token } = userInfo;
     try {
       const response = await axios.patch(
         "/api/user/update/myInfo",
@@ -172,7 +173,6 @@ const InfoEdit = () => {
           userFav: userInfo.userFav || null,
           userPhone: userInfo.userPhone,
           userIntro: userInfo.userIntro || null,
-          userSeq,
         },
         {
           headers: {
@@ -185,7 +185,7 @@ const InfoEdit = () => {
 
       if (response.data.code === 1) {
         alert(response.data.message || "정보가 성공적으로 수정되었습니다!");
-        navigate(`/myprofile/${userSeq}/userInfo`);
+        navigate(`/myprofile/${token}/userInfo`);
       } else if (response.data.code === 0) {
         alert(response.data.message || "정보 수정에 실패했습니다.");
       } else {

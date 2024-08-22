@@ -453,7 +453,7 @@ const MyMeetingNoticeResister = () => {
                       className="notice-textarea"
                       rows="10"
                       value={boardContents}
-                      maxLength={300}
+                      maxLength={50}
                       onChange={e => {
                         setBoardContents(e.target.value);
                         setTextAreaLength(e.target.value.length);
@@ -462,7 +462,7 @@ const MyMeetingNoticeResister = () => {
                     <div style={{ textAlign: "right" }}>
                       <span>
                         <strong style={{ color: "red" }}>*</strong>
-                        제한 숫자{textAreaLength}/300
+                        제한 숫자{textAreaLength}/50
                       </span>
                     </div> */}
 

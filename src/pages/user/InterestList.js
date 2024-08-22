@@ -37,6 +37,7 @@ const InterestInnerStyle = styled.div`
     max-width: 600px;
     width: 100%;
     box-sizing: border-box;
+    background-color: #f9f8f5;
   }
   .interest-item {
     display: flex;
