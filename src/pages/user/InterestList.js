@@ -37,7 +37,7 @@ const InterestInnerStyle = styled.div`
     max-width: 600px;
     width: 100%;
     box-sizing: border-box;
-    background-color: #f9f8f5;
+    background-color: #fff;
   }
   .interest-item {
     display: flex;
@@ -69,12 +69,12 @@ const InterestInnerStyle = styled.div`
     font-size: 12pt;
     border: none;
     border-radius: 4px;
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     color: white;
     cursor: pointer;
   }
   .interest-item button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
   .cate {
     width: 80px;

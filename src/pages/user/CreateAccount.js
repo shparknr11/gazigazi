@@ -97,14 +97,14 @@ const AccountInnerStyle = styled.div`
     padding: 10px;
     font-size: 10pt;
     cursor: pointer;
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     color: white;
     border: none;
     border-radius: 4px;
     text-align: center;
   }
   .main-create-detail button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
   .create-button-group {
     display: flex;
@@ -143,7 +143,6 @@ const CreateAccount = () => {
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,10}$/;
   const NameRegex = /^[가-힣]{2,6}$/;
   const PhoneRegex = /^01[0-9](?:-?\d{4}){2}$/;
-  const addressRegex = /^[\w\s\-,.]{5,100}$/;
 
   const [accountPic, setAccountPic] = useState(null);
   const [previewPic, setPreviewPic] = useState(null);
@@ -465,13 +464,14 @@ const CreateAccount = () => {
         params: { str: value, num },
       });
 
-      // 응답 코드 확인
+      console.log("서버 응답:", response);
+
       if (response.status === 200) {
         const { code, message } = response.data;
 
         if (code === 1) {
           // 중복 여부에 따른 처리
-          if (message.includes("중복된")) {
+          if (message && message.includes("중복된")) {
             alert(
               `이미 존재하는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다.`,
             );
@@ -482,7 +482,7 @@ const CreateAccount = () => {
             }
           } else {
             alert(
-              `중복되지 않는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
+              `사용 가능한 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
             );
             if (type === "userEmail") {
               setIsEmailChecked(true);
@@ -491,22 +491,25 @@ const CreateAccount = () => {
             }
           }
         } else if (code === 2) {
-          // 입력값 오류 처리
-          alert("입력값을 확인해주세요.");
+          alert("검사에 실패했습니다. 이메일을 다시 확인해 주세요.");
         } else if (code === 3) {
-          // 서버 에러 처리
           alert("서버 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
         } else {
-          throw new Error("예상치 못한 응답 코드입니다.");
+          alert("예상치 못한 응답 코드입니다.");
         }
       } else {
         throw new Error(`서버 오류: ${response.status}`);
       }
     } catch (error) {
       console.error("중복 체크 오류:", error); // 오류 로그를 콘솔에 기록
-      alert(
-        "중복 체크를 수행하는 도중 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
-      );
+
+      if (error.response && error.response.data) {
+        alert(`에러: ${error.response.data.message || "알 수 없는 오류"}`);
+      } else {
+        alert(
+          "중복 체크를 수행하는 도중 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+        );
+      }
     }
   };
 

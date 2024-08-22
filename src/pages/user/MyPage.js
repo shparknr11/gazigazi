@@ -46,7 +46,7 @@ const NavLinks = styled.div`
 
   a {
     padding: 10px;
-    background-color: #e0b88a;
+    background-color: #d3cdb5;
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -54,7 +54,7 @@ const NavLinks = styled.div`
     text-align: center;
 
     &:hover {
-      background-color: #c5965e;
+      background-color: #dcd8c5;
     }
   }
 `;
@@ -117,9 +117,11 @@ const MyPage = () => {
 
     fetchUserData();
 
-    const currentPath = window.location.pathname;
-    if (!currentPath.includes(`/myprofile/${userSeq}`)) {
-      window.history.replaceState(null, "", `/myprofile/${userSeq}/userInfo`);
+    if (userSeq) {
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes(`/myprofile/${userSeq}`)) {
+        window.history.replaceState(null, "", `/myprofile/${userSeq}/userInfo`);
+      }
     }
 
     // Cleanup function

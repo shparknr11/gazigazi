@@ -25,7 +25,7 @@ const UserReviewWrapStyle = styled.div`
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: #f9f8f5;
+  background-color: #fff;
 `;
 
 const UserReviewInnerStyle = styled.div`
@@ -43,7 +43,7 @@ const UserReviewInnerStyle = styled.div`
   button {
     width: 10%;
     padding: 5px;
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     border: none;
     border-radius: 2px;
     color: white;
@@ -54,7 +54,7 @@ const UserReviewInnerStyle = styled.div`
     margin-left: 0px;
 
     &:hover {
-      background-color: #e0b88a;
+      background-color: #dcd8c5;
     }
   }
 
@@ -80,7 +80,7 @@ const UserReviewInnerStyle = styled.div`
       width: 10%;
       border: none;
       border-radius: 4px;
-      background-color: #ebddcc;
+      background-color: #d3cdb5;
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -88,7 +88,7 @@ const UserReviewInnerStyle = styled.div`
       margin-top: 0px;
 
       &:hover {
-        background-color: #e0b88a;
+        background-color: #dcd8c5;
       }
     }
   }
@@ -167,7 +167,7 @@ const UserReviewInnerStyle = styled.div`
           padding: 10px;
           border: none;
           border-radius: 4px;
-          background-color: #ebddcc;
+          background-color: #d3cdb5;
           color: white;
           font-size: 12px;
           cursor: pointer;
@@ -175,7 +175,7 @@ const UserReviewInnerStyle = styled.div`
           margin-top: 0px;
 
           &:hover {
-            background-color: #e0b88a;
+            background-color: #dcd8c5;
           }
         }
       }
@@ -201,7 +201,7 @@ const UserReviewInnerStyle = styled.div`
       padding: 10px 20px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      background-color: #ebddcc;
+      background-color: #d3cdb5;
       color: white;
       cursor: pointer;
       font-size: 12px;
@@ -209,11 +209,11 @@ const UserReviewInnerStyle = styled.div`
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #e0b88a;
+        background-color: #dcd8c5;
       }
 
       &:disabled {
-        background-color: #ebddcc;
+        background-color: #dcd8c5;
         cursor: not-allowed;
       }
     }

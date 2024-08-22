@@ -42,7 +42,7 @@ const InfoEditInnerStyle = styled.div`
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    background-color: #f9f8f5;
+    background-color: #fff;
   }
 
   .info-container label {
@@ -66,7 +66,7 @@ const InfoEditInnerStyle = styled.div`
 
   .info-container button {
     padding: 12px 20px;
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -77,7 +77,7 @@ const InfoEditInnerStyle = styled.div`
   }
 
   .info-container button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 
   .image-preview {

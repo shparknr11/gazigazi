@@ -14,7 +14,7 @@ const ButtonContainer = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  background-color: #ebddcc;
+  background-color: #d3cdb5;
   color: white;
   border: none;
   padding: 8px;
@@ -23,6 +23,10 @@ const DeleteButton = styled.button`
   width: 20%;
   font-size: 12pt;
   transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #dcd8c5;
+  }
 `;
 
 const Modal = styled.div`
@@ -47,7 +51,7 @@ const ModalContent = styled.div`
 `;
 
 const Modalbutton1 = styled.button`
-  background-color: #ebddcc;
+  background-color: #d3cdb5;
   color: white;
   border: none;
   padding: 8px;
@@ -62,12 +66,12 @@ const Modalbutton1 = styled.button`
   margin-left: 20px;
 
   &:hover {
-    background-color: #c5965e;
+    background-color: #dcd8c5;
   }
 `;
 
 const Modalbutton2 = styled.button`
-  background-color: #ebddcc;
+  background-color: #d3cdb5;
   color: white;
   border: none;
   padding: 8px;
@@ -82,7 +86,7 @@ const Modalbutton2 = styled.button`
   margin-left: 65px;
 
   &:hover {
-    background-color: #c5965e;
+    background-color: #dcd8c5;
   }
 `;
 

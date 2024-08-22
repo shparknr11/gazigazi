@@ -45,7 +45,7 @@ const UserInfoInnerStyle = styled.div`
     margin-bottom: 130px;
     box-sizing: border-box;
     overflow: hidden;
-    background-color: #f9f8f5;
+    background-color: #fff;
   }
 
   .profile-picture-container {
@@ -85,7 +85,7 @@ const UserInfoInnerStyle = styled.div`
   }
 
   .button {
-    background-color: #ebddcc;
+    background-color: #d3cdb5;
     color: white;
     border: none;
     padding: 10px;
@@ -98,7 +98,7 @@ const UserInfoInnerStyle = styled.div`
   }
 
   .button:hover {
-    background-color: #e0b88a;
+    background-color: #dcd8c5;
   }
 `;
 
