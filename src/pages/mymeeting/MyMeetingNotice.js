@@ -660,7 +660,7 @@ const MyMeetingNotice = () => {
                       <div style={{ textAlign: "right" }}>
                         <span style={{ display: "none" }}>
                           <strong style={{ color: "red" }}>*</strong>
-                          제한 숫자{textAreaLength}/300
+                          제한 숫자{textAreaLength}/50
                         </span>
                       </div>
                     </div>

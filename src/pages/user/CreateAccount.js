@@ -239,7 +239,7 @@ const CreateAccount = () => {
             "이메일 형식이 올바르지 않습니다. 형식: user123@example.com";
           Valid = false;
         } else {
-          newMessages.userEmail = "사용할 수 있는 이메일입니다.";
+          newMessages.userEmail = "형식과 일치하는 이메일입니다.";
         }
         break;
       case "userNickname":
@@ -251,7 +251,7 @@ const CreateAccount = () => {
             "닉네임은 영문, 한글, 숫자로 4~10자리로 구성되어야 합니다.";
           Valid = false;
         } else {
-          newMessages.userNickname = "사용할 수 있는 닉네임입니다.";
+          newMessages.userNickname = "형식과 일치하는 닉네임입니다.";
         }
         break;
       case "userName":
@@ -465,28 +465,48 @@ const CreateAccount = () => {
         params: { str: value, num },
       });
 
-      if (response.data.resultData === 0) {
-        alert(
-          `중복되지 않는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
-        );
-        if (type === "userEmail") {
-          setIsEmailChecked(true);
+      // 응답 코드 확인
+      if (response.status === 200) {
+        const { code, message } = response.data;
+
+        if (code === 1) {
+          // 중복 여부에 따른 처리
+          if (message.includes("중복된")) {
+            alert(
+              `이미 존재하는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다.`,
+            );
+            if (type === "userEmail") {
+              setIsEmailChecked(false);
+            } else {
+              setIsNicknameChecked(false);
+            }
+          } else {
+            alert(
+              `중복되지 않는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다!`,
+            );
+            if (type === "userEmail") {
+              setIsEmailChecked(true);
+            } else {
+              setIsNicknameChecked(true);
+            }
+          }
+        } else if (code === 2) {
+          // 입력값 오류 처리
+          alert("입력값을 확인해주세요.");
+        } else if (code === 3) {
+          // 서버 에러 처리
+          alert("서버 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
         } else {
-          setIsNicknameChecked(true);
+          throw new Error("예상치 못한 응답 코드입니다.");
         }
       } else {
-        alert(
-          `이미 존재하는 ${type === "userEmail" ? "이메일" : "닉네임"}입니다.`,
-        );
-        if (type === "userEmail") {
-          setIsEmailChecked(false);
-        } else {
-          setIsNicknameChecked(false);
-        }
+        throw new Error(`서버 오류: ${response.status}`);
       }
     } catch (error) {
       console.error("중복 체크 오류:", error); // 오류 로그를 콘솔에 기록
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
+      alert(
+        "중복 체크를 수행하는 도중 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+      );
     }
   };
 

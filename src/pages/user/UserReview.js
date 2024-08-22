@@ -25,6 +25,7 @@ const UserReviewWrapStyle = styled.div`
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: #f9f8f5;
 `;
 
 const UserReviewInnerStyle = styled.div`
@@ -347,8 +348,8 @@ function MyPageReviews() {
       ),
     );
 
-    editPics.forEach((item, index) => {
-      formData.append(`pics[${index}]`, item);
+    editPics.forEach(item => {
+      formData.append("pics", item);
     });
 
     try {

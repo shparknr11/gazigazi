@@ -1,9 +1,8 @@
-import React from "react";
 import styled from "@emotion/styled";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearUser } from "../../slices/userSlice";
-import axios from "axios";
 
 const LogOutButton = styled.button`
   background-color: #ebddcc;

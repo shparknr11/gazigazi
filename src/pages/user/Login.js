@@ -39,6 +39,7 @@ const LoginInnerStyle = styled.div`
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     max-width: 700px;
     width: 100%;
+    background-color: #efede5;
   }
   .login-container .logo {
     display: block;
@@ -65,7 +66,7 @@ const LoginInnerStyle = styled.div`
     width: 100%;
     padding: 15px;
     background-color: #ebddcc;
-    border: none;
+    border: 1px solid #ccc;
     border-radius: 4px;
     color: white;
     font-size: 18px;
@@ -99,6 +100,7 @@ const LoginInnerStyle = styled.div`
     justify-content: center;
     width: 100%;
     padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     color: #fff;
     text-align: center;

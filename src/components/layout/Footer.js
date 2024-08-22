@@ -3,7 +3,7 @@ import gazilogo from "../../images/logo2.png";
 import { prColor } from "../../css/color";
 
 const FooterStyle = styled.div`
-  background-color: ${prColor.p300};
+  background-color: ${prColor.p500};
   border-top: 1px solid ${prColor.p600};
 
   .footer-inner {
