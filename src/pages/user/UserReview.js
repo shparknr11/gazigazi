@@ -26,6 +26,7 @@ const UserReviewWrapStyle = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background-color: #fff;
+  margin-bottom: 129px;
 `;
 
 const UserReviewInnerStyle = styled.div`
