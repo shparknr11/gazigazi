@@ -10,7 +10,7 @@ const TitleDivStyle = styled.div`
   padding: 20px 0px 20px 5px;
 `;
 const MyMeetingBoard = ({ noticeList }) => {
-  console.log(noticeList);
+  // console.log(noticeList);
   const navigate = useNavigate();
   const params = useParams();
   return (

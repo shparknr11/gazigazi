@@ -175,7 +175,6 @@ const MeetingCalendarWrapStyle = styled.div`
     background-color: blue;
   }
   .sun {
-    border-radius: 55px;
     background-color: #c9c2a5 !important;
   }
 
@@ -254,7 +253,7 @@ const MeeetingDetailCalendar = ({ partySeq }) => {
         alert(result.resultMsg);
         return;
       }
-      console.log(result.resultData);
+      // console.log(result.resultData);
       setAllData(result.resultData);
     } catch (error) {
       console.log(error);

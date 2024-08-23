@@ -319,16 +319,16 @@ const Rank = () => {
 
   const handleClickPrev = () => {
     const showRank = searchParams.get("rank");
-    console.log(showRank);
+    // console.log(showRank);
     if (showRank === "total") {
       // console.log("total");
       // navigate(`/`)
       navigate(`/rank?rank=local`);
     } else if (showRank === "local") {
-      console.log("local");
+      // console.log("local");
       // navigate(`/rank?rank=local`);
     } else {
-      console.log("다른랭킹");
+      // console.log("다른랭킹");
     }
   };
   return (

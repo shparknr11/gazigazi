@@ -561,7 +561,7 @@ const Create = () => {
           <select
             id="partyminage"
             onChange={e => {
-              console.log(e.target.value);
+              // console.log(e.target.value);
               handleChangeMinAge(e);
             }}
           >

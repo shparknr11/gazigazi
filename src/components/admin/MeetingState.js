@@ -106,7 +106,7 @@ const MeetingState = ({ meetingState }) => {
   };
 
   const getMeetingBorderStyle = _num => {
-    console.log(_num);
+    // console.log(_num);
     switch (_num) {
       case "2":
         return "2px soild #e6e2d5";

@@ -183,7 +183,7 @@ const CategoryOthers = () => {
   const partyGenre = searchParams.get("partyGenre");
   const searchKeyword = searchParams.get("search");
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   const filterCategory = _resultData => {
     const updateList = _resultData.filter(

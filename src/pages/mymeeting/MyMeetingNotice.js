@@ -300,7 +300,7 @@ const MyMeetingNotice = () => {
 
     try {
       const result = await patchNotice(formData, user.token);
-      console.log(result);
+      // console.log(result);
 
       toast.success("게시글이 저장되었습니다.");
       // navigate(`/mymeeting/mymeetingLeader/${isAuth}`, {

@@ -105,7 +105,7 @@ const EventPage = () => {
   const { eventId } = useParams();
 
   const handleClickDetail = _partySeq => {
-    console.log(_partySeq);
+    // console.log(_partySeq);
     navigate(`/meeting/${_partySeq}?mu=1`);
   };
 

@@ -50,8 +50,8 @@ export const getBudgetPhoto = async ({ budgetSeq, token }) => {
     const res = await jwtAxios.get(`/api/budget/${budgetSeq}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(res.data);
-    console.log(res.data.resultData);
+    // console.log(res.data);
+    // console.log(res.data.resultData);
     return res.data.resultData;
   } catch (error) {
     console.log(error);
@@ -66,7 +66,7 @@ export const getMemberBudget = async ({ budgetPartySeq, month }) => {
     const res = await jwtAxios.get(
       `/api/budget/member?budgetPartySeq=${budgetPartySeq}&month=${month}`,
     );
-    console.log(res.data);
+    // console.log(res.data);
     return res.data.resultData;
   } catch (error) {
     console.log(error);

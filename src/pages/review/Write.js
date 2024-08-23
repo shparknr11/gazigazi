@@ -76,7 +76,7 @@ const Write = () => {
   const [previewPic, setPreviewPic] = useState([]);
   const fileBt = useRef(null);
   const location = useLocation();
-  console.log(location.state);
+  // console.log(location.state);
   const handleRwFileChange = e => {
     const filesArr = Array.from(e.target.files);
 

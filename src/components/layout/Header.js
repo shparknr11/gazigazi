@@ -20,6 +20,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const handleLogout = async e => {
     e.preventDefault();
 
@@ -85,6 +86,9 @@ const Header = () => {
     }
   };
 
+  const handleClickBurger = () => {
+    setIsMobileMenuOpen(prev => !prev);
+  };
   return (
     <header className="header">
       <div className="header-inner">
@@ -160,7 +164,12 @@ const Header = () => {
               <div>
                 <span className="header-profileicon-name">{userName} 님</span>
               </div>
-              <div className="header-submenu-mobile">
+              <div
+                className="header-submenu-mobile"
+                onClick={() => {
+                  handleClickBurger();
+                }}
+              >
                 <CiMenuBurger />
               </div>
             </div>
@@ -229,6 +238,43 @@ const Header = () => {
               </>
             )}
           </li>
+        </ul>
+      </div>
+      <div
+        className={`header-submenu-mobile-div ${isMobileMenuOpen ? "dp-block" : ""}`}
+      >
+        <ul>
+          <li>
+            <Link to="/rank?rank=total">랭킹</Link>
+          </li>
+          <li>
+            <Link to="/review">후기</Link>
+          </li>
+          <li>
+            <div
+              className="header-menu-item-mobile"
+              onClick={() => {
+                handleClickMyMeeting();
+              }}
+            >
+              내 모임
+            </div>
+          </li>
+
+          {userRole ? (
+            <li
+              className="header-menu-item-mobile"
+              onClick={e => {
+                handleLogout(e);
+              }}
+            >
+              로그아웃
+            </li>
+          ) : (
+            <li style={{ display: "none" }}>
+              <Link>로그아웃</Link>
+            </li>
+          )}
         </ul>
       </div>
     </header>

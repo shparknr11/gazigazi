@@ -69,7 +69,7 @@ const MyMeetingNewMemberList = () => {
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
 
-  console.log(partySeq);
+  // console.log(partySeq);
   // console.log(userSeq);
   // api함수
   const getData = async () => {
@@ -79,7 +79,7 @@ const MyMeetingNewMemberList = () => {
         alert(result.resultMsg);
         return;
       }
-      console.log(result.resultData);
+      // console.log(result.resultData);
       popularHomeList(result.resultData);
     } catch (error) {
       console.log(error);

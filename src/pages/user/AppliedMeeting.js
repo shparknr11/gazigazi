@@ -121,8 +121,8 @@ const AppliedMeeting = () => {
   const navigate = useNavigate();
   const user = useSelector(state => state.user);
   const userSeq = user.userSeq;
-  console.log(partySeq);
-  console.log(isOpen);
+  // console.log(partySeq);
+  // console.log(isOpen);
   // api 호출 함수
   const getMyAppliedListCall = async () => {
     try {

@@ -20,8 +20,11 @@ const WriteInnerStyle = styled.div`
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  height: auto;
+  /* height: auto; */
+  max-height: 80vh;
+  overflow-y: auto;
   margin-top: 40px;
+  border-radius: 15px;
   margin-bottom: 40px;
   background-color: ${prColor.p100};
   border: 1px solid ${prColor.p200};
@@ -31,7 +34,8 @@ const WriteInnerStyle = styled.div`
     margin-bottom: 10px;
   }
   h1 {
-    font-size: 28px;
+    font-size: 22px;
+    font-weight: bold;
     margin-bottom: 10px;
   }
 `;
@@ -80,8 +84,8 @@ const ReviewFileStyle = styled.div`
   }
   .preview-reviewpic {
     display: block;
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     cursor: pointer;
   }
   .morerv-button {

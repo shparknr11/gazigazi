@@ -40,7 +40,7 @@ export const postParty = async (_data, _token) => {
     };
 
     const response = await axios.post(`/api/party`, _data, { headers });
-    console.log(response);
+    // console.log(response);
     const status = response.status.toString().charAt(0);
     if (status === "2") {
       return response.data;

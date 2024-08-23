@@ -171,7 +171,7 @@ const MyMeetingMemberList = () => {
         return;
       }
       setMemberList(result.resultData);
-      console.log(result.resultData);
+      // console.log(result.resultData);
     } catch (error) {
       console.log(error);
     }
