@@ -51,7 +51,6 @@ const FooterStyle = styled.div`
     }
   }
 
-
   .footer-links-div {
     .footer-links {
       margin-top: 10px;
