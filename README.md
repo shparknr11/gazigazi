@@ -47,6 +47,9 @@ https://github.com/user-attachments/assets/04d0c4f3-b156-4fe4-825c-cdd9e7e91403
 - 로그인
 - 정보수정
 - 마이페이지
+  - 후기관리
+- 내모임
+  - 게시판
 
 > 담당자 : 윤성환 : 개인사유로 프로젝트 중단
 
